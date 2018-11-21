@@ -23,14 +23,15 @@ public class Database {
         for (Field field : item.getClass().getDeclaredFields()) {
             field.setAccessible(true);
             if (field.isAnnotationPresent(Column.class)) {
-                if (field.isAnnotationPresent(AutoIncrement.class))
+                if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null)
                     continue;
 
-                String name = this.getColumnName(field);
+                columns.add(this.getColumnName(field));
 
-                columns.add(name);
                 try {
                     var v = field.get(item);
+
+                    /* If the field is not allowed to be null and is null throw an exception */
                     if (!field.isAnnotationPresent(Nullable.class) && v == null)
                         throw new Exception("Field " + field.getName() + " is not allowed to be null!");
 
@@ -41,27 +42,7 @@ public class Database {
             }
         }
 
-        StringBuilder valuesInsert = new StringBuilder();
-
-        for (Object object : values) {
-            var c = object.getClass();
-            boolean addComma = true;
-
-
-            if (values.indexOf(object) == values.size() - 1)
-                addComma = false;
-
-            if (c == String.class) {
-                valuesInsert.append("'").append(object).append("'").append(addComma ? ", " : "");
-            } else if (c == Integer.class || c == int.class) {
-                valuesInsert.append(object).append(addComma ? ", " : "");
-            } else {
-                throw new Exception("No serializer found for class " + c + " add it to database.java!");
-            }
-        }
-
-
-        System.out.println("INSERT INTO " + table + " (`" + String.join("`, `", columns) + "`) VALUES (" + valuesInsert + ")");
+        System.out.println(this.buildInsertQuery(table, columns, values));
     }
 
 
@@ -70,9 +51,11 @@ public class Database {
             var table = item.getClass().getAnnotation(Table.class).name();
 
             if (table.equals(""))
-                throw new Exception("Table annotation is missing, please add it to the class or add it manually");
+                throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
             else
                 this.insert(item, table);
+        } else {
+            throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
         }
     }
 
@@ -86,6 +69,10 @@ public class Database {
         for (T item : items) {
             this.insert(item, table);
         }
+    }
+
+    public <T> List<T> select(Class<T> output, List<Clause> clauses) throws Exception {
+        return null;
     }
 
     public <T> List<T> select(Class<T> output, String sql) throws Exception {
@@ -125,20 +112,47 @@ public class Database {
     }
 
 
-    public <T> void update(T item) throws Exception {
-        HashMap<String, Object> clause = new HashMap<>();
+    public <T> void update(T item, String table) throws Exception {
+        ArrayList<Clause> clauses = new ArrayList<>();
+        HashMap<String, Object> updated = new HashMap<>();
 
         for (Field field : item.getClass().getDeclaredFields()) {
             if (!field.isAnnotationPresent(Column.class)) continue;
+
             field.setAccessible(true);
 
             String name = this.getColumnName(field);
 
-            if (field.isAnnotationPresent(PrimaryKey.class))
-                clause.put(name, field.get(item));
+            if (field.isAnnotationPresent(PrimaryKey.class)) {
+                clauses.add(new Clause(name, CompareMethod.Equal, field.get(item)));
+                continue;
+            }
+
+            var v = field.get(item);
+
+            if (!field.isAnnotationPresent(Nullable.class) && v == null)
+                throw new Exception("Field content was null but this is now allowed! Add @nullable if the field is allowed to be null.");
+            else if (field.isAnnotationPresent(Nullable.class) && v == null)
+                continue;
+
+            updated.put(name, field.get(item));
+
         }
 
-        System.out.println(this.buildClause(clause));
+        System.out.println(this.buildUpdateQuery(table, updated, clauses));
+    }
+
+    public <T> void update(T item) throws Exception {
+        if (item.getClass().isAnnotationPresent(Table.class)) {
+            var table = item.getClass().getAnnotation(Table.class).name();
+
+            if (table.equals(""))
+                throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
+            else
+                this.update(item, table);
+        } else {
+            throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
+        }
     }
 
     private String getColumnName(Field field) {
@@ -150,30 +164,52 @@ public class Database {
         return name;
     }
 
-    private String buildClause(HashMap<String, Object> clause) throws Exception {
+    private String buildClause(List<Clause> clauses) throws Exception {
         var builder = new StringBuilder();
-        var iteration = 0;
 
-        for (Map.Entry<String, Object> entry : clause.entrySet()) {
-            builder.append(entry.getKey()).append(" = ").append(this.objectToSQL(entry.getValue()));
-
-            if(iteration !=  clause.size() - 1) {
-                iteration++;
-                builder.append(" AND ");
+        for (Clause clause : clauses) {
+            if (clauses.indexOf(clause) != clauses.size() - 1) {
+                builder.append(clause.toString(true)).append(" ");
+            } else {
+                builder.append(clause.toString(false));
             }
         }
 
         return builder.toString();
     }
 
-    private String objectToSQL(Object o) throws Exception {
-        var c = o.getClass();
-        if(c == String.class) {
-            return "'" + o +"'";
-        } else if(c == Integer.class || c == int.class) {
-            return o.toString();
-        } else {
-            throw new Exception("No serializer found for class " + o.getClass() + ". Implement it in Database.java in function `objectToSQL()`");
+    private String buildInsertQuery(String table, List<String> columns, List<Object> values) throws Exception {
+        var insertString = new StringBuilder();
+
+        for (Object object : values) {
+            boolean addComma = true;
+
+            if (values.indexOf(object) == values.size() - 1)
+                addComma = false;
+
+            insertString.append(ObjectHelper.objectToSQL(object)).append(addComma ? ", " : "");
         }
+
+        return String.format("INSERT INTO %s (`%s`) VALUES (%s)", table, String.join("`, `", columns), insertString);
     }
+
+    private String buildUpdateQuery(String table, HashMap<String, Object> updatedValues, List<Clause> clauses) throws Exception {
+        var updateString = new StringBuilder();
+        var iteration = 0;
+
+        for (Map.Entry<String, Object> entry : updatedValues.entrySet()) {
+            boolean addComma = true;
+
+            if (iteration == updatedValues.size() - 1)
+                addComma = false;
+
+            updateString.append(entry.getKey()).append(" = ").append(ObjectHelper.objectToSQL(entry.getValue())).append(addComma ? ", " : "");
+        }
+
+        String clauseString = clauses.size() > 0 ? "WHERE " + this.buildClause(clauses) : "";
+
+        return String.format("UPDATE %s SET %s %s", table, updateString, clauseString);
+    }
+
+
 }

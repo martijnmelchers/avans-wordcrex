@@ -31,7 +31,7 @@ public class Main {
             /* Multiple inserts, using annotations (automatic table resolving!) */
             var users = new ArrayList<User>();
             users.add(new User(51, "Test-In-List-1", "Test-In-List-1@test.nl"));
-            users.add(new User(52, "Test-In-List-2", "Test-In-List-2@test.nl"));
+            users.add(new User("Test-In-List-2", "Test-In-List-2@test.nl"));
             users.add(new User(53, "Test-In-List-3", "Test-In-List-3@test.nl"));
             _db.insert(users);
 

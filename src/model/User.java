@@ -10,7 +10,6 @@ public class User {
     @PrimaryKey
     private Integer userId;
     @Column
-    @PrimaryKey
     private String username;
     @Column(name = "e_mail")
     @Nullable
@@ -18,6 +17,11 @@ public class User {
 
     public User() {
 
+    }
+
+    public User(String username, String email) {
+        this.username = username;
+        this.email = email;
     }
 
     public User(Integer userId, String username, String email) {
