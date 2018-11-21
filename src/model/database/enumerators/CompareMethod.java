@@ -1,4 +1,4 @@
-package model.database;
+package model.database.enumerators;
 
 public enum CompareMethod {
     Equal("="),
@@ -6,7 +6,8 @@ public enum CompareMethod {
     Greater(">"),
     GreaterEqual(">="),
     Less("<"),
-    LessEqual("=<");
+    LessEqual("=<"),
+    Like("LIKE");
 
     private String method;
 

@@ -1,9 +1,7 @@
 import model.User;
-import model.database.Connector;
-import model.database.Database;
+import model.database.services.Connector;
+import model.database.services.Database;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,7 +13,7 @@ public class Main {
             var _db = new Database(conn);
 
 
-            var selectedUsers =_db.select(User.class, "select * from fjmelche_db2.user");
+            var selectedUsers =_db.select(User.class, new ArrayList<>());
 
             for (User user : selectedUsers) {
                 System.out.println(user.getInformation());
@@ -44,6 +42,7 @@ public class Main {
             var updatedUser = selectedUsers.get(0); // <-- Get first result from query that ran above
 
             updatedUser.setUsername("Peter pan " + new Random().nextInt(5000));
+            updatedUser.setEmail("anale@bilhaar.gitaar");
 
             _db.update(updatedUser);
 

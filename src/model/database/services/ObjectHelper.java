@@ -1,4 +1,4 @@
-package model.database;
+package model.database.services;
 
 public class ObjectHelper {
     public static String objectToSQL(Object o) throws Exception {

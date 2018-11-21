@@ -2,7 +2,7 @@ package model;
 
 import model.annotations.*;
 
-@Table(name = "users")
+@Table(name = "user")
 public class User {
 
     @Column
@@ -30,6 +30,10 @@ public class User {
         this.email = email;
     }
 
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public void setUsername(String username) {
         this.username = username;

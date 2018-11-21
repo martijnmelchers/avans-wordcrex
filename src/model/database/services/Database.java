@@ -1,13 +1,15 @@
-package model.database;
+package model.database.services;
 
 import model.annotations.*;
+import model.database.classes.Clause;
+import model.database.enumerators.CompareMethod;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiFunction;
 
 public class Database {
     private Connection connection;
@@ -16,47 +18,54 @@ public class Database {
         this.connection = connection;
     }
 
+
     public <T> void insert(T item, String table) throws Exception {
+        /* Store the keys to insert and values separately */
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<Object> values = new ArrayList<>();
 
+        /* Loop through each field in the class */
         for (Field field : item.getClass().getDeclaredFields()) {
             field.setAccessible(true);
-            if (field.isAnnotationPresent(Column.class)) {
-                if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null)
-                    continue;
 
-                columns.add(this.getColumnName(field));
+            /* Only continue if the field is marked as a column */
+            if (!field.isAnnotationPresent(Column.class)) continue;
 
-                try {
-                    var v = field.get(item);
+            /* If the field is auto increment and not forced continue */
+            if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null)
+                continue;
 
-                    /* If the field is not allowed to be null and is null throw an exception */
-                    if (!field.isAnnotationPresent(Nullable.class) && v == null)
-                        throw new Exception("Field " + field.getName() + " is not allowed to be null!");
+            /* Add the column name to the list */
+            columns.add(this.getColumnName(field));
 
-                    values.add(field.get(item));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
+            /* Get the value of the field */
+            var v = field.get(item);
+
+            /* If the field is not allowed to be null and is null throw an exception */
+            if (!field.isAnnotationPresent(Nullable.class) && v == null)
+                throw new Exception("Field " + field.getName() + " is not allowed to be null!");
+
+            /* If not, add the value to the list */
+            values.add(v);
+
         }
 
-        System.out.println(this.buildInsertQuery(table, columns, values));
+        /* Build query & execute it */
+        System.out.println(QueryBuilder.buildInsert(table, columns, values));
     }
 
 
     public <T> void insert(T item) throws Exception {
-        if (item.getClass().isAnnotationPresent(Table.class)) {
-            var table = item.getClass().getAnnotation(Table.class).name();
-
-            if (table.equals(""))
-                throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
-            else
-                this.insert(item, table);
-        } else {
+        if (!item.getClass().isAnnotationPresent(Table.class))
             throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
-        }
+
+        var tableName = item.getClass().getAnnotation(Table.class).name();
+
+        if (tableName.equals(""))
+            throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
+        else
+            this.insert(item, tableName);
+
     }
 
     public <T> void insert(List<T> items) throws Exception {
@@ -72,7 +81,8 @@ public class Database {
     }
 
     public <T> List<T> select(Class<T> output, List<Clause> clauses) throws Exception {
-        return null;
+        System.out.println(QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), clauses));
+        return this.select(output, QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), clauses));
     }
 
     public <T> List<T> select(Class<T> output, String sql) throws Exception {
@@ -139,7 +149,7 @@ public class Database {
 
         }
 
-        System.out.println(this.buildUpdateQuery(table, updated, clauses));
+        System.out.println(QueryBuilder.buildUpdate(table, updated, clauses));
     }
 
     public <T> void update(T item) throws Exception {
@@ -162,53 +172,6 @@ public class Database {
             name = field.getName();
 
         return name;
-    }
-
-    private String buildClause(List<Clause> clauses) throws Exception {
-        var builder = new StringBuilder();
-
-        for (Clause clause : clauses) {
-            if (clauses.indexOf(clause) != clauses.size() - 1) {
-                builder.append(clause.toString(true)).append(" ");
-            } else {
-                builder.append(clause.toString(false));
-            }
-        }
-
-        return builder.toString();
-    }
-
-    private String buildInsertQuery(String table, List<String> columns, List<Object> values) throws Exception {
-        var insertString = new StringBuilder();
-
-        for (Object object : values) {
-            boolean addComma = true;
-
-            if (values.indexOf(object) == values.size() - 1)
-                addComma = false;
-
-            insertString.append(ObjectHelper.objectToSQL(object)).append(addComma ? ", " : "");
-        }
-
-        return String.format("INSERT INTO %s (`%s`) VALUES (%s)", table, String.join("`, `", columns), insertString);
-    }
-
-    private String buildUpdateQuery(String table, HashMap<String, Object> updatedValues, List<Clause> clauses) throws Exception {
-        var updateString = new StringBuilder();
-        var iteration = 0;
-
-        for (Map.Entry<String, Object> entry : updatedValues.entrySet()) {
-            boolean addComma = true;
-
-            if (iteration == updatedValues.size() - 1)
-                addComma = false;
-
-            updateString.append(entry.getKey()).append(" = ").append(ObjectHelper.objectToSQL(entry.getValue())).append(addComma ? ", " : "");
-        }
-
-        String clauseString = clauses.size() > 0 ? "WHERE " + this.buildClause(clauses) : "";
-
-        return String.format("UPDATE %s SET %s %s", table, updateString, clauseString);
     }
 
 

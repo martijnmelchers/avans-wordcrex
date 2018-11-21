@@ -1,4 +1,4 @@
-package model.database;
+package model.database.enumerators;
 
 public enum LinkMethod {
     And("AND"),

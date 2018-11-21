@@ -1,4 +1,8 @@
-package model.database;
+package model.database.classes;
+
+import model.database.enumerators.CompareMethod;
+import model.database.enumerators.LinkMethod;
+import model.database.services.ObjectHelper;
 
 public class Clause {
     private String field;
