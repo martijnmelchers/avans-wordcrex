@@ -1,13 +1,16 @@
 package model;
 
-import model.annotations.Column;
-import model.annotations.Nullable;
+import model.annotations.*;
 
+@Table(name = "users")
 public class User {
 
-    @Column()
+    @Column
+    @AutoIncrement
+    @PrimaryKey
     private Integer userId;
-    @Column()
+    @Column
+    @PrimaryKey
     private String username;
     @Column(name = "e_mail")
     @Nullable
@@ -23,15 +26,12 @@ public class User {
         this.email = email;
     }
 
-    public Integer getUserId() {
-        return userId;
-    }
 
-    public String getUsername() {
-        return username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getInformation() {
-        return "User #" + this.userId + " is registered with username: " + this.username + " and email:     " + this.email;
+        return "User #" + this.userId + " is registered with username: " + this.username + " and email: " + this.email;
     }
 }
