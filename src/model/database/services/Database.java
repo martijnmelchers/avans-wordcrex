@@ -3,13 +3,15 @@ package model.database.services;
 import model.database.annotations.*;
 import model.database.classes.Clause;
 import model.database.classes.Join;
+import model.database.classes.Select;
 import model.database.enumerators.CompareMethod;
 import model.database.enumerators.JoinMethod;
 import model.database.enumerators.LinkMethod;
+import model.database.enumerators.ResultMethod;
 
-import javax.management.Query;
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -85,42 +87,20 @@ public class Database {
 
     public <T> List<T> select(Class<T> output, List<Clause> clauses) throws Exception {
 
-        System.out.println(QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), clauses, this.findForeignKeys(output)));
+        var query = QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), this.findNamings(output), clauses, this.findForeignKeys(output));
 
+        System.out.println(query);
 
-        return this.select(output, QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), clauses, new ArrayList<>()));
+        return this.select(output, query);
     }
 
-    public <T> List<T> select(Class<T> output, String sql) throws Exception {
-        Field[] fields = output.getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-        }
 
+    private <T> List<T> select(Class<T> output, String sql) throws Exception {
         var resultSet = this.connection.createStatement().executeQuery(sql);
 
         List<T> list = new ArrayList<>();
         while (resultSet.next()) {
-
-            T dto = output.getConstructor().newInstance();
-
-            for (Field field : fields) {
-                if (!field.isAnnotationPresent(Column.class))
-                    continue;
-
-                String name = this.getColumnName(field);
-
-                try {
-                    String value = resultSet.getString(name);
-                    field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
-                } catch (Exception e) {
-                    if (!field.isAnnotationPresent(Nullable.class))
-                        throw new Exception("An error occurred! Field content was null! (Add @nullable if a field can be null)", e);
-                }
-
-            }
-
-            list.add(dto);
+            list.add(this.processResult(output, resultSet));
 
         }
 
@@ -180,11 +160,11 @@ public class Database {
         return name;
     }
 
-    private <T> List<Join> findForeignKeys(Class<T> input) throws Exception {
+    private <T> ArrayList<Join> findForeignKeys(Class<T> input) throws Exception {
         return this.findForeignKeys(input, new ArrayList<>());
     }
 
-    private <T> List<Join> findForeignKeys(Class<T> input, ArrayList<Join> joins) throws Exception {
+    private <T> ArrayList<Join> findForeignKeys(Class<T> input, ArrayList<Join> joins) throws Exception {
         for (Field field : input.getDeclaredFields()) {
             field.setAccessible(true);
 
@@ -230,6 +210,90 @@ public class Database {
 
         return joins;
     }
+
+    private <T> ArrayList<Select> findNamings(Class<T> input) throws Exception {
+        return this.findNamings(input, new ArrayList<>());
+    }
+
+    private <T> ArrayList<Select> findNamings(Class<T> input, ArrayList<Select> namings) throws Exception {
+        for (Field field : input.getDeclaredFields()) {
+            field.setAccessible(true);
+
+
+            if (!field.isAnnotationPresent(Column.class)) continue;
+
+            if (field.isAnnotationPresent(ForeignKey.class)) {
+                var annotation = field.getAnnotation(ForeignKey.class);
+                var type = annotation.type();
+
+                if (!type.isAnnotationPresent(Table.class) || !input.isAnnotationPresent(Table.class))
+                    throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
+
+                var table = input.getAnnotation(Table.class).name();
+
+                namings.add(new Select(table, this.getColumnName(field)));
+                namings.addAll(this.findNamings(type));
+            } else {
+
+                if (!input.isAnnotationPresent(Table.class))
+                    throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
+
+                var table = input.getAnnotation(Table.class).name();
+
+                namings.add(new Select(table, this.getColumnName(field)));
+            }
+
+
+        }
+
+        return namings;
+    }
+
+    private <T> T processResult(Class<T> output, ResultSet data) throws Exception {
+        T dto = output.getConstructor().newInstance();
+
+        for (Field field : output.getDeclaredFields()) {
+            field.setAccessible(true);
+
+            if (!field.isAnnotationPresent(Column.class))
+                continue;
+
+            if (!output.isAnnotationPresent(Table.class))
+                throw new Exception("");
+
+            String tableName = output.getAnnotation(Table.class).name();
+            String columnName = this.getColumnName(field);
+            String combinedName = tableName + "." + columnName;
+
+            try {
+
+                if (field.isAnnotationPresent(ForeignKey.class)) {
+                    var a = field.getAnnotation(ForeignKey.class);
+                    var t = a.type();
+
+                    var f = output.getDeclaredField(a.output());
+                    if (a.result() == ResultMethod.SINGLE) {
+                        f.setAccessible(true);
+                        f.set(dto, this.processResult(t, data));
+                    }
+
+
+                } else {
+                    String value = data.getString(combinedName);
+                    field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
+                }
+
+
+            } catch (Exception e) {
+                if (!field.isAnnotationPresent(Nullable.class))
+                    throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)", e);
+            }
+
+        }
+
+        return dto;
+    }
+
 
     private Join findJoin(ArrayList<Join> joins, String originTable, String destinationTable) {
         for (Join join : joins) {

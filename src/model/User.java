@@ -15,7 +15,7 @@ public class User {
     @Nullable
     private String email;
     @Column
-    @ForeignKey(type = FullName.class, field = "id")
+    @ForeignKey(type = FullName.class, field = "id", output = "name")
     private Integer nameId;
 
     private FullName name;
@@ -45,6 +45,6 @@ public class User {
     }
 
     public String getInformation() {
-        return "User #" + this.userId + " is registered with username: " + this.username + " and email: " + this.email;
+        return "User #" + this.userId + " is registered with username: " + this.username + " and email: " + this.email + " and his name is: " + this.name.firstname;
     }
 }

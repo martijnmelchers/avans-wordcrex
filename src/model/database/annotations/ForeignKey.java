@@ -14,7 +14,7 @@ public @interface ForeignKey {
 
     String field();
 
-    String output() default "";
+    String output();
 
     ResultMethod result() default ResultMethod.SINGLE;
 }

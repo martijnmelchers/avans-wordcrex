@@ -2,6 +2,7 @@ package model.database.services;
 
 import model.database.classes.Clause;
 import model.database.classes.Join;
+import model.database.classes.Select;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,13 +60,29 @@ public class QueryBuilder {
         return "";
     }
 
-    public static String buildSelect(String table, List<Clause> clauses, List<Join> joins) throws Exception {
-        String clauseString = clauses.size() > 0 ? "WHERE " + QueryBuilder.buildClause(clauses) : "";
+    public static String buildSelect(String table, List<Select> columns, List<Clause> clauses, List<Join> joins) throws Exception {
 
-        String joinString = joins.size() > 0 ? "\n" + QueryBuilder.buildJoin(joins) : "";
+        String selectString = columns.size() > 0 ? QueryBuilder.buildSelectFields(columns) : "*";
+        String joinString = joins.size() > 0 ? "\n    " + QueryBuilder.buildJoin(joins) : "";
+        String clauseString = clauses.size() > 0 ? " WHERE " + QueryBuilder.buildClause(clauses) : "";
 
-        return String.format("SELECT * FROM %s %s %s", table, joinString, clauseString);
+
+        return String.format("SELECT %s FROM %s%s%s", selectString, table, joinString, clauseString);
     }
+
+    private static String buildSelectFields(List<Select> selects) {
+        var builder = new StringBuilder();
+
+        for(Select select : selects) {
+            builder.append(select.build());
+            if(selects.indexOf(select) != selects.size() - 1)
+                builder.append(", ");
+        }
+
+
+        return builder.toString();
+    }
+
 
     public static String buildJoin(List<Join> joins) throws Exception {
         var builder = new StringBuilder();

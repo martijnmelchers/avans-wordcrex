@@ -1,9 +1,6 @@
 package model;
 
-import model.database.annotations.AutoIncrement;
-import model.database.annotations.Column;
-import model.database.annotations.PrimaryKey;
-import model.database.annotations.Table;
+import model.database.annotations.*;
 
 @Table(name = "names")
 public class FullName {
@@ -17,6 +14,7 @@ public class FullName {
     public String firstname;
 
     @Column
+    @Nullable
     public String middlename;
 
     @Column

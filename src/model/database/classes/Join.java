@@ -39,7 +39,7 @@ public class Join {
     }
 
     public String build() throws Exception {
-        return joinMethod.getMethod() + " JOIN " + originTable + " ON " + this.buildJoins();
+        return joinMethod.getMethod() + " JOIN " + destinationTable + " ON " + this.buildJoins();
     }
 
     private String buildJoins() throws Exception {
