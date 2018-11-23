@@ -1,6 +1,4 @@
-package Moderator.Model;
-
-import java.io.Console;
+package moderator.model;
 
 public class Moderator {
 

@@ -2,14 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="804250ad-d12d-4a1f-b435-35427369225f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Moderator/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Moderator/Model/Moderator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/avans-wordcrex/Moderator/View/Moderator.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/avans-wordcrex/Moderator/View/Moderator.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Moderator/Controller/ModeratorViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Moderator/Controller/ModeratorViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Moderator/View/Moderator.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/Moderator/View/Moderator.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Moderator/View/ModeratorView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Moderator/View/ModeratorView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Moderator/Controller/ModeratorViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/moderator/controller/ModeratorViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Moderator/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/moderator/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Moderator/Model/Moderator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/moderator/model/Moderator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Moderator/View/Moderator.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/moderator/view/Moderator.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Moderator/View/ModeratorView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/moderator/view/ModeratorView.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,7 +20,7 @@
     <session id="-1805635033">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.4" value="1" />
@@ -62,30 +61,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Moderator/Main.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/moderator/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="20" column="71" selection-start-line="20" selection-start-column="71" selection-end-line="20" selection-end-column="71" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="51">
+              <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Moderator/View/Moderator.fxml">
-          <provider selected="true" editor-type-id="text-editor">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/moderator/view/Moderator.fxml">
+          <provider editor-type-id="text-editor">
             <state relative-caret-position="374">
               <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
             </state>
           </provider>
-          <provider editor-type-id="JavaFX-Scene-Builder" />
+          <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Moderator/View/ModeratorView.java">
+        <entry file="file://$PROJECT_DIR$/src/moderator/view/ModeratorView.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
               <caret line="10" column="33" lean-forward="true" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
@@ -99,10 +95,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Moderator/Controller/ModeratorViewController.java">
+        <entry file="file://$PROJECT_DIR$/src/moderator/controller/ModeratorViewController.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="111">
-              <caret line="36" selection-start-line="36" selection-end-line="36" />
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -111,10 +107,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Moderator/Model/Moderator.java">
+        <entry file="file://$PROJECT_DIR$/src/moderator/model/Moderator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="170">
+              <caret line="10" column="5" lean-forward="true" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
               <folding>
                 <element signature="e#92#93#0" expanded="true" />
                 <element signature="e#134#135#0" expanded="true" />
@@ -146,6 +142,7 @@
         <option value="$PROJECT_DIR$/src/Moderator/Main.java" />
         <option value="$PROJECT_DIR$/src/Moderator/Controller/ModeratorViewController.java" />
         <option value="$PROJECT_DIR$/src/Moderator/View/Moderator.fxml" />
+        <option value="$PROJECT_DIR$/src/moderator/View/Moderator.fxml" />
       </list>
     </option>
   </component>
@@ -190,7 +187,7 @@
               <item name="avans-wordcrex" type="b2602c69:ProjectViewProjectNode" />
               <item name="avans-wordcrex" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Moderator" type="462c0819:PsiDirectoryNode" />
+              <item name="moderator" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="avans-wordcrex" type="b2602c69:ProjectViewProjectNode" />
@@ -207,7 +204,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542988308288" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542989426679" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
@@ -235,7 +232,7 @@
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Moderator.Main" />
+      <option name="MAIN_CLASS_NAME" value="moderator.Main" />
       <module name="avans-wordcrex" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -260,12 +257,12 @@
       <workItem from="1542974872591" duration="410000" />
       <workItem from="1542975433077" duration="657000" />
       <workItem from="1542976111609" duration="1153000" />
-      <workItem from="1542983035472" duration="5266000" />
+      <workItem from="1542983035472" duration="6260000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7486000" />
+    <option name="totallyTimeSpent" value="8480000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -280,7 +277,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.329718" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.20065077" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.20065077" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -289,7 +286,7 @@
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.329718" />
+      <window_info active="true" anchor="bottom" id="Messages" order="11" visible="true" weight="0.329718" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -311,7 +308,7 @@
     <entry file="file://$PROJECT_DIR$/src/model/User.java" />
     <entry file="file://$PROJECT_DIR$/src/Moderator/Controller.java" />
     <entry file="file://$PROJECT_DIR$/src/Moderator/sample.fxml" />
-    <entry file="file://$PROJECT_DIR$/src/Moderator/Main.java" />
+    <entry file="file://$PROJECT_DIR$/src/moderator/Main.java" />
     <entry file="file://$PROJECT_DIR$/.idea/vcs.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -335,38 +332,7 @@
     <entry file="file://$PROJECT_DIR$/avans-wordcrex.iml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Moderator/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="20" column="71" selection-start-line="20" selection-start-column="71" selection-end-line="20" selection-end-column="71" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Moderator/Model/Moderator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-          <folding>
-            <element signature="e#92#93#0" expanded="true" />
-            <element signature="e#134#135#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Moderator/Controller/ModeratorViewController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="111">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Moderator/View/ModeratorView.java">
+    <entry file="file://$PROJECT_DIR$/src/moderator/view/ModeratorView.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="10" column="33" lean-forward="true" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
@@ -378,13 +344,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Moderator/View/Moderator.fxml">
+    <entry file="file://$PROJECT_DIR$/src/moderator/controller/ModeratorViewController.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/moderator/model/Moderator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="5" lean-forward="true" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
+          <folding>
+            <element signature="e#92#93#0" expanded="true" />
+            <element signature="e#134#135#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/moderator/view/Moderator.fxml">
+      <provider editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder" />
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/moderator/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
+        </state>
+      </provider>
     </entry>
   </component>
   <component name="masterDetails">
