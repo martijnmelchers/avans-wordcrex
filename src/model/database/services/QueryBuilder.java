@@ -1,6 +1,7 @@
 package model.database.services;
 
 import model.database.classes.Clause;
+import model.database.classes.Join;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,9 +13,9 @@ public class QueryBuilder {
 
         for (Clause clause : clauses) {
             if (clauses.indexOf(clause) != clauses.size() - 1) {
-                builder.append(clause.toString(true)).append(" ");
+                builder.append(clause.build(true)).append(" ");
             } else {
-                builder.append(clause.toString(false));
+                builder.append(clause.build(false));
             }
         }
 
@@ -58,9 +59,22 @@ public class QueryBuilder {
         return "";
     }
 
-    public static String buildSelect(String table, List<Clause> clauses) throws Exception {
+    public static String buildSelect(String table, List<Clause> clauses, List<Join> joins) throws Exception {
         String clauseString = clauses.size() > 0 ? "WHERE " + QueryBuilder.buildClause(clauses) : "";
 
-        return String.format("SELECT * FROM %s %s", table, clauseString);
+        String joinString = joins.size() > 0 ? "\n" + QueryBuilder.buildJoin(joins) : "";
+
+        return String.format("SELECT * FROM %s %s %s", table, joinString, clauseString);
+    }
+
+    public static String buildJoin(List<Join> joins) throws Exception {
+        var builder = new StringBuilder();
+
+        for(Join join : joins) {
+            builder.append(join.build()).append("\n");
+        }
+
+
+        return builder.toString();
     }
 }

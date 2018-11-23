@@ -1,13 +1,13 @@
 package model.database.enumerators;
 
 public enum CompareMethod {
-    Equal("="),
-    NotEqual("!="),
-    Greater(">"),
-    GreaterEqual(">="),
-    Less("<"),
-    LessEqual("=<"),
-    Like("LIKE");
+    EQUAL("="),
+    NOT_EQUAL("!="),
+    GREATER(">"),
+    GREATER_EQUAL(">="),
+    LESS("<"),
+    LESS_EQUAL("=<"),
+    LIKE("LIKE");
 
     private String method;
 

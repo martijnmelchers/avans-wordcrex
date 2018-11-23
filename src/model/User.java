@@ -1,6 +1,6 @@
 package model;
 
-import model.annotations.*;
+import model.database.annotations.*;
 
 @Table(name = "user")
 public class User {
@@ -14,6 +14,11 @@ public class User {
     @Column(name = "e_mail")
     @Nullable
     private String email;
+    @Column
+    @ForeignKey(type = FullName.class, field = "id")
+    private Integer nameId;
+
+    private FullName name;
 
     public User() {
 

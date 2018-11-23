@@ -1,12 +1,13 @@
 package model.database.enumerators;
 
-public enum LinkMethod {
-    AND("AND"),
-    OR("OR");
+public enum JoinMethod {
+    INNER(""),
+    RIGHT("RIGHT"),
+    LEFT("LEFT");
 
     private String method;
 
-    LinkMethod(String method){
+    JoinMethod(String method) {
         this.method = method;
     }
 

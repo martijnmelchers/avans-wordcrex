@@ -21,10 +21,10 @@ public class Clause {
         this.field = field;
         this.method = method;
         this.value = value;
-        this.linkMethod = LinkMethod.And;
+        this.linkMethod = LinkMethod.AND;
     }
 
-    public String toString(boolean needsLink) throws Exception {
+    public String build(boolean needsLink) throws Exception {
         return "`" + this.field + "` " + this.method.getMethod() + " " + ObjectHelper.objectToSQL(this.value) +  " " + (needsLink ? linkMethod.getMethod() : "");
     }
 }

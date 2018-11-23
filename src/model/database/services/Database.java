@@ -1,15 +1,18 @@
 package model.database.services;
 
-import model.annotations.*;
+import model.database.annotations.*;
 import model.database.classes.Clause;
+import model.database.classes.Join;
 import model.database.enumerators.CompareMethod;
+import model.database.enumerators.JoinMethod;
+import model.database.enumerators.LinkMethod;
 
+import javax.management.Query;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiFunction;
 
 public class Database {
     private Connection connection;
@@ -81,8 +84,11 @@ public class Database {
     }
 
     public <T> List<T> select(Class<T> output, List<Clause> clauses) throws Exception {
-        System.out.println(QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), clauses));
-        return this.select(output, QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), clauses));
+
+        System.out.println(QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), clauses, this.findForeignKeys(output)));
+
+
+        return this.select(output, QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), clauses, new ArrayList<>()));
     }
 
     public <T> List<T> select(Class<T> output, String sql) throws Exception {
@@ -134,7 +140,7 @@ public class Database {
             String name = this.getColumnName(field);
 
             if (field.isAnnotationPresent(PrimaryKey.class)) {
-                clauses.add(new Clause(name, CompareMethod.Equal, field.get(item)));
+                clauses.add(new Clause(name, CompareMethod.EQUAL, field.get(item)));
                 continue;
             }
 
@@ -172,6 +178,66 @@ public class Database {
             name = field.getName();
 
         return name;
+    }
+
+    private <T> List<Join> findForeignKeys(Class<T> input) throws Exception {
+        return this.findForeignKeys(input, new ArrayList<>());
+    }
+
+    private <T> List<Join> findForeignKeys(Class<T> input, ArrayList<Join> joins) throws Exception {
+        for (Field field : input.getDeclaredFields()) {
+            field.setAccessible(true);
+
+
+            if (!field.isAnnotationPresent(Column.class)) continue;
+
+            if (field.isAnnotationPresent(ForeignKey.class)) {
+                var annotation = field.getAnnotation(ForeignKey.class);
+                var type = annotation.type();
+
+                if (!type.isAnnotationPresent(Table.class) || !input.isAnnotationPresent(Table.class))
+                    throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
+
+                joins.addAll(this.findForeignKeys(type));
+
+
+                var tbl = type.getAnnotation(Table.class).name();
+                var originTbl = input.getAnnotation(Table.class).name();
+
+                var existingJoin = this.findJoin(joins, originTbl, tbl);
+
+                if (existingJoin != null) {
+                    existingJoin.addJoinColumn(this.getColumnName(field), annotation.field());
+                } else {
+
+                    var join = new Join(
+                            originTbl,
+                            tbl,
+                            LinkMethod.AND,
+                            JoinMethod.INNER
+                    );
+
+                    join.addJoinColumn(this.getColumnName(field), annotation.field());
+
+                    joins.add(join);
+                }
+
+
+            }
+
+
+        }
+
+        return joins;
+    }
+
+    private Join findJoin(ArrayList<Join> joins, String originTable, String destinationTable) {
+        for (Join join : joins) {
+            if (join.getDestinationTable().equals(destinationTable) && join.getOriginTable().equals(originTable))
+                return join;
+        }
+
+        return null;
     }
 
 
