@@ -1,4 +1,12 @@
-package sample;
+package Moderator.Controller;
 
-public class Controller {
+import javafx.stage.Modality;
+
+public class ModeratorViewController {
+    public ModeratorViewController(){
+
+    }
+    public void initialize(){
+
+    }
 }
