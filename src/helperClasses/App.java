@@ -16,19 +16,19 @@ public class App extends Application
     private Stage primaryStage;
     private View view;
 
-    public void load()
+    public void load(String startingFxml)
     {
-        launch();
+        launch(startingFxml);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception
     {
         this.primaryStage = primaryStage;
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Wordcrex");
         primaryStage.show();
         loadControllers();
-        navigate("LoginView.fxml");
+        navigate(this.getParameters().getRaw().get(0));
     }
 
     private void loadControllers()
