@@ -1,0 +1,12 @@
+.label
+{
+    -fx-background-color: red;
+}
+
+#login_grid
+{
+    -fx-background-image: url("login_background.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
