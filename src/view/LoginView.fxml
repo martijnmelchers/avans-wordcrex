@@ -11,13 +11,14 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane id="login_grid" alignment="center" hgap="10" style="-fx-background-color: grey" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginView">
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane id="login_grid"  style="-fx-background-color: grey" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginView">
     <stylesheets>
         <URL value="@Authentication.css" />
     </stylesheets>
     <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="TOP">
         <image>
-            <Image url="/view/wordcrex_cup.png" />
+            <Image url="/view/wordcrex_cup.png"/>
         </image>
         <GridPane.margin>
             <Insets bottom="25.0" />
@@ -49,11 +50,4 @@
          <RowConstraints />
       </rowConstraints>
     </GridPane>
-   <columnConstraints>
-      <ColumnConstraints />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints />
-   </rowConstraints>
-
-</GridPane>
+</AnchorPane>
