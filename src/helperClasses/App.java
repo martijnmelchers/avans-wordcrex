@@ -34,7 +34,17 @@ public class App extends Application
     private void loadControllers()
     {
         controllers = new ArrayList<>();
-        File[] files = new File(Main.class.getResource("/controller").getPath()).listFiles();
+        File[] files;
+        try
+        {
+            files = new File(Main.class.getResource("/controller").toURI().getPath()).listFiles();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
 
         for(File file : files)
         {
