@@ -1,19 +1,15 @@
-package model;
+package model.classes;
 
 import model.database.annotations.Column;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table(name = "account")
-public class Account {
+@Table("role")
+public class Role {
 
     @Column
     @PrimaryKey
-    private String username;
-    @Column
-    private String password;
+    private String role;
 
-    public Account() {
 
-    }
 }
