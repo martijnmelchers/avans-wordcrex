@@ -1,6 +1,6 @@
-package helperClasses;
+package controller;
 
-import controller.Main;
+import view.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,7 +34,16 @@ public class App extends Application
     private void loadControllers()
     {
         controllers = new ArrayList<>();
-        File[] files = new File(Main.class.getResource("/Controller").getPath()).listFiles();
+        File[] files;
+        try
+        {
+            files = new File(Main.class.getResource("/Controller").toURI().getPath()).listFiles();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            return;
+        }
 
         for(File file : files)
         {

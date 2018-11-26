@@ -1,4 +1,7 @@
-package helperClasses;
+package view;
+
+import controller.App;
+import controller.Controller;
 
 public abstract class View
 {
