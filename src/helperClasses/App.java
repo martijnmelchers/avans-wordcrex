@@ -34,7 +34,7 @@ public class App extends Application
     private void loadControllers()
     {
         controllers = new ArrayList<>();
-        File[] files = new File(Main.class.getResource("/Controller").getPath()).listFiles();
+        File[] files = new File(Main.class.getResource("/controller").getPath()).listFiles();
 
         for(File file : files)
         {
@@ -95,13 +95,18 @@ public class App extends Application
 
     public void navigate(String fxmlFileName)
     {
+        navigate(fxmlFileName, 1200, 700);
+    }
+
+    public void navigate(String fxmlFileName, int width, int height)
+    {
         try
         {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/"+fxmlFileName));
             Parent root = fxmlLoader.load();
             view = fxmlLoader.getController();
             view.setApp(this);
-            primaryStage.setScene(new Scene(root,1200,700));
+            primaryStage.setScene(new Scene(root, width, height));
         }
         catch (Exception e)
         {
