@@ -11,13 +11,28 @@ public class FullName {
     public Integer id;
 
     @Column
-    public String firstname;
+    private String firstname;
 
     @Column
     @Nullable
-    public String middlename;
+    private String middlename;
 
     @Column
-    public String lastname;
+    private String lastname;
+
+    public FullName(String firstname, String middlename, String lastname) {
+        this.firstname = firstname;
+        this.middlename = middlename;
+        this.lastname = lastname;
+    }
+
+    public FullName() {
+
+    }
+
+    public String getFullName() {
+        return this.firstname + (this.middlename == null || this.middlename.equals("") ? " " : " " + this.middlename + " ") + this.lastname;
+    }
+
 
 }

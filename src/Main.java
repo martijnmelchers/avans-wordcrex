@@ -1,3 +1,4 @@
+import model.FullName;
 import model.User;
 import model.database.services.Connector;
 import model.database.services.Database;
@@ -23,29 +24,26 @@ public class Main {
             /* Insert examples */
 
             /* Simple insert, single user using annotations (automatic table resolving!)*/
-            var user = new User(50, "Test-W-Annotations", "Test-W-Annotation@test.nl");
+            var user = new User("ab", "a@b.nl", new FullName("Martijn", "", "Melchers"));
             _db.insert(user);
 
             /* Multiple inserts, using annotations (automatic table resolving!) */
-            var users = new ArrayList<User>();
+            /*var users = new ArrayList<User>();
             users.add(new User(51, "Test-In-List-1", "Test-In-List-1@test.nl"));
             users.add(new User("Test-In-List-2", "Test-In-List-2@test.nl"));
             users.add(new User(53, "Test-In-List-3", "Test-In-List-3@test.nl"));
-            _db.insert(users);
+            _db.insert(users);*/
 
-            /* Single user, using annotations but forcing a table */
-            var user_1 = new User(50, "Test-W-Annotations", "Test-W-Annotation@test.nl");
-            _db.insert(user_1, "users");
 
 
             /* Update examples WARNING: DOES NOT SUPPORT PRIMARY KEY CHANGES YET! */
-            var updatedUser = selectedUsers.get(0); // <-- Get first result from query that ran above
+           /* var updatedUser = selectedUsers.get(0); // <-- Get first result from query that ran above
 
             updatedUser.setUsername("Peter pan " + new Random().nextInt(5000));
             updatedUser.setEmail("anale@bilhaar.gitaar");
 
             _db.update(updatedUser);
-
+*/
 
         } catch (Exception e) {
             e.printStackTrace();

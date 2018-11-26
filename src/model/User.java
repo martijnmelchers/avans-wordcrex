@@ -24,15 +24,17 @@ public class User {
 
     }
 
-    public User(String username, String email) {
+    public User(String username, String email, FullName name) {
         this.username = username;
         this.email = email;
+        this.name = name;
     }
 
-    public User(Integer userId, String username, String email) {
+    public User(Integer userId, String username, String email, FullName name) {
         this.userId = userId;
         this.username = username;
         this.email = email;
+        this.name = name;
     }
 
 
@@ -45,6 +47,7 @@ public class User {
     }
 
     public String getInformation() {
-        return "User #" + this.userId + " is registered with username: " + this.username + " and email: " + this.email + " and his name is: " + this.name.firstname;
+        return "User ID #" + this.userId + " with username " + this.username + " and email " + this.email + "\n" +
+                "Name ID #" + this.nameId + " and name: " + this.name.getFullName();
     }
 }
