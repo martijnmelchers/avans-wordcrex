@@ -1,4 +1,4 @@
-package model.classes;
+package model.database.tables;
 
 import model.database.annotations.Column;
 import model.database.annotations.ForeignKey;

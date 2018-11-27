@@ -1,4 +1,4 @@
-import model.classes.AccountInfo;
+import model.database.tables.AccountInfo;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;

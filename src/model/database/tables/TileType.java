@@ -1,15 +1,13 @@
-package model.classes;
+package model.database.tables;
 
 import model.database.annotations.Column;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table("role")
-public class Role {
+@Table(value = "tiletype")
+public class TileType {
 
-    @Column
+    @Column(value = "type")
     @PrimaryKey
-    private String role;
-
-
+    private String _tileType;
 }
