@@ -1,4 +1,4 @@
-import helperClasses.App;
+import controller.App;
 
 public class Main
 {
