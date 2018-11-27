@@ -1,5 +1,3 @@
-package controller;
-
 import helperClasses.App;
 
 public class Main

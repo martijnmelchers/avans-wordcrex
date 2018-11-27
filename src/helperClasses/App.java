@@ -1,6 +1,5 @@
 package helperClasses;
 
-import controller.Main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -34,7 +33,7 @@ public class App extends Application
     private void loadControllers()
     {
         controllers = new ArrayList<>();
-        File[] files = new File(Main.class.getResource("/Controller").getPath()).listFiles();
+        File[] files = new File(App.class.getResource("/Controller").getPath()).listFiles();
 
         for(File file : files)
         {
@@ -95,13 +94,18 @@ public class App extends Application
 
     public void navigate(String fxmlFileName)
     {
+        navigate(fxmlFileName, 600,400 );
+    }
+
+    public void navigate(String fxmlFileName, int width, int height)
+    {
         try
         {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/"+fxmlFileName));
             Parent root = fxmlLoader.load();
             view = fxmlLoader.getController();
             view.setApp(this);
-            primaryStage.setScene(new Scene(root,1200,700));
+            primaryStage.setScene(new Scene(root,width,height));
         }
         catch (Exception e)
         {

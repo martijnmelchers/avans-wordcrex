@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 public class LoginView extends View
 {
     private LoginController loginController;
+
     public LoginView()
     {
 
