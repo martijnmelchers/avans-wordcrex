@@ -1,9 +1,7 @@
 package controller;
 
-<<<<<<< HEAD:src/helperClasses/App.java
-=======
+
 import view.View;
->>>>>>> origin/feature/Navigation:src/controller/App.java
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,20 +35,16 @@ public class App extends Application
     private void loadControllers()
     {
         controllers = new ArrayList<>();
-<<<<<<< HEAD:src/helperClasses/App.java
-        File[] files = new File(App.class.getResource("/Controller").getPath()).listFiles();
-=======
         File[] files;
         try
         {
-            files = new File(Main.class.getResource("/Controller").toURI().getPath()).listFiles();
+            files = new File(App.class.getResource("/Controller").toURI().getPath()).listFiles();
         }
         catch(Exception e)
         {
             e.printStackTrace();
             return;
         }
->>>>>>> origin/feature/Navigation:src/controller/App.java
 
         for(File file : files)
         {
