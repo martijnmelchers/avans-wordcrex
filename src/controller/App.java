@@ -1,5 +1,6 @@
 package controller;
 
+import view.LoginView;
 import view.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +30,7 @@ public class App extends Application
         loadControllers();
         navigate(this.getParameters().getRaw().get(0), 350, 550);
         primaryStage.show();
+
     }
 
     private void loadControllers()
@@ -113,9 +115,10 @@ public class App extends Application
         try
         {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/"+fxmlFileName));
-            Parent root = fxmlLoader.load();
             view = fxmlLoader.getController();
             view.setApp(this);
+            Parent root = fxmlLoader.load();
+
             primaryStage.setScene(new Scene(root, width, height));
         }
         catch (Exception e)

@@ -1,22 +1,27 @@
 package view;
 
-import controller.RegisterController;
+import controller.AccountController;
 
 public class RegisterView extends View
 {
 
-    private RegisterController registerController;
+    private AccountController accountController;
+
+    @Override
+    protected void loadFinished()
+    {
+        accountController = this.getController();
+    }
 
     public void backClicked()
     {
-        registerController = this.getController();
-        registerController.navigate("LoginView.fxml", 350, 550);
+        accountController.navigate("LoginView.fxml", 350, 550);
     }
 
     public void registerClicked()
     {
-        registerController = this.getController();
-        registerController.navigate("MainView.fxml");
+        accountController.navigate("MainView.fxml");
     }
+
 
 }

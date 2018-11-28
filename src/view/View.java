@@ -2,6 +2,7 @@ package view;
 
 import controller.App;
 import controller.Controller;
+import javafx.fxml.FXML;
 
 public abstract class View
 {
@@ -16,4 +17,6 @@ public abstract class View
     {
         return application.getController();
     }
+
+    protected abstract void loadFinished();
 }
