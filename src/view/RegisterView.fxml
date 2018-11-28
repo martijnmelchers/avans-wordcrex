@@ -1,14 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="view.RegisterView"
-            prefHeight="400.0" prefWidth="600.0">
+<?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+<BorderPane id="register_pane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="view.RegisterView" prefHeight="400.0" prefWidth="600.0">
+    <stylesheets>
+        <URL value="@Authentication.css" />
+    </stylesheets>
+    <top>
+        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_CENTER" GridPane.columnSpan="2">
+            <image>
+                <Image url="/view/wordcrex_cup.png" />
+            </image>
+            <GridPane.margin>
+                <Insets bottom="25.0" />
+            </GridPane.margin>
+        </ImageView>
+    </top>
+    <center>
+        <GridPane BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" prefWidth="100" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+            </rowConstraints>
+            <TextField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Username" GridPane.rowIndex="0">
+                <GridPane.margin>
+                    <Insets left="25" right="25" top="30" />
+                </GridPane.margin>
+            </TextField>
+            <PasswordField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Password" GridPane.rowIndex="1">
+                <GridPane.margin>
+                    <Insets left="25" right="25" top="10" />
+                </GridPane.margin>
+            </PasswordField>
+            <PasswordField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Confirm password" GridPane.rowIndex="2">
+                <GridPane.margin>
+                    <Insets left="25" right="25" top="10" />
+                </GridPane.margin>
+            </PasswordField>
+        </GridPane>
+    </center>
+    <bottom>
+        <GridPane BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" prefWidth="100" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+            </rowConstraints>
+            <Button focusTraversable="false" onMouseClicked="#backClicked" prefHeight="40" prefWidth="300" text="Back" GridPane.hgrow="ALWAYS" GridPane.rowIndex="0">
+                <GridPane.margin>
+                    <Insets bottom="10" left="25" right="25" />
+                </GridPane.margin>
+            </Button>
+            <Button focusTraversable="false" onMouseClicked="#registerClicked" prefHeight="40" prefWidth="300" text="Register" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+                <GridPane.margin>
+                    <Insets bottom="20" left="25" right="25" />
+                </GridPane.margin>
+            </Button>
+        </GridPane>
+    </bottom>
 
-</AnchorPane>
+</BorderPane>
