@@ -1,4 +1,4 @@
-package model.database.tables;
+package model.tables;
 
 import model.database.annotations.Column;
 import model.database.annotations.PrimaryKey;

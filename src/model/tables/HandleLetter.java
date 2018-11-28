@@ -1,4 +1,4 @@
-package model.database.tables;
+package model.tables;
 
 public class HandleLetter {
 }
