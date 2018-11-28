@@ -30,10 +30,4 @@ public abstract class Controller
     {
         application.navigate(fxmlFileName, width, height);
     }
-
-    public void navigate(String fxmlFileName, int width, int height)
-    {
-        application.navigate(fxmlFileName, width, height);
-    }
-
 }
