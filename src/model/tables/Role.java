@@ -4,7 +4,7 @@ import model.database.annotations.Column;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table(value = "role")
+@Table("role")
 public class Role {
 
     @Column

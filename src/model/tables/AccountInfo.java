@@ -5,16 +5,16 @@ import model.database.annotations.ForeignKey;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table(value = "accountrole")
+@Table("accountrole")
 public class AccountInfo {
 
     @PrimaryKey
-    @Column(value = "username")
+    @Column("username")
     @ForeignKey(type = Account.class, field = "username", output = "account")
     private String usernameId;
 
     @PrimaryKey
-    @Column(value = "role")
+    @Column("role")
     @ForeignKey(type = Role.class, field = "role", output = "role")
     private String roleId;
 

@@ -4,10 +4,10 @@ import model.database.annotations.Column;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table(value = "tiletype")
+@Table("tiletype")
 public class TileType {
 
-    @Column(value = "type")
+    @Column("type")
     @PrimaryKey
     private String _tileType;
 }
