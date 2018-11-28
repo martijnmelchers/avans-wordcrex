@@ -1,7 +1,6 @@
 package view;
 
 import controller.LoginController;
-import helperClasses.View;
 import javafx.fxml.FXML;
 
 public class LoginView extends View
@@ -12,10 +11,15 @@ public class LoginView extends View
 
     }
 
-    @FXML
-    public void click()
+    public void loginClicked()
     {
         loginController = this.getController();
         loginController.navigate("MainView.fxml");
+    }
+
+    public void registerClicked()
+    {
+        loginController = this.getController();
+        loginController.navigate("RegisterView.fxml", 350, 550);
     }
 }

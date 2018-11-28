@@ -1,6 +1,6 @@
-package helperClasses;
+package controller;
 
-import controller.Main;
+import view.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,9 +26,9 @@ public class App extends Application
     {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Wordcrex");
-        primaryStage.show();
         loadControllers();
-        navigate(this.getParameters().getRaw().get(0));
+        navigate(this.getParameters().getRaw().get(0), 350, 550);
+        primaryStage.show();
     }
 
     private void loadControllers()

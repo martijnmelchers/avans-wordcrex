@@ -1,4 +1,6 @@
-package helperClasses;
+package controller;
+
+import view.View;
 
 public abstract class Controller
 {
@@ -23,6 +25,7 @@ public abstract class Controller
     {
         application.navigate(fxmlFileName);
     }
+
     public void navigate(String fxmlFileName, int width, int height)
     {
         application.navigate(fxmlFileName, width, height);
