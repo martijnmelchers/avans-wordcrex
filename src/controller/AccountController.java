@@ -7,6 +7,11 @@ public class AccountController extends Controller
 
     }
 
+    public boolean checkPasswords(String password, String confirmationPassword)
+    {
+        return password.equals(confirmationPassword);
+    }
+
     public boolean registerUser(String username, String password)
     {
         return false;

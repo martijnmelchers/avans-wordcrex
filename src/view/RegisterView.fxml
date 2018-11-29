@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-
 <?import java.net.URL?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
-<BorderPane id="register_pane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="view.RegisterView" prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane id="register_pane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.RegisterView">
     <stylesheets>
         <URL value="@Authentication.css" />
     </stylesheets>
@@ -31,18 +34,19 @@
             <rowConstraints>
                 <RowConstraints />
                 <RowConstraints />
+            <RowConstraints />
             </rowConstraints>
             <TextField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Gebruikersnaam" GridPane.rowIndex="0">
                 <GridPane.margin>
                     <Insets left="25" right="25" top="30" />
                 </GridPane.margin>
             </TextField>
-            <PasswordField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Wachtwoord" GridPane.rowIndex="1">
+            <PasswordField fx:id="password" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Wachtwoord" GridPane.rowIndex="1">
                 <GridPane.margin>
                     <Insets left="25" right="25" top="10" />
                 </GridPane.margin>
             </PasswordField>
-            <PasswordField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Opnieuw wachtwoord" GridPane.rowIndex="2">
+            <PasswordField fx:id="confirmationPassword" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Opnieuw wachtwoord" GridPane.rowIndex="2">
                 <GridPane.margin>
                     <Insets left="25" right="25" top="10" />
                 </GridPane.margin>
