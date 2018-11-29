@@ -1,5 +1,6 @@
 package controller.moderator;
 
+import javafx.scene.control.Button;
 import model.moderator.Moderator;
 import view.moderator.ModeratorView;
 import javafx.collections.FXCollections;
@@ -17,7 +18,8 @@ public class ModeratorViewController {
 
     public ModeratorViewController(){
         WordList = FXCollections.observableList(new ArrayList<String>());
-        WordList.add("KEWL");
+        WordList.add("1lekkerpiemelseten");
+        WordList.add("2lekkerpiemelseten");
 
 
     }
@@ -29,23 +31,49 @@ public class ModeratorViewController {
 
 
     @FXML private ListView WordView;
-
+    @FXML private Button DenyButton;
+    @FXML private Button AddButton;
 
     private ModeratorView moderatorView;
     private ObservableList<String> WordList;
     private Moderator moderator;
+    private String mode = "pending";
 
     public void setModerator(Moderator moderator) {
         this.moderator = moderator;
 
 
     }
+    public void refreshAccepted(){
+        mode = "accepted";
+        Refresh();
+    }
+    public void refreshPending(){
+        mode = "pending";
+        Refresh();
+    }
+    public void refreshDeclined(){
+        mode = "declined";
+        Refresh();
+    }
 
     @FXML
     private void Refresh(){
         WordList.clear();
-        for(String temp: moderator.getSuggestedWords()){
-            WordList.add(temp);
+        if(mode == "pending") {
+            for (String temp : moderator.getSuggestedWords()) {
+                WordList.add(temp);
+            }
+        }
+        else if(mode == "declined"){
+            for (String temp : moderator.getDeclinedWords()) {
+                WordList.add(temp);
+            }
+        }
+        else if (mode == "accepted"){
+            for (String temp : moderator.getAcceptedWords()) {
+                WordList.add(temp);
+            }
         }
 
 
