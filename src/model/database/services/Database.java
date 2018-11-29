@@ -2,6 +2,7 @@ package model.database.services;
 
 import model.database.annotations.*;
 import model.database.classes.Clause;
+import model.database.classes.InsertedKeys;
 import model.database.classes.Join;
 import model.database.classes.Select;
 import model.database.enumerators.CompareMethod;
@@ -32,10 +33,12 @@ public class Database {
     }
 
 
-    private <T> int insert(T item, String table) throws Exception {
+    private <T> List<InsertedKeys> insert(T item, String table) throws Exception {
         /* Store the keys to insert and values separately */
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<Object> values = new ArrayList<>();
+
+
         var hasGeneratedId = false;
 
         /* Loop through each field in the class */
@@ -45,17 +48,20 @@ public class Database {
             /* Only continue if the field is marked as a column */
             if (!field.isAnnotationPresent(Column.class)) continue;
 
-            /* If the field is auto increment and not forced continue */
+            /* If the field is auto increment, we don't have to insert a value */
             if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null)
                 continue;
             else
                 hasGeneratedId = true;
 
 
+            /* If the field is a foreign key to another table we have to create that first. */
             if (field.isAnnotationPresent(ForeignKey.class)) {
                 var annotation = field.getAnnotation(ForeignKey.class);
                 var f = item.getClass().getDeclaredField(annotation.output());
                 f.setAccessible(true);
+
+
                 var id = this.insert(f.get(item));
                 field.set(item, id);
             }
@@ -100,7 +106,7 @@ public class Database {
 
     public <T> int insert(T item) throws Exception {
         if (!item.getClass().isAnnotationPresent(Table.class))
-            throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
+            throw new Exception("Table annotation is missing! Add it to " + item.getClass() + " using: @Table(\"tablename\")");
 
         var tableName = item.getClass().getAnnotation(Table.class).value();
 
