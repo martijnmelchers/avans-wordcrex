@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 
 public class LoginView extends View
 {
-    private LoginController loginController;
-
     public LoginView()
     {
 
@@ -15,7 +13,7 @@ public class LoginView extends View
     @FXML
     public void click()
     {
-        loginController = this.getController();
+        LoginController loginController = this.getController(LoginController.class);
         loginController.navigate("MainView.fxml");
     }
 }
