@@ -2,18 +2,23 @@ package view;
 
 import controller.AccountController;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 public class RegisterView extends View
 {
 
+
+
     private AccountController accountController;
 
-    @FXML
-    private PasswordField password;
+    @FXML private Label labelError;
 
-    @FXML
-    private PasswordField confirmationPassword;
+    @FXML private PasswordField passwordFieldPassword;
+    @FXML private PasswordField passwordFieldConfirmationPassword;
+
+    @FXML private TextField textFieldUsername;
 
     @Override
     protected void loadFinished()
@@ -28,11 +33,12 @@ public class RegisterView extends View
 
     public void registerClicked()
     {
-        if(!accountController.checkPasswords(password.getText(), confirmationPassword.getText()))
-        {
-            return;
-        }
+        accountController.registerUser(textFieldUsername.getText(), passwordFieldPassword.getText(),passwordFieldConfirmationPassword.getText());
+    }
 
-        accountController.navigate("MainView.fxml");
+    public void showError(String error)
+    {
+        labelError.setText(error);
+        labelError.setVisible(true);
     }
 }

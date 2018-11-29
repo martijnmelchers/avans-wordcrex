@@ -1,5 +1,8 @@
 package controller;
 
+import view.LoginView;
+import view.RegisterView;
+
 public class AccountController extends Controller
 {
     public AccountController()
@@ -7,19 +10,28 @@ public class AccountController extends Controller
 
     }
 
-    public boolean checkPasswords(String password, String confirmationPassword)
+    private boolean checkPasswords(String password, String confirmationPassword)
     {
-        return password.equals(confirmationPassword);
+        return  password.equals(confirmationPassword);
     }
 
-    public boolean registerUser(String username, String password)
+    public void registerUser(String username, String password,String confirmationPassword)
     {
-        return false;
+        RegisterView registerView = getViewCasted();
+        if(!checkPasswords(password,confirmationPassword ))
+        {
+            registerView.showError("De wachtwoorden komen niet overeen");
+        }
+        //TODO: register user
     }
 
-    public boolean checkPassword(String username,String password)
+    public void checkUserCredentials(String username ,String password)
     {
-        return false;
+        LoginView loginView = getViewCasted();
+        if(true)
+        {
+            loginView.showError("Inloggegevens onjuist");
+        }
+        // TODO: check user credentials in model
     }
-
 }
