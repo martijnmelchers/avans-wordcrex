@@ -22,6 +22,4 @@ public class RegisterView extends View
     {
         accountController.navigate("MainView.fxml");
     }
-
-
 }

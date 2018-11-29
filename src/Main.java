@@ -1,4 +1,4 @@
-package controller;
+import controller.App;
 
 public class Main
 {
