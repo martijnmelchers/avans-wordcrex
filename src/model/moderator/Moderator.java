@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class Moderator {
 
     private GameDictionary gameDictionary;
-    private String username = "bea";
+    private String username = "Daan";
     private String letterset = "NL";
     public Moderator(Database dB){
         this.gameDictionary = new GameDictionary(dB);

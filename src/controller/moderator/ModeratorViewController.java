@@ -18,8 +18,8 @@ public class ModeratorViewController {
 
     public ModeratorViewController(){
         WordList = FXCollections.observableList(new ArrayList<String>());
-        WordList.add("1lekkerpiemelseten");
-        WordList.add("2lekkerpiemelseten");
+        WordList.add("1piemel");
+        WordList.add("2piemel");
 
 
     }
