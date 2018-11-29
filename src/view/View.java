@@ -11,6 +11,7 @@ public abstract class View
     public void setApp(App app)
     {
         application = app;
+        loadFinished();
     }
 
     protected  <T extends Controller> T getController()
