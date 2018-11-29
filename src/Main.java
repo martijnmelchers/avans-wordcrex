@@ -2,6 +2,7 @@ import model.tables.AccountInfo;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
+import controller.app;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,9 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+      
+        App application = new App();
+        application.load("LoginView.fxml");
     }
-
-
 }
+
