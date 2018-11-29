@@ -63,7 +63,7 @@ public class QueryBuilder {
     public static String buildSelect(String table, List<Select> columns, List<Clause> clauses, List<Join> joins) throws Exception {
 
         String selectString = columns.size() > 0 ? QueryBuilder.buildSelectFields(columns) : "*";
-        String joinString = joins.size() > 0 ? "\n    " + QueryBuilder.buildJoin(joins) : "";
+        String joinString = joins.size() > 0 ? "\n" + QueryBuilder.buildJoin(joins) : "";
         String clauseString = clauses.size() > 0 ? " WHERE " + QueryBuilder.buildClause(clauses) : "";
 
 
