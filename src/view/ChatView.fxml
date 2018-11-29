@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView">
-   <children>
-      <TextField layoutX="13.0" layoutY="331.0" prefHeight="49.0" prefWidth="430.0" />
-      <Button layoutX="451.0" layoutY="331.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="136.0" text="Verstuur" />
-   </children>
+    <children>
+        <TextField fx:id="messageField" layoutX="13.0" layoutY="331.0" onAction="#onEnter" prefHeight="49.0" prefWidth="430.0" />
+        <Button layoutX="451.0" layoutY="331.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="49.0" prefWidth="136.0" text="Verstuur" />
+        <ScrollPane fitToWidth="true" layoutX="13.0" layoutY="13.0" prefHeight="309.0" prefWidth="572.0">
+            <content>
+                <VBox fx:id="messagesVbox" layoutX="1.0" layoutY="1.0" prefHeight="302.0" prefWidth="565.0" />
+            </content>
+        </ScrollPane>
+    </children>
 </AnchorPane>
