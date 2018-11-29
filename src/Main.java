@@ -29,7 +29,7 @@ public class Main {
         }
       
         App application = new App();
-        application.load("LoginView.fxml");
+        application.load("ChatView.fxml");
     }
 }
 
