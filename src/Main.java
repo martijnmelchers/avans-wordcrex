@@ -1,9 +1,9 @@
-import model.tables.Account;
-import model.tables.AccountInfo;
+import controller.App;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
-import controller.App;
+import model.tables.Account;
+import model.tables.AccountInfo;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -20,21 +20,14 @@ public class Main {
 
             var clauses = new ArrayList<Clause>();
 
+
             var accountInfoTest = new AccountInfo();
             accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
             accountInfoTest.setRoleId("player");
 
             _db.insert(accountInfoTest);
 
-
-
-
-
-
-
-
-
-            for(AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
+            for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
                 System.out.println(ac);
                 System.out.println(ac.account);
                 System.out.println(ac.role);
@@ -43,7 +36,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-      
+
         App application = new App();
         application.load("LoginView.fxml");
     }
