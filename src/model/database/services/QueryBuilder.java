@@ -3,6 +3,7 @@ package model.database.services;
 import model.database.classes.Clause;
 import model.database.classes.Join;
 import model.database.classes.Select;
+import model.database.classes.TableAlias;
 
 import java.util.HashMap;
 import java.util.List;
