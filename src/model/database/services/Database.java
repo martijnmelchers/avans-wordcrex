@@ -155,7 +155,11 @@ public class Database {
             String name = this.getColumnName(field);
 
             if (field.isAnnotationPresent(PrimaryKey.class)) {
+<<<<<<< HEAD
                 clauses.add(new Clause(name, CompareMethod.EQUAL, field.get(item)));
+=======
+                clauses.add(new Clause(table, name, CompareMethod.EQUAL, field.get(item)));
+>>>>>>> development
                 continue;
             }
 
