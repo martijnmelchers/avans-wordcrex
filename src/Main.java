@@ -1,7 +1,7 @@
-package moderator;
-
-import moderator.controller.ModeratorViewController;
-import moderator.model.Moderator;
+import controller.moderator.ModeratorViewController;
+import model.database.services.Connector;
+import model.database.services.Database;
+import model.moderator.Moderator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,13 +15,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("view/Moderator.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("view/moderator/Moderator.fxml"));
         Parent root = fxmlLoader.load();
 
         ModeratorViewController controller = fxmlLoader.getController();
 
-        controller.setModerator(new Moderator());
-        primaryStage.setTitle("moderator");
+        controller.setModerator(new Moderator(new Database(new Connector().connect("databases.aii.avans.nl","ddfschol","Ab12345","smendel_db2"))));
+        primaryStage.setTitle("controller/moderator");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

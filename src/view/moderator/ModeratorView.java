@@ -1,4 +1,4 @@
-package moderator.view;
+package view.moderator;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;

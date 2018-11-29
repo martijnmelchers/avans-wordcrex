@@ -1,7 +1,7 @@
-package moderator.controller;
+package controller.moderator;
 
-import moderator.model.Moderator;
-import moderator.view.ModeratorView;
+import model.moderator.Moderator;
+import view.moderator.ModeratorView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
