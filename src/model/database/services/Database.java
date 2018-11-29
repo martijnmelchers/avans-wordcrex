@@ -2,6 +2,7 @@ package model.database.services;
 
 import model.database.annotations.*;
 import model.database.classes.Clause;
+import model.database.classes.InsertedKeys;
 import model.database.classes.Join;
 import model.database.classes.Select;
 import model.database.enumerators.CompareMethod;
@@ -26,17 +27,24 @@ import java.util.List;
  */
 public class Database {
     private Connection connection;
+    private boolean debug;
 
     public Database(Connection connection) {
         this.connection = connection;
     }
 
+    public Database(Connection connection, boolean debug) {
+        this.connection = connection;
+        this.debug = debug;
+    }
 
-    private <T> int insert(T item, String table) throws Exception {
+
+    private <T> ArrayList<InsertedKeys> insert(T item, String table) throws Exception {
         /* Store the keys to insert and values separately */
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<Object> values = new ArrayList<>();
-        var hasGeneratedId = false;
+        ArrayList<InsertedKeys> keys = new ArrayList<>();
+        boolean hasGeneratedId = false;
 
         /* Loop through each field in the class */
         for (Field field : item.getClass().getDeclaredFields()) {
@@ -45,23 +53,44 @@ public class Database {
             /* Only continue if the field is marked as a column */
             if (!field.isAnnotationPresent(Column.class)) continue;
 
-            /* If the field is auto increment and not forced continue */
-            if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null)
-                continue;
-            else
+            /* If the field is auto increment, we don't have to insert a value */
+            if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null) {
                 hasGeneratedId = true;
+                continue;
+            }
 
 
+
+            /* If the field is a foreign key to another table we have to create that first. */
             if (field.isAnnotationPresent(ForeignKey.class)) {
                 var annotation = field.getAnnotation(ForeignKey.class);
                 var f = item.getClass().getDeclaredField(annotation.output());
                 f.setAccessible(true);
-                var id = this.insert(f.get(item));
-                field.set(item, id);
+
+                var v = field.get(item);
+
+
+                if (v != null) {
+                    keys.add(this.findPrimaryKey(annotation.type(), v));
+                } else {
+                    keys.addAll(this.insert(f.get(item)));
+
+                    for (InsertedKeys key : keys) {
+                        var c = f.get(item).getClass();
+                        var oTable = c.getAnnotation(Table.class).value();
+
+                        if (key.getTable().equals(oTable) && key.getColumn().equals(annotation.field()))
+                            field.set(item, key.getValue());
+
+                    }
+
+                }
+
+
             }
 
-            /* Add the column value to the list */
-            columns.add(this.getColumnName(field));
+            /* Get the column name */
+            var columnName = this.getColumnName(field);
 
             /* Get the value of the field */
             var v = field.get(item);
@@ -70,13 +99,22 @@ public class Database {
             if (!field.isAnnotationPresent(Nullable.class) && v == null)
                 throw new Exception("Field " + field.getName() + " is not allowed to be null!");
 
+            if (field.isAnnotationPresent(PrimaryKey.class))
+                keys.add(new InsertedKeys(table, columnName, v));
+
+            /* Add the column name to the list */
+            columns.add(columnName);
+
             /* If not, add the value to the list */
             values.add(v);
 
         }
 
         var sql = QueryBuilder.buildInsert(table, columns, values);
-        System.out.println(sql);
+
+        if (this.debug)
+            LogWriter.PrintLog(sql);
+
         var statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         var rowsAffected = statement.executeUpdate();
@@ -86,35 +124,56 @@ public class Database {
         }
 
         if (hasGeneratedId) {
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                return generatedKeys.getInt(1);
-            } else {
-                throw new Exception("No ID has been generated! Insertion has failed!");
+            var generatedKeys = statement.getGeneratedKeys();
+            var metadata = statement.getMetaData();
+            int size = 0;
+            while (generatedKeys.next()) {
+                size++;
+                keys.add(new InsertedKeys(metadata.getTableName(size + 1), metadata.getColumnName(size + 1), generatedKeys.getInt(size + 1)));
             }
+
+            if (size == 0)
+                throw new Exception("No IDs were generated! Items were still inserted");
         }
 
-        return -1;
+
+        return keys;
+    }
+
+    private <T> InsertedKeys findPrimaryKey(Class<T> c, Object value) {
+        var table = c.getAnnotation(Table.class).value();
+
+        for (Field field : c.getDeclaredFields()) {
+            field.setAccessible(true);
+
+            if (!field.isAnnotationPresent(Column.class) || !field.isAnnotationPresent(PrimaryKey.class))
+                continue;
+
+            return new InsertedKeys(table, this.getColumnName(field), value);
+
+        }
+
+        return null;
     }
 
 
-    public <T> int insert(T item) throws Exception {
+    public <T> ArrayList<InsertedKeys> insert(T item) throws Exception {
         if (!item.getClass().isAnnotationPresent(Table.class))
-            throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
+            throw new Exception("Table annotation is missing! Add it to " + item.getClass() + " using: @Table(\"tablename\")");
 
         var tableName = item.getClass().getAnnotation(Table.class).value();
 
         if (tableName.equals(""))
-            throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
+            throw new Exception("Table annotation is missing! Add it to " + item.getClass() + " using: @Table(\"tablename\")");
         else
             return this.insert(item, tableName);
 
     }
 
-    public <T> ArrayList<Integer> insert(List<T> items) throws Exception {
-        var ids = new ArrayList<Integer>();
+    public <T> ArrayList<InsertedKeys> insert(List<T> items) throws Exception {
+        var ids = new ArrayList<InsertedKeys>();
         for (T item : items) {
-            ids.add(this.insert(item));
+            ids.addAll(this.insert(item));
         }
 
         return ids;
@@ -124,7 +183,8 @@ public class Database {
 
         var query = QueryBuilder.buildSelect(output.getAnnotation(Table.class).value(), this.findNamings(output), clauses, this.findForeignKeys(output));
 
-        System.out.println(query);
+        if(this.debug)
+            LogWriter.PrintLog(query);
 
         return this.select(output, query);
     }
@@ -136,7 +196,6 @@ public class Database {
         List<T> list = new ArrayList<>();
         while (resultSet.next()) {
             list.add(this.processResult(output, resultSet, list));
-
         }
 
         return list;
@@ -215,7 +274,6 @@ public class Database {
 
                 joins.addAll(this.findForeignKeys(type));
 
-
                 var tbl = type.getAnnotation(Table.class).value();
                 var originTbl = input.getAnnotation(Table.class).value();
 
@@ -243,7 +301,23 @@ public class Database {
 
         }
 
-        return joins;
+        return this.filterOutDuplicateJoins(joins);
+    }
+
+    private ArrayList<Join> filterOutDuplicateJoins(ArrayList<Join> joins) throws Exception {
+        var distinctJoins = new ArrayList<Join>();
+        var joinStrings = new ArrayList<String>();
+
+        for(Join join : joins) {
+            var sql = join.build();
+            if(!joinStrings.contains(sql)) {
+                joinStrings.add(sql);
+                distinctJoins.add(join);
+            }
+
+        }
+
+        return distinctJoins;
     }
 
     private <T> ArrayList<Select> findNamings(Class<T> input) throws Exception {
@@ -281,7 +355,23 @@ public class Database {
 
         }
 
-        return namings;
+        return this.filterOutDuplicateNamings(namings);
+    }
+
+    private ArrayList<Select> filterOutDuplicateNamings(ArrayList<Select> namings) {
+        var distinctNamings = new ArrayList<Select>();
+        var namingStrings = new ArrayList<String>();
+
+        for(Select naming : namings) {
+            var sql = naming.build();
+            if(!namingStrings.contains(sql)) {
+                namingStrings.add(sql);
+                distinctNamings.add(naming);
+            }
+        }
+
+
+        return distinctNamings;
     }
 
     private <T> T processResult(Class<T> output, ResultSet data, List<T> existing) throws Exception {
@@ -351,7 +441,7 @@ public class Database {
                     var foreignKeyField = output.getDeclaredField(annotation.output());
 
                     @SuppressWarnings("unchecked") /* Suppress this because we know it is a list */
-                    ArrayList<Object> existingItems = (ArrayList<Object>) foreignKeyField.get(output);
+                            ArrayList<Object> existingItems = (ArrayList<Object>) foreignKeyField.get(output);
 
                     var newItem = this.processResult(type, data, new ArrayList<>());
 
@@ -374,10 +464,6 @@ public class Database {
         }
 
         return null;
-    }
-
-    private static <T> ArrayList<T> createListOfType(Class<T> type) {
-        return new ArrayList<T>();
     }
 
     private <T> T findExistingItem(T goal, List<T> possiblities) throws IllegalAccessException {
