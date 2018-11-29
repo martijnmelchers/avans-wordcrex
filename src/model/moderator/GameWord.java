@@ -9,14 +9,13 @@ import model.database.annotations.Table;
 public class GameWord {
     @Column
     @PrimaryKey
-    private String word;
+    protected String word;
     @Column
-
-    private String letterset_code;
+    protected String letterset_code;
     @Column
-    private String state;
+    protected String state;
     @Column
-    private String username;
+    protected String username;
 
     public String getWord() {
         return word;

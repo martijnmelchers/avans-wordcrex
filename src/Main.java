@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import controller.moderator.ModeratorViewController;
 import model.database.services.Connector;
 import model.database.services.Database;
@@ -40,16 +39,3 @@ public class Main extends Application {
 
 
 }
-=======
-import controller.App;
-
-public class Main
-{
-    public static void main(String[] args)
-    {
-        App application = new App();
-        application.load("LoginView.fxml");
-    }
-}
-
->>>>>>> development
