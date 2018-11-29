@@ -4,12 +4,13 @@ import model.database.annotations.Column;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table("tiletype")
-public class TileType {
+@Table("turnaction")
+public class TurnAction {
 
-    @Column("type")
     @PrimaryKey
-    private String _tileType;
+    @Column("type")
+    private String _type;
 
-    public TileType() {}
+    public TurnAction(){}
+
 }
