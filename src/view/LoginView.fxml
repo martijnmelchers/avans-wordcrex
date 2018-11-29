@@ -35,12 +35,12 @@
                 <RowConstraints />
             <RowConstraints />
             </rowConstraints>
-            <TextField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Username" GridPane.rowIndex="0">
+            <TextField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Gebruikersnaam" GridPane.rowIndex="0">
                 <GridPane.margin>
                     <Insets left="25" right="25" top="30" />
                 </GridPane.margin>
             </TextField>
-            <PasswordField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Password" GridPane.rowIndex="1">
+            <PasswordField focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Wachtwoord" GridPane.rowIndex="1">
                 <GridPane.margin>
                     <Insets left="25" right="25" top="10" />
                 </GridPane.margin>
@@ -61,7 +61,7 @@
                     <Insets bottom="10" left="25" right="25" />
                 </GridPane.margin>
             </Button>
-            <Button focusTraversable="false" onMouseClicked="#registerClicked" prefHeight="40" prefWidth="300" text="Register" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+            <Button focusTraversable="false" onMouseClicked="#registerClicked" prefHeight="40" prefWidth="300" text="Registreer" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
                 <GridPane.margin>
                     <Insets bottom="20" left="25" right="25" />
                 </GridPane.margin>
