@@ -1,21 +1,33 @@
 package model.moderator;
 
 import model.database.annotations.Column;
-import model.database.annotations.ForeignKey;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table(name = "dictionary")
+@Table("dictionary")
 public class GameWord {
     @Column
     @PrimaryKey
-    protected String word;
+    private String word;
     @Column
-    protected String letterset_code;
+    private String letterset_code;
     @Column
-    protected String state;
+    private String state;
     @Column
-    protected String username;
+    private String username;
+
+    public GameWord(String word, String letterset_code, String state, String username) {
+        this.word = word;
+        this.letterset_code = letterset_code;
+        this.state = state;
+        this.username = username;
+    }
+
+    public GameWord() {
+
+    }
+
+
 
     public String getWord() {
         return word;

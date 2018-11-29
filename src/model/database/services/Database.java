@@ -60,7 +60,7 @@ public class Database {
                 field.set(item, id);
             }
 
-            /* Add the column name to the list */
+            /* Add the column value to the list */
             columns.add(this.getColumnName(field));
 
             /* Get the value of the field */
@@ -102,7 +102,7 @@ public class Database {
         if (!item.getClass().isAnnotationPresent(Table.class))
             throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
 
-        var tableName = item.getClass().getAnnotation(Table.class).name();
+        var tableName = item.getClass().getAnnotation(Table.class).value();
 
         if (tableName.equals(""))
             throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
@@ -122,7 +122,7 @@ public class Database {
 
     public <T> List<T> select(Class<T> output, List<Clause> clauses) throws Exception {
 
-        var query = QueryBuilder.buildSelect(output.getAnnotation(Table.class).name(), this.findNamings(output), clauses, this.findForeignKeys(output));
+        var query = QueryBuilder.buildSelect(output.getAnnotation(Table.class).value(), this.findNamings(output), clauses, this.findForeignKeys(output));
 
         System.out.println(query);
 
@@ -177,7 +177,7 @@ public class Database {
 
     public <T> void update(T item) throws Exception {
         if (item.getClass().isAnnotationPresent(Table.class)) {
-            var table = item.getClass().getAnnotation(Table.class).name();
+            var table = item.getClass().getAnnotation(Table.class).value();
 
             if (table.equals(""))
                 throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
@@ -189,7 +189,7 @@ public class Database {
     }
 
     private String getColumnName(Field field) {
-        String name = field.getAnnotation(Column.class).name();
+        String name = field.getAnnotation(Column.class).value();
 
         if (name.equals(""))
             name = field.getName();
@@ -218,8 +218,8 @@ public class Database {
                 joins.addAll(this.findForeignKeys(type));
 
 
-                var tbl = type.getAnnotation(Table.class).name();
-                var originTbl = input.getAnnotation(Table.class).name();
+                var tbl = type.getAnnotation(Table.class).value();
+                var originTbl = input.getAnnotation(Table.class).value();
 
                 var existingJoin = this.findJoin(joins, originTbl, tbl);
 
@@ -266,7 +266,7 @@ public class Database {
                 if (!type.isAnnotationPresent(Table.class) || !input.isAnnotationPresent(Table.class))
                     throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
 
-                var table = input.getAnnotation(Table.class).name();
+                var table = input.getAnnotation(Table.class).value();
 
                 namings.add(new Select(table, this.getColumnName(field)));
                 namings.addAll(this.findNamings(type));
@@ -275,7 +275,7 @@ public class Database {
                 if (!input.isAnnotationPresent(Table.class))
                     throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
 
-                var table = input.getAnnotation(Table.class).name();
+                var table = input.getAnnotation(Table.class).value();
 
                 namings.add(new Select(table, this.getColumnName(field)));
             }
@@ -300,7 +300,7 @@ public class Database {
             if (!output.isAnnotationPresent(Table.class))
                 throw new Exception("");
 
-            String tableName = output.getAnnotation(Table.class).name();
+            String tableName = output.getAnnotation(Table.class).value();
             String columnName = this.getColumnName(field);
             String combinedName = tableName + "." + columnName;
 
