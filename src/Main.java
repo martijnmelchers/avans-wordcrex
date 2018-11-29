@@ -3,6 +3,7 @@ import model.tables.AccountInfo;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
+import model.tables.BoardPlayer1;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,15 @@ public class Main {
                 System.out.println(ac);
                 System.out.println(ac.account);
                 System.out.println(ac.role);
+            }
+
+            clauses.clear();
+
+            for (BoardPlayer1 bp : _db.select(BoardPlayer1.class, clauses)){
+                System.out.println(bp);
+                System.out.println(bp.tile);
+                System.out.println(bp.turn);
+                System.out.println(bp.turnPlayer1);
             }
 
         } catch (Exception e) {

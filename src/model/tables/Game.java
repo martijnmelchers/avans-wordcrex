@@ -13,7 +13,7 @@ public class Game {
     private int _gameId;
 
     @Column("game_state")
-    @ForeignKey(type = GameState.class, field = "game_state", output = "gameState")
+    @ForeignKey(type = GameState.class, field = "state", output = "gameState")
     private String _gameState;
 
     @Column("letterset_code")
