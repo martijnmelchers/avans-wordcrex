@@ -27,4 +27,8 @@ public class AccountInfo {
         System.out.println("waa!!");
         return "Dit is stuff";
     }
+
+    public void setRoleId(String role) {
+        this.roleId = role;
+    }
 }
