@@ -5,7 +5,7 @@ import model.database.annotations.ForeignKey;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table("Tile")
+@Table("tile")
 public class Tile {
 
     @Column("x")

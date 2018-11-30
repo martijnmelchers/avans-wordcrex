@@ -10,7 +10,7 @@ public class Symbol {
 
     @PrimaryKey
     @Column("letterset_code")
-    @ForeignKey(type = LetterSet.class, field = "lettertype", output = "letterSet")
+    @ForeignKey(type = LetterSet.class, field = "code", output = "letterSet")
     private String _lettersetCode;
 
 

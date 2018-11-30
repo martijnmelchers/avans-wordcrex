@@ -19,7 +19,7 @@ public class TurnPlayer2 {
     private int _turnId;
 
     @PrimaryKey
-    @Column("username_player 2")
+    @Column("username_player2")
     private String _usernamePlayer1;
 
     @Column("bonus")

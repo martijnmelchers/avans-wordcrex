@@ -15,7 +15,7 @@ public class BoardPlayer2 {
 
     @PrimaryKey
     @Column("username")
-    @ForeignKey(type = TurnPlayer2.class, field = "username_player 2", output = "turnPlayer2")
+    @ForeignKey(type = TurnPlayer2.class, field = "username_player2", output = "turnPlayer2")
     private String _username;
 
     @PrimaryKey
