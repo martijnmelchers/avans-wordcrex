@@ -7,8 +7,15 @@ public class GameModel {
     private ArrayList<String> _allowedWords = new ArrayList<>();
 
     private int _currentTurn;
+    private Board _board;
 
 
+    public GameModel()
+    {
+        _board = new Board();
+    }
+
+    public Tile[][] getTiles(){ return _board.getTiles(); }
 
     private void getBoardDisplayPieces(){
 
@@ -35,7 +42,7 @@ public class GameModel {
         return false;
     }
 
-    public GameModel() { }
+
 
     private void submitWord(){
 
