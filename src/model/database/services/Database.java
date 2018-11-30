@@ -16,7 +16,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 
 /**
@@ -185,8 +184,14 @@ public class Database {
         return this.select(output, aliases, query);
     }
 
-    private String buildTableAlias(String tableName) {
-        return tableName.replaceAll("[AEIOUaeiou]", "") + "-" + new Random().nextInt(100);
+    private TableAlias buildTableAlias(String tableName, ArrayList<TableAlias> existing) {
+        var currentIdentifier = 1;
+        for(TableAlias alias : existing) {
+            if(alias.getTable().equals(tableName))
+                currentIdentifier = alias.getIdentifier() + 1;
+        }
+
+        return new TableAlias(tableName, currentIdentifier);
     }
 
     private <T> String getTableName(Class<T> item) throws Exception {
@@ -226,7 +231,7 @@ public class Database {
             String name = this.getColumnName(field);
 
             if (field.isAnnotationPresent(PrimaryKey.class)) {
-                clauses.add(new Clause(new TableAlias(table, table), name, CompareMethod.EQUAL, field.get(item)));
+                clauses.add(new Clause(new TableAlias(table, -1), name, CompareMethod.EQUAL, field.get(item)));
                 continue;
             }
 
@@ -288,20 +293,18 @@ public class Database {
             if (result.foreignKeyFinished(annotation.output()))
                 continue;
 
+            /* Get the table name of the Foreign Key and create an alias for it */
             var tblName = this.getTableName(type);
-            var tbl = new TableAlias(tblName, this.buildTableAlias(tblName));
+            var tbl = this.buildTableAlias(tblName, result.getAliases());
 
             var recursiveJoinResult = new JoinResult();
 
             for (String key : result.getFinishedForeignKeys())
                 recursiveJoinResult.addFinishedForeignKey(key);
 
-            var recursiveResult = this.findForeignKeys(type, tbl.getAlias(), recursiveJoinResult);
+            var recursiveResult = this.findForeignKeys(type, tbl.build(), recursiveJoinResult);
 
-            result.addJoins(recursiveResult.getJoins());
             result.addAliases(recursiveResult.getAliases());
-
-
 
 
             result.addAlias(tbl);
@@ -326,6 +329,7 @@ public class Database {
 
             result.addFinishedForeignKey(annotation.output());
 
+            result.addJoins(recursiveResult.getJoins());
 
         }
 
@@ -353,11 +357,11 @@ public class Database {
                 if(alias == null)
                     throw new Exception("A fatal error occured!");
 
-                namings.add(new Select(alias, this.getColumnName(field)));
-                namings.add(new Select(new TableAlias(table, table), this.getColumnName(field)));
-                namings.addAll(this.findNamings(type, alias.getAlias(), tableAliases));
+                namings.add(new Select(alias, annotation.field()));
+                namings.add(new Select(new TableAlias(table, -1), this.getColumnName(field)));
+                namings.addAll(this.findNamings(type, alias.build(), tableAliases));
             } else {
-                namings.add(new Select(new TableAlias(table, table), this.getColumnName(field)));
+                namings.add(new Select(new TableAlias(table, -1), this.getColumnName(field)));
             }
 
 
@@ -397,7 +401,7 @@ public class Database {
                 throw new Exception("");
 
             var alias = this.findAlias(aliases, this.getTableName(output));
-            var name = alias == null ? this.getTableName(output) : alias.getAlias();
+            var name = alias == null ? this.getTableName(output) : alias.build();
 
             String combinedName = name + "." + this.getColumnName(field);
 
@@ -467,7 +471,7 @@ public class Database {
 
     private TableAlias findAlias(ArrayList<TableAlias> aliases, String tableName) {
         var candidates = new ArrayList<TableAlias>();
-        var bestCandidate = new TableAlias(null, null);
+        var bestCandidate = new TableAlias(null, -1);
 
         for (TableAlias alias : aliases) {
             if (alias.getTable().equals(tableName))
@@ -485,7 +489,7 @@ public class Database {
 
     private Join findJoin(ArrayList<Join> joins, String originTable, TableAlias destinationTable) {
         for (Join join : joins) {
-            if (join.getDestinationTable().getAlias().equals(destinationTable.getAlias()) && join.getOriginTable().equals(originTable))
+            if (join.getDestinationTable().build().equals(destinationTable.build()) && join.getOriginTable().equals(originTable))
                 return join;
         }
 
