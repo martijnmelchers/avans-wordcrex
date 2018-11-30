@@ -297,6 +297,8 @@ public class Database {
             var tblName = this.getTableName(type);
             var tbl = this.buildTableAlias(tblName, result.getAliases());
 
+            result.addAlias(tbl);
+
             var recursiveJoinResult = new JoinResult();
 
             for (String key : result.getFinishedForeignKeys())
@@ -305,9 +307,6 @@ public class Database {
             var recursiveResult = this.findForeignKeys(type, tbl.build(), recursiveJoinResult);
 
             result.addAliases(recursiveResult.getAliases());
-
-
-            result.addAlias(tbl);
 
             var existingJoin = this.findJoin(result.getJoins(), table, tbl);
 
