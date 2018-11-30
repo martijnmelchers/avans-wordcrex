@@ -15,7 +15,7 @@ public class BoardPlayer1 {
 
     @PrimaryKey
     @Column("username")
-    @ForeignKey(type = TurnPlayer1.class, field = "username_player 1", output = "turnPlayer1")
+    @ForeignKey(type = TurnPlayer1.class, field = "username_player1", output = "turnPlayer1")
     private String _username;
 
     @PrimaryKey
@@ -25,18 +25,19 @@ public class BoardPlayer1 {
 
     @PrimaryKey
     @Column("letter_id")
-    @ForeignKey(type = Turn.class, field = "letter_id", output = "turn")
+    @ForeignKey(type = Letter.class, field = "letter_id", output = "letter")
     private int _letterId;
 
-    @Column("tyle_x")
-    @ForeignKey(type = Tile.class, field = "tile_x", output = "tile")
+    @Column("tile_x")
+    @ForeignKey(type = Tile.class, field = "x", output = "tile")
     private int _tileX;
 
-    @Column("tyle_y")
-    @ForeignKey(type = Tile.class, field = "tile_y", output = "tile")
+    @Column("tile_y")
+    @ForeignKey(type = Tile.class, field = "y", output = "tile")
     private int _tileY;
 
     public TurnPlayer2 turnPlayer1;
+    public Letter letter;
     public Turn turn;
     public Tile tile;
 

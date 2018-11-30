@@ -5,7 +5,7 @@ import model.database.annotations.ForeignKey;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table("Turn")
+@Table("turn")
 public class Turn {
 
     @Column("game_id")

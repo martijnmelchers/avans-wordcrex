@@ -17,7 +17,7 @@ public class Game {
     private String _gameState;
 
     @Column("letterset_code")
-    @ForeignKey(type = LetterSet.class, field = "letterset_code", output = "letterSet")
+    @ForeignKey(type = LetterSet.class, field = "code", output = "letterSet")
     private String _letterSetCode;
 
     @Column("username_player1")
