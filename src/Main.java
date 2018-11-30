@@ -18,7 +18,7 @@ public class Main {
             var conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
             var _db = new Database(conn, true);
 
-            var clauses = new ArrayList<Clause>();
+            var clauses = new ArrayList <Clause>();
 
 
             var accountInfoTest = new AccountInfo();

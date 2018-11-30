@@ -2,25 +2,28 @@ package model.database.classes;
 
 public class TableAlias {
     private String table;
-    private String alias;
+    private Integer identifier;
     private Integer usages;
 
-    public TableAlias(String table, String alias) {
+    public TableAlias(String table, Integer identifier) {
         this.table = table;
-        this.alias = alias;
+        this.identifier = identifier;
         this.usages = 0;
     }
 
     public String build() {
-        return this.alias;
+        if(identifier == -1)
+            return this.table;
+
+        return this.table + "-" + this.identifier;
     }
 
     public String getTable() {
         return table;
     }
 
-    public String getAlias() {
-        return alias;
+    public Integer getIdentifier() {
+        return identifier;
     }
 
     public Integer getUsages() {
