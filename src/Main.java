@@ -1,9 +1,8 @@
 import controller.App;
+import model.tables.AccountInfo;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
-import model.tables.Account;
-import model.tables.AccountInfo;
 
 import java.util.ArrayList;
 import java.util.Random;
