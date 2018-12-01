@@ -24,7 +24,7 @@ public class Main extends Application {
         primaryStage.setTitle("controller/moderator");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
-        
+
         primaryStage.show();
 
     }

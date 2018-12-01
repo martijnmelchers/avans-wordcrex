@@ -10,12 +10,12 @@ public class Join {
     private String originTable;
     private ArrayList<String> originColumns;
 
-    private String destinationTable;
+    private TableAlias destinationTable;
     private ArrayList<String> destinationColumns;
     private LinkMethod linkMethod;
     private JoinMethod joinMethod;
 
-    public Join(String originTable, String destinationTable, LinkMethod linkMethod, JoinMethod joinMethod) {
+    public Join(String originTable, TableAlias destinationTable, LinkMethod linkMethod, JoinMethod joinMethod) {
         this.originTable = originTable;
         this.originColumns = new ArrayList<>();
         this.destinationTable = destinationTable;
@@ -34,12 +34,12 @@ public class Join {
         return originTable;
     }
 
-    public String getDestinationTable() {
+    public TableAlias getDestinationTable() {
         return destinationTable;
     }
 
     public String build() throws Exception {
-        return joinMethod.getMethod() + " JOIN " + destinationTable + " ON " + this.buildJoins();
+        return joinMethod.getMethod() + " JOIN `" + destinationTable.getTable() + "` AS `" + destinationTable.build() + "` ON " + this.buildJoins();
     }
 
     private String buildJoins() throws Exception {
@@ -51,7 +51,7 @@ public class Join {
         for (int i = 0; i < originColumns.size(); i++) {
             builder.append("`").append(originTable).append("`.`").append(originColumns.get(i)).append("`");
             builder.append(" = ");
-            builder.append("`").append(destinationTable).append("`.`").append(destinationColumns.get(i)).append("`");
+            builder.append("`").append(destinationTable.build()).append("`.`").append(destinationColumns.get(i)).append("`");
             if (i != originColumns.size() - 1)
                 builder.append(linkMethod.getMethod());
         }

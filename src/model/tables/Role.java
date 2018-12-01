@@ -11,5 +11,6 @@ public class Role {
     @PrimaryKey
     private String role;
 
+    public Role(){}
 
 }

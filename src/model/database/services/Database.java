@@ -1,9 +1,8 @@
 package model.database.services;
 
 import model.database.annotations.*;
-import model.database.classes.Clause;
-import model.database.classes.Join;
-import model.database.classes.Select;
+import model.database.classes.*;
+import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.enumerators.JoinMethod;
 import model.database.enumerators.LinkMethod;
@@ -26,17 +25,24 @@ import java.util.List;
  */
 public class Database {
     private Connection connection;
+    private boolean debug;
 
     public Database(Connection connection) {
         this.connection = connection;
     }
 
+    public Database(Connection connection, boolean debug) {
+        this.connection = connection;
+        this.debug = debug;
+    }
 
-    private <T> int insert(T item, String table) throws Exception {
+
+    private <T> ArrayList<InsertedKeys> insert(T item, String table) throws Exception {
         /* Store the keys to insert and values separately */
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<Object> values = new ArrayList<>();
-        var hasGeneratedId = false;
+        ArrayList<InsertedKeys> keys = new ArrayList<>();
+        boolean hasGeneratedId = false;
 
         /* Loop through each field in the class */
         for (Field field : item.getClass().getDeclaredFields()) {
@@ -45,23 +51,44 @@ public class Database {
             /* Only continue if the field is marked as a column */
             if (!field.isAnnotationPresent(Column.class)) continue;
 
-            /* If the field is auto increment and not forced continue */
-            if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null)
-                continue;
-            else
+            /* If the field is auto increment, we don't have to insert a value */
+            if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null) {
                 hasGeneratedId = true;
+                continue;
+            }
 
 
+
+            /* If the field is a foreign key to another table we have to create that first. */
             if (field.isAnnotationPresent(ForeignKey.class)) {
                 var annotation = field.getAnnotation(ForeignKey.class);
                 var f = item.getClass().getDeclaredField(annotation.output());
                 f.setAccessible(true);
-                var id = this.insert(f.get(item));
-                field.set(item, id);
+
+                var v = field.get(item);
+
+
+                if (v != null) {
+                    keys.add(this.findPrimaryKey(annotation.type(), v));
+                } else {
+                    keys.addAll(this.insert(f.get(item)));
+
+                    for (InsertedKeys key : keys) {
+                        var c = f.get(item).getClass();
+                        var oTable = c.getAnnotation(Table.class).value();
+
+                        if (key.getTable().equals(oTable) && key.getColumn().equals(annotation.field()))
+                            field.set(item, key.getValue());
+
+                    }
+
+                }
+
+
             }
 
-            /* Add the column value to the list */
-            columns.add(this.getColumnName(field));
+            /* Get the column name */
+            var columnName = this.getColumnName(field);
 
             /* Get the value of the field */
             var v = field.get(item);
@@ -70,13 +97,22 @@ public class Database {
             if (!field.isAnnotationPresent(Nullable.class) && v == null)
                 throw new Exception("Field " + field.getName() + " is not allowed to be null!");
 
+            if (field.isAnnotationPresent(PrimaryKey.class))
+                keys.add(new InsertedKeys(table, columnName, v));
+
+            /* Add the column name to the list */
+            columns.add(columnName);
+
             /* If not, add the value to the list */
             values.add(v);
 
         }
 
         var sql = QueryBuilder.buildInsert(table, columns, values);
-        System.out.println(sql);
+
+        if (this.debug)
+            LogWriter.PrintLog(sql);
+
         var statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         var rowsAffected = statement.executeUpdate();
@@ -86,35 +122,49 @@ public class Database {
         }
 
         if (hasGeneratedId) {
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                return generatedKeys.getInt(1);
-            } else {
-                throw new Exception("No ID has been generated! Insertion has failed!");
+            var generatedKeys = statement.getGeneratedKeys();
+            var metadata = statement.getMetaData();
+            int size = 0;
+            while (generatedKeys.next()) {
+                size++;
+                keys.add(new InsertedKeys(metadata.getTableName(size + 1), metadata.getColumnName(size + 1), generatedKeys.getInt(size + 1)));
             }
+
+            if (size == 0)
+                throw new Exception("No IDs were generated! Items were still inserted");
         }
 
-        return -1;
+
+        return keys;
+    }
+
+    private <T> InsertedKeys findPrimaryKey(Class<T> c, Object value) {
+        var table = c.getAnnotation(Table.class).value();
+
+        for (Field field : c.getDeclaredFields()) {
+            field.setAccessible(true);
+
+            if (!field.isAnnotationPresent(Column.class) || !field.isAnnotationPresent(PrimaryKey.class))
+                continue;
+
+            return new InsertedKeys(table, this.getColumnName(field), value);
+
+        }
+
+        return null;
     }
 
 
-    public <T> int insert(T item) throws Exception {
-        if (!item.getClass().isAnnotationPresent(Table.class))
-            throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
-
-        var tableName = item.getClass().getAnnotation(Table.class).value();
-
-        if (tableName.equals(""))
-            throw new Exception("Table annotation is missing, please add it to the class or use insert(item, table)");
-        else
-            return this.insert(item, tableName);
+    public <T> ArrayList<InsertedKeys> insert(T item) throws Exception {
+        var name = this.getTableName(item.getClass());
+        return this.insert(item, name);
 
     }
 
-    public <T> ArrayList<Integer> insert(List<T> items) throws Exception {
-        var ids = new ArrayList<Integer>();
+    public <T> ArrayList<InsertedKeys> insert(List<T> items) throws Exception {
+        var ids = new ArrayList<InsertedKeys>();
         for (T item : items) {
-            ids.add(this.insert(item));
+            ids.addAll(this.insert(item));
         }
 
         return ids;
@@ -122,21 +172,47 @@ public class Database {
 
     public <T> List<T> select(Class<T> output, List<Clause> clauses) throws Exception {
 
-        var query = QueryBuilder.buildSelect(output.getAnnotation(Table.class).value(), this.findNamings(output), clauses, this.findForeignKeys(output));
+        var tableName = this.getTableName(output);
+        var result = this.findForeignKeys(output, tableName);
+        var aliases = new ArrayList<>(result.getAliases());
 
-        System.out.println(query);
+        var query = QueryBuilder.buildSelect(tableName, this.findNamings(output, tableName, aliases), clauses, result.getJoins());
 
-        return this.select(output, query);
+        if (this.debug)
+            LogWriter.PrintLog(query);
+
+        return this.select(output, aliases, query);
+    }
+
+    private TableAlias buildTableAlias(String tableName, ArrayList<TableAlias> existing) {
+        var currentIdentifier = 1;
+        for(TableAlias alias : existing) {
+            if(alias.getTable().equals(tableName))
+                currentIdentifier = alias.getIdentifier() + 1;
+        }
+
+        return new TableAlias(tableName, currentIdentifier);
+    }
+
+    private <T> String getTableName(Class<T> item) throws Exception {
+        if (!item.isAnnotationPresent(Table.class))
+            throw new Exception("Table annotation is missing! Add it to " + item + " using: @Table(\"tablename\")");
+
+        var tableName = item.getAnnotation(Table.class).value();
+
+        if (tableName.equals(""))
+            throw new Exception("Table annotation is missing! Add it to " + item + " using: @Table(\"tablename\")");
+
+        return tableName;
     }
 
 
-    private <T> List<T> select(Class<T> output, String sql) throws Exception {
+    private <T> ArrayList<T> select(Class<T> output, ArrayList<TableAlias> aliases, String sql) throws Exception {
         var resultSet = this.connection.createStatement().executeQuery(sql);
 
-        List<T> list = new ArrayList<>();
+        ArrayList<T> list = new ArrayList<>();
         while (resultSet.next()) {
-            list.add(this.processResult(output, resultSet, list));
-
+            list.add(this.processResult(output, resultSet, list, aliases));
         }
 
         return list;
@@ -155,9 +231,7 @@ public class Database {
             String name = this.getColumnName(field);
 
             if (field.isAnnotationPresent(PrimaryKey.class)) {
-
-                clauses.add(new Clause(table, name, CompareMethod.EQUAL, field.get(item)));
-
+                clauses.add(new Clause(new TableAlias(table, -1), name, CompareMethod.EQUAL, field.get(item)));
                 continue;
             }
 
@@ -197,96 +271,121 @@ public class Database {
         return name;
     }
 
-    private <T> ArrayList<Join> findForeignKeys(Class<T> input) throws Exception {
-        return this.findForeignKeys(input, new ArrayList<>());
+    private <T> JoinResult findForeignKeys(Class<T> input, String table) throws Exception {
+        return this.findForeignKeys(input, table, new JoinResult());
     }
 
-    private <T> ArrayList<Join> findForeignKeys(Class<T> input, ArrayList<Join> joins) throws Exception {
+    private <T> JoinResult findForeignKeys(Class<T> input, String table, JoinResult result) throws Exception {
         for (Field field : input.getDeclaredFields()) {
             field.setAccessible(true);
 
 
             if (!field.isAnnotationPresent(Column.class)) continue;
 
-            if (field.isAnnotationPresent(ForeignKey.class)) {
-                var annotation = field.getAnnotation(ForeignKey.class);
-                var type = annotation.type();
+            if (!field.isAnnotationPresent(ForeignKey.class))
+                continue;
+            var annotation = field.getAnnotation(ForeignKey.class);
+            var type = annotation.type();
 
-                if (!type.isAnnotationPresent(Table.class) || !input.isAnnotationPresent(Table.class))
-                    throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
+            if (!type.isAnnotationPresent(Table.class) || !input.isAnnotationPresent(Table.class))
+                throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
 
-                joins.addAll(this.findForeignKeys(type));
+            if (result.foreignKeyFinished(annotation.output()))
+                continue;
 
+            /* Get the table name of the Foreign Key and create an alias for it */
+            var tblName = this.getTableName(type);
+            var tbl = this.buildTableAlias(tblName, result.getAliases());
 
-                var tbl = type.getAnnotation(Table.class).value();
-                var originTbl = input.getAnnotation(Table.class).value();
+            result.addAlias(tbl);
 
-                var existingJoin = this.findJoin(joins, originTbl, tbl);
+            var recursiveJoinResult = new JoinResult();
 
-                if (existingJoin != null) {
-                    existingJoin.addJoinColumn(this.getColumnName(field), annotation.field());
-                } else {
+            for (String key : result.getFinishedForeignKeys())
+                recursiveJoinResult.addFinishedForeignKey(key);
 
-                    var join = new Join(
-                            originTbl,
-                            tbl,
-                            LinkMethod.AND,
-                            JoinMethod.INNER
-                    );
+            var recursiveResult = this.findForeignKeys(type, tbl.build(), recursiveJoinResult);
 
-                    join.addJoinColumn(this.getColumnName(field), annotation.field());
+            result.addAliases(recursiveResult.getAliases());
 
-                    joins.add(join);
-                }
+            var existingJoin = this.findJoin(result.getJoins(), table, tbl);
 
-
-            }
-
-
-        }
-
-        return joins;
-    }
-
-    private <T> ArrayList<Select> findNamings(Class<T> input) throws Exception {
-        return this.findNamings(input, new ArrayList<>());
-    }
-
-    private <T> ArrayList<Select> findNamings(Class<T> input, ArrayList<Select> namings) throws Exception {
-        for (Field field : input.getDeclaredFields()) {
-            field.setAccessible(true);
-
-
-            if (!field.isAnnotationPresent(Column.class)) continue;
-
-            if (field.isAnnotationPresent(ForeignKey.class)) {
-                var annotation = field.getAnnotation(ForeignKey.class);
-                var type = annotation.type();
-
-                if (!type.isAnnotationPresent(Table.class) || !input.isAnnotationPresent(Table.class))
-                    throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
-
-                var table = input.getAnnotation(Table.class).value();
-
-                namings.add(new Select(table, this.getColumnName(field)));
-                namings.addAll(this.findNamings(type));
+            if (existingJoin != null) {
+                existingJoin.addJoinColumn(this.getColumnName(field), annotation.field());
             } else {
 
-                if (!input.isAnnotationPresent(Table.class))
-                    throw new Exception("Table annotation is missing! We can't automatically generate the select statement.");
+                var join = new Join(
+                        table,
+                        tbl,
+                        LinkMethod.AND,
+                        JoinMethod.INNER
+                );
 
-                var table = input.getAnnotation(Table.class).value();
+                join.addJoinColumn(this.getColumnName(field), annotation.field());
 
-                namings.add(new Select(table, this.getColumnName(field)));
+                result.addJoin(join);
+            }
+
+            result.addFinishedForeignKey(annotation.output());
+
+            result.addJoins(recursiveResult.getJoins());
+
+        }
+
+
+        return result;
+    }
+
+    private <T> ArrayList<Select> findNamings(Class<T> input, String table, ArrayList<TableAlias> aliases) throws Exception {
+        return this.findNamings(input, new ArrayList<>(), table, aliases);
+    }
+
+    private <T> ArrayList<Select> findNamings(Class<T> input, ArrayList<Select> namings, String table, ArrayList<TableAlias> tableAliases) throws Exception {
+        for (Field field : input.getDeclaredFields()) {
+            field.setAccessible(true);
+
+
+            if (!field.isAnnotationPresent(Column.class)) continue;
+
+            if (field.isAnnotationPresent(ForeignKey.class)) {
+                var annotation = field.getAnnotation(ForeignKey.class);
+                var type = annotation.type();
+                var tableName = this.getTableName(type);
+                var alias = this.findAlias(tableAliases, tableName);
+
+                if(alias == null)
+                    throw new Exception("A fatal error occured!");
+
+                namings.add(new Select(alias, annotation.field()));
+                namings.add(new Select(new TableAlias(table, -1), this.getColumnName(field)));
+                namings.addAll(this.findNamings(type, alias.build(), tableAliases));
+            } else {
+                namings.add(new Select(new TableAlias(table, -1), this.getColumnName(field)));
             }
 
 
         }
 
-        return namings;
+        return this.filterOutDuplicateNamings(namings);
     }
 
-    private <T> T processResult(Class<T> output, ResultSet data, List<T> existing) throws Exception {
+    private ArrayList<Select> filterOutDuplicateNamings(ArrayList<Select> namings) {
+        var distinctNamings = new ArrayList<Select>();
+        var namingStrings = new ArrayList<String>();
+
+        for (Select naming : namings) {
+            var sql = naming.build();
+            if (!namingStrings.contains(sql)) {
+                namingStrings.add(sql);
+                distinctNamings.add(naming);
+            }
+        }
+
+
+        return distinctNamings;
+    }
+
+    private <T> T processResult(Class<T> output, ResultSet data, ArrayList<T> existing, ArrayList<TableAlias> aliases) throws Exception {
         T dto = output.getConstructor().newInstance();
         var foreignKeyListFields = new ArrayList<Field>();
 
@@ -300,9 +399,10 @@ public class Database {
             if (!output.isAnnotationPresent(Table.class))
                 throw new Exception("");
 
-            String tableName = output.getAnnotation(Table.class).value();
-            String columnName = this.getColumnName(field);
-            String combinedName = tableName + "." + columnName;
+            var alias = this.findAlias(aliases, this.getTableName(output));
+            var name = alias == null ? this.getTableName(output) : alias.build();
+
+            String combinedName = name + "." + this.getColumnName(field);
 
             try {
 
@@ -314,7 +414,7 @@ public class Database {
                     var foreignKeyField = output.getDeclaredField(annotation.output());
                     if (annotation.result() == ResultMethod.SINGLE) {
                         foreignKeyField.setAccessible(true);
-                        foreignKeyField.set(dto, this.processResult(type, data, new ArrayList<>()));
+                        foreignKeyField.set(dto, this.processResult(type, data, new ArrayList<>(), aliases));
                     } else {
                         foreignKeyListFields.add(field);
                     }
@@ -340,7 +440,7 @@ public class Database {
                     var type = annotation.type();
 
                     var newList = new ArrayList<>();
-                    var newItem = this.processResult(type, data, new ArrayList<>());
+                    var newItem = this.processResult(type, data, new ArrayList<>(), aliases);
                     newList.add(newItem);
 
                     var foreignKeyField = output.getDeclaredField(annotation.output());
@@ -353,9 +453,9 @@ public class Database {
                     var foreignKeyField = output.getDeclaredField(annotation.output());
 
                     @SuppressWarnings("unchecked") /* Suppress this because we know it is a list */
-                    ArrayList<Object> existingItems = (ArrayList<Object>) foreignKeyField.get(output);
+                            ArrayList<Object> existingItems = (ArrayList<Object>) foreignKeyField.get(output);
 
-                    var newItem = this.processResult(type, data, new ArrayList<>());
+                    var newItem = this.processResult(type, data, new ArrayList<>(), aliases);
 
                     existingItems.add(newItem);
 
@@ -368,18 +468,31 @@ public class Database {
         return dto;
     }
 
+    private TableAlias findAlias(ArrayList<TableAlias> aliases, String tableName) {
+        var candidates = new ArrayList<TableAlias>();
+        var bestCandidate = new TableAlias(null, -1);
 
-    private Join findJoin(ArrayList<Join> joins, String originTable, String destinationTable) {
+        for (TableAlias alias : aliases) {
+            if (alias.getTable().equals(tableName))
+                candidates.add(alias);
+        }
+
+        for (TableAlias candidate : candidates) {
+            if (bestCandidate.getUsages() > candidate.getUsages() || bestCandidate.getUsages() == 0)
+                bestCandidate = candidate;
+        }
+
+        return bestCandidate.build() == null ? null : bestCandidate;
+    }
+
+
+    private Join findJoin(ArrayList<Join> joins, String originTable, TableAlias destinationTable) {
         for (Join join : joins) {
-            if (join.getDestinationTable().equals(destinationTable) && join.getOriginTable().equals(originTable))
+            if (join.getDestinationTable().build().equals(destinationTable.build()) && join.getOriginTable().equals(originTable))
                 return join;
         }
 
         return null;
-    }
-
-    private static <T> ArrayList<T> createListOfType(Class<T> type) {
-        return new ArrayList<T>();
     }
 
     private <T> T findExistingItem(T goal, List<T> possiblities) throws IllegalAccessException {

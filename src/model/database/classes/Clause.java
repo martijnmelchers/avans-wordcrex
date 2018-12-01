@@ -5,15 +5,13 @@ import model.database.enumerators.LinkMethod;
 import model.database.services.ObjectHelper;
 
 public class Clause {
-
-    private String table;
-
+    private TableAlias table;
     private String field;
     private CompareMethod method;
     private Object value;
     private LinkMethod linkMethod;
 
-    public Clause(String table, String field, CompareMethod method, Object value, LinkMethod linkMethod) {
+    public Clause(TableAlias table, String field, CompareMethod method, Object value, LinkMethod linkMethod) {
         this.table = table;
 
         this.field = field;
@@ -22,8 +20,7 @@ public class Clause {
         this.linkMethod = linkMethod;
     }
 
-
-    public Clause(String table, String field, CompareMethod method, Object value) {
+    public Clause(TableAlias table, String field, CompareMethod method, Object value) {
         this.table = table;
 
         this.field = field;
@@ -33,8 +30,6 @@ public class Clause {
     }
 
     public String build(boolean needsLink) throws Exception {
-
-        return "`" + this.table + "`.`" + this.field + "` " + this.method.getMethod() + " " + ObjectHelper.objectToSQL(this.value) +  " " + (needsLink ? linkMethod.getMethod() : "");
-
+        return "`" + this.table.build() + "`.`" + this.field + "` " + this.method.getMethod() + " " + ObjectHelper.objectToSQL(this.value) +  " " + (needsLink ? linkMethod.getMethod() : "");
     }
 }
