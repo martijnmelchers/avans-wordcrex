@@ -1,8 +1,14 @@
 import controller.App;
-import model.tables.*;
+
+import model.tables.Account;
+
+import model.tables.AccountInfo;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
+
+import model.tables.BoardPlayer1;
+
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -20,11 +26,12 @@ public class Main {
             var clauses = new ArrayList <Clause>();
 
 
-            var accountInfoTest = new AccountInfo();
-            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
-            accountInfoTest.setRoleId("player");
+//            var accountInfoTest = new AccountInfo();
+//            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
+//            accountInfoTest.setRoleId("player");
+//
+//            _db.insert(accountInfoTest);
 
-            _db.insert(accountInfoTest);
 
             for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
                 System.out.println(ac);
@@ -37,7 +44,6 @@ public class Main {
         }
 
         App application = new App();
-        application.load("LoginView.fxml");
+        application.load("MatchOverview.fxml");
     }
 }
-

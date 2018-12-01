@@ -31,5 +31,4 @@ public class AccountInfo {
     public void setRoleId(String role) {
         this.roleId = role;
     }
-
 }
