@@ -114,7 +114,7 @@ public class App extends Application
     {
         try
         {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/"+fxmlFileName));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/"+ fxmlFileName));
             Parent root = fxmlLoader.load();
 
             if(scene == null)

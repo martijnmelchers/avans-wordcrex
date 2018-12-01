@@ -33,17 +33,17 @@ public class Main {
 //            _db.insert(accountInfoTest);
 
 
-            for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
-                System.out.println(ac);
-                System.out.println(ac.account);
-                System.out.println(ac.role);
-            }
+//            for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
+//                System.out.println(ac);
+//                System.out.println(ac.account);
+//                System.out.println(ac.role);
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         App application = new App();
-        application.load("MatchOverview.fxml");
+        application.load("AdminView.fxml");
     }
 }
