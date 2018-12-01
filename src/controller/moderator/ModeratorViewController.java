@@ -18,8 +18,8 @@ public class ModeratorViewController {
 
     public ModeratorViewController(){
         WordList = FXCollections.observableList(new ArrayList<String>());
-        WordList.add("1piemesl");
-        WordList.add("2piemesl");
+        WordList.add("1sukerkool");
+        WordList.add("2sukerkool");
 
 
     }
@@ -44,14 +44,17 @@ public class ModeratorViewController {
 
 
     }
+    @FXML
     public void refreshAccepted(){
         mode = "accepted";
         Refresh();
     }
+    @FXML
     public void refreshPending(){
         mode = "pending";
         Refresh();
     }
+    @FXML
     public void refreshDeclined(){
         mode = "declined";
         Refresh();
@@ -61,7 +64,7 @@ public class ModeratorViewController {
     private void Refresh(){
         WordList.clear();
         if(mode == "pending") {
-            for (String temp : moderator.getSuggestedWords()) {
+             for (String temp : moderator.getSuggestedWords()) {
                 WordList.add(temp);
             }
         }

@@ -1,8 +1,10 @@
 package model.moderator;
 
 import model.database.classes.Clause;
+import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
+import model.tables.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +19,13 @@ public class GameDictionary {
 
 
     public GameDictionary(Database dB) {
+
         pending = new ArrayList<Clause>();
         accepted = new ArrayList<Clause>();
         declined = new ArrayList<Clause>();
-        pending.add(new Clause("dictionary", "state", CompareMethod.EQUAL, "pending"));
-        accepted.add(new Clause("dictionary", "state", CompareMethod.EQUAL, "accepted"));
-        declined.add(new Clause("dictionary", "state", CompareMethod.EQUAL, "denied"));
+        pending.add(new Clause(new TableAlias("dictionary",-1), "state", CompareMethod.EQUAL, "pending"));
+        accepted.add(new Clause(new TableAlias("dictionary",-1), "state", CompareMethod.EQUAL, "accepted"));
+        declined.add(new Clause(new TableAlias("dictionary",-1), "state", CompareMethod.EQUAL, "denied"));
 
         this.dB = dB;
 
@@ -32,12 +35,11 @@ public class GameDictionary {
     public void refreshPending() {
 
         try {
-            words = dB.select(GameWord.class, pending);
+            words  =  dB.select(GameWord.class, pending);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
     public void refreshAccepted() {
 
         try {
@@ -46,7 +48,6 @@ public class GameDictionary {
             e.printStackTrace();
         }
     }
-
     public void refreshDeclined() {
 
         try {
@@ -74,6 +75,9 @@ public class GameDictionary {
 
     }
 
+    public void declineWords(String[] words, String userName, String letterSet){
+        dB.
+    }
 
     public List<GameWord> getWords() {
         return words;

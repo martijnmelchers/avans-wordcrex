@@ -14,12 +14,12 @@
          <Font size="10.0" />
       </font>
    </Button>
-   <Button layoutX="272.0" layoutY="8.0" mnemonicParsing="false" onAction="#Refresh" prefHeight="45.0" prefWidth="20.0" text="↻" translateX="2.0">
+   <Button layoutX="270.0" layoutY="8.0" mnemonicParsing="false" onAction="#Refresh" prefHeight="45.0" prefWidth="38.0" text="↻" translateX="2.0">
       <font>
          <Font size="18.0" />
       </font>
    </Button>
-   <Button layoutX="177.0" layoutY="8.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="96.0" text="Geaccepteerde woorden" wrapText="true" />
-   <Button layoutX="98.0" layoutY="8.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="84.0" text="Pending woorden" wrapText="true" />
-   <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="84.0" text="Geweigerde woorden" wrapText="true" />
+   <Button layoutX="177.0" layoutY="8.0" mnemonicParsing="false" onAction="#refreshAccepted" prefHeight="45.0" prefWidth="96.0" text="Geaccepteerde woorden" wrapText="true" />
+   <Button layoutX="98.0" layoutY="8.0" mnemonicParsing="false" onAction="#refreshPending" prefHeight="45.0" prefWidth="84.0" text="Pending woorden" wrapText="true" />
+   <Button layoutX="14.0" layoutY="8.0" mnemonicParsing="false" onAction="#refreshDeclined" prefHeight="45.0" prefWidth="84.0" text="Geweigerde woorden" wrapText="true" />
 </AnchorPane>
