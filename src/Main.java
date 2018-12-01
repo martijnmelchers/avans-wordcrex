@@ -1,5 +1,5 @@
 import controller.App;
-import model.tables.AccountInfo;
+import model.tables.*;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;

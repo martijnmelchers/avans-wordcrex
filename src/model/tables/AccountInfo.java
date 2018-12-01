@@ -32,7 +32,4 @@ public class AccountInfo {
         this.roleId = role;
     }
 
-    public AccountInfo() {
-
-    }
 }
