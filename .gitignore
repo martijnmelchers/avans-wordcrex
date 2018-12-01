@@ -31,3 +31,4 @@ out/
 
 # Libraries
 !libraries/**
+src/Main.java
