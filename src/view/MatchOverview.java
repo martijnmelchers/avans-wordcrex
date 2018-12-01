@@ -24,7 +24,8 @@ public class MatchOverview extends View
         controller = this.getController(MatchOverviewController.class);
 
         VBox root = new VBox();
-        root.getChildren().addAll(new Button("test"), new Button("test2"));
+        root.getChildren().addAll(new Button("test"),
+                                    new Button("test2"));
 
 
         m_matchScrollPane.setContent(root);
