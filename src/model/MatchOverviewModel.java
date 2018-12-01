@@ -1,10 +1,13 @@
 package model;
 
+import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
 import model.tables.AccountInfo;
+import model.tables.Game;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 /**
  * TODO: Add comments
@@ -29,8 +32,16 @@ public class MatchOverviewModel
             e.printStackTrace();
         }
 
+        var clauses = new ArrayList<Clause>();
 
-
-        _db.select()
+        try
+        {
+            for (Game game : _db.select(Game.class, clauses)) {
+                System.out.println(game.account);
+            }
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 }
