@@ -10,15 +10,19 @@ public class Tile {
 
     @Column("x")
     @PrimaryKey
-    private String _xPosition;
+    private int _xPosition;
 
     @Column("y")
     @PrimaryKey
-    private String _yPosition;
+    private int _yPosition;
 
     @Column("tile_type")
-    @ForeignKey(type = TileType.class, field = "type", output = "tiletype")
+    @ForeignKey(type = TileType.class, field = "type", output = "tileType")
     private String _tileType;
 
+
+    public TileType tileType;
+
+    public Tile() {}
 
 }

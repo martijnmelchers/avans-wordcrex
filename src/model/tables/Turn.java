@@ -5,15 +5,19 @@ import model.database.annotations.ForeignKey;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table("letter")
+@Table("Turn")
 public class Turn {
 
-    @PrimaryKey
-    @Column("_letterId")
-    private String _letterId;
-
     @Column("game_id")
-    @ForeignKey(type = HandleLetter.class, field = "game_id", output = "HandleLetter")
-    private String _gameId;
+    @PrimaryKey
+    @ForeignKey(type = Game.class, field = "game_id", output = "game")
+    private int _gameId;
 
+    @PrimaryKey
+    @Column("turn_id")
+    private int _turnId;
+
+    public Game game;
+
+    public Turn() {}
 }
