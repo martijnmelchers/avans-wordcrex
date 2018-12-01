@@ -19,10 +19,10 @@ public class Symbol {
     private char _symbol;
 
     @Column("value")
-    private int _value;
+    private Integer _value;
 
     @Column("Counted")
-    private int _counted;
+    private Integer _counted;
 
 
     public LetterSet letterSet;

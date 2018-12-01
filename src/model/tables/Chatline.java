@@ -18,7 +18,7 @@ public class Chatline {
     @PrimaryKey
     @Column("game_id")
     @ForeignKey(type = Game.class, field = "username", output = "game")
-    private int _gameId;
+    private Integer _gameId;
 
     @PrimaryKey
     @Column("moment")

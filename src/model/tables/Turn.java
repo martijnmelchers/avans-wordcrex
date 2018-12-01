@@ -11,11 +11,11 @@ public class Turn {
     @Column("game_id")
     @PrimaryKey
     @ForeignKey(type = Game.class, field = "game_id", output = "game")
-    private int _gameId;
+    private Integer _gameId;
 
     @PrimaryKey
     @Column("turn_id")
-    private int _turnId;
+    private Integer _turnId;
 
     public Game game;
 

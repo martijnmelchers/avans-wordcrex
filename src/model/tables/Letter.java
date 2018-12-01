@@ -10,12 +10,12 @@ public class Letter {
 
     @Column("letter_id")
     @PrimaryKey
-    private int _letterId;
+    private Integer _letterId;
 
     @PrimaryKey
     @Column("game_id")
     @ForeignKey(type = Game.class, field = "game_id", output = "game")
-    private int _gameId;
+    private Integer _gameId;
 
     @Column("symbol_letterset_code")
     @ForeignKey(type = Symbol.class, field = "letterset_code", output = "symbol")

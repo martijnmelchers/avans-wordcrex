@@ -11,7 +11,7 @@ public class BoardPlayer2 {
     @PrimaryKey
     @Column("game_id")
     @ForeignKey(type = TurnPlayer2.class, field = "game_id", output = "turnPlayer2")
-    private int _gameId;
+    private Integer _gameId;
 
     @PrimaryKey
     @Column("username")
@@ -21,20 +21,20 @@ public class BoardPlayer2 {
     @PrimaryKey
     @Column("turn_id")
     @ForeignKey(type = TurnPlayer2.class, field = "turn_id", output = "turnPlayer2")
-    private int _turnId;
+    private Integer _turnId;
 
     @PrimaryKey
     @Column("letter_id")
     @ForeignKey(type = Turn.class, field = "letter_id", output = "turn")
-    private int _letterId;
+    private Integer _letterId;
 
     @Column("tyle_x")
     @ForeignKey(type = Tile.class, field = "tile_x", output = "tile")
-    private int _tileX;
+    private Integer _tileX;
 
     @Column("tyle_y")
     @ForeignKey(type = Tile.class, field = "tile_y", output = "tile")
-    private int _tileY;
+    private Integer _tileY;
 
     public TurnPlayer2 turnPlayer2;
     public Turn turn;

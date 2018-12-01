@@ -10,11 +10,11 @@ public class Tile {
 
     @Column("x")
     @PrimaryKey
-    private int _xPosition;
+    private Integer _xPosition;
 
     @Column("y")
     @PrimaryKey
-    private int _yPosition;
+    private Integer _yPosition;
 
     @Column("tile_type")
     @ForeignKey(type = TileType.class, field = "type", output = "tileType")
