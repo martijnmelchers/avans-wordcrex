@@ -11,22 +11,22 @@ public class TurnPlayer2 {
     @PrimaryKey
     @Column("game_id")
     @ForeignKey(type = Turn.class, field = "game_id", output = "turn")
-    private int _gameId;
+    private Integer _gameId;
 
     @PrimaryKey
     @Column("turn_id")
     @ForeignKey(type = Turn.class, field = "turn_id", output = "turn")
-    private int _turnId;
+    private Integer _turnId;
 
     @PrimaryKey
     @Column("username_player2")
     private String _usernamePlayer1;
 
     @Column("bonus")
-    private int _bonus;
+    private Integer _bonus;
 
     @Column("score")
-    private int _score;
+    private Integer _score;
 
     @Column("turnaction_type")
     private String _turnactionType;

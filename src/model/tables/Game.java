@@ -10,7 +10,7 @@ public class Game {
 
     @PrimaryKey
     @Column("game_id")
-    private int _gameId;
+    private Integer _gameId;
 
     @Column("game_state")
     @ForeignKey(type = GameState.class, field = "state", output = "gameState")
