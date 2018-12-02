@@ -25,7 +25,7 @@ public class Game {
     private String _usernamePlayer1;
 
     @Column("username_player2")
-    @ForeignKey(type = Account.class, field = "username", output = "account")
+    @ForeignKey(type = Account.class, field = "username", output = "opponent")
     private String _usernamePlayer2;
 
     @Column("answer_player2")
@@ -35,7 +35,10 @@ public class Game {
     public GameState gameState;
     public LetterSet letterSet;
     public Account account;
+    public Account opponent;
     public Answer answer;
 
     public Game(){}
+
+    public Integer getGameID() { return _gameId; }
 }

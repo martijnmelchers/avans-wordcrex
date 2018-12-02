@@ -1,9 +1,10 @@
 package model;
 
 import model.database.classes.Clause;
+import model.database.classes.TableAlias;
+import model.database.enumerators.CompareMethod;
 import model.database.services.Connector;
 import model.database.services.Database;
-import model.tables.AccountInfo;
 import model.tables.Game;
 
 import java.sql.Connection;
@@ -19,7 +20,11 @@ public class MatchOverviewModel
     private Database _db;
 
     // TODO: Fill the username automatically in using the authentication feature.
-    private String _username = "";
+    private String _username = "Mega Neger #1741";
+
+    private ArrayList<Game> _games;
+    public ArrayList<Game> getGames() {return _games;}
+
 
     public MatchOverviewModel()
     {
@@ -32,16 +37,28 @@ public class MatchOverviewModel
             e.printStackTrace();
         }
 
-        var clauses = new ArrayList<Clause>();
+        _games = FindGames();
+    }
 
+    private ArrayList<Game> FindGames()
+    {
+        var clauses = new ArrayList<Clause>();
+        var foundGames = new ArrayList<Game>();
+
+        System.out.println();
+
+        clauses.add(new Clause(new TableAlias("Game", -1), "username_player1", CompareMethod.EQUAL, _username));
         try
         {
             for (Game game : _db.select(Game.class, clauses)) {
-                System.out.println(game.account);
+                foundGames.add(game);
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
         }
+
+        return foundGames;
     }
 }

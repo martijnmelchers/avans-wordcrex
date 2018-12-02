@@ -15,4 +15,6 @@ public class LetterSet {
     private String _description;
 
     public LetterSet(){}
+
+    public String getDescription(){return _description;}
 }

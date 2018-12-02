@@ -12,4 +12,7 @@ public class GameState {
     private String _state;
 
     public GameState() {}
+
+    public boolean isRequest() { return _state.equals("request"); }
+    public boolean isPlaying() { return _state.equals("playing"); }
 }
