@@ -39,5 +39,14 @@ public class LoginView extends View
         labelError.setVisible(true);
     }
 
+    public void loginSucces()
+    {
+        //TODO: accountController.navigatie("") << Main menu here
+    }
 
+    public void setCredentials(String username, String password)
+    {
+        textFieldUsername.setText(username);
+        passwordFieldPassword.setText(password);
+    }
 }

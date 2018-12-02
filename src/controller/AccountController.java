@@ -1,13 +1,18 @@
 package controller;
 
+import com.mysql.jdbc.log.Log;
+import model.AccountModel;
 import view.LoginView;
 import view.RegisterView;
 
 public class AccountController extends Controller
 {
+
+    AccountModel model;
+
     public AccountController()
     {
-
+        model = new AccountModel();
     }
 
     private boolean checkPasswords(String password, String confirmationPassword)
@@ -17,6 +22,7 @@ public class AccountController extends Controller
 
     public void registerUser(String username, String password, String confirmationPassword)
     {
+
         RegisterView registerView = getViewCasted();
         if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
         {
@@ -29,7 +35,16 @@ public class AccountController extends Controller
             registerView.showError("De wachtwoorden komen niet overeen");
             return;
         }
-        //TODO: register user
+
+        if(model.registerAccount(username,password ))
+        {
+            registerView.showError("Registreren mislukt");
+        }
+
+        navigate("loginView.fxml", 350, 550);
+
+        LoginView loginView = getViewCasted();
+        loginView.setCredentials(username,password);
     }
 
     public void checkUserCredentials(String username, String password)
@@ -41,11 +56,12 @@ public class AccountController extends Controller
             return;
         }
 
-        if(true)
+        if(model.getAccount(username,password ) == null)
         {
             loginView.showError("Inloggegevens onjuist");
             return;
         }
-        // TODO: check user credentials in model
+
+        loginView.loginSucces();
     }
 }

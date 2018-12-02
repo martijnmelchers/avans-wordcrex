@@ -18,12 +18,10 @@ public class Account {
 
     }
 
-    public boolean checkPassword(String password)
+    public Account(String username,String password)
     {
-        if(password.equals(this.password))
-        {
-            return true;
-        }
-        return false;
+        this.username = username;
+        this.password = password;
     }
+
 }
