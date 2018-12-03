@@ -14,7 +14,7 @@ import javafx.scene.text.TextFlow;
 import model.tables.Game;
 
 import java.util.ArrayList;
-
+import java.util.function.Consumer;
 
 public class MatchOverview extends View
 {
@@ -24,11 +24,11 @@ public class MatchOverview extends View
     private ScrollPane _matchScrollPane;
     private VBox _vBox;
 
-    // NOTE: the person who invites is player1.
     private Header _headerInvite;
     private Header _headerInvitations;
     private Header _headerYourTurn;
     private Header _headerOurturn;
+
 
     public MatchOverview()
     {
@@ -46,31 +46,36 @@ public class MatchOverview extends View
         _vBox = new VBox();
         _vBox.setPrefWidth(_matchScrollPane.getWidth());
         _vBox.setPrefHeight(_matchScrollPane.getHeight());
-        //_vBox.getChildren().addAll(new Button("test")); TEST THIS
 
         ArrayList<Game> games = controller.getGames();
         for (Game game : games)
         {
-            //String buttonName = game.opponent.getUsername() + " - " + game.letterSet.getDescription();
-            //Button gameButton = new Button(buttonName);
-            //gameButton.setMaxWidth(Double.MAX_VALUE);
-            //buttons.add(gameButton);
             if(game.gameState.isRequest())
             {
                 invitations.add(game);
             }
             else if(game.gameState.isPlaying())
             {
-                yourTurns.add(game);
+                //Differ in your turns
+                if(currentTurnHasAction(game))
+                {
+                    yourTurns.add(game);
+                }
+                else
+                {
+                    //their turn played(and not yours)
+                }
             }
         }
 
         // Invitation
-        initiateHeader(_headerInvitations, invitations);
+        initiateInvitationHeader(_headerInvitations, invitations);
 
         // Our Turn
+        initiateYourTurnHeader(_headerYourTurn, yourTurns);
+
         // Their Turn
-        initiateHeader(_headerYourTurn, yourTurns);
+
 
         //_vBox.getChildren().addAll(buttons);
         _vBox.getChildren().addAll(_headerInvitations.getContent());
@@ -78,14 +83,33 @@ public class MatchOverview extends View
         _matchScrollPane.setContent(_vBox);
     }
 
-    private void initiateHeader(Header header, ArrayList<Game> games) {
+    private boolean currentTurnHasAction(Game game) {
+        return controller.currentTurnHasAction(game);
+    }
+
+    private void initiateInvitationHeader(Header header, ArrayList<Game> games) {
         for(Game game : games)
         {
             String opponentName = game.opponent.getUsername();
-            header.addButton(opponentName,
-                            "Invited " + opponentName,
-                            game.letterSet.getDescription());
+            header.addButton(this::onInvitationClick, game, "Uitdaging naar " + opponentName + " gestuurd");
         }
+    }
+
+    private void initiateYourTurnHeader(Header header, ArrayList<Game> games) {
+        for(Game game : games)
+        {
+            header.addButton(this::onYourTurnClick, game, "Speel je beurt");
+        }
+    }
+
+    private void onInvitationClick(Game game)
+    {
+        System.out.println(game.getGameID());
+    }
+
+    private void onYourTurnClick(Game game)
+    {
+        System.out.println(game.getGameID());
     }
 
     private class Header
@@ -93,7 +117,6 @@ public class MatchOverview extends View
         private final Color textColor = Color.WHITE;
         private final Color labelColor = new Color(0.2392, 0.2235, 0.7921, 1);
         private final Color buttonColor = new Color(0.2784, 0.5216, 0.8, 1);
-
 
         private Label _label;
         private VBox _vBox;
@@ -116,17 +139,20 @@ public class MatchOverview extends View
             return nodes;
         }
 
-        public void addButton(String opponent, String comment, String language)
+        public void addButton(Consumer<Game> onClick, Game game, String comment)
         {
             var flowPane = new FlowPane();
             flowPane.setRowValignment(VPos.CENTER);
             flowPane.setAlignment(Pos.BASELINE_LEFT);
 
-            var pane = new Pane();
-            pane.setPrefHeight(70);
-            pane.setPrefWidth(70);
+            flowPane.setStyle("-fx-border-width: 1 0 1 0; -fx-border-color:#" + Integer.toHexString(labelColor.hashCode()) + ";");
+            flowPane.setOnMouseClicked(event -> onClick.accept(game));
 
-            var text1 = new Text(opponent + " - " + language + "\n");
+            var pane = new Pane();
+            pane.setPrefHeight(50);
+            pane.setPrefWidth(50);
+
+            var text1 = new Text(game.opponent.getUsername() + " - " + game.letterSet.getDescription() + "\n");
             text1.setFill(textColor);
             var text2 = new Text(comment);
             text2.setFill(textColor);

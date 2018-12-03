@@ -6,9 +6,13 @@ import model.database.enumerators.CompareMethod;
 import model.database.services.Connector;
 import model.database.services.Database;
 import model.tables.Game;
+import model.tables.Turn;
+import model.tables.TurnPlayer1;
+import model.tables.TurnPlayer2;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Add comments
@@ -47,7 +51,7 @@ public class MatchOverviewModel
 
         System.out.println();
 
-        clauses.add(new Clause(new TableAlias("Game", -1), "username_player1", CompareMethod.EQUAL, _username));
+        clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, _username));
         try
         {
             for (Game game : _db.select(Game.class, clauses)) {
@@ -60,5 +64,27 @@ public class MatchOverviewModel
         }
 
         return foundGames;
+    }
+
+    public boolean currentTurnHasAction(Game game) {
+        var clauses = new ArrayList<Clause>();
+
+        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _username));
+        clauses.add(new Clause(new TableAlias("turn", -1), "turn_id", CompareMethod.EQUAL, ));
+
+        try
+        {
+            List<TurnPlayer1> turnList = _db.select(TurnPlayer1.class, clauses);
+
+            System.out.println("test");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        //clauses.add(new Clause(new TableAlias()))
+
+        return false;
     }
 }

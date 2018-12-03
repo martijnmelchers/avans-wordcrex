@@ -18,4 +18,8 @@ public class MatchOverviewController extends Controller
     {
         return model.getGames();
     }
+
+    public boolean currentTurnHasAction(Game game) {
+        return model.currentTurnHasAction(game);
+    }
 }
