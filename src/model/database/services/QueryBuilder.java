@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QueryBuilder {
+class QueryBuilder {
     static String buildClause(List<Clause> clauses) throws Exception {
         var builder = new StringBuilder();
 
