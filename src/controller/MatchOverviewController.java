@@ -22,4 +22,8 @@ public class MatchOverviewController extends Controller
     public boolean currentTurnHasAction(Game game) {
         return model.currentTurnHasAction(game);
     }
+
+    public boolean currentTurnPlayer2HasAction(Game game) {
+        return model.currentTurnPlayer2HasAction(game);
+    }
 }

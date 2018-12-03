@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import model.tables.Game;
@@ -27,13 +28,14 @@ public class MatchOverview extends View
     private Header _headerInvite;
     private Header _headerInvitations;
     private Header _headerYourTurn;
-    private Header _headerOurturn;
+    private Header _headerTheirTurn;
 
 
     public MatchOverview()
     {
         _headerInvitations = new Header("Uitnodigingen");
         _headerYourTurn = new Header("Jouw Beurt");
+        _headerTheirTurn = new Header("Hun Beurt");
     }
 
     public void start()
@@ -42,6 +44,7 @@ public class MatchOverview extends View
 
         var invitations = new ArrayList<Game>();
         var yourTurns = new ArrayList<Game>();
+        var theirTurns = new ArrayList<Game>();
 
         _vBox = new VBox();
         _vBox.setPrefWidth(_matchScrollPane.getWidth());
@@ -57,48 +60,63 @@ public class MatchOverview extends View
             else if(game.gameState.isPlaying())
             {
                 //Differ in your turns
-                if(currentTurnHasAction(game))
+                if( currentTurnHasAction(game) && !player2TurnHasAction(game))
                 {
-                    yourTurns.add(game);
+                    theirTurns.add(game);
                 }
                 else
                 {
+                    yourTurns.add(game);
                     //their turn played(and not yours)
                 }
             }
         }
 
         // Invitation
-        initiateInvitationHeader(_headerInvitations, invitations);
+        initiateInvitationHeader(invitations);
 
         // Our Turn
-        initiateYourTurnHeader(_headerYourTurn, yourTurns);
+        initiateYourTurnHeader(yourTurns);
 
         // Their Turn
-
+        initiateTheirTurnHeader(theirTurns);
 
         //_vBox.getChildren().addAll(buttons);
         _vBox.getChildren().addAll(_headerInvitations.getContent());
         _vBox.getChildren().addAll(_headerYourTurn.getContent());
+        _vBox.getChildren().addAll(_headerTheirTurn.getContent());
         _matchScrollPane.setContent(_vBox);
+    }
+
+    private boolean player2TurnHasAction(Game game) {
+        return controller.currentTurnPlayer2HasAction(game);
     }
 
     private boolean currentTurnHasAction(Game game) {
         return controller.currentTurnHasAction(game);
     }
 
-    private void initiateInvitationHeader(Header header, ArrayList<Game> games) {
+    private void initiateInvitationHeader(ArrayList<Game> games) {
         for(Game game : games)
         {
-            String opponentName = game.opponent.getUsername();
-            header.addButton(this::onInvitationClick, game, "Uitdaging naar " + opponentName + " gestuurd");
+            String opponentName = game.player2.getUsername();
+            _headerInvitations.addButton(this::onInvitationClick, game, "Uitdaging naar " + opponentName + " gestuurd");
         }
     }
 
-    private void initiateYourTurnHeader(Header header, ArrayList<Game> games) {
+    private void initiateYourTurnHeader(ArrayList<Game> games) {
         for(Game game : games)
         {
-            header.addButton(this::onYourTurnClick, game, "Speel je beurt");
+            _headerYourTurn.addButton(this::onYourTurnClick, game, "Speel je beurt");
+        }
+    }
+
+    private void initiateTheirTurnHeader(ArrayList<Game> games){
+        for(Game game : games)
+        {
+            String opponentName = game.player2.getUsername();
+
+            _headerTheirTurn.addButton(this::onTheirTurnClick, game, opponentName + " moet zijn beurt nog spelen.");
         }
     }
 
@@ -112,11 +130,16 @@ public class MatchOverview extends View
         System.out.println(game.getGameID());
     }
 
+    private void onTheirTurnClick(Game game)
+    {
+        System.out.println(game.getGameID());
+    }
+
     private class Header
     {
-        private final Color textColor = Color.WHITE;
-        private final Color labelColor = new Color(0.2392, 0.2235, 0.7921, 1);
-        private final Color buttonColor = new Color(0.2784, 0.5216, 0.8, 1);
+        private final Color textColor = Color.web("#ecf0f1");
+        private final Color labelColor = Color.web("#2980b9");
+        private final Color buttonColor = Color.web("#3498db");
 
         private Label _label;
         private VBox _vBox;
@@ -152,9 +175,11 @@ public class MatchOverview extends View
             pane.setPrefHeight(50);
             pane.setPrefWidth(50);
 
-            var text1 = new Text(game.opponent.getUsername() + " - " + game.letterSet.getDescription() + "\n");
+            var text1 = new Text(game.player2.getUsername() + " - " + game.letterSet.getDescription() + "\n");
             text1.setFill(textColor);
+            text1.setFont(Font.font("Tahoma"));
             var text2 = new Text(comment);
+            text2.setFont(Font.font("Tahoma"));
             text2.setFill(textColor);
             var textFlow = new TextFlow(text1, text2);
 
