@@ -10,6 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import model.tables.Game;
@@ -183,13 +184,12 @@ public class MatchOverview extends View
 
             var text1 = new Text(game.player2.getUsername() + " - " + game.letterSet.getDescription() + "\n");
             text1.setFill(textColor);
-            text1.setFont(Font.font("Tahoma"));
+            text1.setFont(Font.font("Tahoma", FontWeight.BOLD, 12));
             var text2 = new Text(comment);
-            text2.setFont(Font.font("Tahoma"));
+            text2.setFont(Font.font("Tahoma", 12));
             text2.setFill(textColor);
             var textFlow = new TextFlow(text1, text2);
 
-            text1.setStyle("-fx-font-weight: bold;");
 
             fillBackground(flowPane, buttonColor);
             flowPane.getChildren().addAll(pane, textFlow);
