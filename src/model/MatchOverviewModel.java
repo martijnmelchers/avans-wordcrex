@@ -68,9 +68,13 @@ public class MatchOverviewModel
 
         try
         {
-            List<TurnPlayer1> turnList = _db.select(TurnPlayer1.class, clauses);
-
-            System.out.println("test");
+            var turnList = _db.select(TurnPlayer1.class, clauses);
+            for (TurnPlayer1 playerTurn : turnList)
+            {
+                if(playerTurn.turn.game.getGameID().equals(game.getGameID()))
+                {
+                    return playerTurn.getTurnActionType() != null;
+                }
             }
         }
         catch (Exception e)

@@ -23,6 +23,7 @@ public class MatchOverview extends View
 
     @FXML
     private ScrollPane _matchScrollPane;
+
     private VBox _vBox;
 
     private Header _headerInvite;
@@ -47,8 +48,8 @@ public class MatchOverview extends View
         var theirTurns = new ArrayList<Game>();
 
         _vBox = new VBox();
-        _vBox.setPrefWidth(_matchScrollPane.getWidth());
-        _vBox.setPrefHeight(_matchScrollPane.getHeight());
+
+
 
         ArrayList<Game> games = controller.getGames();
         for (Game game : games)
@@ -59,15 +60,14 @@ public class MatchOverview extends View
             }
             else if(game.gameState.isPlaying())
             {
-                //Differ in your turns
+                // Differ in your turns
                 if( currentTurnHasAction(game) && !player2TurnHasAction(game))
                 {
                     theirTurns.add(game);
                 }
-                else
+                else // Their turn played(and not yours)
                 {
                     yourTurns.add(game);
-                    //their turn played(and not yours)
                 }
             }
         }
@@ -81,11 +81,21 @@ public class MatchOverview extends View
         // Their Turn
         initiateTheirTurnHeader(theirTurns);
 
-        //_vBox.getChildren().addAll(buttons);
-        _vBox.getChildren().addAll(_headerInvitations.getContent());
-        _vBox.getChildren().addAll(_headerYourTurn.getContent());
-        _vBox.getChildren().addAll(_headerTheirTurn.getContent());
+        if(invitations.size() != 0)
+            _vBox.getChildren().addAll(_headerInvitations.getContent());
+
+        if(yourTurns.size() != 0)
+            _vBox.getChildren().addAll(_headerYourTurn.getContent());
+
+        if(theirTurns.size() != 0)
+            _vBox.getChildren().addAll(_headerTheirTurn.getContent());
+
+        fillBackground(_vBox, labelColor);
+        fillBackground(_matchScrollPane, labelColor);
+
+
         _matchScrollPane.setContent(_vBox);
+
     }
 
     private boolean player2TurnHasAction(Game game) {
@@ -127,7 +137,7 @@ public class MatchOverview extends View
 
     private void onYourTurnClick(Game game)
     {
-        System.out.println(game.getGameID());
+        System.out.println(_matchScrollPane.getHeight());
     }
 
     private void onTheirTurnClick(Game game)
@@ -137,10 +147,6 @@ public class MatchOverview extends View
 
     private class Header
     {
-        private final Color textColor = Color.web("#ecf0f1");
-        private final Color labelColor = Color.web("#2980b9");
-        private final Color buttonColor = Color.web("#3498db");
-
         private Label _label;
         private VBox _vBox;
 
@@ -189,10 +195,14 @@ public class MatchOverview extends View
             flowPane.getChildren().addAll(pane, textFlow);
             _vBox.getChildren().add(flowPane);
         }
+    }
 
-        private void fillBackground(Region node, Color color)
-        {
-            node.setBackground(new Background(new BackgroundFill(color, null, null)));
-        }
+    private static Color textColor = Color.web("#ecf0f1");
+    private static Color labelColor = Color.web("#2980b9");
+    private static Color buttonColor = Color.web("#3498db");
+
+    private static void fillBackground(Region node, Color color)
+    {
+        node.setBackground(new Background(new BackgroundFill(color, null, null)));
     }
 }
