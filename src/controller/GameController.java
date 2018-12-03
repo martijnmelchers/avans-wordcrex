@@ -3,11 +3,11 @@ package controller;
 import model.GameModel;
 import model.Tile;
 
-public class BoardController {
+public class GameController {
 
     private GameModel _gameModel;
 
-    public BoardController()
+    public GameController()
     {
         _gameModel = new GameModel();
     }

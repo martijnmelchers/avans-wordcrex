@@ -1,44 +1,46 @@
 package view;
 
-import controller.BoardController;
+import controller.GameController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import model.Tile;
 
 public class BoardView extends View {
 
-    @FXML private GridPane _gridPane;
+    @FXML
+    private GridPane _gridPane;
 
-    private BoardController _controller;
+    private GameController _controller;
 
-    public BoardView()
-    {
-        _controller = new BoardController();
+    public BoardView() {
+        _controller = new GameController();
     }
 
-    public void initialize()
-    {
-        System.out.println(_gridPane);
-
+    public void initialize() {
         Tile[][] tiles = _controller.getTiles();
 
-        for (int x = 0; x < tiles.length; x++)
-        {
-            for (int y = 0; y < tiles[x].length; y++)
-            {
-                Rectangle rect = new Rectangle(30,30);
+        for (int x = 0; x < tiles.length; x++) {
+            for (int y = 0; y < tiles[x].length; y++) {
+                StackPane stackPane = new StackPane();
+                Rectangle rect = new Rectangle(30, 30);
 
                 rect.setFill(tiles[x][y].getColor());
                 rect.setArcWidth(10);
                 rect.setArcHeight(10);
 
-                GridPane.setRowIndex(rect, x);
-                GridPane.setColumnIndex(rect, y);
+                Text text = new Text();
 
-                _gridPane.getChildren().add(rect);
+                var letter = tiles[x][y].getLetterType().letter();
+                text.setText(letter.equals("") ? tiles[x][y].getType().toString() : tiles[x][y].getLetterType().letter());
 
+                GridPane.setRowIndex(stackPane, x);
+                GridPane.setColumnIndex(stackPane, y);
+
+                stackPane.getChildren().addAll(rect, text);
+                _gridPane.getChildren().add(stackPane);
             }
         }
     }

@@ -1,4 +1,5 @@
 import controller.App;
+import model.WordChecker;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
@@ -20,6 +21,8 @@ public class Main {
             var clauses = new ArrayList<Clause>();
 
 
+            System.out.println(new WordChecker(_db).check("man"));
+
 //            var accountInfoTest = new AccountInfo();
 //            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
 //            accountInfoTest.setRoleId("player");
@@ -33,16 +36,16 @@ public class Main {
                 System.out.println(ac.role);
             }*/
 
-            for(Game game : _db.select(Game.class, clauses)) {
+            /*for(Game game : _db.select(Game.class, clauses)) {
                 System.out.println("Game found!");
 
-            }
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         App application = new App();
-        //application.load("MatchOverview.fxml");
+        application.load("BoardView.fxml");
     }
 }
