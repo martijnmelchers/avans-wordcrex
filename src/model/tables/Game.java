@@ -21,11 +21,11 @@ public class Game {
     private String _letterSetCode;
 
     @Column("username_player1")
-    @ForeignKey(type = Account.class, field = "username", output = "account")
+    @ForeignKey(type = Account.class, field = "username", output = "player1")
     private String _usernamePlayer1;
 
     @Column("username_player2")
-    @ForeignKey(type = Account.class, field = "username", output = "account")
+    @ForeignKey(type = Account.class, field = "username", output = "player2")
     private String _usernamePlayer2;
 
     @Column("answer_player2")
@@ -34,7 +34,8 @@ public class Game {
 
     public GameState gameState;
     public LetterSet letterSet;
-    public Account account;
+    public Account player1;
+    public Account player2;
     public Answer answer;
 
     public Game(){}

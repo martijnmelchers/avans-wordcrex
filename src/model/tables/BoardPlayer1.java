@@ -36,7 +36,7 @@ public class BoardPlayer1 {
     @ForeignKey(type = Tile.class, field = "y", output = "tile")
     private Integer _tileY;
 
-    public TurnPlayer2 turnPlayer1;
+    public TurnPlayer1 turnPlayer1;
     public Letter letter;
     public Turn turn;
     public Tile tile;

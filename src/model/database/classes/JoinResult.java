@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 public class JoinResult {
     private ArrayList<Join> joins;
+    private ArrayList<Select> selects;
     private ArrayList<TableAlias> aliases;
     private ArrayList<String> finishedForeignKeys;
 
     public JoinResult() {
         this.joins = new ArrayList<>();
         this.aliases = new ArrayList<>();
+        this.selects = new ArrayList<>();
         this.finishedForeignKeys = new ArrayList<>();
     }
 
@@ -21,16 +23,40 @@ public class JoinResult {
         this.joins.addAll(joins);
     }
 
-    public void addAlias(TableAlias alias) {
-        this.aliases.add(alias);
-    }
-
-    public void addAliases(ArrayList<TableAlias> aliases) {
-        this.aliases.addAll(aliases);
-    }
-
     public void addFinishedForeignKey(String keyName) {
         this.finishedForeignKeys.add(keyName);
+    }
+
+    public void addAlias(TableAlias newAlias) {
+        boolean match = false;
+        for (TableAlias alias : this.aliases) {
+            if (alias.getTable().equals(newAlias.getTable()) && alias.getIdentifier().equals(newAlias.getIdentifier()))
+                match = true;
+        }
+
+        if (!match)
+            this.aliases.add(newAlias);
+    }
+
+    public void addAliases(ArrayList<TableAlias> newAliases) {
+        for(TableAlias newAlias : newAliases) {
+            boolean match = false;
+            for (TableAlias alias : this.aliases) {
+                if (alias.getTable().equals(newAlias.getTable()) && alias.getIdentifier().equals(newAlias.getIdentifier()))
+                    match = true;
+            }
+
+            if (!match)
+                this.aliases.add(newAlias);
+        }
+    }
+
+    public void addSelect(Select select) {
+        this.selects.add(select);
+    }
+
+    public void addSelects(ArrayList<Select> selects) {
+        this.selects.addAll(selects);
     }
 
     public boolean foreignKeyFinished(String keyName) {
@@ -42,10 +68,10 @@ public class JoinResult {
     }
 
     public ArrayList<TableAlias> getAliases() {
-        return this.aliases;
+        return aliases;
     }
 
-    public ArrayList<String> getFinishedForeignKeys() {
-        return this.finishedForeignKeys;
+    public ArrayList<Select> getSelects() {
+        return this.selects;
     }
 }
