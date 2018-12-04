@@ -5,20 +5,24 @@ import model.database.annotations.ForeignKey;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table("Tile")
+@Table("tile")
 public class Tile {
 
     @Column("x")
     @PrimaryKey
-    private String _xPosition;
+    private Integer _xPosition;
 
     @Column("y")
     @PrimaryKey
-    private String _yPosition;
+    private Integer _yPosition;
 
     @Column("tile_type")
-    @ForeignKey(type = TileType.class, field = "type", output = "tiletype")
+    @ForeignKey(type = TileType.class, field = "type", output = "tileType")
     private String _tileType;
 
+
+    public TileType tileType;
+
+    public Tile() {}
 
 }

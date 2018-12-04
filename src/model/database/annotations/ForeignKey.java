@@ -1,5 +1,6 @@
 package model.database.annotations;
 
+import model.database.enumerators.JoinMethod;
 import model.database.enumerators.ResultMethod;
 
 import java.lang.annotation.ElementType;
@@ -17,4 +18,6 @@ public @interface ForeignKey {
     String output();
 
     ResultMethod result() default ResultMethod.SINGLE;
+
+    JoinMethod joinMethod() default JoinMethod.INNER;
 }

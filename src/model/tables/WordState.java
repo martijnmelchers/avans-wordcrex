@@ -4,12 +4,12 @@ import model.database.annotations.Column;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table("tiletype")
-public class TileType {
+@Table("wordstate")
+public class WordState {
 
-    @Column("type")
     @PrimaryKey
-    private String _tileType;
+    @Column("state")
+    private String _state;
 
-    public TileType() {}
+    public WordState(){}
 }
