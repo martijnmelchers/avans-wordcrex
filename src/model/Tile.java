@@ -9,6 +9,20 @@ public class Tile {
 
     private Letter _letter;
 
+    public Tile() {}
+    //LAden van de tiles
+    public Tile(TileType tileType, Color color) {
+        _tileType = tileType;
+        _tileColor = color;
+        _letter = new Letter("");
+    }
+    //Laden van de letters
+    public Tile(String letter){
+        _tileType = TileType.UNUSED;
+        _tileColor = Color.WHITE;
+        _letter = new Letter(letter);
+    }
+
     public TileType getType() {
         return _tileType;
     }
@@ -19,13 +33,11 @@ public class Tile {
 
     public Letter getLetterType() { return _letter; }
 
-    public void setLetter( String letter){ _letter.setLetter(letter); }
+    public boolean isEmpty(){ return _letter.getLetter().equals(""); }
 
-    public Tile() {}
-
-    public Tile(TileType tileType, Color color, String letter) {
-        _tileType = tileType;
-        _tileColor = color;
-        _letter = new Letter(letter);
+    public void replace( String letter, int points){
+        _letter.setLetter(letter);
+        _letter.setPoints(points);
     }
+
 }

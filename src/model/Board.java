@@ -2,8 +2,20 @@ package model;
 
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Board {
 
+    private ArrayList<Vector2> _placedCoords = new ArrayList<>();
+    private HashMap<String, Integer> _letterValues = new HashMap<>() {{
+        put("A", 2); put("B", 3); put("C", 6); put("D", 2); put("E", 1);
+        put("F", 6); put("G", 4); put("H", 5); put("I", 2); put("J", 5);
+        put("K", 4); put("L", 4); put("M", 3); put("N", 1); put("O", 2);
+        put("P", 5); put("Q", 20); put("R", 2); put("S", 3); put("T", 2);
+        put("U", 3); put("V", 5); put("W", 6); put("X", 8); put("Y", 9);
+        put("Z", 6);
+    }};
     private Tile[][] _tiles = new Tile[15][15];
 
     public Board() {
@@ -15,21 +27,22 @@ public class Board {
         }
     }
 
-    public Tile[][] getTiles() {
-        return _tiles;
-    }
+    public Tile[][] getTiles() { return _tiles; }
 
-    public boolean isTaken(int x, int y) {
-        return (_tiles[x][y].getLetterType().letter().equals(""));
-    }
+    public boolean isTaken(int x, int y) { return (_tiles[x][y].isEmpty()); }
 
     public void place(int x, int y, String letter) {
-        _tiles[x][y].setLetter(letter);
+        _tiles[x][y].replace(letter, _letterValues.get(letter.toUpperCase()));
         _tiles[x][y].setColor(Color.WHITE);
+        _placedCoords.add(new Vector2(x, y));
     }
 
-    public void remove(int x, int y){
-        _tiles[x][y] = decideTileType(x, y);
+    //Remove a piece
+    public void remove(int x, int y){ _tiles[x][y] = decideTileType(x, y); }
+
+    //Submit a piece to the database
+    public void submit(){
+        _placedCoords.clear();
     }
 
     private Tile decideTileType(int x, int y) {
@@ -49,7 +62,7 @@ public class Board {
             case 145:
             case 210:
             case 224:
-                return new Tile(TileType.LETTER_TIMES_SIX, Color.rgb(142, 234, 68), "");
+                return new Tile(TileType.LETTER_TIMES_SIX, Color.rgb(142, 234, 68));
             case 4:
             case 10:
             case 30:
@@ -62,7 +75,7 @@ public class Board {
             case 194:
             case 214:
             case 220:
-                return new Tile(TileType.WORD_TIMES_THREE, Color.rgb(234, 67, 209), "");
+                return new Tile(TileType.WORD_TIMES_THREE, Color.rgb(234, 67, 209));
             case 7:
             case 33:
             case 41:
@@ -81,7 +94,7 @@ public class Board {
             case 183:
             case 191:
             case 217:
-                return new Tile(TileType.LETTER_TIMES_FOUR, Color.rgb(78, 94, 237), "");
+                return new Tile(TileType.LETTER_TIMES_FOUR, Color.rgb(78, 94, 237));
             case 17:
             case 21:
             case 23:
@@ -98,12 +111,11 @@ public class Board {
             case 201:
             case 203:
             case 207:
-                return new Tile(TileType.LETTER_TIMES_TWO, Color.rgb(14, 212, 234), "");
+                return new Tile(TileType.LETTER_TIMES_TWO, Color.rgb(14, 212, 234));
             case 105:
             case 119:
-                return new Tile(TileType.WORD_TIMES_FOUR, Color.rgb(232, 183, 39), "");
+                return new Tile(TileType.WORD_TIMES_FOUR, Color.rgb(232, 183, 39));
         }
-        return new Tile(TileType.STANDARD, Color.rgb(51, 43, 124), "");
+        return new Tile(TileType.STANDARD, Color.rgb(51, 43, 124));
     }
-
 }

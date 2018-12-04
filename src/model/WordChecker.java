@@ -20,8 +20,9 @@ public class WordChecker {
         var clauses = new ArrayList<Clause>();
 
         try{
-            clauses.add(new Clause(new TableAlias("dictionary", -1), "word", CompareMethod.LIKE, word));
-            return _database.select(WordDictionary.class, clauses).get(0).getWord().equals(word);
+            clauses.add(new Clause(new TableAlias("dictionary", -1), "word", CompareMethod.EQUAL, word));
+            clauses.add(new Clause(new TableAlias("dictionary", -1), "state", CompareMethod.EQUAL, "accepted"));
+            return _database.select(WordDictionary.class, clauses).size() > 0;
 
         } catch (Exception e){
             e.printStackTrace();

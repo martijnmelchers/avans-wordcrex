@@ -15,13 +15,13 @@ public class Main {
          */
 
         try {
-            var conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
+            var conn = new Connector().connect("databases.aii.avans.nl", "sawitzie", "Ab12345", "smendel_db2");
             var _db = new Database(conn, true);
 
             var clauses = new ArrayList<Clause>();
 
 
-            System.out.println(new WordChecker(_db).check("man"));
+            System.out.println(new WordChecker(_db).check("sex"));
 
 //            var accountInfoTest = new AccountInfo();
 //            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");

@@ -33,8 +33,8 @@ public class BoardView extends View {
 
                 Text text = new Text();
 
-                var letter = tiles[x][y].getLetterType().letter();
-                text.setText(letter.equals("") ? tiles[x][y].getType().toString() : tiles[x][y].getLetterType().letter());
+                var letter = tiles[x][y].getLetterType().getLetter();
+                text.setText(letter.equals("") ? tiles[x][y].getType().toString() : tiles[x][y].getLetterType().getLetter());
 
                 GridPane.setRowIndex(stackPane, x);
                 GridPane.setColumnIndex(stackPane, y);
