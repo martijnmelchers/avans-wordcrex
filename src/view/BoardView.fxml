@@ -45,6 +45,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
+       <fx:include source="Dock.fxml"
       <Text layoutX="497.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1 : 0p">
          <font>
             <Font size="18.0" />
