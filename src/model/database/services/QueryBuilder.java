@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QueryBuilder {
+class QueryBuilder {
     static String buildClause(List<Clause> clauses) throws Exception {
         var builder = new StringBuilder();
 
@@ -49,6 +49,7 @@ public class QueryBuilder {
             if (iteration == updatedValues.size() - 1)
                 addComma = false;
 
+            iteration++;
             updateString.append("`").append(entry.getKey()).append("`").append(" = ").append(ObjectHelper.objectToSQL(entry.getValue())).append(addComma ? ", " : "");
         }
 
@@ -57,8 +58,10 @@ public class QueryBuilder {
         return String.format("UPDATE %s SET %s %s", table, updateString, clauseString);
     }
 
-    public static String buildDelete() {
-        return "";
+    public static String buildDelete(String table, List<Clause> clauses) throws Exception {
+        String clauseString = clauses.size() > 0 ? " WHERE " + QueryBuilder.buildClause(clauses) : "";
+
+        return String.format("DELETE FROM %s%s", table, clauseString);
     }
 
     public static String buildSelect(String table, List<Select> columns, List<Clause> clauses, List<Join> joins) throws Exception {

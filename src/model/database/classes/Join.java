@@ -12,17 +12,20 @@ public class Join {
 
     private TableAlias destinationTable;
     private ArrayList<String> destinationColumns;
+
     private LinkMethod linkMethod;
     private JoinMethod joinMethod;
 
-    public Join(String originTable, TableAlias destinationTable, LinkMethod linkMethod, JoinMethod joinMethod) {
+    private String outputVariable;
+
+    public Join(String originTable, TableAlias destinationTable, LinkMethod linkMethod, JoinMethod joinMethod, String outputVariable) {
         this.originTable = originTable;
         this.originColumns = new ArrayList<>();
         this.destinationTable = destinationTable;
         this.destinationColumns = new ArrayList<>();
         this.linkMethod = linkMethod;
         this.joinMethod = joinMethod;
-
+        this.outputVariable = outputVariable;
     }
 
     public void addJoinColumn(String origin, String destination) {
@@ -42,6 +45,10 @@ public class Join {
         return joinMethod.getMethod() + " JOIN `" + destinationTable.getTable() + "` AS `" + destinationTable.build() + "` ON " + this.buildJoins();
     }
 
+    public String getOutputVariable() {
+        return this.outputVariable;
+    }
+
     private String buildJoins() throws Exception {
         if (originColumns.size() != destinationColumns.size())
             throw new Exception("Foreign key error: destination table and origin table do not share the same amount of columns!");
@@ -53,7 +60,7 @@ public class Join {
             builder.append(" = ");
             builder.append("`").append(destinationTable.build()).append("`.`").append(destinationColumns.get(i)).append("`");
             if (i != originColumns.size() - 1)
-                builder.append(linkMethod.getMethod());
+                builder.append(" ").append(linkMethod.getMethod()).append(" ");
         }
 
         return builder.toString();
