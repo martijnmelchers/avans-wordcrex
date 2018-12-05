@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class Board {
 
@@ -45,6 +46,22 @@ public class Board {
         _placedCoords.clear();
     }
 
+    public String check(Vector2 vector2){
+        ArrayList<Character> _letters = new ArrayList<>();
+
+        for (int x = 0; x < 15; x++){
+            if(!_tiles[x][vector2.getY()].isEmpty()){
+                _letters.add(_tiles[x][vector2.getY()].getLetterType().getLetter().charAt(0));
+            }
+        }
+
+        for (int y = 0; y < 15; y++){
+            if(!_tiles[vector2.getX()][y].isEmpty()){
+                _letters.add(_tiles[vector2.getX()][y].getLetterType().getLetter().charAt(0));
+            }
+        }
+        return _letters.stream().map(e->e.toString()).collect(Collectors.joining());
+    }
     private Tile decideTileType(int x, int y) {
 
         int position = (x * 15) + y;
