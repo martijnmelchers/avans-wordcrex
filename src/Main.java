@@ -1,11 +1,8 @@
 import controller.App;
-import javafx.scene.control.Alert;
+import model.DocumentSession;
 import model.database.classes.Clause;
-import model.database.services.Connector;
-import model.database.services.Database;
 import model.tables.Account;
 import model.tables.AccountInfo;
-import model.tables.BoardPlayer1;
 import model.tables.Game;
 
 import java.util.ArrayList;
@@ -14,12 +11,11 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) {
         /*
-        Thus us a database example :)
+        This is a database example :)
          */
 
         try {
-            var conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
-            var _db = new Database(conn, true);
+            var _db = DocumentSession.getDatabase(false);
 
             var clauses = new ArrayList<Clause>();
 
