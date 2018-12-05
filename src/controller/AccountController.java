@@ -1,6 +1,5 @@
 package controller;
 
-import com.mysql.jdbc.log.Log;
 import model.AccountModel;
 import view.LoginView;
 import view.RegisterView;
@@ -36,9 +35,12 @@ public class AccountController extends Controller
             return;
         }
 
-        if(model.registerAccount(username,password ))
+        String error = model.registerAccount(username, password);
+
+        if(!error.equals(""))
         {
-            registerView.showError("Registreren mislukt");
+            registerView.showError(error);
+            return;
         }
 
         navigate("loginView.fxml", 350, 550);

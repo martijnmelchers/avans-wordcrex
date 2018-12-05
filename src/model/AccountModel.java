@@ -27,17 +27,30 @@ public class AccountModel
         }
     }
 
-    public boolean registerAccount(String username,String password)
+    public String registerAccount(String username,String password)
     {
+        if (username.length() < 5 || username.length() > 25)
+        {
+            return "Gebruikersnaam lengte moet tussen (5 - 25)";
+        }
+
+        if (password.length() < 5 || password.length() > 25)
+        {
+            return "Wachtwoord lengte moet tussen (5 - 25)";
+        }
+
+        String lowerUsername = username.toLowerCase();
+        String lowerPassword = password.toLowerCase();
+
         try
         {
-            db.insert(new Account(username,password));
-            return true;
+            db.insert(new Account(lowerUsername, lowerPassword));
+            return null;
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return false;
+            return e.getMessage();
         }
     }
 
