@@ -85,7 +85,9 @@ public class Database {
             this.delete(item);
     }
 
-
+    public void close() throws SQLException {
+        this.connection.close();
+    }
 
     private <T> ArrayList<InsertedKeys> insert(T item, String table) throws Exception {
         /* Store the keys to insert and values separately */
@@ -266,7 +268,6 @@ public class Database {
 
         this.connection.prepareStatement(query).execute();
     }
-
 
 
     private <T> T processResult(Class<T> output, ResultSet data, String table, ArrayList<T> existing, ArrayList<Join> joins) throws Exception {

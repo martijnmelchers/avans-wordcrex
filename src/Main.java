@@ -38,11 +38,14 @@ public class Main {
 
             }
 
+            _db.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         App application = new App();
         //application.load("MatchOverview.fxml");
+
+
     }
 }
