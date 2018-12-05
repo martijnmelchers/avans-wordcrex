@@ -1,4 +1,5 @@
 import controller.App;
+import javafx.scene.control.Alert;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
@@ -42,14 +43,16 @@ public class Main {
 
             }
 
+            App application = new App();
+            application.load("MainView.fxml");
+
             // close the connection nibba
             _db.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        App application = new App();
-        //application.load("MatchOverview.fxml");
+
 
 
     }
