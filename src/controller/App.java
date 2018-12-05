@@ -17,6 +17,8 @@ public class App extends Application
     private Stage primaryStage;
     private View view;
 
+    private Scene scene;
+
     public void load(String startingFxml)
     {
         launch(startingFxml);
@@ -38,7 +40,7 @@ public class App extends Application
         File[] files;
         try
         {
-            files = new File(App.class.getResource("/Controller").toURI().getPath()).listFiles();
+            files = new File(App.class.getResource("/controller").toURI().getPath()).listFiles();
         }
         catch(Exception e)
         {
@@ -67,16 +69,16 @@ public class App extends Application
 
     }
 
-    public <T extends Controller> T getController()
+    public <T extends Controller> T getController(Class<T> cType)
     {
         for (Controller c : controllers)
         {
             try
             {
-                if((T)c!=null)
+                if(c.getClass().isAssignableFrom(cType));
                 {
                     c.setApp(this);
-                    return (T)c;
+                    return cType.cast(c);
                 }
             }
             catch (Exception e) { }
@@ -114,9 +116,21 @@ public class App extends Application
         {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/"+fxmlFileName));
             Parent root = fxmlLoader.load();
+
+            if(scene == null)
+            {
+                scene = new Scene(root);
+            }
+            else
+            {
+                scene.setRoot(root);
+            }
+
             view = fxmlLoader.getController();
             view.setApp(this);
-            primaryStage.setScene(new Scene(root,width,height));
+            primaryStage.setScene(scene);
+            primaryStage.setHeight(height);
+            primaryStage.setWidth(width);
         }
         catch (Exception e)
         {

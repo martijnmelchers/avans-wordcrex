@@ -3,12 +3,13 @@ package model.database.services;
 import model.database.classes.Clause;
 import model.database.classes.Join;
 import model.database.classes.Select;
+import model.database.classes.TableAlias;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class QueryBuilder {
+class QueryBuilder {
     static String buildClause(List<Clause> clauses) throws Exception {
         var builder = new StringBuilder();
 
@@ -48,6 +49,7 @@ public class QueryBuilder {
             if (iteration == updatedValues.size() - 1)
                 addComma = false;
 
+            iteration++;
             updateString.append("`").append(entry.getKey()).append("`").append(" = ").append(ObjectHelper.objectToSQL(entry.getValue())).append(addComma ? ", " : "");
         }
 
@@ -56,14 +58,16 @@ public class QueryBuilder {
         return String.format("UPDATE %s SET %s %s", table, updateString, clauseString);
     }
 
-    public static String buildDelete() {
-        return "";
+    public static String buildDelete(String table, List<Clause> clauses) throws Exception {
+        String clauseString = clauses.size() > 0 ? " WHERE " + QueryBuilder.buildClause(clauses) : "";
+
+        return String.format("DELETE FROM %s%s", table, clauseString);
     }
 
     public static String buildSelect(String table, List<Select> columns, List<Clause> clauses, List<Join> joins) throws Exception {
 
         String selectString = columns.size() > 0 ? QueryBuilder.buildSelectFields(columns) : "*";
-        String joinString = joins.size() > 0 ? "\n    " + QueryBuilder.buildJoin(joins) : "";
+        String joinString = joins.size() > 0 ? "\n" + QueryBuilder.buildJoin(joins) : "";
         String clauseString = clauses.size() > 0 ? " WHERE " + QueryBuilder.buildClause(clauses) : "";
 
 

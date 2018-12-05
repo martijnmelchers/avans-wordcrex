@@ -12,8 +12,8 @@ public abstract class View
         application = app;
     }
 
-    protected  <T extends Controller> T getController()
+    protected  <T extends Controller> T getController(Class<T> cType)
     {
-        return application.getController();
+        return application.getController(cType);
     }
 }
