@@ -6,6 +6,7 @@ import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.tables.Game;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +90,11 @@ public class ModeratorDictionary {
         return words;
     }
     public void close(){
-        dB.close();
+        try {
+            dB.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     public int getSize() {
         return words.size();

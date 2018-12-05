@@ -31,6 +31,6 @@ public class Moderator {
         moderatorDictionary.acceptWords(words,username,letterset);
     }
     public void close(){
-        moderatorDictionary.
+        moderatorDictionary.close();
     }
 }

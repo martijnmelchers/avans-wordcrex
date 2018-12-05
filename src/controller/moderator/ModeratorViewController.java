@@ -100,7 +100,7 @@ public class ModeratorViewController {
 
     public void Dispose(){
         Stage Temp = (Stage)WordView.getScene().getWindow();
-        moderator.
+        moderator.close();
         Temp.close();
     }
 

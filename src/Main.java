@@ -20,7 +20,7 @@ public class Main extends Application {
 
         ModeratorViewController controller = fxmlLoader.getController();
 
-        controller.setModerator(new Moderator(new Database(new Connector().connect("databases.aii.avans.nl","ddfschol","Ab12345","smendel_db2"))));
+        //controller.setModerator(new Moderator(new Database(new Connector().connect("databases.aii.avans.nl","ddfschol","Ab12345","smendel_db2"))));
         primaryStage.setTitle("controller/moderator");
         primaryStage.setResizable(false);
         primaryStage.setScene(new Scene(root));
