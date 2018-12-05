@@ -39,6 +39,7 @@ FlowPane{
 AnchorPane{
 
 }
-GridPane{
+BoardGridPane{
+    display: GridPane;
     -fx-background-color: #383093;
 }
