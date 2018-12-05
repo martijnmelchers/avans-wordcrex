@@ -13,6 +13,7 @@ public class Clause {
 
     public Clause(TableAlias table, String field, CompareMethod method, Object value, LinkMethod linkMethod) {
         this.table = table;
+
         this.field = field;
         this.method = method;
         this.value = value;
@@ -21,6 +22,7 @@ public class Clause {
 
     public Clause(TableAlias table, String field, CompareMethod method, Object value) {
         this.table = table;
+
         this.field = field;
         this.method = method;
         this.value = value;

@@ -46,22 +46,61 @@ public class Board {
         _placedCoords.clear();
     }
 
-    public String check(Vector2 vector2){
-        ArrayList<Character> _letters = new ArrayList<>();
+    public int check(Vector2 vector2){
+        ArrayList<Tile> tiles = new ArrayList<>();
 
         for (int x = 0; x < 15; x++){
             if(!_tiles[x][vector2.getY()].isEmpty()){
-                _letters.add(_tiles[x][vector2.getY()].getLetterType().getLetter().charAt(0));
+                tiles.add(_tiles[x][vector2.getY()]);
             }
         }
 
         for (int y = 0; y < 15; y++){
             if(!_tiles[vector2.getX()][y].isEmpty()){
-                _letters.add(_tiles[vector2.getX()][y].getLetterType().getLetter().charAt(0));
+                tiles.add(_tiles[vector2.getX()][y]);
             }
         }
-        return _letters.stream().map(e->e.toString()).collect(Collectors.joining());
+
+        //if(new WordChecker())
+
+        return calculatePoints(tiles.toArray(new Tile[tiles.size()]));
     }
+
+    private int calculatePoints(Tile[] tiles){
+
+        int points = 0;
+
+        int w3 = 0;
+        int w4 = 0;
+
+        for (int i = 0; i < tiles.length; i++){
+            TileType tileType = tiles[i].getType();
+
+            switch (tileType){
+                case LETTER_TIMES_TWO:
+                    points += _letterValues.get(tiles[i].getLetterType().getLetter()) * 2;
+                    break;
+                case LETTER_TIMES_FOUR:
+                    points += _letterValues.get(tiles[i].getLetterType().getLetter()) * 4;
+                    break;
+                case LETTER_TIMES_SIX:
+                    points += _letterValues.get(tiles[i].getLetterType().getLetter()) * 6;
+                    break;
+                case WORD_TIMES_THREE:
+                    w3++;
+                    break;
+                case WORD_TIMES_FOUR:
+                    w4++;
+                    break;
+            }
+        }
+
+        for (int j = 0; j < w3; j++){ points *= 3; }
+        for (int j =0; j< w4; j++){ points  *= 4;}
+
+        return points;
+    }
+
     private Tile decideTileType(int x, int y) {
 
         int position = (x * 15) + y;

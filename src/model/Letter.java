@@ -14,9 +14,7 @@ public class Letter {
         return _letter;
     }
 
-    public int getPoints(){
-        return _points;
-    }
+    public int getPoints(){ return _points; }
 
     public void setPoints(int points){
         _points = points;
