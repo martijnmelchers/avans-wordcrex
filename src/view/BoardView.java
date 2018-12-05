@@ -17,7 +17,7 @@ public class BoardView extends View {
 
     @Override
     protected void loadFinished() {
-        _controller = new GameController();
+        _controller = this.getController(GameController.class);
         init();
     }
 
