@@ -116,6 +116,7 @@ public class App extends Application
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/"+fxmlFileName));
             Parent root = fxmlLoader.load();
             primaryStage.setScene(new Scene(root, width, height));
+            primaryStage.setResizable(false);
             view = fxmlLoader.getController();
             view.setApp(this);
         }
