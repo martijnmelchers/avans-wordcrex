@@ -76,7 +76,7 @@ public class GameDictionary {
     }
 
     public void declineWords(String[] words, String userName, String letterSet){
-        dB.
+
     }
 
     public List<GameWord> getWords() {
