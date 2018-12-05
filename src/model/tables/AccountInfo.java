@@ -24,8 +24,7 @@ public class AccountInfo {
     public AccountInfo(){}
 
     public String doStuff() {
-        System.out.println("waa!!");
-        return "Dit is stuff";
+        return usernameId;
     }
 
     public void setRoleId(String role) {

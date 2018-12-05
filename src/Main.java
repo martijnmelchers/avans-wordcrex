@@ -2,10 +2,13 @@ import controller.App;
 import model.database.classes.Clause;
 import model.database.services.Connector;
 import model.database.services.Database;
+import model.tables.Account;
+import model.tables.AccountInfo;
 import model.tables.BoardPlayer1;
 import model.tables.Game;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,24 +23,26 @@ public class Main {
             var clauses = new ArrayList<Clause>();
 
 
-//            var accountInfoTest = new AccountInfo();
-//            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
-//            accountInfoTest.setRoleId("player");
-//
-//            _db.insert(accountInfoTest);
+            var accountInfoTest = new AccountInfo();
+            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
+            accountInfoTest.setRoleId("player");
+
+            _db.insert(accountInfoTest);
 
 
-            /*for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
-                System.out.println(ac);
-                System.out.println(ac.account);
-                System.out.println(ac.role);
-            }*/
+            /* fuck that account lets delete that nibba again */
+            _db.delete(accountInfoTest);
+
+            for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
+                System.out.println("Account found! " + ac.doStuff());
+            }
 
             for(Game game : _db.select(Game.class, clauses)) {
                 System.out.println("Game found!");
 
             }
 
+            // close the connection nibba
             _db.close();
         } catch (Exception e) {
             e.printStackTrace();
