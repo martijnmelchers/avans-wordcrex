@@ -16,4 +16,9 @@ public class LoginView extends View
         LoginController loginController = this.getController(LoginController.class);
         loginController.navigate("MainView.fxml");
     }
+
+    @Override
+    protected void loadFinished() {
+
+    }
 }

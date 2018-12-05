@@ -15,11 +15,13 @@ public class BoardView extends View {
 
     private GameController _controller;
 
-    public BoardView() {
+    @Override
+    protected void loadFinished() {
         _controller = new GameController();
+        init();
     }
 
-    public void initialize() {
+    public void init() {
         Tile[][] tiles = _controller.getTiles();
 
         for (int x = 0; x < tiles.length; x++) {
@@ -44,4 +46,6 @@ public class BoardView extends View {
             }
         }
     }
+
+
 }
