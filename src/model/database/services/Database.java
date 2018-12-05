@@ -19,7 +19,6 @@ import java.util.List;
 /**
  * TODO: Add comments
  * TODO: Clean up code
- * TODO: Add delete and fix update recusrive call
  */
 public class Database {
     private Connection connection;
