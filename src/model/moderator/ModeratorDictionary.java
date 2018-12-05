@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class GameDictionary {
+public class ModeratorDictionary {
     private List<GameWord> words;
     private Database dB;
     private List<Clause> pending;
@@ -18,7 +18,7 @@ public class GameDictionary {
     private List<Clause> declined;
 
 
-    public GameDictionary(Database dB) {
+    public ModeratorDictionary(Database dB) {
 
         pending = new ArrayList<Clause>();
         accepted = new ArrayList<Clause>();
@@ -58,16 +58,22 @@ public class GameDictionary {
     }
 
     public void acceptWords(String[] words, String userName, String letterset) {
+        setWords(words,userName,letterset,"accepted");
+
+
+    }
+
+    public void setWords(String[] words, String userName, String letterSet,String state) {
         List<GameWord> acceptedWords = new ArrayList<GameWord>();
 
         for (String temp : words) {
             acceptedWords.add(
-                    new GameWord(temp, letterset, "accepted", userName)
+                    new GameWord(temp, letterSet, state, userName)
             );
         }
 
         try {
-            dB.insert(acceptedWords);
+            dB.update(acceptedWords);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,13 +82,15 @@ public class GameDictionary {
     }
 
     public void declineWords(String[] words, String userName, String letterSet){
-
+        setWords(words,userName,letterSet,"denied");
     }
 
     public List<GameWord> getWords() {
         return words;
     }
-
+    public void close(){
+        dB.close();
+    }
     public int getSize() {
         return words.size();
     }

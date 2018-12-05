@@ -3,34 +3,34 @@ package model.moderator;
 
 import model.database.services.Database;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 public class Moderator {
 
-    private GameDictionary gameDictionary;
+    private ModeratorDictionary moderatorDictionary;
     private String username = "Daan";
     private String letterset = "NL";
     public Moderator(Database dB){
-        this.gameDictionary = new GameDictionary(dB);
+        this.moderatorDictionary = new ModeratorDictionary(dB);
     }
 
     public String[] getSuggestedWords(){
-        gameDictionary.refreshPending();
-        return gameDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
+        moderatorDictionary.refreshPending();
+        return moderatorDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
     }
     public String[] getDeclinedWords(){
-        gameDictionary.refreshDeclined();
-        return gameDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
+        moderatorDictionary.refreshDeclined();
+        return moderatorDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
     }
     public String[] getAcceptedWords(){
-        gameDictionary.refreshAccepted();
-        return gameDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
+        moderatorDictionary.refreshAccepted();
+        return moderatorDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
     }
     public void rejectSuggestedWords(String[] words){
 
     }
     public void acceptSuggestedWords(String[] words){
-        gameDictionary.acceptWords(words,username,letterset);
+        moderatorDictionary.acceptWords(words,username,letterset);
+    }
+    public void close(){
+        moderatorDictionary.
     }
 }

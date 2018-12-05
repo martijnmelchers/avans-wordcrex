@@ -1,0 +1,24 @@
+Button{
+
+}
+TextFlow{
+    color: #ecf0f1;
+    font: "Tahoma";
+
+}
+Text{
+    color: #ecf0f1;
+    font: "Tahoma";
+}
+VBox{
+    color: #2980b9;
+}
+ScrollPane{
+    color: #2980b9;
+}
+Label{
+    color: #2980b9;
+}
+FlowPane{
+    color: #3498db;
+}

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="630.0" prefWidth="330.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.moderator.ModeratorViewController">
+<AnchorPane prefHeight="630.0" prefWidth="330.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.moderator.ModeratorViewController">
    <ListView fx:id="WordView" layoutX="14.0" layoutY="52.0" prefHeight="502.0" prefWidth="303.0" />
    <Button fx:id="DenyButton" layoutX="14.0" layoutY="571.0" mnemonicParsing="false" onAction="#IgnoreWord" prefHeight="45.0" prefWidth="140.0" text="Woord Weigeren" />
    <Button fx:id="AddButton" layoutX="177.0" layoutY="571.0" mnemonicParsing="false" onAction="#AddWord" prefHeight="45.0" prefWidth="140.0" text="Woord Toevoegen" />
