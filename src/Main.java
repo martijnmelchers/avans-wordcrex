@@ -13,11 +13,11 @@ public class Main {
         Thus us a database example :)
          */
 
-        try {
-            var conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
+/*        try {
+*//*            var conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
             var _db = new Database(conn, true);
 
-            var clauses = new ArrayList<Clause>();
+            var clauses = new ArrayList<Clause>();*//*
 
 
 //            var accountInfoTest = new AccountInfo();
@@ -27,21 +27,22 @@ public class Main {
 //            _db.insert(accountInfoTest);
 
 
-            /*for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
+            *//*for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
                 System.out.println(ac);
                 System.out.println(ac.account);
                 System.out.println(ac.role);
-            }*/
-
+            }*//*
+*//*
             for(Game game : _db.select(Game.class, clauses)) {
                 System.out.println("Game found!");
 
-            }
+            }*//*
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
         App application = new App();
+        application.load("ChatView.fxml");
     }
 }

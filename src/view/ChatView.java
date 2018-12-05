@@ -1,14 +1,19 @@
 package view;
 
+import controller.ChatController;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import model.tables.Chatline;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class ChatView extends View{
-    private ArrayList<String> messages = new ArrayList<>();
+public class ChatView extends View {
+
+    private ChatController _controller = new ChatController();
 
     @FXML
     private Pane messagesVbox;
@@ -16,13 +21,19 @@ public class ChatView extends View{
     @FXML
     private TextField messageField;
 
-    // temporary function for displaying messages
+    public ChatView() {
+        // TODO: run displaymessages after all the fxml elements have loaded
+    }
+
+    // function for displaying messages
     public void displayMessages() {
         messagesVbox.getChildren().clear();
 
-        for(String message : messages){
+        ArrayList<Chatline> chatlines = _controller.getChatlines(500);
+
+        for (Chatline chatline : chatlines) {
             Text displayMessage = new Text();
-            displayMessage.setText(message);
+            displayMessage.setText(chatline.getMessage());
             messagesVbox.getChildren().add(displayMessage);
         }
     }
@@ -31,12 +42,17 @@ public class ChatView extends View{
     public void sendMessage() {
         String message = messageField.getText();
 
-        if(!message.isEmpty()){
-            messages.add(message);
-            messageField.clear();
-        }
+        if (!message.isEmpty()) {
+            Timestamp timestamp = new Timestamp(new Date().getTime());
 
-        displayMessages();
+            System.out.println(timestamp);
+
+            // TODO: base variables on game that is being played and user
+            Chatline chatline = new Chatline("ger", 500, timestamp, message);
+            _controller.sendChatline(chatline);
+
+            displayMessages();
+        }
     }
 
     // when enter key is pressed send the message
