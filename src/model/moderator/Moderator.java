@@ -25,7 +25,7 @@ public class Moderator {
         return moderatorDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
     }
     public void rejectSuggestedWords(String[] words){
-
+        moderatorDictionary.declineWords(words,username,letterset);
     }
     public void acceptSuggestedWords(String[] words){
         moderatorDictionary.acceptWords(words,username,letterset);
