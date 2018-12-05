@@ -35,6 +35,8 @@ public class Main {
 
             for(Game game : _db.select(Game.class, clauses)) {
                 System.out.println("Game found!");
+                _db.update(game);
+                _db.delete(game);
 
             }
 
