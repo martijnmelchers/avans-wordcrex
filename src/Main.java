@@ -40,7 +40,7 @@ public class Main {
             }
 
             App application = new App();
-            application.load("MatchOverview.fxml");
+            application.load("MatchOverview");
 
             // close the connection nibba
             _db.close();
