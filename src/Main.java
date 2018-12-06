@@ -40,15 +40,12 @@ public class Main {
             }
 
             App application = new App();
+            application.load("MatchOverview.fxml");
 
             // close the connection nibba
             _db.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 }
