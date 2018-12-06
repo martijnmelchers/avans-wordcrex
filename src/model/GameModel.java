@@ -1,5 +1,9 @@
 package model;
 
+import model.database.services.Database;
+import model.tables.Turn;
+import model.tables.TurnPlayer1;
+
 import java.util.ArrayList;
 
 public class GameModel {
@@ -39,9 +43,23 @@ public class GameModel {
     //Geeft de tile terug die er lag voordat het verwijderd word
     public Tile removeTile(Vector2 vector2) { return _board.remove(vector2); }
 
-    public void checkBoard(Vector2 vector2) { _board.check(vector2); }
+    public CheckInfo checkBoard(Vector2 vector2) { return _board.check(vector2); }
 
-    public void submitTurn(CheckInfo info) { _board.submit(info); }
+    //Submit a piece to the database
+    public void submitTurn(CheckInfo checkInfo){
+        //TODO check of hij alseerste plaatst
+        //TODO als hij als laatste plaats kijk of de text gelijk is en geef 5 punten aan de tegen partij
+        Database db = DocumentSession.getDatabase();
+        try{
+            db.insert(new Turn(1, 5));
+            db.insert(new TurnPlayer1(1,5, "Mega Neger #1741", 10, 1, "play"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        //db.insert(new InsertedKeys())
+        _board.clearPlacedCoords();
+    }
+
 
 }
 

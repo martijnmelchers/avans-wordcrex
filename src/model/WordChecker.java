@@ -15,6 +15,9 @@ public class WordChecker {
     public WordChecker(){ _database = DocumentSession.getDatabase(); }
 
     public boolean check(String word){
+
+        if(word == null) return false;
+
         var clauses = new ArrayList<Clause>();
 
         try{

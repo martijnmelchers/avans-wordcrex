@@ -19,5 +19,8 @@ public class Turn {
 
     public Game game;
 
-    public Turn() {}
+    public Turn(Integer gameId, Integer turnId) {
+        _gameId = gameId;
+        _turnId = turnId;
+    }
 }

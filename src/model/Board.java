@@ -3,7 +3,9 @@ package model;
 import javafx.scene.paint.Color;
 import model.database.classes.InsertedKeys;
 import model.database.services.Database;
+import model.tables.TurnPlayer1;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,6 +21,9 @@ public class Board {
         put("Z", 6);
     }};
     private Tile[][] _tiles = new Tile[15][15];
+
+    public ArrayList<Vector2> getPlacedCoords(){ return _placedCoords; }
+    public void clearPlacedCoords() { _placedCoords.clear(); }
 
     public Board() {
 
@@ -46,14 +51,6 @@ public class Board {
         return prevTile;
     }
 
-    //Submit a piece to the database
-    public void submit(CheckInfo checkInfo){
-        //TODO check of hij alseerste plaatst
-        //TODO als hij als laatste plaats kijk of de text gelijk is en geef 5 punten aan de tegen partij
-        Database db = DocumentSession.getDatabase();
-        //db.insert(new InsertedKeys())
-        _placedCoords.clear();
-    }
 
     //Returned de punten die het woord geeft
     public CheckInfo check(Vector2 vector2){

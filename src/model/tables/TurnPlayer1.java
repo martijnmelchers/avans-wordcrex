@@ -22,17 +22,24 @@ public class TurnPlayer1 {
     @Column("username_player1")
     private String _usernamePlayer1;
 
-    @Column("bonus")
-    private Integer _bonus;
-
     @Column("score")
     private Integer _score;
+
+    @Column("bonus")
+    private Integer _bonus;
 
     @Column("turnaction_type")
     private String _turnactionType;
 
     public Turn turn;
 
-    public TurnPlayer1() {}
+    public TurnPlayer1(Integer gameId, Integer turnId, String usernamePlayer1, Integer score, Integer bonus, String turnactionType ) {
+        _gameId = gameId;
+        _turnId = turnId;
+        _usernamePlayer1 = usernamePlayer1;
+        _score = score;
+        _bonus = bonus;
+        _turnactionType = turnactionType;
+    }
 
 }
