@@ -1,44 +1,87 @@
-*{
+* {
     -fx-text-fill: #ecf0f1;
-    -fx-font-family: "Tahoma","Comic Sans MS";
+    -fx-font-family: "Tahoma", "Comic Sans MS";
     -fx-background-color: #34495e;
 }
 
-Button{
+Button {
     -fx-font-family: "Comic Sans MS";
     -fx-background-color: #2c3e50;
     -fx-background-radius: 0;
 
 }
-VBox{
 
+VBox {
 
 }
-ListView{
+
+ListView {
     -fx-border-color: #2c3e50;
 }
-ListView :even{
+
+ListView :even {
     -fx-background-color: #34495e;
 
 }
-ListView :odd{
+
+ListView :odd {
     -fx-background-color: #2c3e50;
 
 }
-ScrollPane{
 
-
-}
-Label{
-
+ScrollPane {
 
 }
-FlowPane{
+
+Label {
 
 }
-AnchorPane{
+
+FlowPane {
 
 }
+
+AnchorPane {
+
+}
+
 TextField {
-    -fx-background-color: #486279;
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-color: transparent;
+}
+
+TextField:focused {
+    -fx-border-color: purple;
+}
+
+.Chat-Name-Pane {
+    -fx-background-color: #2c3e50;
+}
+
+.Chat-Name-Label {
+    -fx-background-color: transparent;
+    -fx-font-size: 16;
+}
+
+.Chat-MessagesVBox {
+
+}
+
+.Chat-Message-Container {
+    -fx-background-color: purple;
+    -fx-margin: 10px;
+    -fx-padding: 3px;
+    -fx-border-radius: 5px;
+    -fx-pref-width: 15%;
+    -fx-min-width: 15%;
+    -fx-max-width: 90%;
+}
+
+.Chat-Message {
+    -fx-font-size: 14;
+}
+
+.Chat-Moment {
+    -fx-font-size: 10;
 }

@@ -19,7 +19,7 @@ public class Main {
 
             var clauses = new ArrayList<Clause>();
 
-
+/*
             var accountInfoTest = new AccountInfo();
             accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
             accountInfoTest.setRoleId("player");
@@ -27,7 +27,7 @@ public class Main {
             _db.insert(accountInfoTest);
 
 
-            /* fuck that account lets delete that nibba again */
+            *//* fuck that account lets delete it again *//*
             _db.delete(accountInfoTest);
 
             for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
@@ -37,12 +37,12 @@ public class Main {
             for(Game game : _db.select(Game.class, clauses)) {
                 System.out.println("Game found!");
 
-            }
+            }*/
 
             App application = new App();
-            application.load("MatchOverview");
+            application.load("ChatView");
 
-            // close the connection nibba
+            // close the connection
             _db.close();
         } catch (Exception e) {
             e.printStackTrace();

@@ -42,4 +42,7 @@ public class Chatline {
         return _message;
     }
 
+    public Timestamp getMoment() {
+        return _moment;
+    }
 }
