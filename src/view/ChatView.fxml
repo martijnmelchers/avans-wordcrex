@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@css/Main.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView">
     <children>
         <TextField fx:id="messageField" layoutX="13.0" layoutY="331.0" onAction="#onEnter" prefHeight="49.0" prefWidth="430.0" />
         <Button layoutX="451.0" layoutY="331.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="49.0" prefWidth="136.0" text="Verstuur" />

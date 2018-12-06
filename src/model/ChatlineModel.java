@@ -17,7 +17,7 @@ public class ChatlineModel {
     public ChatlineModel() {
         try
         {
-            Connection conn = new Connector().connect("sql20.main-hosting.eu", "u895965828_avans", "urobj5CBGORAg", "u895965828_avans");
+            Connection conn = new Connector().connect("databases.aii.avans.nl", "jjadema", "Ab12345", "smendel_db2");
             this._db = new Database(conn, true);
         }
         catch(Exception e){

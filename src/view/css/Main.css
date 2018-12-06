@@ -39,3 +39,6 @@ FlowPane{
 AnchorPane{
 
 }
+TextField {
+    -fx-background-color: #486279;
+}

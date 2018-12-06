@@ -40,7 +40,7 @@ public class Main {
             }
 
             App application = new App();
-            application.load("MainView.fxml");
+            application.load("ChatView.fxml");
 
             // close the connection nibba
             _db.close();
