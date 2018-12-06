@@ -39,4 +39,6 @@ public class Game {
     public Answer answer;
 
     public Game(){}
+
+    public Integer getGameID() { return _gameId; }
 }

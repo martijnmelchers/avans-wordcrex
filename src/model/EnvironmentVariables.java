@@ -1,9 +1,9 @@
 package model;
 
-public class EnvironmentVariables
+class EnvironmentVariables
 {
-    public static final String username = "urobj5CBGORAg";
-    public static final String password = "urobj5CBGORAg";
-    public static final String table = "u895965828_avans";
-    public static final String ip = "sql20.main-hosting.eu";
+    static final String CONN_USERNAME = "fjmelche";
+    static final String CONN_PASSWORD = "Ab12345";
+    static final String CONN_TABLE = "smendel_db2";
+    static final String CONN_IP = "databases.aii.avans.nl";
 }

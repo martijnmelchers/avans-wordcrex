@@ -71,7 +71,7 @@ public class Database {
     }
 
     public <T> void update(List<T> items) throws Exception {
-        for(T item : items)
+        for (T item : items)
             this.update(item);
     }
 
@@ -81,7 +81,7 @@ public class Database {
     }
 
     public <T> void delete(List<T> items) throws Exception {
-        for(T item : items)
+        for (T item : items)
             this.delete(item);
     }
 
@@ -217,7 +217,7 @@ public class Database {
 
         var query = QueryBuilder.buildDelete(table, clauses);
 
-        if(this.debug)
+        if (this.debug)
             LogWriter.PrintLog("Query built: " + query);
 
         this.connection.prepareStatement(query).execute();
@@ -237,7 +237,7 @@ public class Database {
             if (field.isAnnotationPresent(PrimaryKey.class))
                 clauses.add(new Clause(new TableAlias(table, -1), name, CompareMethod.EQUAL, field.get(item)));
 
-            if(field.isAnnotationPresent(PrimaryKey.class) && !field.isAnnotationPresent(ForeignKey.class))
+            if (field.isAnnotationPresent(PrimaryKey.class) && !field.isAnnotationPresent(ForeignKey.class))
                 continue;
 
 
@@ -258,12 +258,12 @@ public class Database {
 
         }
 
-        if(updated.size() == 0)
+        if (updated.size() == 0)
             return;
 
         var query = QueryBuilder.buildUpdate(table, updated, clauses);
 
-        if(this.debug)
+        if (this.debug)
             LogWriter.PrintLog("Query built: " + query);
 
         this.connection.prepareStatement(query).execute();
@@ -305,7 +305,13 @@ public class Database {
                 }
 
                 String value = data.getString(combinedName);
-                field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
+
+                var customParser = ObjectHelper.SQLToObject(field, data, combinedName);
+
+                if (customParser == null)
+                    field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
+                else
+                    field.set(dto, customParser);
 
 
             } catch (Exception e) {

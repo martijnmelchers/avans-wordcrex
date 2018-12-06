@@ -17,7 +17,7 @@ public class Chatline {
 
     @PrimaryKey
     @Column("game_id")
-    @ForeignKey(type = Game.class, field = "username", output = "game")
+    @ForeignKey(type = Game.class, field = "game_id", output = "game")
     private Integer _gameId;
 
     @PrimaryKey
@@ -30,6 +30,19 @@ public class Chatline {
     public Account account;
     public Game game;
 
-    public Chatline() {}
+    public Chatline() {
+
+    }
+
+    public Chatline(String _username, Integer _gameId, Timestamp _moment, String _message) {
+        this._username = _username;
+        this._gameId = _gameId;
+        this._moment = _moment;
+        this._message = _message;
+    }
+
+    public String getMessage() {
+        return _message;
+    }
 
 }
