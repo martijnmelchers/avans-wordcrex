@@ -1,6 +1,8 @@
 package controller;
 
 
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import view.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 
 public class App extends Application
 {
+    private final boolean _isMaximized = false;
     private ArrayList<Controller> controllers;
     private Stage primaryStage;
     private View view;
@@ -30,10 +33,23 @@ public class App extends Application
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Wordcrex");
         primaryStage.show();
+
         loadControllers();
         navigate(this.getParameters().getRaw().get(0));
 
         view.start();
+
+
+        if(_isMaximized)
+        {
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getVisualBounds();
+
+            primaryStage.setX(bounds.getMinX());
+            primaryStage.setY(bounds.getMinY());
+            primaryStage.setWidth(bounds.getWidth());
+            primaryStage.setHeight(bounds.getHeight());
+        }
     }
 
     private void loadControllers()
@@ -110,7 +126,8 @@ public class App extends Application
 
     public void navigate(String fxmlFileName)
     {
-        navigate(fxmlFileName, 600,400 );
+
+        navigate(fxmlFileName, 1600, 1200 );
     }
 
     public void navigate(String fxmlFileName, int width, int height)
@@ -131,6 +148,7 @@ public class App extends Application
 
             view = fxmlLoader.getController();
             view.setApp(this);
+            view.setScene(scene);
             primaryStage.setScene(scene);
             primaryStage.setHeight(height);
             primaryStage.setWidth(width);

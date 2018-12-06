@@ -24,11 +24,11 @@ public class Main {
             accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
             accountInfoTest.setRoleId("player");
 
-            _db.insert(accountInfoTest);
+            //_db.insert(accountInfoTest);
 
 
             /* fuck that account lets delete that nibba again */
-            _db.delete(accountInfoTest);
+            //_db.delete(accountInfoTest);
 
             for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
                 System.out.println("Account found! " + ac.doStuff());
