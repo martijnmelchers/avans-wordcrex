@@ -1,9 +1,11 @@
 package controller;
 
 import model.*;
+import view.BoardView;
 
 public class GameController extends Controller{
 
+    private BoardView boardView;
     private GameModel _gameModel;
 
     public GameController()
@@ -16,9 +18,21 @@ public class GameController extends Controller{
 
     public Letter[] getDock(){return _gameModel.getDock();}
 
+    public void placeTile(int x,int y,String letter)
+    {
+        _gameModel.placeTile(new Vector2(x,y ),letter);
+        boardView = getViewCasted();
+        boardView.update();
+    }
+
+    public boolean tileEmpty(int x,int y)
+    {
+        return  _gameModel.tileIsEmpty(new Vector2(x, y));
+    }
+
     public void submitTurn(){
-       CheckInfo info = _gameModel.checkBoard(new Vector2(0,0));
-       _gameModel.submitTurn(info);
+        CheckInfo info = _gameModel.checkBoard(new Vector2(0,0));
+        _gameModel.submitTurn(info);
     }
 
 }

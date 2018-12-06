@@ -40,7 +40,6 @@ public class GameModel {
 
     public void placeTile(Vector2 vector2, String letter){ _board.place(vector2, letter); }
 
-    //Geeft de tile terug die er lag voordat het verwijderd word
     public Tile removeTile(Vector2 vector2) { return _board.remove(vector2); }
 
     public CheckInfo checkBoard(Vector2 vector2) { return _board.check(vector2); }

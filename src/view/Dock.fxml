@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Text?>
 <?import javafx.geometry.Insets?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
@@ -11,32 +9,4 @@
     <HBox.margin>
         <Insets top="25"/>
     </HBox.margin>
-    <StackPane styleClass="white">
-        <Rectangle width="30" height="30" fill="wheat" arcHeight="10" arcWidth="10"/>
-        <Text StackPane.alignment="CENTER" text="A" />
-    </StackPane>
-    <StackPane styleClass="white">
-        <Rectangle width="30" height="30" fill="wheat" arcHeight="10" arcWidth="10"/>
-        <Text StackPane.alignment="CENTER" text="A" />
-    </StackPane>
-    <StackPane styleClass="white">
-        <Rectangle width="30" height="30" fill="wheat" arcHeight="10" arcWidth="10"/>
-        <Text StackPane.alignment="CENTER" text="A" />
-    </StackPane>
-    <StackPane styleClass="white">
-        <Rectangle width="30" height="30" fill="wheat" arcHeight="10" arcWidth="10"/>
-        <Text StackPane.alignment="CENTER" text="A" />
-    </StackPane>
-    <StackPane styleClass="white">
-        <Rectangle width="30" height="30" fill="wheat" arcHeight="10" arcWidth="10"/>
-        <Text StackPane.alignment="CENTER" text="A" />
-    </StackPane>
-    <StackPane styleClass="white">
-        <Rectangle width="30" height="30" fill="wheat" arcHeight="10" arcWidth="10"/>
-        <Text StackPane.alignment="CENTER" text="A" />
-    </StackPane>
-    <StackPane styleClass="white">
-        <Rectangle width="30" height="30" fill="wheat" arcHeight="10" arcWidth="10"/>
-        <Text StackPane.alignment="CENTER" text="A" />
-    </StackPane>
 </HBox>

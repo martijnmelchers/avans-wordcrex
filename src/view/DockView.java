@@ -2,8 +2,10 @@ package view;
 
 import controller.App;
 import controller.GameController;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -12,10 +14,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import model.Letter;
 import model.Tile;
 
 import java.util.List;
+import java.util.Stack;
 
 public class DockView
 {
@@ -38,14 +42,7 @@ public class DockView
         List<Node> children = hBoxDock.getChildren();
         for(int i =0;i<letters.length;i++)
         {
-            StackPane stackPane = (StackPane) children.get(i);
-            stackPane.setOnMouseDragged(e -> blockMoved(e,stackPane));
-            stackPane.setOnMouseReleased(e-> blockReleased(e,stackPane ));
-            List<Node> elements = stackPane.getChildren();
-            Rectangle block = (Rectangle) elements.get(0);
-            Text text  = (Text)elements.get(1);
-            text.setText(letters[i].getLetter());
-            block.setFill(Color.rgb(255, 255, 255));
+            addCharacter(letters[i].getLetter());
         }
     }
 
@@ -69,34 +66,87 @@ public class DockView
 
     private void blockReleased(MouseEvent e, StackPane tile)
     {
-        getTile((Rectangle) tile.getChildren().get(0));
+        getTile(tile);
     }
 
-    private void getTile(Rectangle tile)
+    private void getTile(StackPane stackPane)
     {
-        Tile[][] tiles = controller.getTiles();
+        Rectangle tile = (Rectangle) stackPane.getChildren().get(0);
+        Text text = (Text) stackPane.getChildren().get(1);
         List<Node> children = board._gridPane.getChildren();
 
-        for (int xi = 0; xi <= 15; xi++)
+        for (int i = 0; i < 225; i++)
         {
-            for (int yi = 0; yi <= 15; yi++)
+            int row = i/15;
+            int column = i%15;
+            Node child = children.get(i);
+            Bounds b = tile.localToScreen(tile.getBoundsInLocal());
+            double x = ((b.getMinX() + b.getMaxX())/2);
+            double y = ((b.getMinY() + b.getMaxY())/2);
+            Bounds bounds = child.localToScreen(child.getBoundsInLocal());
+            
+            if(bounds.getMaxY()+1 > y && bounds.getMinY()-1 < y)
             {
-                int index = xi*14 + yi;
-                Node child = children.get(index);
-                Bounds b = tile.localToScreen(tile.getBoundsInLocal());
-                double x = ((b.getMinX() + b.getMaxX())/2);
-                double y = ((b.getMinY() + b.getMaxY())/2);
-                Bounds bounds = child.localToScreen(child.getBoundsInLocal());
-                if(bounds.getMaxY()+1 > y && bounds.getMinY()-1 < y)
+                if (bounds.getMaxX() + 1 > x && bounds.getMinX() - 1 < x)
                 {
-                    if(bounds.getMaxX()+1 > x && bounds.getMinX()-1 < x)
+                    if(!controller.tileEmpty(column,row))
                     {
-                        System.out.println("X:" +xi);
-                        System.out.println("Y:" +yi);
-                        return;
+                        continue;
                     }
+                    controller.placeTile(row,column ,text.getText());
+                    hBoxDock.getChildren().remove(hBoxDock.getChildren().indexOf(stackPane));
+                    System.out.println("row:" + row);
+                    System.out.println("column:" + column);
+                    return;
                 }
             }
         }
+        jumpBack((StackPane) tile.getParent());
+    }
+
+    public StackPane addCharacter(String character, double x, double y)
+    {
+        StackPane sp = new StackPane();
+        sp.setAlignment(Pos.CENTER);
+        sp.setOnMouseDragged(e -> blockMoved(e,sp));
+        sp.setOnMouseReleased(e-> blockReleased(e,sp ));
+        Rectangle r = new Rectangle();
+        r.setFill(Color.WHITE);
+        r.setArcHeight(10);
+        r.setArcWidth(10);
+        r.setWidth(10);
+        r.setWidth(30);
+        r.setHeight(30);
+        Text t = new Text();
+        t.setText(character);
+        sp.getChildren().add(r);
+        sp.getChildren().add(t);
+        hBoxDock.getChildren().add(sp);
+        if(x != 0 && y!=0)
+        {
+            Bounds  b = sp.localToScene(sp.getBoundsInLocal());
+            double currentX = ((b.getMinX() + b.getMaxX())/2);
+            double currentY = ((b.getMinY() + b.getMaxY())/2);
+            double Xdiff = x - currentX;
+            double Ydiff = y - currentY;
+            sp.setTranslateX((Xdiff-30)-262);
+            sp.setTranslateY(Ydiff-30);
+        }
+        sp.getParent().getParent().toFront();
+        return sp;
+    }
+
+    public void addCharacter(String character)
+    {
+        addCharacter(character,0,0);
+    }
+
+    private void jumpBack(StackPane sp)
+    {
+        TranslateTransition tt = new TranslateTransition(Duration.millis(250), sp);
+        tt.setToX(0);
+        tt.setToY(0);
+        tt.setAutoReverse(true);
+        tt.play();
     }
 }

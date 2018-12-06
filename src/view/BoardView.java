@@ -1,16 +1,17 @@
 package view;
 
 import controller.GameController;
+import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
+
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.Tile;
 
-import java.util.List;
 
 public class BoardView extends View {
 
@@ -27,10 +28,22 @@ public class BoardView extends View {
         init();
     }
 
-    public void init() {
+
+    public void update()
+    {
+        clearGrid();
+        init();
+    }
+
+    public void clearGrid()
+    {
+        _gridPane.getChildren().removeAll(_gridPane.getChildren().filtered(a->a instanceof StackPane));
+    }
+
+
+    public void init()
+    {
         Tile[][] tiles = _controller.getTiles();
-
-
         for (int x = 0; x < tiles.length; x++) {
             for (int y = 0; y < tiles[x].length; y++) {
                 StackPane stackPane = new StackPane();
@@ -39,6 +52,8 @@ public class BoardView extends View {
                 rect.setFill(tiles[x][y].getColor());
                 rect.setArcWidth(10);
                 rect.setArcHeight(10);
+
+                rect.setOnMousePressed(event-> tileClicked(event,stackPane));
 
                 Text text = new Text();
 
@@ -54,5 +69,15 @@ public class BoardView extends View {
         }
     }
 
-
+    private void tileClicked(MouseEvent e, StackPane tile)
+    {
+        if(true)// check if tile is unlocked
+        {
+            //reset tile
+            String character = ((Text)tile.getChildren().get(1)).getText();
+            StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY());
+            tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
+            tile.setOnMouseReleased(event-> Event.fireEvent(sp,event ));
+        }
+    }
 }
