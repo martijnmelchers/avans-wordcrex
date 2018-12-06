@@ -1,4 +1,4 @@
-package view;
+package view.MatchOverview;
 
 import controller.MatchOverviewController;
 import javafx.fxml.FXML;
@@ -14,6 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import model.tables.Game;
+import view.View;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;

@@ -1,4 +1,4 @@
-package view;
+package view.ChatView;
 
 import controller.ChatController;
 import javafx.fxml.FXML;
@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import model.tables.Chatline;
+import view.View;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
