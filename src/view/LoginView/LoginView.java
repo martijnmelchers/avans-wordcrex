@@ -1,7 +1,8 @@
-package view;
+package view.LoginView;
 
 import controller.LoginController;
 import javafx.fxml.FXML;
+import view.View;
 
 public class LoginView extends View
 {

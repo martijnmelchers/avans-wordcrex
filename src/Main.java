@@ -40,16 +40,12 @@ public class Main {
             }
 
             App application = new App();
-            application.load("ChatView.fxml");
+            application.load("MatchOverview");
 
             // close the connection nibba
             _db.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
-
     }
 }
