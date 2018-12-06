@@ -1,4 +1,6 @@
-package view;
+package view.MainView;
+
+import view.View;
 
 public class MainView extends View
 {
