@@ -1,5 +1,6 @@
 package view.MatchOverview;
 
+import controller.App;
 import controller.MatchOverviewController;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -10,12 +11,12 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import model.tables.Game;
 import view.View;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -36,13 +37,20 @@ public class MatchOverview extends View
 
     public MatchOverview()
     {
+        InputStream isBold = App.class.getResourceAsStream("/Fonts/Trueno/TruenoBd.otf");
+        fontBold = Font.loadFont(isBold, 12.0);
+        InputStream is = App.class.getResourceAsStream("/Fonts/Trueno/TruenoLt.otf");
+        font = Font.loadFont(is, 12.0);
+
         _headerInvitations = new Header("Uitnodigingen");
         _headerYourTurn = new Header("Jouw Beurt");
         _headerTheirTurn = new Header("Hun Beurt");
     }
 
+    @Override
     public void start()
     {
+
         controller = this.getController(MatchOverviewController.class);
 
         var invitations = new ArrayList<Game>();
@@ -50,8 +58,6 @@ public class MatchOverview extends View
         var theirTurns = new ArrayList<Game>();
 
         _vBox = new VBox();
-
-
 
         ArrayList<Game> games = controller.getGames();
         for (Game game : games)
@@ -97,7 +103,6 @@ public class MatchOverview extends View
 
 
         _matchScrollPane.setContent(_vBox);
-
     }
 
     private boolean player2TurnHasAction(Game game) {
@@ -157,6 +162,7 @@ public class MatchOverview extends View
             _label = new Label(headerName);
             _label.setMaxWidth(Double.MAX_VALUE);
             _label.setAlignment(Pos.CENTER);
+            _label.setFont(font);
             fillBackground(_label, labelColor);
             _label.setTextFill(textColor);
             _vBox = new VBox();
@@ -185,11 +191,12 @@ public class MatchOverview extends View
 
             var text1 = new Text(game.player2.getUsername() + " - " + game.letterSet.getDescription() + "\n");
             text1.setFill(textColor);
-            text1.setFont(Font.font("Tahoma", FontWeight.BOLD, 12));
+            text1.setFont(fontBold);
             var text2 = new Text(comment);
-            text2.setFont(Font.font("Tahoma", 12));
             text2.setFill(textColor);
+            text2.setFont(font);
             var textFlow = new TextFlow(text1, text2);
+
 
 
             fillBackground(flowPane, buttonColor);
@@ -201,6 +208,9 @@ public class MatchOverview extends View
     private static Color textColor = Color.web("#ecf0f1");
     private static Color labelColor = Color.web("#2980b9");
     private static Color buttonColor = Color.web("#3498db");
+
+    private static Font font;
+    private static Font fontBold;
 
     private static void fillBackground(Region node, Color color)
     {

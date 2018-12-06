@@ -32,12 +32,15 @@ public class App extends Application
         primaryStage.show();
         loadControllers();
         navigate(this.getParameters().getRaw().get(0));
+
+        view.start();
     }
 
     private void loadControllers()
     {
         controllers = new ArrayList<>();
         File[] files;
+
         try
         {
             files = new File(App.class.getResource("/controller").toURI().getPath()).listFiles();

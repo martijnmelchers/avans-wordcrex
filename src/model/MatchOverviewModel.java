@@ -30,8 +30,7 @@ public class MatchOverviewModel
     {
         try
         {
-            Connection conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
-            this._db = new Database(conn);
+            this._db = DocumentSession.getDatabase();
         }
         catch(Exception e){
             e.printStackTrace();
