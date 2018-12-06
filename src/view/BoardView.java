@@ -2,27 +2,34 @@ package view;
 
 import controller.GameController;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.Tile;
 
+import java.util.List;
+
 public class BoardView extends View {
 
-    @FXML
-    private GridPane _gridPane;
+    @FXML public GridPane _gridPane;
+
+    @FXML private DockView dockController;
 
     private GameController _controller;
 
     @Override
     protected void loadFinished() {
         _controller = this.getController(GameController.class);
+        dockController.setParent(this);
         init();
     }
 
     public void init() {
         Tile[][] tiles = _controller.getTiles();
+
 
         for (int x = 0; x < tiles.length; x++) {
             for (int y = 0; y < tiles[x].length; y++) {

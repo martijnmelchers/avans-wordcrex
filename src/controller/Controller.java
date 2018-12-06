@@ -21,6 +21,11 @@ public abstract class Controller
         return application.getView();
     }
 
+    public App getApplication()
+    {
+        return application;
+    }
+
     public void navigate(String fxmlFileName)
     {
         application.navigate(fxmlFileName);

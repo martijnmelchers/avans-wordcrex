@@ -16,7 +16,7 @@ public class Main {
         This is a database example :)
          */
 
-        try {
+        /*try {
 
             var _db = DocumentSession.getDatabase(false);
             var clauses = new ArrayList<Clause>();
@@ -30,7 +30,7 @@ public class Main {
 
 
             /* fuck that account lets delete that nibba again */
-            _db.delete(accountInfoTest);
+            /*_db.delete(accountInfoTest);
 
             for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
                 System.out.println("Account found! " + ac.doStuff());
@@ -43,11 +43,11 @@ public class Main {
 
             App application = new App();
             application.load("BoardView.fxml");
-
+/*
             // close the connection nibba
             _db.close();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }

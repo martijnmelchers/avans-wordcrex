@@ -17,6 +17,21 @@ public class GameModel {
 
     public Tile[][] getTiles(){ return _board.getTiles(); }
 
+    public Letter[] getDock()
+    {
+        //TODO: get letters from database
+        return new Letter[]
+        {
+            new Letter("A"),
+            new Letter("G"),
+            new Letter("D"),
+            new Letter("L"),
+            new Letter("E"),
+            new Letter("N"),
+            new Letter("E"),
+        };
+    }
+
     private void getBoardDisplayPieces(){
 
     }
@@ -36,6 +51,8 @@ public class GameModel {
     private void getScore(){
 
     }
+
+
 
     private boolean validateWord(String word){
         if(_allowedWords.contains(word)) return true;
