@@ -40,7 +40,6 @@ public class Main {
             }
 
             App application = new App();
-            application.load("MainView.fxml");
 
             // close the connection nibba
             _db.close();
