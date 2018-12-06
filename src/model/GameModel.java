@@ -1,12 +1,7 @@
 package model;
 
-import java.util.ArrayList;
-
 public class GameModel {
 
-    private ArrayList<String> _allowedWords = new ArrayList<>();
-
-    private int _currentTurn;
     private Board _board;
 
 
@@ -17,34 +12,16 @@ public class GameModel {
 
     public Tile[][] getTiles(){ return _board.getTiles(); }
 
-    private void getBoardDisplayPieces(){
+    public boolean tileIsEmpty(Vector2 vector2) { return _board.isEmpty(vector2); }
 
-    }
+    public void placeTile(Vector2 vector2, String letter){ _board.place(vector2, letter); }
 
-    private void getPlayerPieces(){
+    //Geeft de tile terug die er lag voordat het verwijderd word
+    public Tile removeTile(Vector2 vector2) { return _board.remove(vector2); }
 
-    }
+    public void checkBoard(Vector2 vector2) { _board.check(vector2); }
 
-    private void getPlayers(){
+    public void submitTurn(CheckInfo info) { _board.submit(info); }
 
-    }
-
-    private void getGameState(){
-
-    }
-
-    private void getScore(){
-
-    }
-
-    private boolean validateWord(String word){
-        if(_allowedWords.contains(word)) return true;
-        return false;
-    }
-
-
-
-    private void submitWord(){
-
-    }
 }
+

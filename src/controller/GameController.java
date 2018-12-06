@@ -3,7 +3,7 @@ package controller;
 import model.GameModel;
 import model.Tile;
 
-public class GameController {
+public class GameController extends Controller{
 
     private GameModel _gameModel;
 
