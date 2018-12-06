@@ -4,7 +4,7 @@ import model.GameModel;
 import model.Letter;
 import model.Tile;
 
-public class GameController extends Controller {
+public class GameController extends Controller{
 
     private GameModel _gameModel;
 

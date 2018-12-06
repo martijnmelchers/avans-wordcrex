@@ -12,9 +12,7 @@ public class WordChecker {
 
     private Database _database;
 
-    public WordChecker(Database db){
-        _database = db;
-    }
+    public WordChecker(){ _database = DocumentSession.getDatabase(); }
 
     public boolean check(String word){
         var clauses = new ArrayList<Clause>();

@@ -15,8 +15,6 @@ public class GameModel {
         _board = new Board();
     }
 
-    public Tile[][] getTiles(){ return _board.getTiles(); }
-
     public Letter[] getDock()
     {
         //TODO: get letters from database
@@ -32,36 +30,18 @@ public class GameModel {
         };
     }
 
-    private void getBoardDisplayPieces(){
+    public Tile[][] getTiles(){ return _board.getTiles(); }
 
-    }
+    public boolean tileIsEmpty(Vector2 vector2) { return _board.isEmpty(vector2); }
 
-    private void getPlayerPieces(){
+    public void placeTile(Vector2 vector2, String letter){ _board.place(vector2, letter); }
 
-    }
+    //Geeft de tile terug die er lag voordat het verwijderd word
+    public Tile removeTile(Vector2 vector2) { return _board.remove(vector2); }
 
-    private void getPlayers(){
+    public void checkBoard(Vector2 vector2) { _board.check(vector2); }
 
-    }
+    public void submitTurn(CheckInfo info) { _board.submit(info); }
 
-    private void getGameState(){
-
-    }
-
-    private void getScore(){
-
-    }
-
-
-
-    private boolean validateWord(String word){
-        if(_allowedWords.contains(word)) return true;
-        return false;
-    }
-
-
-
-    private void submitWord(){
-
-    }
 }
+

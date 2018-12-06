@@ -1,10 +1,11 @@
 package model;
 
 import javafx.scene.paint.Color;
+import model.database.classes.InsertedKeys;
+import model.database.services.Database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class Board {
 
@@ -23,52 +24,70 @@ public class Board {
 
         for (int x = 0; x < _tiles.length; x++) {
             for (int y = 0; y < _tiles[x].length; y++) {
-                _tiles[x][y] = decideTileType(x, y);
+                _tiles[x][y] = decideTileType(new Vector2(x, y));
             }
         }
     }
 
     public Tile[][] getTiles() { return _tiles; }
 
-    public boolean isTaken(int x, int y) { return (_tiles[x][y].isEmpty()); }
+    public boolean isEmpty(Vector2 vector2) { return (_tiles[vector2.getX()][vector2.getY()].isEmpty()); }
 
-    public void place(int x, int y, String letter) {
-        _tiles[x][y].replace(letter, _letterValues.get(letter.toUpperCase()));
-        _tiles[x][y].setColor(Color.WHITE);
-        _placedCoords.add(new Vector2(x, y));
+    public void place(Vector2 vector2, String letter) {
+        _tiles[vector2.getX()][vector2.getY()].replace(letter, _letterValues.get(letter.toUpperCase()));
+        _tiles[vector2.getX()][vector2.getY()].setColor(Color.WHITE);
+        _placedCoords.add(vector2);
     }
 
     //Remove a piece
-    public void remove(int x, int y){ _tiles[x][y] = decideTileType(x, y); }
+    public Tile remove(Vector2 vector2){
+        Tile prevTile = _tiles[vector2.getX()][vector2.getY()];
+        _tiles[vector2.getX()][vector2.getY()] = decideTileType(vector2);
+        return prevTile;
+    }
 
     //Submit a piece to the database
-    public void submit(){
+    public void submit(CheckInfo checkInfo){
+        //TODO check of hij alseerste plaatst
+        //TODO als hij als laatste plaats kijk of de text gelijk is en geef 5 punten aan de tegen partij
+        Database db = DocumentSession.getDatabase();
+        //db.insert(new InsertedKeys())
         _placedCoords.clear();
     }
 
-    public int check(Vector2 vector2){
+    //Returned de punten die het woord geeft
+    public CheckInfo check(Vector2 vector2){
+
         ArrayList<Tile> tiles = new ArrayList<>();
+        String[] words = new String[2]; //0 = x - 1 = y;
 
         for (int x = 0; x < 15; x++){
             if(!_tiles[x][vector2.getY()].isEmpty()){
                 tiles.add(_tiles[x][vector2.getY()]);
+                words[0] = words[0].concat(_tiles[x][vector2.getY()].getLetterType().getLetter());
             }
         }
 
         for (int y = 0; y < 15; y++){
             if(!_tiles[vector2.getX()][y].isEmpty()){
                 tiles.add(_tiles[vector2.getX()][y]);
+                words[1] = words[1].concat(_tiles[vector2.getX()][y].getLetterType().getLetter());
             }
         }
 
-        //if(new WordChecker())
+        WordChecker checker = new WordChecker();
+        if(!checker.check(words[0]) && !checker.check(words[1])) return null;
 
-        return calculatePoints(tiles.toArray(new Tile[tiles.size()]));
+        Tile[] tileArr = tiles.toArray(new Tile[tiles.size()]);
+        Score score = calculatePoints(tileArr);
+
+        return new CheckInfo(words, score, tileArr);
     }
 
-    private int calculatePoints(Tile[] tiles){
+    private Score calculatePoints(Tile[] tiles){
 
-        int points = 0;
+        int score = 0;
+        int bonus = 0;
 
         int w3 = 0;
         int w4 = 0;
@@ -76,15 +95,18 @@ public class Board {
         for (int i = 0; i < tiles.length; i++){
             TileType tileType = tiles[i].getType();
 
+            int letterValue = _letterValues.get(tiles[i].getLetterType().getLetter());
+            score += letterValue;
+
             switch (tileType){
                 case LETTER_TIMES_TWO:
-                    points += _letterValues.get(tiles[i].getLetterType().getLetter()) * 2;
+                    bonus += letterValue * 2;
                     break;
                 case LETTER_TIMES_FOUR:
-                    points += _letterValues.get(tiles[i].getLetterType().getLetter()) * 4;
+                    bonus += letterValue * 4;
                     break;
                 case LETTER_TIMES_SIX:
-                    points += _letterValues.get(tiles[i].getLetterType().getLetter()) * 6;
+                    bonus += letterValue * 6;
                     break;
                 case WORD_TIMES_THREE:
                     w3++;
@@ -95,13 +117,16 @@ public class Board {
             }
         }
 
-        for (int j = 0; j < w3; j++){ points *= 3; }
-        for (int j =0; j< w4; j++){ points  *= 4;}
+        for (int j = 0; j < w3; j++){ bonus *= 3; }
+        for (int j =0; j< w4; j++){ bonus  *= 4;}
 
-        return points;
+        return new Score(score, bonus);
     }
 
-    private Tile decideTileType(int x, int y) {
+    private Tile decideTileType(Vector2 vector2) {
+
+        int x = vector2.getX();
+        int y = vector2.getY();
 
         int position = (x * 15) + y;
 
