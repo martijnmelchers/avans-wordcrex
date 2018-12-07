@@ -1,9 +1,6 @@
 package model.tables;
 
-import model.database.annotations.Column;
-import model.database.annotations.ForeignKey;
-import model.database.annotations.PrimaryKey;
-import model.database.annotations.Table;
+import model.database.annotations.*;
 
 import java.sql.Timestamp;
 
@@ -30,10 +27,6 @@ public class Chatline {
     public Account account;
     public Game game;
 
-    public Chatline() {
-
-    }
-
     public Chatline(String _username, Integer _gameId, Timestamp _moment, String _message) {
         this._username = _username;
         this._gameId = _gameId;
@@ -41,8 +34,15 @@ public class Chatline {
         this._message = _message;
     }
 
+    public Chatline() {
+
+    }
+
     public String getMessage() {
         return _message;
     }
 
+    public Timestamp getMoment() {
+        return _moment;
+    }
 }

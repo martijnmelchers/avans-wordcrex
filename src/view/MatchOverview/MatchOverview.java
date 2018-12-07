@@ -3,6 +3,9 @@ package view.MatchOverview;
 import controller.App;
 import controller.MatchOverviewController;
 import javafx.animation.AnimationTimer;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -10,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -40,7 +44,13 @@ public class MatchOverview extends View {
     private MatchOverviewController controller;
 
     @FXML
-    private VBox _Content;
+    private VBox _content;
+
+    @FXML
+    private FlowPane _toolBar;
+
+    @FXML
+    private TextField _searchBar;
 
     @FXML
     private ScrollPane _matchScrollPane;
@@ -67,6 +77,8 @@ public class MatchOverview extends View {
         _headerInvitations = new Header("Uitnodigingen");
         _headerYourTurn = new Header("Jouw Beurt");
         _headerTheirTurn = new Header("Hun Beurt");
+
+
     }
 
     @Override
@@ -93,7 +105,6 @@ public class MatchOverview extends View {
                 }
             }
         }
-
         // Invitation
         initiateInvitationHeader(invitations);
 
@@ -115,35 +126,46 @@ public class MatchOverview extends View {
         fillBackground(_vBox, labelColor);
         fillBackground(_matchScrollPane, labelColor);
 
-
         _matchScrollPane.setContent(_vBox);
 
         // Add to application.
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                    final double newWidth = scene.getWidth();
-                    final double newHeight = scene.getHeight();
-
-                    final double ratio = 1.2;
-
-                    double scaleFactor =
-                            newWidth / newHeight > ratio ? newHeight / 600 : newWidth / 800;
-
-                    if (scaleFactor > 1) {
-                        Scale scale = new Scale(scaleFactor, scaleFactor);
-                        scale.setPivotX(0);
-                        scale.setPivotY(0);
-                        scene.getRoot().getTransforms().setAll(scale);
-
-                        _Content.setPrefWidth(newWidth / scaleFactor);
-                        _Content.setPrefHeight(newHeight / scaleFactor);
-                    } else {
-                        _Content.setPrefWidth(Math.max(800, newWidth));
-                        _Content.setPrefHeight(Math.max(600, newHeight));
-                    }
+                ScaleScreen();
             }
         }.start();
+
+        _searchBar.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                searchTextChanged(observable, oldValue, newValue);
+            }
+        });
+    }
+
+    private void ScaleScreen()
+    {
+        final double newWidth = scene.getWidth();
+        final double newHeight = scene.getHeight();
+
+        final double ratio = 1.2;
+
+        double scaleFactor =
+                newWidth / newHeight > ratio ? newHeight / 600 : newWidth / 800;
+
+        if (scaleFactor > 1) {
+            Scale scale = new Scale(scaleFactor, scaleFactor);
+            scale.setPivotX(0);
+            scale.setPivotY(0);
+            scene.getRoot().getTransforms().setAll(scale);
+
+            _content.setPrefWidth(newWidth / scaleFactor);
+            _content.setPrefHeight(newHeight / scaleFactor);
+        } else {
+            _content.setPrefWidth(Math.max(800, newWidth));
+            _content.setPrefHeight(Math.max(600, newHeight));
+        }
     }
 
     private boolean player2TurnHasAction(Game game) {
@@ -189,6 +211,7 @@ public class MatchOverview extends View {
 
     @FXML
     private void switchViewMode() {
+        DestroyViewList();
         if (_viewMode == ViewMode.Play) {
             _viewMode = ViewMode.Observer;
             ChangeToObserverMode();
@@ -198,15 +221,31 @@ public class MatchOverview extends View {
         }
     }
 
+    private void DestroyViewList() {
+        DestroyHeader(_headerInvite);
+        DestroyHeader(_headerInvitations);
+        DestroyHeader(_headerYourTurn);
+        DestroyHeader(_headerTheirTurn);
+    }
+
+    private void DestroyHeader(Header header)
+    {
+        if(header != null)
+        {
+            _vBox.getChildren().removeAll(header.getContent());
+        }
+    }
+
     private void ChangeToPlayMode() {
         _viewModeButton.setText("Observer Mode");
-
-
     }
 
     private void ChangeToObserverMode() {
         _viewModeButton.setText("Speel Mode");
+    }
 
+    private void searchTextChanged(ObservableValue<? extends String> observable, String oldValue, String newValue)
+    {
 
     }
 
@@ -257,7 +296,6 @@ public class MatchOverview extends View {
             flowPane.getChildren().addAll(pane, textFlow);
             _vBox.getChildren().add(flowPane);
         }
-
     }
 
     private static Color textColor = Color.web("#ecf0f1");
