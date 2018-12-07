@@ -26,4 +26,6 @@ public class Letter {
     }
 
     public void setId(int letterId) { _letterId = letterId; }
+
+    public int getid() { return _letterId; }
 }

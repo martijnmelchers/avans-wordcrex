@@ -47,8 +47,11 @@ public class Board {
     //Remove a piece
     public Tile remove(Vector2 vector2){
         Tile prevTile = _tiles[vector2.getX()][vector2.getY()];
+
         _tiles[vector2.getX()][vector2.getY()] = decideTileType(vector2);
         _tiles[vector2.getX()][vector2.getY()].setState(TileState.LOCKED);
+
+        _placedCoords.remove(vector2);
         return prevTile;
     }
 
@@ -76,9 +79,11 @@ public class Board {
         if(!checker.check(words[0]) || !checker.check(words[1])) return null;
 
         Tile[] tileArr = tiles.toArray(new Tile[tiles.size()]);
+        Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[_placedCoords.size()]);
+
         Points points = calculatePoints(tileArr);
 
-        return new CheckInfo(words, points, tileArr);
+        return new CheckInfo(words, points, tileArr, coordinatesArr);
     }
 
     private Points calculatePoints(Tile[] tiles){

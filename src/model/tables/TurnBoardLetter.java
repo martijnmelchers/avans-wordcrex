@@ -34,4 +34,11 @@ public class TurnBoardLetter {
     public Tile tile;
 
     public TurnBoardLetter() {}
+    public TurnBoardLetter(Integer letterId, Integer gameId, Integer turnId, Integer x, Integer y) {
+        _letterId = letterId;
+        _gameId = gameId;
+        _turnId = turnId;
+        _tileX = x;
+        _tileY = y;
+    }
 }

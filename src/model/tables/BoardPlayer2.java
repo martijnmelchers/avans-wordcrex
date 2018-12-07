@@ -41,4 +41,14 @@ public class BoardPlayer2 {
     public Tile tile;
 
     public BoardPlayer2() {}
+
+    public BoardPlayer2(Integer gameId, String username, Integer turnId, Integer letterId, Integer x, Integer y){
+        _gameId = gameId;
+        _username = username;
+        _turnId = turnId;
+        _letterId = letterId;
+        _tileX = x;
+        _tileY = y;
+    }
+
 }
