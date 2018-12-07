@@ -12,7 +12,7 @@ public class Tile {
     private Letter _letter;
 
     public Tile() {}
-    //LAden van de tiles
+    //Laden van de tiles
     public Tile(TileType tileType, Color color) {
         _tileState = TileState.LOCKED;
         _tileType = tileType;
@@ -42,7 +42,7 @@ public class Tile {
 
     public boolean isEmpty(){ System.out.println(_letter.getLetter());return _letter.getLetter().equals(""); }
 
-    public void replace( String letter, int points){
+    public void replace(String letter, int points){
         _letter.setLetter(letter);
         _letter.setPoints(points);
     }

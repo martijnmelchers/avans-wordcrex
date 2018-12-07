@@ -8,8 +8,7 @@ public class GameController extends Controller{
     private BoardView boardView;
     private GameModel _gameModel;
 
-    public GameController()
-    {
+    public GameController() {
         _gameModel = new GameModel();
         submitTurn();
     }
@@ -18,8 +17,7 @@ public class GameController extends Controller{
 
     public Letter[] getDock(){return _gameModel.getDock();}
 
-    public void placeTile(int x,int y,String letter)
-    {
+    public void placeTile(int x,int y,String letter) {
         _gameModel.placeTile(new Vector2(x,y ),letter);
         boardView = getViewCasted();
         boardView.update();
@@ -35,6 +33,7 @@ public class GameController extends Controller{
         return  _gameModel.tileIsEmpty(new Vector2(x, y));
     }
 
+    //TODO check of je speler 1 of speler 2 bent
     public void submitTurn(){
         CheckInfo info = _gameModel.checkBoard(new Vector2(0,0));
         //_gameModel.submitTurn(info);

@@ -40,6 +40,7 @@ public class Board {
         tile.replace(letter, _letterValues.get(letter.toUpperCase()));
         tile.setColor(Color.WHITE);
         tile.setState(TileState.UNLOCKED);
+
         _placedCoords.add(vector2);
     }
 
@@ -50,7 +51,6 @@ public class Board {
         _tiles[vector2.getX()][vector2.getY()].setState(TileState.LOCKED);
         return prevTile;
     }
-
 
     //Returned de punten die het woord geeft
     public CheckInfo check(Vector2 vector2){

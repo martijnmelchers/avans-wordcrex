@@ -2,11 +2,11 @@ package model;
 
 public enum TileType {
 
-    LETTER_TIMES_FOUR("L4"),
-    WORD_TIMES_THREE("W3"),
-    LETTER_TIMES_TWO("L2"),
-    LETTER_TIMES_SIX("L6"),
-    WORD_TIMES_FOUR("W4"),
+    LETTER_TIMES_FOUR("4L"),
+    WORD_TIMES_THREE("3W"),
+    LETTER_TIMES_TWO("2L"),
+    LETTER_TIMES_SIX("6L"),
+    WORD_TIMES_FOUR("4W"),
     STANDARD("");
 
     private String text;

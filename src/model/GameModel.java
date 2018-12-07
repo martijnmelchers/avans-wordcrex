@@ -67,7 +67,7 @@ public class GameModel {
         var clauses = new ArrayList<Clause>();
 
         try{
-            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn", CompareMethod.EQUAL, _turnId + 1));
+            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, _turnId + 1));
 
             var results = db.select(TurnPlayer2.class, clauses);
 
@@ -86,6 +86,10 @@ public class GameModel {
 
                 if(equalScore) { db.update(new TurnPlayer2(_gameId, _turnId, _playerName2, score, bonus + 5, "play")); }
             }
+
+            //db.insert()
+
+
         }catch (Exception e){
             e.printStackTrace();
         }

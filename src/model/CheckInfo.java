@@ -19,5 +19,4 @@ public class CheckInfo {
         _score = score;
         _tiles = tiles;
     }
-
 }

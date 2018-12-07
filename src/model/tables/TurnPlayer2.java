@@ -40,6 +40,7 @@ public class TurnPlayer2 {
     public Integer getScore() { return  _score; }
     public String getTurnAction() { return _turnactionType; }
 
+    public TurnPlayer2() {}
 
     public TurnPlayer2(Integer gameId, Integer turnId, String usernamePlayer2, Integer score, Integer bonus, String turnactionType ) {
         _gameId = gameId;
