@@ -1,6 +1,7 @@
 package model;
 
 import model.database.classes.Clause;
+import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Connector;
 import model.database.services.Database;
@@ -58,8 +59,8 @@ public class AccountModel
     {
         var clauses = new ArrayList<Clause>();
 
-        clauses.add(new Clause("account","username" , CompareMethod.EQUAL,username ));
-        clauses.add(new Clause("account","password" , CompareMethod.EQUAL,password ));
+        clauses.add(new Clause(new TableAlias("account",-1 ),"username" , CompareMethod.EQUAL,username ));
+        clauses.add(new Clause(new TableAlias("account",-1 ),"password" , CompareMethod.EQUAL,password ));
 
         try
         {

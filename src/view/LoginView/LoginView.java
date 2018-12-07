@@ -20,7 +20,7 @@ public class LoginView extends View
     @Override
     protected void loadFinished()
     {
-        accountController = this.getController();
+        accountController = this.getController(AccountController.class);
     }
 
     public void loginClicked()
@@ -30,7 +30,7 @@ public class LoginView extends View
 
     public void registerClicked()
     {
-        this.getController().navigate("RegisterView.fxml", 350, 550);
+        accountController.navigate("RegisterView", 350, 550);
     }
 
     public void showError(String error)

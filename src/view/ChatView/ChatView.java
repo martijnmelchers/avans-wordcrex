@@ -93,4 +93,10 @@ public class ChatView extends View {
         // TODO: get opponents name from db and display it
         NameLabel.setText("John Doe");
     }
+
+    @Override
+    protected void loadFinished()
+    {
+
+    }
 }

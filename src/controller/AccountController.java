@@ -2,7 +2,7 @@ package controller;
 
 import model.AccountModel;
 import view.LoginView;
-import view.RegisterView;
+import view.RegisterView.RegisterView;
 
 public class AccountController extends Controller
 {
