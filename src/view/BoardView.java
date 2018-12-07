@@ -10,7 +10,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import model.Board;
 import model.Tile;
+import model.TileState;
 
 
 public class BoardView extends View {
@@ -56,6 +58,7 @@ public class BoardView extends View {
                 rect.setOnMousePressed(event-> tileClicked(event,stackPane));
 
                 Text text = new Text();
+                text.setMouseTransparent(true);
 
                 var letter = tiles[x][y].getLetterType().getLetter();
                 text.setText(letter.equals("") ? tiles[x][y].getType().toString() : tiles[x][y].getLetterType().getLetter());
@@ -71,10 +74,14 @@ public class BoardView extends View {
 
     private void tileClicked(MouseEvent e, StackPane tile)
     {
-        if(true)// check if tile is unlocked
+        Tile[][] tiles = _controller.getTiles();
+        int row = GridPane.getRowIndex(tile);
+        int col = GridPane.getColumnIndex(tile);
+        if(tiles[row][col].getState() == TileState.UNLOCKED)
         {
-            //reset tile
             String character = ((Text)tile.getChildren().get(1)).getText();
+            _controller.resetTile(row,col );
+            update();
             StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY());
             tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
             tile.setOnMouseReleased(event-> Event.fireEvent(sp,event ));

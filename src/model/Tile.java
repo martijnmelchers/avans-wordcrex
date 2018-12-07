@@ -40,7 +40,7 @@ public class Tile {
 
     public Letter getLetterType() { return _letter; }
 
-    public boolean isEmpty(){ return _letter.getLetter().equals(""); }
+    public boolean isEmpty(){ System.out.println(_letter.getLetter());return _letter.getLetter().equals(""); }
 
     public void replace( String letter, int points){
         _letter.setLetter(letter);

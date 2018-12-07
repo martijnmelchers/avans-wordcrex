@@ -129,8 +129,8 @@ public class DockView
             double currentY = ((b.getMinY() + b.getMaxY())/2);
             double Xdiff = x - currentX;
             double Ydiff = y - currentY;
-            sp.setTranslateX((Xdiff-30)-262);
-            sp.setTranslateY(Ydiff-30);
+            sp.setTranslateX((Xdiff-30)-270);
+            sp.setTranslateY((Ydiff-30)-9);
         }
         sp.getParent().getParent().toFront();
         return sp;

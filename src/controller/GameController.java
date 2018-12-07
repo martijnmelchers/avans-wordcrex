@@ -25,6 +25,11 @@ public class GameController extends Controller{
         boardView.update();
     }
 
+    public void resetTile(int x, int y)
+    {
+        _gameModel.removeTile(new Vector2(x, y));
+    }
+
     public boolean tileEmpty(int x,int y)
     {
         return  _gameModel.tileIsEmpty(new Vector2(x, y));
@@ -32,7 +37,7 @@ public class GameController extends Controller{
 
     public void submitTurn(){
         CheckInfo info = _gameModel.checkBoard(new Vector2(0,0));
-        _gameModel.submitTurn(info);
+        //_gameModel.submitTurn(info);
     }
 
 }
