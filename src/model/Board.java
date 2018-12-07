@@ -34,10 +34,10 @@ public class Board {
 
     public boolean isEmpty(Vector2 vector2) { return (_tiles[vector2.getX()][vector2.getY()].isEmpty()); }
 
-    public void place(Vector2 vector2, String letter) {
+    public void place(Vector2 vector2, String letter, int letterId) {
         Tile tile = _tiles[vector2.getX()][vector2.getY()];
 
-        tile.replace(letter, _letterValues.get(letter.toUpperCase()));
+        tile.replace(letter, _letterValues.get(letter.toUpperCase()), letterId);
         tile.setColor(Color.WHITE);
         tile.setState(TileState.UNLOCKED);
 

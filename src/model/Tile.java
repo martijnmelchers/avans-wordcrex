@@ -42,8 +42,9 @@ public class Tile {
 
     public boolean isEmpty(){ System.out.println(_letter.getLetter());return _letter.getLetter().equals(""); }
 
-    public void replace(String letter, int points){
+    public void replace(String letter, int points, int letterId){
         _letter.setLetter(letter);
         _letter.setPoints(points);
+        _letter.setId(letterId);
     }
 }

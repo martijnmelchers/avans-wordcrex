@@ -54,7 +54,7 @@ public class GameModel {
 
     public boolean tileIsEmpty(Vector2 vector2) { return _board.isEmpty(vector2); }
 
-    public void placeTile(Vector2 vector2, String letter){ _board.place(vector2, letter); }
+    public void placeTile(Vector2 vector2, String letter, int letterId){ _board.place(vector2, letter, letterId); }
 
     public Tile removeTile(Vector2 vector2) { return _board.remove(vector2); }
 
@@ -81,14 +81,11 @@ public class GameModel {
                 boolean equalScore = results.get(0).getScore().equals(checkInfo.getPoints().score()); //Compare player 2 score with own score
 
                 var result = results.get(0);
-                int score = result.getScore();
-                int bonus = result.getBonus();
 
-                if(equalScore) { db.update(new TurnPlayer2(_gameId, _turnId, _playerName2, score, bonus + 5, "play")); }
+                if(equalScore) { db.update(new TurnPlayer2(_gameId, _turnId, _playerName2, result.getScore(), result.getBonus() + 5, "play")); }
             }
 
-            //db.insert()
-
+            //for (var tile : checkInfo.)
 
         }catch (Exception e){
             e.printStackTrace();
@@ -118,12 +115,9 @@ public class GameModel {
                 boolean equalScore = results.get(0).getScore().equals(checkInfo.getPoints().score()); //Compare player 2 score with own score
 
                 var result = results.get(0);
-                int score = result.getScore();
-                int bonus = result.getBonus();
 
-                if(equalScore) { db.update(new TurnPlayer1(_gameId, _turnId, _playerName1, score, bonus + 5, "play")); }
+                if(equalScore) { db.update(new TurnPlayer1(_gameId, _turnId, _playerName1, result.getScore(), result.getBonus() + 5, "play")); }
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }
