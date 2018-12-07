@@ -89,7 +89,7 @@ public class DockView
             {
                 if (bounds.getMaxX() + 1 > x && bounds.getMinX() - 1 < x)
                 {
-                    if(!controller.tileEmpty(column,row))
+                    if(!controller.tileEmpty(row,column))
                     {
                         continue;
                     }
