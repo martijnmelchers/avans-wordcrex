@@ -15,46 +15,41 @@ import java.util.ArrayList;
  * TODO: Clean up code
  */
 
-public class MatchOverviewModel
-{
+public class MatchOverviewModel {
     private Database _db;
 
     // TODO: Fill the username automatically in using the authentication feature.
-    private String _username = "Mega Neger #1741";
+    private String _username = "Huseyin-Testing";
 
     private ArrayList<Game> _games;
-    public ArrayList<Game> getGames() {return _games;}
+
+    public ArrayList<Game> getGames() {
+        return _games;
+    }
 
 
-    public MatchOverviewModel()
-    {
-        try
-        {
+    public MatchOverviewModel() {
+        try {
             this._db = DocumentSession.getDatabase();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         _games = FindGames();
     }
 
-    private ArrayList<Game> FindGames()
-    {
+    private ArrayList<Game> FindGames() {
         var clauses = new ArrayList<Clause>();
         var foundGames = new ArrayList<Game>();
 
         System.out.println();
 
         clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, _username));
-        try
-        {
+        try {
             for (Game game : _db.select(Game.class, clauses)) {
                 foundGames.add(game);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -65,19 +60,14 @@ public class MatchOverviewModel
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("turnplayer1", -1), "username_player1", CompareMethod.EQUAL, game.player1.getUsername()));
 
-        try
-        {
+        try {
             var turnList = _db.select(TurnPlayer1.class, clauses);
-            for (TurnPlayer1 playerTurn : turnList)
-            {
-                if(playerTurn.turn.game.getGameID().equals(game.getGameID()))
-                {
+            for (TurnPlayer1 playerTurn : turnList) {
+                if (playerTurn.turn.game.getGameID().equals(game.getGameID())) {
                     return playerTurn.getTurnActionType() != null;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -89,22 +79,34 @@ public class MatchOverviewModel
 
         clauses.add(new Clause(new TableAlias("turnplayer2", -1), "username_player2", CompareMethod.EQUAL, game.player2.getUsername()));
 
-        try
-        {
+        try {
             var turnList = _db.select(TurnPlayer2.class, clauses);
-            for (TurnPlayer2 playerTurn : turnList)
-            {
-                if(playerTurn.turn.game.getGameID().equals(game.getGameID()))
-                {
+            for (TurnPlayer2 playerTurn : turnList) {
+                if (playerTurn.turn.game.getGameID().equals(game.getGameID())) {
                     return playerTurn.getTurnActionType() != null;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return false;
+    }
+
+    public ArrayList<Game> getAllGames() {
+        var clauses = new ArrayList<Clause>();
+        clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.NOT_EQUAL_NULLABLE, null));
+
+        try {
+            ArrayList<Game> games = new ArrayList<Game>();
+            games.addAll(_db.select(Game.class, clauses));
+            return games;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

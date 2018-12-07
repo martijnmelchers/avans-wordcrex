@@ -51,6 +51,7 @@ public class MatchOverview extends View {
 
     @FXML
     private TextField _searchBar;
+    private FilterGameView _filterGameView;
 
     @FXML
     private ScrollPane _matchScrollPane;
@@ -77,13 +78,12 @@ public class MatchOverview extends View {
         _headerInvitations = new Header("Uitnodigingen");
         _headerYourTurn = new Header("Jouw Beurt");
         _headerTheirTurn = new Header("Hun Beurt");
-
-
     }
 
     @Override
     public void start() {
         controller = this.getController(MatchOverviewController.class);
+        _filterGameView = new FilterGameView(this, _searchBar);
 
         var invitations = new ArrayList<Game>();
         var yourTurns = new ArrayList<Game>();
@@ -130,18 +130,14 @@ public class MatchOverview extends View {
 
         // Add to application.
         new AnimationTimer() {
+            private long lastUpdate = 0;
             @Override
             public void handle(long now) {
                 ScaleScreen();
+                _filterGameView.updateTimer(now - lastUpdate);
+                lastUpdate = now;
             }
         }.start();
-
-        _searchBar.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                searchTextChanged(observable, oldValue, newValue);
-            }
-        });
     }
 
     private void ScaleScreen()
@@ -197,16 +193,19 @@ public class MatchOverview extends View {
         }
     }
 
-    private void onInvitationClick(Game game) {
-        System.out.println(game.getGameID());
+    private void onInvitationClick(Game game)
+    {
+
     }
 
-    private void onYourTurnClick(Game game) {
-        System.out.println(_matchScrollPane.getHeight());
+    private void onYourTurnClick(Game game)
+    {
+
     }
 
-    private void onTheirTurnClick(Game game) {
-        System.out.println(game.getGameID());
+    private void onTheirTurnClick(Game game)
+    {
+
     }
 
     @FXML
@@ -236,17 +235,16 @@ public class MatchOverview extends View {
         }
     }
 
+    public ArrayList<Game> getGamesList() {
+        return controller.getAllGames();
+    }
+
     private void ChangeToPlayMode() {
         _viewModeButton.setText("Observer Mode");
     }
 
     private void ChangeToObserverMode() {
         _viewModeButton.setText("Speel Mode");
-    }
-
-    private void searchTextChanged(ObservableValue<? extends String> observable, String oldValue, String newValue)
-    {
-
     }
 
     private class Header {

@@ -19,6 +19,11 @@ public class MatchOverviewController extends Controller
         return model.getGames();
     }
 
+    public ArrayList<Game> getAllGames()
+    {
+        return model.getAllGames();
+    }
+
     public boolean currentTurnHasAction(Game game) {
         return model.currentTurnHasAction(game);
     }

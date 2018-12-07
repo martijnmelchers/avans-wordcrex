@@ -3,6 +3,7 @@ package model.database.enumerators;
 public enum CompareMethod {
     EQUAL("="),
     NOT_EQUAL("!="),
+    NOT_EQUAL_NULLABLE("IS NOT"),
     GREATER(">"),
     GREATER_EQUAL(">="),
     LESS("<"),
