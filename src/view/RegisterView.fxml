@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane id="login_grid" style="-fx-background-color: grey" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginView">
+<BorderPane id="register_pane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.RegisterView">
     <stylesheets>
         <URL value="@Authentication.css" />
     </stylesheets>
@@ -34,6 +34,7 @@
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints />
+                <RowConstraints />
             <RowConstraints />
             </rowConstraints>
             <TextField fx:id="textFieldUsername" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Gebruikersnaam" GridPane.rowIndex="0">
@@ -42,6 +43,11 @@
                 </GridPane.margin>
             </TextField>
             <PasswordField fx:id="passwordFieldPassword" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Wachtwoord" GridPane.rowIndex="1">
+                <GridPane.margin>
+                    <Insets left="25" right="25" top="10" />
+                </GridPane.margin>
+            </PasswordField>
+            <PasswordField fx:id="passwordFieldConfirmationPassword" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Opnieuw wachtwoord" GridPane.rowIndex="2">
                 <GridPane.margin>
                     <Insets left="25" right="25" top="10" />
                 </GridPane.margin>
@@ -56,14 +62,14 @@
             <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" />
                 <RowConstraints />
-            <RowConstraints />
+                <RowConstraints />
             </rowConstraints>
-            <Label fx:id="labelError" text="Label" GridPane.halignment="CENTER" GridPane.valignment="CENTER" textFill="red" visible="false" >
+            <Label fx:id="labelError" text="Label" textFill="red" visible="false" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                 <GridPane.margin>
-                    <Insets bottom="25"/>
+                    <Insets bottom="25" />
                 </GridPane.margin>
             </Label>
-            <Button focusTraversable="false" onMouseClicked="#loginClicked" prefHeight="40" prefWidth="300" text="Login" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+            <Button focusTraversable="false" onMouseClicked="#backClicked" prefHeight="40" prefWidth="300" text="Terug" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
                 <GridPane.margin>
                     <Insets bottom="10" left="25" right="25" />
                 </GridPane.margin>
@@ -75,4 +81,5 @@
             </Button>
         </GridPane>
     </bottom>
+
 </BorderPane>
