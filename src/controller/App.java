@@ -42,11 +42,12 @@ public class App extends Application
         {
             files = new File(App.class.getResource("/controller").toURI().getPath()).listFiles();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
             return;
         }
+
 
         for(File file : files)
         {
