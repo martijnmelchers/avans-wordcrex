@@ -31,6 +31,8 @@ public class TurnPlayer2 {
     @Column("turnaction_type")
     private String _turnactionType;
 
+    public Turn turn;
+
     public Integer getGameId() { return _gameId; }
     public Integer getturnId() { return _turnId; }
     public String getUsernamePlayer2() { return _usernamePlayer2; }
@@ -38,7 +40,6 @@ public class TurnPlayer2 {
     public Integer getScore() { return  _score; }
     public String getTurnAction() { return _turnactionType; }
 
-    public Turn turn;
 
     public TurnPlayer2(Integer gameId, Integer turnId, String usernamePlayer2, Integer score, Integer bonus, String turnactionType ) {
         _gameId = gameId;

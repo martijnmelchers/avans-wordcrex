@@ -30,6 +30,7 @@ public class Tile {
     public TileType getType() {
         return _tileType;
     }
+    public void setState(TileState tileState) {_tileState = tileState; }
 
     public TileState getState() { return _tileState; }
 

@@ -1,11 +1,7 @@
 package model;
 
 import javafx.scene.paint.Color;
-import model.database.classes.InsertedKeys;
-import model.database.services.Database;
-import model.tables.TurnPlayer1;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,8 +35,11 @@ public class Board {
     public boolean isEmpty(Vector2 vector2) { return (_tiles[vector2.getX()][vector2.getY()].isEmpty()); }
 
     public void place(Vector2 vector2, String letter) {
-        _tiles[vector2.getX()][vector2.getY()].replace(letter, _letterValues.get(letter.toUpperCase()));
-        _tiles[vector2.getX()][vector2.getY()].setColor(Color.WHITE);
+        Tile tile = _tiles[vector2.getX()][vector2.getY()];
+
+        tile.replace(letter, _letterValues.get(letter.toUpperCase()));
+        tile.setColor(Color.WHITE);
+        tile.setState(TileState.UNLOCKED);
         _placedCoords.add(vector2);
     }
 
@@ -48,6 +47,7 @@ public class Board {
     public Tile remove(Vector2 vector2){
         Tile prevTile = _tiles[vector2.getX()][vector2.getY()];
         _tiles[vector2.getX()][vector2.getY()] = decideTileType(vector2);
+        _tiles[vector2.getX()][vector2.getY()].setState(TileState.LOCKED);
         return prevTile;
     }
 
@@ -73,15 +73,15 @@ public class Board {
         }
 
         WordChecker checker = new WordChecker();
-        if(!checker.check(words[0]) && !checker.check(words[1])) return null;
+        if(!checker.check(words[0]) || !checker.check(words[1])) return null;
 
         Tile[] tileArr = tiles.toArray(new Tile[tiles.size()]);
-        Score score = calculatePoints(tileArr);
+        Points points = calculatePoints(tileArr);
 
-        return new CheckInfo(words, score, tileArr);
+        return new CheckInfo(words, points, tileArr);
     }
 
-    private Score calculatePoints(Tile[] tiles){
+    private Points calculatePoints(Tile[] tiles){
 
         int score = 0;
         int bonus = 0;
@@ -117,7 +117,7 @@ public class Board {
         for (int j = 0; j < w3; j++){ bonus *= 3; }
         for (int j =0; j< w4; j++){ bonus  *= 4;}
 
-        return new Score(score, bonus);
+        return new Points(score, bonus);
     }
 
     private Tile decideTileType(Vector2 vector2) {

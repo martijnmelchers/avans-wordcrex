@@ -33,6 +33,14 @@ public class TurnPlayer1 {
 
     public Turn turn;
 
+    public Integer getGameId() { return _gameId; }
+    public Integer getturnId() { return _turnId; }
+    public String getUsernamePlayer1() { return _usernamePlayer1; }
+    public Integer getBonus() { return _bonus; }
+    public Integer getScore() { return  _score; }
+    public String getTurnAction() { return _turnactionType; }
+
+
     public TurnPlayer1(Integer gameId, Integer turnId, String usernamePlayer1, Integer score, Integer bonus, String turnactionType ) {
         _gameId = gameId;
         _turnId = turnId;

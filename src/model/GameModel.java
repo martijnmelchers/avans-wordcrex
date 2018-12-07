@@ -18,7 +18,7 @@ public class GameModel {
     private Board _board;
 
     private int _gameId;
-    private int _turn;
+    private int _turnId;
 
     private int _playerScore1;
     private  int _playerScore2;
@@ -28,7 +28,7 @@ public class GameModel {
 
     public int getPlayerScore1() { return _playerScore1; }
     public int getPlayerScore2() { return _playerScore2; }
-    public int turn() { return _turn; }
+    public int turn() { return _turnId; }
 
     public GameModel()
     {
@@ -61,38 +61,71 @@ public class GameModel {
     public CheckInfo checkBoard(Vector2 vector2) { return _board.check(vector2); }
 
     //Submit a piece to the database
-    public void submitTurn(CheckInfo checkInfo){
+    public void submitTurnP1(CheckInfo checkInfo){
         //TODO zorg dat hij weet of hij speler 1 of 2 is en die database tabel aanpast
         Database db = DocumentSession.getDatabase();
         var clauses = new ArrayList<Clause>();
 
         try{
-            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn", CompareMethod.EQUAL, _turn + 1));
+            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn", CompareMethod.EQUAL, _turnId + 1));
 
-            boolean uploadedLast = db.select(TurnPlayer2.class, clauses).size() > 0;
-            boolean equalScore = db.select(TurnPlayer2.class, clauses).get(0).getScore().equals(checkInfo.getScore());
+            var results = db.select(TurnPlayer2.class, clauses);
 
-            db.insert(new Turn(1, 5));
+            boolean uploadedLast = results.size() > 0;
+
+            db.insert(new Turn(_gameId, _turnId));
             db.insert(new TurnPlayer1(1,5, _playerName1, 10, 1, "play"));
 
-            if(uploadedLast && equalScore) {
+            if(uploadedLast) {
 
-                var result = db.select(TurnPlayer2.class, clauses).get(0);
+                boolean equalScore = results.get(0).getScore().equals(checkInfo.getPoints().score()); //Compare player 2 score with own score
+
+                var result = results.get(0);
                 int score = result.getScore();
                 int bonus = result.getBonus();
 
-                db.update(new TurnPlayer2(_gameId, _turn, _playerName2, score, bonus + 5, "play"));
+                if(equalScore) { db.update(new TurnPlayer2(_gameId, _turnId, _playerName2, score, bonus + 5, "play")); }
             }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        //db.insert(new InsertedKeys())
+        _turnId++;
+        _board.clearPlacedCoords();
+    }
 
+    public void submitTurnP2(CheckInfo checkInfo){
+        //TODO zorg dat hij weet of hij speler 1 of 2 is en die database tabel aanpast
+        Database db = DocumentSession.getDatabase();
+        var clauses = new ArrayList<Clause>();
+
+        try{
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn", CompareMethod.EQUAL, _turnId + 1));
+
+            var results = db.select(TurnPlayer1.class, clauses);
+
+            boolean uploadedLast = results.size() > 0;
+
+            db.insert(new Turn(_gameId, _turnId));
+            db.insert(new TurnPlayer2(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
+
+            if(uploadedLast) {
+
+                boolean equalScore = results.get(0).getScore().equals(checkInfo.getPoints().score()); //Compare player 2 score with own score
+
+                var result = results.get(0);
+                int score = result.getScore();
+                int bonus = result.getBonus();
+
+                if(equalScore) { db.update(new TurnPlayer1(_gameId, _turnId, _playerName1, score, bonus + 5, "play")); }
+            }
 
         }catch (Exception e){
             e.printStackTrace();
         }
         //db.insert(new InsertedKeys())
-        _turn++;
+        _turnId++;
         _board.clearPlacedCoords();
     }
-
-
 }
 
