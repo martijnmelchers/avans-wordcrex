@@ -70,18 +70,19 @@ public class GameModel {
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn", CompareMethod.EQUAL, _turn + 1));
 
             boolean uploadedLast = db.select(TurnPlayer2.class, clauses).size() > 0;
-            boolean equalScore = db.select(TurnPlayer2.class, clauses).get(0).getScore().equals(checkInfo.getScore());
 
             db.insert(new Turn(1, 5));
             db.insert(new TurnPlayer1(1,5, _playerName1, 10, 1, "play"));
 
-            if(uploadedLast && equalScore) {
+            if(uploadedLast) {
+
+                boolean equalScore = db.select(TurnPlayer2.class, clauses).get(0).getScore().equals(checkInfo.getScore());
 
                 var result = db.select(TurnPlayer2.class, clauses).get(0);
                 int score = result.getScore();
                 int bonus = result.getBonus();
 
-                db.update(new TurnPlayer2(_gameId, _turn, _playerName2, score, bonus + 5, "play"));
+                if(equalScore) { db.update(new TurnPlayer2(_gameId, _turn, _playerName2, score, bonus + 5, "play")); }
             }
 
 
