@@ -24,7 +24,7 @@ public class MatchOverviewModel {
 
     private ArrayList<Game> _games;
 
-    // TODO make the controller use this function
+    // TODO remove this function, the games should be specifically returned from a function.
     public ArrayList<Game> getGames() {
         return _games;
     }
@@ -189,5 +189,5 @@ public class MatchOverviewModel {
 
         return null;
     }
-
 }
+

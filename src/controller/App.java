@@ -72,11 +72,14 @@ public class App extends Application
             try
             {
                 Class<?> controllerClass = ClassLoader.getSystemClassLoader().loadClass("controller."+file.getName().replace(".class","" ));
+
                 if(controllerClass.isAssignableFrom(Controller.class))
                 {
                     continue;
                 }
+
                 Controller controllerInstance = (Controller) controllerClass.getConstructor().newInstance();
+
                 controllers.add(controllerInstance);
             }
             catch (Exception e)
@@ -84,8 +87,6 @@ public class App extends Application
                 continue;
             }
         }
-
-
     }
 
     public <T extends Controller> T getController(Class<T> cType)

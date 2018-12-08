@@ -38,7 +38,7 @@ public class Main {
             }*/
 
             App application = new App();
-            application.load("MatchOverview");
+            application.load("LoginView");
 
             // close the connection
             _db.close();

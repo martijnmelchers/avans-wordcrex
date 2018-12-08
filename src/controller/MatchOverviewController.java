@@ -32,7 +32,6 @@ public class MatchOverviewController extends Controller
         return model.currentTurnPlayer2HasAction(game);
     }
 
-
     public ArrayList<Game> searchForAllGamesAsObserver(String currentGamesToSearch) {
         return model.searchForGamesAsObserver(currentGamesToSearch);
     }

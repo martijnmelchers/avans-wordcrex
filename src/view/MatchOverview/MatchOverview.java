@@ -4,25 +4,19 @@ import controller.App;
 import controller.MatchOverviewController;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.scene.transform.Scale;
+import model.MatchOverviewModel;
 import model.tables.Game;
 import view.View;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 
 // TODO:
@@ -33,9 +27,6 @@ import java.util.function.Consumer;
 // Show score on the games.
 //
 public class MatchOverview extends View {
-
-
-
     private enum ViewMode {
         Play,
         Observer
@@ -72,9 +63,9 @@ public class MatchOverview extends View {
 
     public MatchOverview() {
         InputStream isBold = App.class.getResourceAsStream("/Fonts/Trueno/TruenoBd.otf");
-        fontBold = Font.loadFont(isBold, 12.0);
+        FONT_BOLD = Font.loadFont(isBold, 12.0);
         InputStream is = App.class.getResourceAsStream("/Fonts/Trueno/TruenoLt.otf");
-        font = Font.loadFont(is, 12.0);
+        FONT = Font.loadFont(is, 12.0);
     }
 
     @Override
@@ -90,8 +81,8 @@ public class MatchOverview extends View {
 
         _vBox = new VBox();
 
-        fillBackground(_vBox, labelColor);
-        fillBackground(_matchScrollPane, labelColor);
+        FillBackground(_vBox, LABEL_COLOR);
+        FillBackground(_matchScrollPane, LABEL_COLOR);
 
         ChangeToPlayMode(null);
 
@@ -100,6 +91,7 @@ public class MatchOverview extends View {
             private long lastUpdate = 0;
             @Override
             public void handle(long now) {
+
                 ScaleScreen();
                 _filterGameView.updateTimer(now - lastUpdate);
                 lastUpdate = now;
@@ -172,22 +164,22 @@ public class MatchOverview extends View {
 
     private void onInvitationClick(Game game)
     {
-
+        System.out.println(game.getGameID());
     }
 
     private void onYourTurnClick(Game game)
     {
-
+        System.out.println(game.getGameID());
     }
 
     private void onTheirTurnClick(Game game)
     {
-
+        System.out.println(game.getGameID());
     }
 
     private void onObserverGameClick(Game game)
     {
-
+        System.out.println(game.getGameID());
     }
 
     public void filterObserverGames(String currentGamesToSearch) {
@@ -269,14 +261,12 @@ public class MatchOverview extends View {
 
         _headerObserver = new Header("Spellen");
 
-        _headerObserver.addPlayButton(this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), "TODO fill in");
+        _headerObserver.addInformationToButton(this, this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), " replace this");
 
         _vBox.getChildren().addAll(_headerObserver.getContent());
 
         _matchScrollPane.setContent(_vBox);
     }
-
-
 
     @FXML
     private void switchViewMode() {
@@ -301,79 +291,14 @@ public class MatchOverview extends View {
         _vBox.getChildren().clear();
     }
 
-    private class Header {
-        private Label _label;
-        private VBox _vBox;
+    protected static Color TEXT_COLOR = Color.web("#ecf0f1");
+    protected static Color LABEL_COLOR = Color.web("#2980b9");
+    protected static Color BUTTON_COLOR = Color.web("#3498db");
 
-        public Header(String headerName) {
-            _label = new Label(headerName);
-            _label.setMaxWidth(Double.MAX_VALUE);
-            _label.setAlignment(Pos.CENTER);
-            _label.setFont(font);
-            fillBackground(_label, labelColor);
-            _label.setTextFill(textColor);
-            _vBox = new VBox();
-        }
+    protected static Font FONT;
+    protected static Font FONT_BOLD;
 
-        public ArrayList<Node> getContent() {
-            var nodes = new ArrayList<Node>();
-            nodes.add(_label);
-            nodes.add(_vBox);
-
-            return nodes;
-        }
-
-        public void addPlayButton(Consumer<Game> onClick, Game game, String comment) {
-            createButton(onClick, game, comment, null, null);
-        }
-
-        public void addPlayButton(Consumer<Game> onClick, ArrayList<Game> games, String comment)
-        {
-            for (Game game : games)
-            {
-                var title = new Text(game.player1.getUsername() + " - " + game.player2.getUsername() + "\n");
-                var description = new Text(game.letterSet.getDescription() + " " + comment);
-                createButton(onClick, game, comment, title, description);
-            }
-        }
-
-        private void createButton(Consumer<Game> onClick, Game game, String comment, Text gameTitle, Text description)
-        {
-            var flowPane = new FlowPane();
-            flowPane.setRowValignment(VPos.CENTER);
-            flowPane.setAlignment(Pos.BASELINE_LEFT);
-
-            flowPane.setStyle("-fx-border-width: 1 0 1 0; -fx-border-color:#" + Integer.toHexString(labelColor.hashCode()) + ";");
-            flowPane.setOnMouseClicked(event -> onClick.accept(game));
-
-            var pane = new Pane();
-            pane.setPrefHeight(50);
-            pane.setPrefWidth(50);
-
-
-            var text1 = gameTitle == null ? new Text(game.player2.getUsername() + " - " + game.letterSet.getDescription() + "\n") : gameTitle;
-            text1.setFill(textColor);
-            text1.setFont(fontBold);
-            var text2 = description == null ? new Text(comment) : description;
-            text2.setFill(textColor);
-            text2.setFont(font);
-            var textFlow = new TextFlow(text1, text2);
-
-
-            fillBackground(flowPane, buttonColor);
-            flowPane.getChildren().addAll(pane, textFlow);
-            _vBox.getChildren().add(flowPane);
-        }
-    }
-
-    private static Color textColor = Color.web("#ecf0f1");
-    private static Color labelColor = Color.web("#2980b9");
-    private static Color buttonColor = Color.web("#3498db");
-
-    private static Font font;
-    private static Font fontBold;
-
-    private static void fillBackground(Region node, Color color) {
+    protected static void FillBackground(Region node, Color color) {
         node.setBackground(new Background(new BackgroundFill(color, null, null)));
     }
 }
