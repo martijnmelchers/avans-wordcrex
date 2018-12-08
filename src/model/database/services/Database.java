@@ -7,10 +7,7 @@ import model.database.enumerators.LinkMethod;
 import model.database.enumerators.ResultMethod;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -317,6 +314,7 @@ public class Database {
             } catch (Exception e) {
                 if (!field.isAnnotationPresent(Nullable.class))
                     throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)", e);
+                e.printStackTrace();
             }
 
         }

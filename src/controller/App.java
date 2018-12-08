@@ -42,11 +42,12 @@ public class App extends Application
         {
             files = new File(App.class.getResource("/controller").toURI().getPath()).listFiles();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
             return;
         }
+
 
         for(File file : files)
         {
@@ -113,9 +114,8 @@ public class App extends Application
     public void navigate(String fxmlFileName, int width, int height)
     {
         try
-
         {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fxmlFileName + "/" + fxmlFileName + ".fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fxmlFileName + '/' + fxmlFileName + ".fxml"));
             Parent root = fxmlLoader.load();
 
             if(scene == null)

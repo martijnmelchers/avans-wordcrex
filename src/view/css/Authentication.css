@@ -1,0 +1,18 @@
+*
+{
+    -fx-font: 16px "Gill Sans MT";
+}
+
+#login_grid, #register_pane
+{
+    -fx-background-image: url("../login_background.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-position: center center;
+    -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0);
+}
+
+.button
+{
+    -fx-background-color: #FDC70C;
+    -fx-text-fill: white;
+}
