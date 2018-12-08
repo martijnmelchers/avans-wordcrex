@@ -55,6 +55,7 @@ public class Board {
         return prevTile;
     }
 
+
     //Returned de punten die het woord geeft
     public CheckInfo check(Vector2 vector2){
 
@@ -85,6 +86,7 @@ public class Board {
 
         return new CheckInfo(words, points, tileArr, coordinatesArr);
     }
+
 
     private Points calculatePoints(Tile[] tiles){
 

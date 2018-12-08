@@ -9,8 +9,9 @@ public class GameController extends Controller{
     private GameModel _gameModel;
 
     public GameController() {
-        _gameModel = new GameModel();
-        submitTurn();
+
+        DocumentSession.setPlayerUsername("stan");//TODO: Authentication branch will set the player this is for testing purposes. Remove after branch merged
+        _gameModel = new GameModel(0); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
     }
 
     public Tile[][] getTiles() { return _gameModel.getTiles(); }
@@ -33,10 +34,9 @@ public class GameController extends Controller{
         return  _gameModel.tileIsEmpty(new Vector2(x, y));
     }
 
-    //TODO check of je speler 1 of speler 2 bent
     public void submitTurn(){
         CheckInfo info = _gameModel.checkBoard(new Vector2(0,0));
-        //_gameModel.submitTurn(info);
+        _gameModel.submitTurn(info);
     }
 
 }

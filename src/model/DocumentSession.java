@@ -7,6 +7,19 @@ import java.sql.Connection;
 
 public class DocumentSession
 {
+
+    private static String playerUsername;
+
+    public static String getPlayerUsername()
+    {
+        return playerUsername;
+    }
+
+    public static void setPlayerUsername(String playerUsername)
+    {
+        DocumentSession.playerUsername =  playerUsername;
+    }
+
     private static Database database;
 
     private static synchronized Database getConnection(boolean debug)

@@ -1,19 +1,32 @@
 package model;
 
+import javafx.concurrent.Task;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import jdk.nashorn.api.tree.NewTree;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
+import model.tables.Game;
 import model.tables.Turn;
 import model.tables.TurnPlayer1;
 import model.tables.TurnPlayer2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameModel {
 
     private ArrayList<String> _allowedWords = new ArrayList<>();
+
+    Database db;
+
+    private Timer timer;
+
+    private Dock dock;
 
     private int _currentTurn;
     private Board _board;
@@ -31,9 +44,50 @@ public class GameModel {
     public int getPlayerScore2() { return _playerScore2; }
     public int turn() { return _turnId; }
 
-    public GameModel()
+    public GameModel(int gameId)
     {
+
+        this.db = DocumentSession.getDatabase();
+        _gameId = gameId;
         _board = new Board();
+        dock = new Dock(isPlayerOne());
+    }
+
+    private boolean isPlayerOne()
+    {
+        try
+        {
+            List<Clause> clauses = new ArrayList<>();
+            clauses.add(new Clause(new TableAlias("game",-1 ), "game_id",CompareMethod.EQUAL ,_gameId ));
+            clauses.add(new Clause(new TableAlias("game",-1 ), "username_player1",CompareMethod.EQUAL ,DocumentSession.getPlayerUsername() ));
+            List<Game> game = db.select(Game.class, clauses);
+            if(game.size()==1)
+            {
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void waitForPlayer(Task finished)
+    {
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run()
+            {
+                if(isNewTurn())
+                {
+                    finished.run();
+                    timer.cancel();
+                }
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(task, 3000,3000);
     }
 
     public Letter[] getDock()
@@ -61,10 +115,45 @@ public class GameModel {
 
     public CheckInfo checkBoard(Vector2 vector2) { return _board.check(vector2); }
 
+
+    public void submitTurn(CheckInfo checkInfo)
+    {
+        // submit turn to database tables: boardplayer1, turnplayer1 OR boardplayer2,
+
+        if(isPlayerOne())
+        {
+            submitTurnP1(checkInfo);
+        }
+        else
+        {
+            submitTurnP2(checkInfo);
+        }
+
+
+        if(bothPlayersFinished())//players both finished
+        {
+            //submit tiles of the winner to the database table:'turnboardletters'
+
+            //refill winners hand + insert hand to database
+        }
+
+        else // other player not finished
+        {
+            // wait for other player 3 seconds timer interval
+            waitForPlayer(new Task() {
+                @Override
+                protected Object call() // This gets called when other player is ready
+                {
+                    // when other player ready: Refresh board + hand + score (other player created the new hand + updated the board)
+                    return null;
+                }
+            });
+        }
+    }
+
     //Submit a piece to the database
-    public void submitTurnP1(CheckInfo checkInfo){
+    private void submitTurnP1(CheckInfo checkInfo){
         //TODO zorg dat hij weet of hij speler 1 of 2 is en die database tabel aanpast
-        Database db = DocumentSession.getDatabase();
         var clauses = new ArrayList<Clause>();
 
         try{
@@ -105,13 +194,11 @@ public class GameModel {
             e.printStackTrace();
         }
         //db.insert(new InsertedKeys())
-        _turnId++;
         _board.clearPlacedCoords();
     }
 
-    public void submitTurnP2(CheckInfo checkInfo){
+    private void submitTurnP2(CheckInfo checkInfo){
         //TODO zorg dat hij weet of hij speler 1 of 2 is en die database tabel aanpast
-        Database db = DocumentSession.getDatabase();
         var clauses = new ArrayList<Clause>();
 
         try{
@@ -152,8 +239,43 @@ public class GameModel {
             e.printStackTrace();
         }
         //db.insert(new InsertedKeys())
-        _turnId++;
         _board.clearPlacedCoords();
+
     }
+
+    private boolean isNewTurn()
+    {
+        return false;
+    }
+
+    private boolean bothPlayersFinished()
+    {
+        List<Clause> player1Clauses = new ArrayList<>();
+        List<Clause> player2Clauses = new ArrayList<>();
+        player1Clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
+        player1Clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+        player2Clauses.add(new Clause( new TableAlias("player2Clauses",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
+        player2Clauses.add(new Clause( new TableAlias("player2Clauses",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+        try
+        {
+            List<TurnPlayer1> turnPlayer1 = db.select(TurnPlayer1.class, player1Clauses);
+            List<TurnPlayer2> turnPlayer2 = db.select(TurnPlayer2.class, player2Clauses);
+
+            if(!(turnPlayer1.size()<1)&&!(turnPlayer2.size()<1))
+            {
+                int scoreP1 = turnPlayer1.get(0).getScore() + turnPlayer1.get(0).getBonus();
+                int scoreP2 = turnPlayer2.get(0).getScore() + turnPlayer2.get(0).getBonus();
+                return true;
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
 }
 

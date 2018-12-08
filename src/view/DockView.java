@@ -1,6 +1,5 @@
 package view;
 
-import controller.App;
 import controller.GameController;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
@@ -8,7 +7,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -16,10 +14,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import model.Letter;
-import model.Tile;
 
 import java.util.List;
-import java.util.Stack;
 
 public class DockView
 {
@@ -39,7 +35,6 @@ public class DockView
     {
         Letter[] letters = controller.getDock();
         makeTransparent();
-        List<Node> children = hBoxDock.getChildren();
         for(int i =0;i<letters.length;i++)
         {
             addCharacter(letters[i].getLetter());
@@ -93,7 +88,7 @@ public class DockView
                     {
                         continue;
                     }
-                    controller.placeTile(row,column ,text.getText());
+                    controller.placeTile(row,column ,text.getText(),0);
                     hBoxDock.getChildren().remove(hBoxDock.getChildren().indexOf(stackPane));
                     System.out.println("row:" + row);
                     System.out.println("column:" + column);

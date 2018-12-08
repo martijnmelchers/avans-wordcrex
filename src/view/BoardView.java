@@ -3,14 +3,11 @@ package view;
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import model.Board;
 import model.Tile;
 import model.TileState;
 
@@ -29,6 +26,7 @@ public class BoardView extends View {
         dockController.setParent(this);
         init();
     }
+
 
 
     public void update()
@@ -70,6 +68,12 @@ public class BoardView extends View {
                 _gridPane.getChildren().add(stackPane);
             }
         }
+    }
+
+    @FXML
+    private void submitTurn()
+    {
+        _controller.submitTurn();
     }
 
     private void tileClicked(MouseEvent e, StackPane tile)
