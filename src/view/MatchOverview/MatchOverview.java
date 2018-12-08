@@ -146,6 +146,11 @@ public class MatchOverview extends View
         System.out.println(game.getGameID());
     }
 
+    @Override
+    protected void loadFinished() {
+
+    }
+
     private class Header
     {
         private Label _label;

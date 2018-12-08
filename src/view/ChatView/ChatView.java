@@ -38,7 +38,7 @@ public class ChatView extends View {
     }
 
     // function for displaying messages
-    public void displayMessages() {
+    private void displayMessages() {
         messagesVbox.getChildren().clear();
 
         ArrayList<Chatline> chatlines = _controller.getChatlines(1);
@@ -89,8 +89,13 @@ public class ChatView extends View {
         sendMessage();
     }
 
-    public void displayOpponentsName() {
+    private void displayOpponentsName() {
         // TODO: get opponents name from db and display it
         NameLabel.setText("John Doe");
+    }
+
+    @Override
+    protected void loadFinished() {
+
     }
 }

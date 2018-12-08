@@ -7,4 +7,9 @@ public class MainView extends View
     public MainView(){
 
     }
+
+    @Override
+    protected void loadFinished() {
+
+    }
 }

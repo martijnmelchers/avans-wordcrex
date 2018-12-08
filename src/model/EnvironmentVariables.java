@@ -2,7 +2,7 @@ package model;
 
 public class EnvironmentVariables
 {
-    public static final Boolean DEBUG = true;
+    public static final Boolean DEBUG = false;
     public static final String MAIN_VIEW = "ChatView";
     public static final String CONN_USERNAME = "fjmelche";
     public static final String CONN_PASSWORD = "Ab12345";

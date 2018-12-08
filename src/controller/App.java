@@ -1,21 +1,18 @@
 package controller;
 
 
-import model.EnvironmentVariables;
-import view.View;
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.EnvironmentVariables;
+import view.View;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-public class App
-{
+public class App {
     private ArrayList<Controller> controllers;
     private Stage primaryStage;
     private View view;
@@ -35,24 +32,20 @@ public class App
         files = new File(App.class.getResource("/controller").toURI().getPath()).listFiles();
 
 
-        if(files == null)
+        if (files == null)
             throw new Exception("No files were found!");
 
-        for(File file : files)
-        {
+        for (File file : files) {
             try {
-                Class<?> controllerClass = ClassLoader.getSystemClassLoader().loadClass("controller."+file.getName().replace(".class","" ));
-                if(controllerClass.isAssignableFrom(Controller.class))
-                {
+                Class<?> controllerClass = ClassLoader.getSystemClassLoader().loadClass("controller." + file.getName().replace(".class", ""));
+                if (controllerClass.isAssignableFrom(Controller.class)) {
                     continue;
                 }
                 Controller controllerInstance = (Controller) controllerClass.getConstructor().newInstance();
                 controllers.add(controllerInstance);
-            } catch(Exception e) {
-                if(EnvironmentVariables.DEBUG)
+            } catch (Exception e) {
+                if (EnvironmentVariables.DEBUG)
                     e.printStackTrace();
-
-                continue;
             }
 
         }
@@ -61,10 +54,8 @@ public class App
     }
 
     public <T extends Controller> T getController(Class<T> cType) throws Exception {
-        for (Controller c : controllers)
-        {
-            if(c.getClass().isAssignableFrom(cType))
-            {
+        for (Controller c : controllers) {
+            if (c.getClass().isAssignableFrom(cType)) {
                 c.setApp(this);
                 return cType.cast(c);
             }
@@ -73,30 +64,28 @@ public class App
         throw new Exception("Controller not found");
     }
 
-    public <T> T getViewCasted()
-    {
-        return (T) view;
+    public <T> T getViewCasted() {
+        @SuppressWarnings("unchecked")
+        var c = (T) view;
+
+        return c;
     }
 
-    public View getView()
-    {
+    public View getView() {
         return view;
     }
 
     public void navigate(String fxmlFileName) throws IOException {
-        navigate(fxmlFileName, 600,400 );
+        navigate(fxmlFileName, 600, 400);
     }
 
     public void navigate(String fxmlFileName, int width, int height) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fxmlFileName + "/" + fxmlFileName + ".fxml"));
         Parent root = fxmlLoader.load();
 
-        if(scene == null)
-        {
+        if (scene == null) {
             scene = new Scene(root);
-        }
-        else
-        {
+        } else {
             scene.setRoot(root);
         }
 
