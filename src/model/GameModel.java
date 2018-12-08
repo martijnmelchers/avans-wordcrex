@@ -144,7 +144,8 @@ public class GameModel {
                 @Override
                 protected Object call() // This gets called when other player is ready
                 {
-                    // when other player ready: Refresh board + hand + score (other player created the new hand + updated the board)
+                    // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
+                    dock.refill();// update hand
                     return null;
                 }
             });
@@ -185,7 +186,7 @@ public class GameModel {
                 TileType tileType = checkInfo.getTiles()[i].getType();
                 int letterId = checkInfo.getTiles()[i].getLetterType().getid();
 
-                db.insert(new model.tables.Tile(c[i].getX(), c[i].getY(), tileType)); //Insert in tiles
+                db.insert(new model.tables.Tile(c[i].getX(), c[i].getY(), tileType)); //Insert in tiles <--- read only table
                 db.insert(new model.tables.BoardPlayer1(_gameId, _playerName1, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 1
                 db.insert(new model.tables.TurnBoardLetter(letterId, _gameId, _turnId, c[i].getX(), c[i].getY())); //Insert in TurnBoardLetter
             }
