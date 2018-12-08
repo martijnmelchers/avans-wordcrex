@@ -1,4 +1,5 @@
 import controller.App;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import model.database.classes.Clause;
 import model.database.services.Connector;
@@ -28,10 +29,8 @@ public class Main {
             accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
             accountInfoTest.setRoleId("player");
 
-        controller.setModerator(new Moderator(new Database(new Connector().connect("databases.aii.avans.nl","ddfschol","Ab12345","smendel_db2"))));
-        primaryStage.setTitle("controller/moderator");
-        primaryStage.setResizable(false);
-        primaryStage.setScene(new Scene(root));
+        //controller.setModerator(new Moderator(new Database(new Connector().connect("databases.aii.avans.nl","ddfschol","Ab12345","smendel_db2"))));
+
 
 
             /* fuck that account lets delete that nibba again */
@@ -47,7 +46,7 @@ public class Main {
             }
 
             App application = new App();
-            application.load("MainView.fxml");
+            application.load("view/moderator/Moderator.fxml");
 
             // close the connection nibba
             _db.close();
