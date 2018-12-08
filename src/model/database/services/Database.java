@@ -5,6 +5,7 @@ import model.database.classes.*;
 import model.database.enumerators.CompareMethod;
 import model.database.enumerators.LinkMethod;
 import model.database.enumerators.ResultMethod;
+import model.helper.LogWriter;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -317,6 +318,7 @@ public class Database {
             } catch (Exception e) {
                 if (!field.isAnnotationPresent(Nullable.class))
                     throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)", e);
+                e.printStackTrace();
             }
 
         }

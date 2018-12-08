@@ -27,7 +27,6 @@ public class Board {
     private Tile decideTileType(int x, int y){
 
         int postion = (x * 15) + y;
-        System.out.println("Postion: " + postion);
 
         switch (postion)
         {
