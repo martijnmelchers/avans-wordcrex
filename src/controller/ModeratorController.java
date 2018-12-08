@@ -1,15 +1,27 @@
-package model.moderator;
+package controller;
 
 
+import controller.Controller;
+import model.DocumentSession;
 import model.database.services.Database;
+import model.moderator.ModeratorDictionary;
 
-public class Moderator {
+import java.sql.SQLException;
+
+public class ModeratorController extends Controller {
 
     private ModeratorDictionary moderatorDictionary;
-    private String username = "Daan";
+    private String username;
     private String letterset = "NL";
-    public Moderator(Database dB){
-        this.moderatorDictionary = new ModeratorDictionary(dB);
+    public ModeratorController(){
+        try {
+            this.moderatorDictionary = new ModeratorDictionary(DocumentSession.getDatabase());
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        username = DocumentSession.getPlayerUsername();
+
     }
 
     public String[] getSuggestedWords(){
