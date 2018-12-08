@@ -15,7 +15,7 @@ public class Main {
          */
 
         try {
-            var _db = DocumentSession.getDatabase(false);
+            /*var _db = DocumentSession.getDatabase(false);
 
             var clauses = new ArrayList<Clause>();
 
@@ -27,7 +27,7 @@ public class Main {
             _db.insert(accountInfoTest);
 
 
-            /* fuck that account lets delete that nibba again */
+            *//* fuck that account lets delete that nibba again *//*
             _db.delete(accountInfoTest);
 
             for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
@@ -37,13 +37,13 @@ public class Main {
             for(Game game : _db.select(Game.class, clauses)) {
                 System.out.println("Game found!");
 
-            }
+            }*/
 
             App application = new App();
-            application.load("MainView.fxml");
+            application.load("AccountInformation");
 
-            // close the connection nibba
-            _db.close();
+            /*// close the connection nibba
+            _db.close();*/
         } catch (Exception e) {
             e.printStackTrace();
         }
