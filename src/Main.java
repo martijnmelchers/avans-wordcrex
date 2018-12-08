@@ -26,21 +26,19 @@ public class Main {
 
             //_db.insert(accountInfoTest);
 
-
             *//* fuck that account lets delete it again *//*
             _db.delete(accountInfoTest);
 
-            for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
+            f or (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
                 System.out.println("Account found! " + ac.doStuff());
             }
 
             for(Game game : _db.select(Game.class, clauses)) {
                 System.out.println("Game found!");
-
             }*/
 
             App application = new App();
-            application.load("ChatView");
+            application.load("MatchOverview");
 
             // close the connection
             _db.close();

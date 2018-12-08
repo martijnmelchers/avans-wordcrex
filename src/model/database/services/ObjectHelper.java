@@ -7,11 +7,6 @@ import java.text.SimpleDateFormat;
 
 public class ObjectHelper {
     public static String objectToSQL(Object o) throws Exception {
-
-        if(o == null) {
-            return "NULL";
-        }
-
         var c = o.getClass();
         if (c == String.class) {
             return "'" + o + "'";

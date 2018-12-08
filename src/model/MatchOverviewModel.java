@@ -3,12 +3,13 @@ package model;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
-import model.database.services.Connector;
+import model.database.enumerators.LinkMethod;
 import model.database.services.Database;
 import model.tables.*;
 
-import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO: Add comments
@@ -23,6 +24,7 @@ public class MatchOverviewModel {
 
     private ArrayList<Game> _games;
 
+    // TODO make the controller use this function
     public ArrayList<Game> getGames() {
         return _games;
     }
@@ -94,12 +96,17 @@ public class MatchOverviewModel {
     }
 
     public ArrayList<Game> getAllGames() {
-        var clauses = new ArrayList<Clause>();
-        clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.NOT_EQUAL_NULLABLE, null));
-
         try {
             ArrayList<Game> games = new ArrayList<Game>();
-            games.addAll(_db.select(Game.class, clauses));
+
+            for (Game game : _db.select(Game.class, new ArrayList<Clause>()))
+            {
+                if(game.gameState.isRequest())
+                    continue;
+
+                games.add(game);
+            }
+
             return games;
         }
         catch(Exception e)
@@ -109,4 +116,78 @@ public class MatchOverviewModel {
 
         return null;
     }
+
+    public ArrayList<Game> searchForGamesAsObserver(String gamesToSearch) {
+        var clauses = new ArrayList<Clause>();
+        clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.LIKE, "%" + gamesToSearch + "%", LinkMethod.OR));
+        clauses.add(new Clause(new TableAlias("game", -1), "username_player2", CompareMethod.LIKE, "%" + gamesToSearch + "%"));
+
+        try {
+            Map<Integer, Game> map = new HashMap<>();
+
+            for (Game game : _db.select(Game.class, clauses))
+            {
+                if(game.gameState.isRequest())
+                    continue;
+
+                if(map.containsKey(game.getGameID()))
+                    continue;
+
+                map.put(game.getGameID(), game);
+            }
+
+            return new ArrayList<Game>(map.values());
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public ArrayList<Game> searchForGamesAsPlayer(String currentGamesToSearch) {
+        var clauses = new ArrayList<Clause>();
+        clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, _username));
+        clauses.add(new Clause(new TableAlias("game", -1), "username_player2", CompareMethod.LIKE, "%" + currentGamesToSearch + "%"));
+
+        try {
+            var foundGames = new ArrayList<Game>();
+            for (Game game : _db.select(Game.class, clauses))
+            {
+                foundGames.add(game);
+            }
+
+            return foundGames;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public ArrayList<String> getPlayerRoles() {
+        var clauses = new ArrayList<Clause>();
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, _username));
+
+        try {
+            ArrayList<String> accountRoles = new ArrayList<>();
+
+            for (AccountInfo acc : _db.select(AccountInfo.class, clauses))
+            {
+                accountRoles.add(acc.role.getRole());
+            }
+
+            return accountRoles;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 }

@@ -126,7 +126,6 @@ public class App extends Application
 
     public void navigate(String fxmlFileName)
     {
-
         navigate(fxmlFileName, 1600, 1200 );
     }
 

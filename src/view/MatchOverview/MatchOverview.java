@@ -3,9 +3,6 @@ package view.MatchOverview;
 import controller.App;
 import controller.MatchOverviewController;
 import javafx.animation.AnimationTimer;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -36,6 +33,9 @@ import java.util.function.Consumer;
 // Show score on the games.
 //
 public class MatchOverview extends View {
+
+
+
     private enum ViewMode {
         Play,
         Observer
@@ -65,6 +65,7 @@ public class MatchOverview extends View {
     private Header _headerInvitations;
     private Header _headerYourTurn;
     private Header _headerTheirTurn;
+    private Header _headerObserver;
 
     private ViewMode _viewMode = ViewMode.Play;
 
@@ -74,10 +75,6 @@ public class MatchOverview extends View {
         fontBold = Font.loadFont(isBold, 12.0);
         InputStream is = App.class.getResourceAsStream("/Fonts/Trueno/TruenoLt.otf");
         font = Font.loadFont(is, 12.0);
-
-        _headerInvitations = new Header("Uitnodigingen");
-        _headerYourTurn = new Header("Jouw Beurt");
-        _headerTheirTurn = new Header("Hun Beurt");
     }
 
     @Override
@@ -85,48 +82,18 @@ public class MatchOverview extends View {
         controller = this.getController(MatchOverviewController.class);
         _filterGameView = new FilterGameView(this, _searchBar);
 
-        var invitations = new ArrayList<Game>();
-        var yourTurns = new ArrayList<Game>();
-        var theirTurns = new ArrayList<Game>();
+        // Check the role of the player.
+        if(!checkObserverRoll(controller.getPlayerRoles()))
+        {
+            _viewModeButton.setVisible(false);
+        }
 
         _vBox = new VBox();
-
-        ArrayList<Game> games = controller.getGames();
-        for (Game game : games) {
-            if (game.gameState.isRequest()) {
-                invitations.add(game);
-            } else if (game.gameState.isPlaying()) {
-                // Differ in your turns
-                if (currentTurnHasAction(game) && !player2TurnHasAction(game)) {
-                    theirTurns.add(game);
-                } else // Their turn played(and not yours)
-                {
-                    yourTurns.add(game);
-                }
-            }
-        }
-        // Invitation
-        initiateInvitationHeader(invitations);
-
-        // Our Turn
-        initiateYourTurnHeader(yourTurns);
-
-        // Their Turn
-        initiateTheirTurnHeader(theirTurns);
-
-        if (invitations.size() != 0)
-            _vBox.getChildren().addAll(_headerInvitations.getContent());
-
-        if (yourTurns.size() != 0)
-            _vBox.getChildren().addAll(_headerYourTurn.getContent());
-
-        if (theirTurns.size() != 0)
-            _vBox.getChildren().addAll(_headerTheirTurn.getContent());
 
         fillBackground(_vBox, labelColor);
         fillBackground(_matchScrollPane, labelColor);
 
-        _matchScrollPane.setContent(_vBox);
+        ChangeToPlayMode(null);
 
         // Add to application.
         new AnimationTimer() {
@@ -138,6 +105,16 @@ public class MatchOverview extends View {
                 lastUpdate = now;
             }
         }.start();
+    }
+
+    private boolean checkObserverRoll(ArrayList<String> playerRoles) {
+        for(String string : playerRoles)
+        {
+            if(string.equals("observer"))
+                return true;
+        }
+
+        return false;
     }
 
     private void ScaleScreen()
@@ -208,43 +185,120 @@ public class MatchOverview extends View {
 
     }
 
+    private void onObserverGameClick(Game game)
+    {
+
+    }
+
+    public void filterObserverGames(String currentGamesToSearch) {
+        DestroyViewList();
+
+        if(currentGamesToSearch.length() == 0) //Reset the view if nothing is searched.
+        {
+            if(_viewMode == ViewMode.Observer)
+            {
+                ChangeToObserverMode(null);
+            }
+            else
+            {
+                ChangeToPlayMode(null);
+            }
+            return;
+        }
+
+        if(_viewMode == ViewMode.Observer)
+        {
+            ChangeToObserverMode(controller.searchForAllGamesAsObserver(currentGamesToSearch));
+        }
+        else
+        {
+            // Make model search for games of current player.
+            ChangeToPlayMode(controller.searchForAllGamesAsPlayer(currentGamesToSearch));
+        }
+    }
+
+    private void ChangeToPlayMode(ArrayList<Game> foundGames) {
+        _viewModeButton.setText("Observer Mode");
+
+        _headerInvitations = new Header("Uitnodigingen");
+        _headerYourTurn = new Header("Jouw Beurt");
+        _headerTheirTurn = new Header("Hun Beurt");
+
+        var invitations = new ArrayList<Game>();
+        var yourTurns = new ArrayList<Game>();
+        var theirTurns = new ArrayList<Game>();
+
+        ArrayList<Game> games = foundGames != null ? foundGames : controller.getGames();
+        for (Game game : games) {
+            if (game.gameState.isRequest()) {
+                invitations.add(game);
+            } else if (game.gameState.isPlaying()) {
+                // Differ in your turns
+                if (currentTurnHasAction(game) && !player2TurnHasAction(game)) {
+                    theirTurns.add(game);
+                } else // Their turn played(and not yours)
+                {
+                    yourTurns.add(game);
+                }
+            }
+        }
+        // Invitation
+        initiateInvitationHeader(invitations);
+
+        // Our Turn
+        initiateYourTurnHeader(yourTurns);
+
+        // Their Turn
+        initiateTheirTurnHeader(theirTurns);
+
+        if (invitations.size() != 0)
+            _vBox.getChildren().addAll(_headerInvitations.getContent());
+
+        if (yourTurns.size() != 0)
+            _vBox.getChildren().addAll(_headerYourTurn.getContent());
+
+        if (theirTurns.size() != 0)
+            _vBox.getChildren().addAll(_headerTheirTurn.getContent());
+
+        _matchScrollPane.setContent(_vBox);
+        //
+    }
+
+    private void ChangeToObserverMode(ArrayList<Game> foundGames) {
+        _viewModeButton.setText("Speel Mode");
+
+        _headerObserver = new Header("Spellen");
+
+        _headerObserver.addPlayButton(this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), "TODO fill in");
+
+        _vBox.getChildren().addAll(_headerObserver.getContent());
+
+        _matchScrollPane.setContent(_vBox);
+    }
+
+
+
     @FXML
     private void switchViewMode() {
         DestroyViewList();
+
         if (_viewMode == ViewMode.Play) {
             _viewMode = ViewMode.Observer;
-            ChangeToObserverMode();
+            ChangeToObserverMode(null);
         } else if (_viewMode == ViewMode.Observer) {
             _viewMode = ViewMode.Play;
-            ChangeToPlayMode();
+            ChangeToPlayMode(null);
         }
     }
 
     private void DestroyViewList() {
-        DestroyHeader(_headerInvite);
-        DestroyHeader(_headerInvitations);
-        DestroyHeader(_headerYourTurn);
-        DestroyHeader(_headerTheirTurn);
-    }
+        _headerInvite = null;
+        _headerInvitations = null;
+        _headerYourTurn = null;
+        _headerTheirTurn = null;
+        _headerObserver = null;
 
-    private void DestroyHeader(Header header)
-    {
-        if(header != null)
-        {
-            _vBox.getChildren().removeAll(header.getContent());
-        }
-    }
-
-    public ArrayList<Game> getGamesList() {
-        return controller.getAllGames();
-    }
-
-    private void ChangeToPlayMode() {
-        _viewModeButton.setText("Observer Mode");
-    }
-
-    private void ChangeToObserverMode() {
-        _viewModeButton.setText("Speel Mode");
+        _vBox.getChildren().clear();
     }
 
     private class Header {
@@ -270,6 +324,21 @@ public class MatchOverview extends View {
         }
 
         public void addPlayButton(Consumer<Game> onClick, Game game, String comment) {
+            createButton(onClick, game, comment, null, null);
+        }
+
+        public void addPlayButton(Consumer<Game> onClick, ArrayList<Game> games, String comment)
+        {
+            for (Game game : games)
+            {
+                var title = new Text(game.player1.getUsername() + " - " + game.player2.getUsername() + "\n");
+                var description = new Text(game.letterSet.getDescription() + " " + comment);
+                createButton(onClick, game, comment, title, description);
+            }
+        }
+
+        private void createButton(Consumer<Game> onClick, Game game, String comment, Text gameTitle, Text description)
+        {
             var flowPane = new FlowPane();
             flowPane.setRowValignment(VPos.CENTER);
             flowPane.setAlignment(Pos.BASELINE_LEFT);
@@ -281,10 +350,11 @@ public class MatchOverview extends View {
             pane.setPrefHeight(50);
             pane.setPrefWidth(50);
 
-            var text1 = new Text(game.player2.getUsername() + " - " + game.letterSet.getDescription() + "\n");
+
+            var text1 = gameTitle == null ? new Text(game.player2.getUsername() + " - " + game.letterSet.getDescription() + "\n") : gameTitle;
             text1.setFill(textColor);
             text1.setFont(fontBold);
-            var text2 = new Text(comment);
+            var text2 = description == null ? new Text(comment) : description;
             text2.setFill(textColor);
             text2.setFont(font);
             var textFlow = new TextFlow(text1, text2);
