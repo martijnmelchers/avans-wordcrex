@@ -1,49 +1,60 @@
 import controller.App;
+import javafx.application.Application;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+import model.DocumentSession;
+import model.EnvironmentVariables;
 
-import model.tables.Account;
+import java.sql.SQLException;
 
-import model.tables.AccountInfo;
-import model.database.classes.Clause;
-import model.database.services.Connector;
-import model.database.services.Database;
-
-import model.tables.BoardPlayer1;
-
-
-import java.util.ArrayList;
-import java.util.Random;
-
-public class Main {
+public class Main extends Application {
     public static void main(String[] args) {
-        /*
-        Thus us a database example :)
-         */
+        launch(EnvironmentVariables.MAIN_VIEW);
+    }
 
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        initializeApp(primaryStage);
+    }
+
+    private void initializeApp(Stage primaryStage) throws SQLException {
+        var tryAgainButton = new ButtonType("Probeer opnieuw");
+        var closeAppButton = new ButtonType("Afsluiten");
+
+        /* First initialize database */
         try {
-            var conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
-            var _db = new Database(conn, true);
-
-            var clauses = new ArrayList <Clause>();
-
-
-//            var accountInfoTest = new AccountInfo();
-//            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
-//            accountInfoTest.setRoleId("player");
-//
-//            _db.insert(accountInfoTest);
-
-
-//            for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
-//                System.out.println(ac);
-//                System.out.println(ac.account);
-//                System.out.println(ac.role);
-//            }
-
+            DocumentSession.getDatabase(EnvironmentVariables.DEBUG);
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Tijdens opstarten van de database is de volgende fout opgetreden:\n\n" + e.getMessage(), closeAppButton, tryAgainButton);
+            alert.showAndWait();
+
+            if (EnvironmentVariables.DEBUG)
+                e.printStackTrace();
+
+            if (alert.getResult() == tryAgainButton)
+                initializeApp(primaryStage);
+            else
+                System.exit(1);
         }
 
-        App application = new App();
-        application.load("AdminView.fxml");
+        /* Start the main app */
+        try {
+            var app = new App(primaryStage);
+
+            app.navigate(EnvironmentVariables.MAIN_VIEW);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
+            alert.showAndWait();
+
+            if (EnvironmentVariables.DEBUG)
+                e.printStackTrace();
+
+            System.exit(1);
+        }
+
+        /* This will be run when the app is closed */
+        DocumentSession.getDatabase().close();
+        System.out.println("Database connection closed. Closing application");
     }
 }

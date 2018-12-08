@@ -22,13 +22,29 @@ public class AccountInfo {
     public Role role;
 
     public AccountInfo(){}
+    public AccountInfo(String role, String user){
+        this.usernameId = user;
+        this.roleId = role;
+
+
+        System.out.println(this.usernameId);
+        System.out.println(this.roleId);
+    }
 
     public String doStuff() {
-        System.out.println("waa!!");
-        return "Dit is stuff";
+        return usernameId;
     }
 
     public void setRoleId(String role) {
         this.roleId = role;
+    }
+
+
+    public String getUsername(){
+        return this.usernameId;
+    }
+
+    public String getRole(){
+        return this.roleId;
     }
 }

@@ -1,8 +1,12 @@
 package model;
 
+import javafx.scene.control.Alert;
 import model.database.classes.Clause;
+import model.database.classes.TableAlias;
+import model.database.enumerators.CompareMethod;
 import model.database.services.Connector;
 import model.database.services.Database;
+import model.helper.ErrorHandler;
 import model.tables.Account;
 import model.tables.AccountInfo;
 import model.tables.Role;
@@ -31,13 +35,13 @@ public class AdminModel {
      * Haalt alle users uit de db.
      * @return List<Account>
      */
-    public List<Account> getUsers(){
+    public List<AccountInfo> getUsers(){
 
         var clauses = new ArrayList <Clause>();
-        List<Account> accounts = new ArrayList<>();
+        List<AccountInfo> accounts = new ArrayList<>();
 
         try{
-            accounts = this._db.select(Account.class,clauses);
+            accounts = this._db.select(AccountInfo.class,clauses);
         }
 
         catch(Exception e){
@@ -46,24 +50,47 @@ public class AdminModel {
         return accounts;
     }
 
-    public void createRole(Role role) throws Exception {
+    public void setRole(AccountInfo info) throws Exception {
+        var clauses = new ArrayList<Clause>();
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
+        if(this._db.select(AccountInfo.class, clauses).size()  == 0){
+            try{
+                this._db.insert(info);
+            }
+            catch (Exception e){
+                throw e;
+            }
+        }
+    }
+
+    public void removeRole(AccountInfo info) throws Exception {
+        var clauses = new ArrayList<Clause>();
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
+
+        List<AccountInfo> roles  = this._db.select(AccountInfo.class, clauses);
+        if(roles.size()  > 0){
+            try{
+                this._db.delete(roles);
+            }
+            catch (Exception e){
+                throw e;
+            }
+        }
+    }
+
+    public List<AccountInfo> getRoles(String username){
+        List<AccountInfo> roles = new ArrayList<>();
+        var clauses = new ArrayList<Clause>();
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, username));
         try{
-            this._db.insert(role);
+           roles = this._db.select(AccountInfo.class,clauses);
         }
+
         catch (Exception e){
-            throw e;
+            ErrorHandler.handle(e);
         }
-    }
-
-    public void removeRole(){
-        //TODO
-    }
-
-    public void assignRole(){
-        //TODO
-    }
-
-    public void deAssignRole(){
-        //TODO
+        return roles;
     }
 }

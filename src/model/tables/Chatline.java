@@ -1,9 +1,6 @@
 package model.tables;
 
-import model.database.annotations.Column;
-import model.database.annotations.ForeignKey;
-import model.database.annotations.PrimaryKey;
-import model.database.annotations.Table;
+import model.database.annotations.*;
 
 import java.sql.Timestamp;
 
@@ -17,7 +14,7 @@ public class Chatline {
 
     @PrimaryKey
     @Column("game_id")
-    @ForeignKey(type = Game.class, field = "username", output = "game")
+    @ForeignKey(type = Game.class, field = "game_id", output = "game")
     private Integer _gameId;
 
     @PrimaryKey
@@ -30,6 +27,22 @@ public class Chatline {
     public Account account;
     public Game game;
 
-    public Chatline() {}
+    public Chatline(String _username, Integer _gameId, Timestamp _moment, String _message) {
+        this._username = _username;
+        this._gameId = _gameId;
+        this._moment = _moment;
+        this._message = _message;
+    }
 
+    public Chatline() {
+
+    }
+
+    public String getMessage() {
+        return _message;
+    }
+
+    public Timestamp getMoment() {
+        return _moment;
+    }
 }
