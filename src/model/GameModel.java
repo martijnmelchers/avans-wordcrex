@@ -1,12 +1,16 @@
 package model;
 
 import javafx.concurrent.Task;
+import jdk.nashorn.api.tree.TryTree;
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
+import model.helper.Log;
 import model.tables.*;
 
+import javax.swing.text.Document;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +48,12 @@ public class GameModel {
 
     public GameModel(Game game)
     {
+        try{
+            this.db = DocumentSession.getDatabase();
+        }catch (Exception e){
+            Log.error(e);
+        }
 
-        this.db = DocumentSession.getDatabase();
         _gameId = game.getGameId();
         _board = new Board();
         dock = new Dock(isPlayerOne(),_gameId,_turnId);
@@ -95,7 +103,7 @@ public class GameModel {
         {
             List<Clause> clauses = new ArrayList<>();
             clauses.add(new Clause(new TableAlias("game",-1 ), "game_id",CompareMethod.EQUAL ,_gameId ));
-            clauses.add(new Clause(new TableAlias("game",-1 ), "username_player1",CompareMethod.EQUAL ,DocumentSession.getPlayerUsername() ));
+            //clauses.add(new Clause(new TableAlias("game",-1 ), "username_player1",CompareMethod.EQUAL ,DocumentSession.getPlayerUsername() ));
             List<Game> game = db.select(Game.class, clauses);
             if(game.size()==1)
             {

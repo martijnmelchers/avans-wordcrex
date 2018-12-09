@@ -1,9 +1,6 @@
 package model.tables;
 
-import model.database.annotations.Column;
-import model.database.annotations.ForeignKey;
-import model.database.annotations.PrimaryKey;
-import model.database.annotations.Table;
+import model.database.annotations.*;
 
 @Table("turnplayer2")
 public class TurnPlayer2 {
@@ -28,6 +25,7 @@ public class TurnPlayer2 {
     @Column("score")
     private Integer _score;
 
+    @Nullable
     @Column("turnaction_type")
     private String _turnactionType;
 

@@ -1,8 +1,10 @@
 package controller;
 
 import model.*;
+import model.database.DocumentSession;
 import model.tables.Game;
-import view.BoardView;
+import model.tables.HandLetter;
+import view.BoardView.*;
 
 public class GameController extends Controller{
 
@@ -11,13 +13,13 @@ public class GameController extends Controller{
 
     public GameController() {
 
-        DocumentSession.setPlayerUsername("jagermeester");//TODO: Authentication branch will set the player this is for testing purposes. Remove after branch merged
-        _gameModel = new GameModel(new Game(502, "playing", "NL", "jagermeester", "rik", "accepted")); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
+        //DocumentSession.setPlayerUsername("jagermeester");//TODO: Authentication branch will set the player this is for testing purposes. Remove after branch merged
+        _gameModel = new GameModel(new Game(502, "playing", "NL", "jagermeester", "rik", "accepted", null)); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
     }
 
     public Tile[][] getTiles() { return _gameModel.getTiles(); }
 
-    public Letter[] getDock(){return _gameModel.getDock();}
+    public HandLetter[] getDock(){ return _gameModel.getDock(); }
 
     public int[] getScore() { return new int[] {_gameModel.getPlayerScore1(), _gameModel.getPlayerScore2() }; }
 

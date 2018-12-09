@@ -1,6 +1,7 @@
 package model;
 
 import javafx.scene.paint.Color;
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;

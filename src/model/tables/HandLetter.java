@@ -28,8 +28,10 @@ public class HandLetter {
 
     public HandLetter() {}
 
-    public HandLetter(int _letterId,int _turnId,int _gameId)
+    public HandLetter(Integer _letterId, Integer _turnId, Integer _gameId)
     {
-
+       this._gameId = _gameId;
+       this._turnId = _turnId;
+       this._letterId = _letterId;
     }
 }

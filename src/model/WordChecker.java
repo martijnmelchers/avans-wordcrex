@@ -1,5 +1,6 @@
 package model;
 
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
@@ -12,7 +13,14 @@ public class WordChecker {
 
     private Database _database;
 
-    public WordChecker(){ _database = DocumentSession.getDatabase(); }
+    public WordChecker(){
+     try {
+         _database = DocumentSession.getDatabase();
+     }
+     catch (Exception e){
+         e.printStackTrace();
+     }
+    }
 
     public boolean check(String word){
 

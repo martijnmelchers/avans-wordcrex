@@ -1,4 +1,4 @@
-package view;
+package view.DockView;
 
 import controller.GameController;
 import javafx.animation.TranslateTransition;
@@ -13,8 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import model.Letter;
+import model.helper.Log;
 import model.tables.HandLetter;
+import view.BoardView.BoardView;
 
 import java.util.List;
 
@@ -28,7 +29,14 @@ public class DockView
     public void setParent(BoardView board)
     {
         this.board = board;
-        controller = board.getController(GameController.class);
+
+        try{
+            controller = board.getController(GameController.class);
+        } catch (Exception e){
+            Log.error(e);
+        }
+
+
         updateDock();
     }
 

@@ -23,6 +23,7 @@ public class AccountInfo {
 
     public AccountInfo(){}
 
+    // What kind of naming is this??
     public String doStuff() {
         return usernameId;
     }

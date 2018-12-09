@@ -1,4 +1,4 @@
-package view;
+package view.BoardView;
 
 import controller.GameController;
 import javafx.event.Event;
@@ -10,6 +10,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.Tile;
 import model.TileState;
+import model.helper.Log;
+import view.DockView.DockView;
+import view.View;
 
 
 public class BoardView extends View {
@@ -25,7 +28,12 @@ public class BoardView extends View {
 
     @Override
     protected void loadFinished() {
-        _controller = this.getController(GameController.class);
+        try {
+            _controller = this.getController(GameController.class);
+        } catch (Exception e){
+            Log.error(e);
+        }
+
         dockController.setParent(this);
         init();
         updateScore();

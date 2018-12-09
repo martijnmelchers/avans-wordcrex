@@ -21,7 +21,7 @@ public class Symbol {
     @Column("value")
     private Integer _value;
 
-    @Column("Counted")
+    @Column("counted")
     private Integer _counted;
 
 

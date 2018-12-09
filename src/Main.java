@@ -1,53 +1,59 @@
 import controller.App;
+import javafx.application.Application;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+import model.EnvironmentVariables;
+import model.database.DocumentSession;
+import model.helper.Log;
 
-import model.WordChecker;
-import model.DocumentSession;
-import model.database.classes.Clause;
-import model.tables.Account;
-import model.tables.AccountInfo;
-import model.tables.Game;
-
-import java.util.ArrayList;
-import java.util.Random;
-
-public class Main {
+public class Main extends Application {
     public static void main(String[] args) {
-        /*
-        This is a database example :)
-         */
+        Log.info("Launching application...");
+        launch(EnvironmentVariables.MAIN_VIEW);
+    }
 
-        /*try {
+    @Override
+    public void start(Stage primaryStage) {
+        initializeApp(primaryStage);
+    }
 
-            var _db = DocumentSession.getDatabase(false);
-            var clauses = new ArrayList<Clause>();
+    private void initializeApp(Stage primaryStage) {
+        var tryAgainButton = new ButtonType("Probeer opnieuw");
+        var closeAppButton = new ButtonType("Afsluiten");
 
-            System.out.println(new WordChecker(_db).check("sex"));
-            var accountInfoTest = new AccountInfo();
-            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
-            accountInfoTest.setRoleId("player");
-
-            _db.insert(accountInfoTest);
-
-
-            /* fuck that account lets delete that nibba again */
-            /*_db.delete(accountInfoTest);
-
-            for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
-                System.out.println("Account found! " + ac.doStuff());
-            }
-
-            /*for(Game game : _db.select(Game.class, clauses)) {
-                System.out.println("Game found!");
-
-            }*/
-
-            App application = new App();
-            application.load("BoardView.fxml");
-/*
-            // close the connection nibba
-            _db.close();
+        /* Initialize the database */
+        Log.info("Initializing database...");
+        try {
+            DocumentSession.getDatabase();
+            Log.info("Database connection established!");
         } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Tijdens opstarten van de database is de volgende fout opgetreden:\n\n" + e.getMessage(), closeAppButton, tryAgainButton);
+            alert.showAndWait();
+
+            Log.error(e);
+
+            if (alert.getResult() == tryAgainButton)
+                initializeApp(primaryStage);
+            else
+                System.exit(1);
+        }
+
+        /* Start the main app */
+        Log.info("Starting views...");
+        try {
+            var app = new App(primaryStage);
+
+            app.navigate(EnvironmentVariables.MAIN_VIEW);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
+            alert.showAndWait();
+
+            Log.error(e);
+
+            System.exit(1);
+        }
+
+        Runtime.getRuntime().addShutdownHook(new BeforeShutdown());
     }
 }

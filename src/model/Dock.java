@@ -1,11 +1,14 @@
 package model;
 
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
+import model.helper.Log;
 import model.tables.HandLetter;
 import model.tables.TurnBoardLetter;
+import model.tables.Letter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +24,11 @@ public class Dock
 
     public Dock(boolean createNewHand,int gameId,int turnId)
     {
-        db = DocumentSession.getDatabase();
+        try {
+            db = DocumentSession.getDatabase();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         letters = new HandLetter[7];
         refill(gameId, turnId);
     }
@@ -74,7 +81,7 @@ public class Dock
             {
                 int randomIndex = new Random().nextInt(notUsed.size());
                 Letter l = notUsed.get(randomIndex);
-                letters[i] = new HandLetter(l.getid(),turnId, gameId);
+                letters[i] = new HandLetter(l.get_letterId(),turnId, gameId);
             }
         }
 
@@ -94,11 +101,11 @@ public class Dock
         List<Letter> availableLetters = new ArrayList<>();
         try
         {
-            availableLetters = db.select(Letter.class,null );
+            availableLetters = db.select(Letter.class);
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e, true);
         }
 
         List<TurnBoardLetter> usedLetters = new ArrayList<>();
@@ -117,7 +124,7 @@ public class Dock
         String[] ids = usedLetters.stream().map(a->a.letter.get_letterId()).toArray(String[]::new);
         List<Letter> usableLetters = availableLetters.stream()
                 .filter(a-> Arrays.stream(ids).anyMatch(
-                        b-> b.equals(a.getid()+"")))
+                        b-> b.equals(a.get_letterId()+"")))
                 .collect(Collectors.toList());
 
         return usableLetters;
