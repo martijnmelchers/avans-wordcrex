@@ -85,3 +85,8 @@ TextField:focused {
 .Chat-Moment {
     -fx-font-size: 10;
 }
+
+#btBack {
+    -fx-background-color: transparent;
+    -fx-font-size: 24;
+}

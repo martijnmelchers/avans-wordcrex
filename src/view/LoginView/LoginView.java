@@ -42,6 +42,7 @@ public class LoginView extends View
     public void loginSucces()
     {
         //TODO: accountController.navigatie("") << Main menu here
+        accountController.navigate("AccountInformation");
     }
 
     public void setCredentials(String username, String password)

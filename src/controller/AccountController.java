@@ -1,6 +1,7 @@
 package controller;
 
 import model.AccountModel;
+import view.AccountInformation.AccountInformation;
 import view.LoginView;
 import view.RegisterView.RegisterView;
 
@@ -21,7 +22,6 @@ public class AccountController extends Controller
 
     public void registerUser(String username, String password, String confirmationPassword)
     {
-
         RegisterView registerView = getViewCasted();
         if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
         {
@@ -65,5 +65,34 @@ public class AccountController extends Controller
         }
 
         loginView.loginSucces();
+    }
+
+    public void changePassword(String username, String password, String confirmationPassword)
+    {
+        AccountInformation accountInformation = getViewCasted();
+        if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
+        {
+            accountInformation.showError("Vul alle velden in");
+            return;
+        }
+
+        if(!checkPasswords(password,confirmationPassword ))
+        {
+            accountInformation.showError("De wachtwoorden komen niet overeen");
+            return;
+        }
+
+        String error = model.changePassword(username, password);
+
+        if(!error.equals(""))
+        {
+            accountInformation.showError(error);
+            return;
+        }
+    }
+
+    public String getUsername()
+    {
+        return model.getUsername();
     }
 }

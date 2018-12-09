@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class AccountModel
 {
     private Database db;
+    private String username;
 
     public AccountModel()
     {
@@ -64,11 +65,38 @@ public class AccountModel
 
         try
         {
+            this.username = username;
             return db.select(Account.class,clauses ).get(0);
         }
         catch (Exception e)
         {
             return null;
         }
+    }
+
+    public String changePassword(String username, String password)
+    {
+        if (password.length() < 5 || password.length() > 25)
+        {
+            return "Wachtwoord lengte moet tussen (5 - 25)";
+        }
+
+        String lowerPassword = password.toLowerCase();
+
+        try
+        {
+            db.update(new Account(username, lowerPassword));
+            return null;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+    }
+
+    public String getUsername()
+    {
+        return this.username;
     }
 }
