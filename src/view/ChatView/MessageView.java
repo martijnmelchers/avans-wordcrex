@@ -12,11 +12,11 @@ public class MessageView extends View {
     @FXML
     private Label MomentLabel;
 
-    public void setMessageLabel(String message) {
+    void setMessageLabel(String message) {
         MessageLabel.setText(message);
     }
 
-    public void setMomentLabel (String moment) {
+    void setMomentLabel(String moment) {
         MomentLabel.setText(moment);
     }
 

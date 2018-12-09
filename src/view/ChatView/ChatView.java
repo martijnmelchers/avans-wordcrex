@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import model.GameSession;
 import model.tables.Account;
@@ -59,42 +60,16 @@ public class ChatView extends View {
     }
 
     private void displayMessage(Chatline chatline) {
-        /*// create vbox for a single message
-        VBox messageVBox = new VBox();
-        messageVBox.setPrefWidth(200);
-        messageVBox.setStyle("-fx-background-color: #800080;");
-
-        if (chatline.account.getUsername().equals(_session.getUsername())) {
-            // messageVBox.getStyleClass().add("Chat-MessageView-Container-Right");
-        } else {
-            // messageVBox.getStyleClass().add("Chat-MessageView-Container-Left");
-        }
-
-        // create text for message
-        Text message = new Text();
-        message.setText(chatline.getMessage());
-        message.getStyleClass().add("Chat-MessageView");
-
-        // create text for moment
-        Text moment = new Text();
-        moment.setText(chatline.getMoment().toString());
-        moment.getStyleClass().add("Chat-Moment");
-
-        // insert the message and moment into the vbox
-        messageVBox.getChildren().add(message);
-        messageVBox.getChildren().add(moment);
-*/
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Incomingmessage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MessageView.fxml"));
 
-            Pane messagePane = loader.load();
+            AnchorPane messagePane = loader.load();
 
-            MessageView messageView = loader.getController();
+            MessageView messageViewController = loader.getController();
 
-            messageView.setMessageLabel(chatline.getMessage());
-            messageView.setMomentLabel(chatline.getMoment().toString());
+            messageViewController.setMessageLabel(chatline.getMessage());
+            messageViewController.setMomentLabel(chatline.getMoment().toString());
 
-            // insert vbox into vbox for all the messages
             messagesVbox.getChildren().add(messagePane);
         } catch (IOException e) {
             e.printStackTrace();
