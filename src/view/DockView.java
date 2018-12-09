@@ -88,7 +88,7 @@ public class DockView
                     {
                         continue;
                     }
-                    controller.placeTile(row,column ,text.getText(),0);
+                    controller.placeTile(row,column ,text.getText(), 0);
                     hBoxDock.getChildren().remove(hBoxDock.getChildren().indexOf(stackPane));
                     System.out.println("row:" + row);
                     System.out.println("column:" + column);

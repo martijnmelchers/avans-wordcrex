@@ -85,34 +85,44 @@ public class Board {
 
 
     //Returned de punten die het woord geeft
-    public CheckInfo check(Vector2 vector2){
+    public CheckInfo check(){
 
         ArrayList<Tile> tiles = new ArrayList<>();
-        String[] words = new String[2]; //0 = x - 1 = y;
+        ArrayList<String> words = new ArrayList<>();
 
-        for (int x = 0; x < 15; x++){
-            if(!_tiles[x][vector2.getY()].isEmpty()){
-                tiles.add(_tiles[x][vector2.getY()]);
-                words[0] = words[0].concat(_tiles[x][vector2.getY()].getLetterType().getLetter());
+        for (int i = 0; i < _placedCoords.size(); i++){
+
+            String lettersX = ""; //0 = x - 1 = y;
+            String lettersY = "";
+
+            int coordX = _placedCoords.get(i).getX();
+            int coordY = _placedCoords.get(i).getY();
+
+            for (int j = 0; j < 15; j++){
+                if(!_tiles[j][coordY].isEmpty()){
+                    tiles.add(_tiles[j][coordY]);
+                    lettersX = lettersX.concat(_tiles[j][coordY].getLetterType().getLetter());
+                }
+                if(!_tiles[coordX][j].isEmpty()){
+                    tiles.add(_tiles[coordX][j]);
+                    lettersY = lettersY.concat(_tiles[coordX][j].getLetterType().getLetter());
+                }
             }
-        }
 
-        for (int y = 0; y < 15; y++){
-            if(!_tiles[vector2.getX()][y].isEmpty()){
-                tiles.add(_tiles[vector2.getX()][y]);
-                words[1] = words[1].concat(_tiles[vector2.getX()][y].getLetterType().getLetter());
-            }
+            WordChecker checker = new WordChecker();
+            if(lettersX.length() > 1 && !checker.check(lettersX)) return null;
+            else { words.add(lettersX); }
+            if(lettersY.length() > 1 && !checker.check(lettersY)) return null;
+            else { words.add(lettersY); }
         }
-
-        WordChecker checker = new WordChecker();
-        if(!checker.check(words[0]) || !checker.check(words[1])) return null;
 
         Tile[] tileArr = tiles.toArray(new Tile[tiles.size()]);
         Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[_placedCoords.size()]);
+        String[] wordsArr = words.toArray(new String[words.size()]);
 
         Points points = calculatePoints(tileArr);
 
-        return new CheckInfo(words, points, tileArr, coordinatesArr);
+        return new CheckInfo(wordsArr, points, tileArr, coordinatesArr);
     }
 
 

@@ -111,7 +111,7 @@ public class GameModel {
 
     public Tile removeTile(Vector2 vector2) { return _board.remove(vector2); }
 
-    public CheckInfo checkBoard(Vector2 vector2) { return _board.check(vector2); }
+    public CheckInfo checkBoard() { return _board.check(); }
 
 
     public void submitTurn(CheckInfo checkInfo)
@@ -202,7 +202,6 @@ public class GameModel {
                 TileType tileType = checkInfo.getTiles()[i].getType();
                 int letterId = checkInfo.getTiles()[i].getLetterType().getid();
 
-                db.insert(new model.tables.Tile(c[i].getX(), c[i].getY(), tileType)); //Insert in tiles <--- read only table
                 db.insert(new model.tables.BoardPlayer1(_gameId, _playerName1, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 1
                 db.insert(new model.tables.TurnBoardLetter(letterId, _gameId, _turnId, c[i].getX(), c[i].getY())); //Insert in TurnBoardLetter
             }
@@ -219,7 +218,7 @@ public class GameModel {
         var clauses = new ArrayList<Clause>();
 
         try{
-            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn", CompareMethod.EQUAL, _turnId + 1));
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId + 1));
 
             var results = db.select(TurnPlayer1.class, clauses);
 
@@ -247,7 +246,6 @@ public class GameModel {
                 TileType tileType = checkInfo.getTiles()[i].getType();
                 int letterId = checkInfo.getTiles()[i].getLetterType().getid();
 
-                db.insert(new model.tables.Tile(c[i].getX(), c[i].getY(), tileType)); //Insert in tiles
                 db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 2
                 db.insert(new model.tables.TurnBoardLetter(letterId, _gameId, _turnId, c[i].getX(), c[i].getY())); //Insert in TurnBoardLetter
             }

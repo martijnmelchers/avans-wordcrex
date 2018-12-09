@@ -35,7 +35,10 @@ public class GameController extends Controller{
     }
 
     public void submitTurn(){
-        CheckInfo info = _gameModel.checkBoard(new Vector2(0,0));
+        CheckInfo info = _gameModel.checkBoard();
+
+        if(info == null) return;
+
         _gameModel.submitTurn(info);
     }
 
