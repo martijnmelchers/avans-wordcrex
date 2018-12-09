@@ -29,4 +29,14 @@ public class Letter {
     public Game game;
 
     public Letter(){}
+
+    public char get_symbol()
+    {
+        return _symbol;
+    }
+
+    public Integer get_letterId()
+    {
+        return _letterId;
+    }
 }

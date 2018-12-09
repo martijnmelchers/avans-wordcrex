@@ -8,11 +8,9 @@ import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
-import model.tables.Game;
-import model.tables.Turn;
-import model.tables.TurnPlayer1;
-import model.tables.TurnPlayer2;
+import model.tables.*;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -133,10 +131,14 @@ public class GameModel {
         if(bothPlayersFinished())//players both finished
         {
             //submit tiles of the winner to the database table:'turnboardletters'
+            submitWinnerBoard(checkInfo);
+
+            // Create new turn
+            createNewTurn();
 
             //refill winners hand + insert hand to database
+            dock.refill();
         }
-
         else // other player not finished
         {
             // wait for other player 3 seconds timer interval
@@ -144,11 +146,25 @@ public class GameModel {
                 @Override
                 protected Object call() // This gets called when other player is ready
                 {
-                    // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
-                    dock.refill();// update hand
-                    return null;
+                // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
+                _board.getBoardFromDatabase(_gameId,_turnId);
+                dock.update(_gameId,_turnId);// update hand
+                return null;
                 }
             });
+        }
+    }
+
+    private void createNewTurn()
+    {
+        _turnId ++;
+        try
+        {
+            db.insert(new Turn(_gameId, _turnId));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -242,6 +258,25 @@ public class GameModel {
 
     }
 
+    private void submitWinnerBoard(CheckInfo checkInfo)
+    {
+        ArrayList<TurnBoardLetter> turnBoardLetters = new ArrayList<>();
+        for(Vector2 vector2 : checkInfo.getCoordinates())
+        {
+            Tile tile = _board.getTiles()[vector2.getX()][vector2.getY()];
+            TurnBoardLetter turnBoardLetter = new TurnBoardLetter(tile.getLetterType().getid(),_gameId,_turnId,vector2.getX(),vector2.getY());
+            turnBoardLetters.add(turnBoardLetter);
+        }
+        try
+        {
+            db.insert(turnBoardLetters);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     private boolean isNewTurn()
     {
         return false;
@@ -253,8 +288,8 @@ public class GameModel {
         List<Clause> player2Clauses = new ArrayList<>();
         player1Clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
         player1Clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
-        player2Clauses.add(new Clause( new TableAlias("player2Clauses",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
-        player2Clauses.add(new Clause( new TableAlias("player2Clauses",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+        player2Clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
+        player2Clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
         try
         {
             List<TurnPlayer1> turnPlayer1 = db.select(TurnPlayer1.class, player1Clauses);
