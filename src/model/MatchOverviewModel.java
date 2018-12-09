@@ -5,7 +5,9 @@ import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.enumerators.LinkMethod;
 import model.database.services.Database;
-import model.tables.*;
+import model.tables.Game;
+import model.tables.TurnPlayer1;
+import model.tables.TurnPlayer2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,12 +41,12 @@ public class MatchOverviewModel {
         var foundGames = new ArrayList<Game>();
 
         clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, _username));
-
-        try {
-            for (Game game : _db.select(Game.class, clauses)) {
-                foundGames.add(game);
-            }
-        } catch (Exception e) {
+        try
+        {
+            foundGames.addAll(_db.select(Game.class, clauses));
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
 
@@ -248,4 +250,3 @@ public class MatchOverviewModel {
         public int player2;
     }
 }
-

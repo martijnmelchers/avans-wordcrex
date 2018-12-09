@@ -4,26 +4,18 @@ import controller.App;
 import controller.Controller;
 import javafx.scene.Scene;
 
-public abstract class View
-{
+public abstract class View {
     private App application;
 
     protected Scene scene;
-
-    public void setApp(App app)
-    {
+    public void setApp(App app) {
         application = app;
+        loadFinished();
     }
 
-
-    public void start() {}
-
-    protected  <T extends Controller> T getController(Class<T> cType)
-    {
+    protected <T extends Controller> T getController(Class<T> cType) throws Exception {
         return application.getController(cType);
     }
 
-    public void setScene(Scene scene) {
-        this.scene = scene;
-    }
+    protected abstract void loadFinished();
 }
