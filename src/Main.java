@@ -3,16 +3,18 @@ import javafx.application.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import model.DocumentSession;
 import model.EnvironmentVariables;
+import model.database.DocumentSession;
+import model.helper.Log;
 
 public class Main extends Application {
     public static void main(String[] args) {
+        Log.info("Launching application...");
         launch(EnvironmentVariables.MAIN_VIEW);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         initializeApp(primaryStage);
     }
 
@@ -20,15 +22,16 @@ public class Main extends Application {
         var tryAgainButton = new ButtonType("Probeer opnieuw");
         var closeAppButton = new ButtonType("Afsluiten");
 
-        /* First initialize database */
+        /* Initialize the database */
+        Log.info("Initializing database...");
         try {
-            DocumentSession.getDatabase(EnvironmentVariables.DEBUG);
+            DocumentSession.getDatabase();
+            Log.info("Database connection established!");
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Tijdens opstarten van de database is de volgende fout opgetreden:\n\n" + e.getMessage(), closeAppButton, tryAgainButton);
             alert.showAndWait();
 
-            if (EnvironmentVariables.DEBUG)
-                e.printStackTrace();
+            Log.error(e);
 
             if (alert.getResult() == tryAgainButton)
                 initializeApp(primaryStage);
@@ -37,6 +40,7 @@ public class Main extends Application {
         }
 
         /* Start the main app */
+        Log.info("Starting views...");
         try {
             var app = new App(primaryStage);
 
@@ -45,8 +49,7 @@ public class Main extends Application {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
             alert.showAndWait();
 
-            if (EnvironmentVariables.DEBUG)
-                e.printStackTrace();
+            Log.error(e);
 
             System.exit(1);
         }

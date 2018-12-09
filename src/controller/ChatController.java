@@ -1,7 +1,6 @@
 package controller;
 
 import model.ChatlineModel;
-import model.DocumentSession;
 import model.tables.Chatline;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ public class ChatController extends Controller {
 
     public ChatController() {
         this.model = new ChatlineModel();
-        DocumentSession.setPlayerUsername("jagermeester"); // TEMPORARY delete before merch
     }
 
     public ArrayList<Chatline> getChatlines(int gameId) {

@@ -8,7 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import model.DocumentSession;
+import model.GameSession;
+import model.tables.Account;
 import model.tables.Chatline;
 import view.View;
 
@@ -18,7 +19,8 @@ import java.util.Date;
 
 public class ChatView extends View {
 
-    private ChatController _controller = new ChatController();
+    private ChatController _controller;
+    private GameSession _session;
 
     @FXML
     private Pane messagesVbox;
@@ -32,8 +34,13 @@ public class ChatView extends View {
     @FXML
     private TextField messageField;
 
+    public ChatView() {
+        _controller = new ChatController();
+        _session = new GameSession();
+    }
 
     public void initialize() {
+        _session.setSession(new Account("bookowner", "no"));
         displayOpponentsName();
         displayMessages();
     }
@@ -57,10 +64,10 @@ public class ChatView extends View {
         messageVBox.setPrefWidth(200);
         messageVBox.setStyle("-fx-background-color: #800080;");
 
-        if(chatline.account.getUsername().equals(DocumentSession.getPlayerUsername())) {
-           // messageVBox.getStyleClass().add("Chat-Message-Container-Right");
+        if (chatline.account.getUsername().equals(_session.getUsername())) {
+            // messageVBox.getStyleClass().add("Chat-Message-Container-Right");
         } else {
-           // messageVBox.getStyleClass().add("Chat-Message-Container-Left");
+            // messageVBox.getStyleClass().add("Chat-Message-Container-Left");
         }
 
         // create text for message
@@ -87,11 +94,8 @@ public class ChatView extends View {
         if (!message.isEmpty()) {
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
-            // TEST
-            System.out.println(timestamp);
-
             // TODO: insert gameid dynamically
-            Chatline chatline = new Chatline(DocumentSession.getPlayerUsername(), 502, timestamp, message);
+            Chatline chatline = new Chatline(_session.getUsername(), 502, timestamp, message);
             _controller.sendChatline(chatline);
 
             messageField.clear();
@@ -99,7 +103,7 @@ public class ChatView extends View {
         }
     }
 
-    public void onEnter(javafx.event.ActionEvent actionEvent) {
+    public void onEnter() {
         sendMessage();
     }
 
@@ -110,6 +114,6 @@ public class ChatView extends View {
 
     @Override
     protected void loadFinished() {
-
+        System.out.println("Load is finished!");
     }
 }
