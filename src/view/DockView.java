@@ -35,9 +35,8 @@ public class DockView
     {
         Letter[] letters = controller.getDock();
         makeTransparent();
-        for(int i =0;i<letters.length;i++)
-        {
-            addCharacter(letters[i].getLetter());
+        for (Letter letter : letters) {
+            addCharacter(letter.getLetter());
         }
     }
 
@@ -89,7 +88,7 @@ public class DockView
                         continue;
                     }
                     controller.placeTile(row,column ,text.getText(), 0);
-                    hBoxDock.getChildren().remove(hBoxDock.getChildren().indexOf(stackPane));
+                    hBoxDock.getChildren().remove(stackPane);
                     System.out.println("row:" + row);
                     System.out.println("column:" + column);
                     return;
@@ -109,7 +108,6 @@ public class DockView
         r.setFill(Color.WHITE);
         r.setArcHeight(10);
         r.setArcWidth(10);
-        r.setWidth(10);
         r.setWidth(30);
         r.setHeight(30);
         Text t = new Text();
@@ -124,8 +122,8 @@ public class DockView
             double currentY = ((b.getMinY() + b.getMaxY())/2);
             double Xdiff = x - currentX;
             double Ydiff = y - currentY;
-            sp.setTranslateX((Xdiff-30)-270);
-            sp.setTranslateY((Ydiff-30)-9);
+            sp.setTranslateX((Xdiff) - 270);
+            sp.setTranslateY((Ydiff) - 9);
         }
         sp.getParent().getParent().toFront();
         return sp;

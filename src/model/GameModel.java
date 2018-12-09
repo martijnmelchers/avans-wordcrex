@@ -1,16 +1,12 @@
 package model;
 
 import javafx.concurrent.Task;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import jdk.nashorn.api.tree.NewTree;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.tables.*;
 
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -26,7 +22,6 @@ public class GameModel {
 
     private Dock dock;
 
-    private int _currentTurn;
     private Board _board;
 
     private int _gameId;
@@ -49,6 +44,40 @@ public class GameModel {
         _gameId = gameId;
         _board = new Board();
         dock = new Dock(isPlayerOne());
+
+        try{
+            var clauses = new ArrayList<Clause>();
+            clauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, _gameId));
+
+            for (Turn turn : db.select(Turn.class, clauses)) {
+                if(_turnId < turn.getTurnId()) _turnId = turn.getTurnId();
+            }
+
+            clauses.clear();
+
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId));
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
+
+           for (TurnPlayer1 turnPlayer1 : db.select(TurnPlayer1.class, clauses)){
+               _playerName1 = turnPlayer1.getUsernamePlayer1();
+               _playerScore1 = turnPlayer1.getScore()  + turnPlayer1.getBonus();
+           }
+
+            clauses.clear();
+
+            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, _turnId));
+            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _gameId));
+
+            for (TurnPlayer1 turnPlayer2 : db.select(TurnPlayer1.class, clauses)){
+                _playerName2 = turnPlayer2.getUsernamePlayer1();
+                _playerScore2 = turnPlayer2.getScore()  + turnPlayer2.getBonus();
+            }
+
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private boolean isPlayerOne()

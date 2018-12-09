@@ -84,9 +84,10 @@ public class BoardView extends View {
         if(tiles[row][col].getState() == TileState.UNLOCKED)
         {
             String character = ((Text)tile.getChildren().get(1)).getText();
-            _controller.resetTile(row,col );
+            _controller.resetTile(row,col);
             update();
             StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY());
+
             tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
             tile.setOnMouseReleased(event-> Event.fireEvent(sp,event ));
         }

@@ -90,35 +90,39 @@ public class Board {
         ArrayList<Tile> tiles = new ArrayList<>();
         ArrayList<String> words = new ArrayList<>();
 
-        for (int i = 0; i < _placedCoords.size(); i++){
+        for (Vector2 placedCoord : _placedCoords) {
 
             String lettersX = ""; //0 = x - 1 = y;
             String lettersY = "";
 
-            int coordX = _placedCoords.get(i).getX();
-            int coordY = _placedCoords.get(i).getY();
+            int coordX = placedCoord.getX();
+            int coordY = placedCoord.getY();
 
-            for (int j = 0; j < 15; j++){
-                if(!_tiles[j][coordY].isEmpty()){
+            for (int j = 0; j < 15; j++) {
+                if (!_tiles[j][coordY].isEmpty()) {
                     tiles.add(_tiles[j][coordY]);
                     lettersX = lettersX.concat(_tiles[j][coordY].getLetterType().getLetter());
                 }
-                if(!_tiles[coordX][j].isEmpty()){
+                if (!_tiles[coordX][j].isEmpty()) {
                     tiles.add(_tiles[coordX][j]);
                     lettersY = lettersY.concat(_tiles[coordX][j].getLetterType().getLetter());
                 }
             }
 
             WordChecker checker = new WordChecker();
-            if(lettersX.length() > 1 && !checker.check(lettersX)) return null;
-            else { words.add(lettersX); }
-            if(lettersY.length() > 1 && !checker.check(lettersY)) return null;
-            else { words.add(lettersY); }
+            if (lettersX.length() > 1 && !checker.check(lettersX)) return null;
+            else {
+                words.add(lettersX);
+            }
+            if (lettersY.length() > 1 && !checker.check(lettersY)) return null;
+            else {
+                words.add(lettersY);
+            }
         }
 
-        Tile[] tileArr = tiles.toArray(new Tile[tiles.size()]);
-        Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[_placedCoords.size()]);
-        String[] wordsArr = words.toArray(new String[words.size()]);
+        Tile[] tileArr = tiles.toArray(new Tile[0]);
+        Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
+        String[] wordsArr = words.toArray(new String[0]);
 
         Points points = calculatePoints(tileArr);
 
@@ -134,13 +138,13 @@ public class Board {
         int w3 = 0;
         int w4 = 0;
 
-        for (int i = 0; i < tiles.length; i++){
-            TileType tileType = tiles[i].getType();
+        for (Tile tile : tiles) {
+            TileType tileType = tile.getType();
 
-            int letterValue = _letterValues.get(tiles[i].getLetterType().getLetter());
+            int letterValue = _letterValues.get(tile.getLetterType().getLetter());
             score += letterValue;
 
-            switch (tileType){
+            switch (tileType) {
                 case LETTER_TIMES_TWO:
                     bonus += letterValue * 2;
                     break;
