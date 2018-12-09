@@ -1,12 +1,9 @@
 package controller;
 
 import model.AdminModel;
-import model.helper.ErrorHandler;
+import model.helper.Log;
 import model.tables.Account;
 import model.tables.AccountInfo;
-import model.tables.Role;
-import view.AdminView.AdminView;
-import view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class AdminController extends Controller {
             this.adminModel.setRole(info);
         }
         catch(Exception e){
-            e.printStackTrace();
+            Log.error(e, true);
         }
     }
 
@@ -41,7 +38,7 @@ public class AdminController extends Controller {
             this.adminModel.removeRole(info);
         }
         catch(Exception e){
-            e.printStackTrace();
+            Log.error(e, true);
         }
     }
 

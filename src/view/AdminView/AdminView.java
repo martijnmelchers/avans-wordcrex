@@ -11,7 +11,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
-import model.helper.ErrorHandler;
 import model.tables.Account;
 import model.tables.AccountInfo;
 import view.View;

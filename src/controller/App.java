@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.EnvironmentVariables;
+import model.helper.Log;
 import view.View;
 
 import java.io.File;
@@ -44,8 +44,7 @@ public class App {
                 Controller controllerInstance = (Controller) controllerClass.getConstructor().newInstance();
                 controllers.add(controllerInstance);
             } catch (Exception e) {
-                if (EnvironmentVariables.DEBUG)
-                    e.printStackTrace();
+                Log.warn("Could not create controller: " + e.getMessage());
             }
 
         }

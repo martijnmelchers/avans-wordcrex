@@ -1,18 +1,12 @@
 package model;
 
-import javafx.scene.control.Alert;
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
-import model.database.services.Connector;
 import model.database.services.Database;
-import model.helper.ErrorHandler;
-import model.tables.Account;
+import model.helper.Log;
 import model.tables.AccountInfo;
-import model.tables.Role;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +18,10 @@ public class AdminModel {
      */
     public AdminModel(){
         try{
-            this._db = DocumentSession.getDatabase(EnvironmentVariables.DEBUG);
+            this._db = DocumentSession.getDatabase();
         }
         catch(Exception e){
-            ErrorHandler.handle(e);
+            Log.error(e, true);
         }
     }
 
@@ -86,7 +80,7 @@ public class AdminModel {
         }
 
         catch (Exception e){
-            ErrorHandler.handle(e);
+            Log.error(e);
         }
         return roles;
     }

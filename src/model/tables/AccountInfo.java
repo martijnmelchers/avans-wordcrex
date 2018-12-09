@@ -20,15 +20,12 @@ public class AccountInfo {
 
     public Account account;
     public Role role;
-
     public AccountInfo(){}
+
+
     public AccountInfo(String role, String user){
         this.usernameId = user;
         this.roleId = role;
-
-
-        System.out.println(this.usernameId);
-        System.out.println(this.roleId);
     }
 
     public String doStuff() {
