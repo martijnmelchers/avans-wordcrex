@@ -148,13 +148,13 @@ public class MatchOverview extends View {
     private void initiateInvitationHeader(ArrayList<Game> games) {
         for (Game game : games) {
             String opponentName = game.player2.getUsername();
-            _headerInvitations.addPlayButton(this::onInvitationClick, game, "Uitdaging naar " + opponentName + " gestuurd");
+            _headerInvitations.addPlayButton(controller, this::onInvitationClick, game, "Uitdaging naar " + opponentName + " gestuurd");
         }
     }
 
     private void initiateYourTurnHeader(ArrayList<Game> games) {
         for (Game game : games) {
-            _headerYourTurn.addPlayButton(this::onYourTurnClick, game, "Speel je beurt");
+            _headerYourTurn.addPlayButton(controller, this::onYourTurnClick, game, "Speel je beurt");
         }
     }
 
@@ -162,7 +162,7 @@ public class MatchOverview extends View {
         for (Game game : games) {
             String opponentName = game.player2.getUsername();
 
-            _headerTheirTurn.addPlayButton(this::onTheirTurnClick, game, opponentName + " moet zijn beurt nog spelen.");
+            _headerTheirTurn.addPlayButton(controller, this::onTheirTurnClick, game, opponentName + " moet zijn beurt nog spelen.");
         }
     }
 
