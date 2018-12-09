@@ -19,6 +19,8 @@ public class GameController extends Controller{
 
     public Letter[] getDock(){return _gameModel.getDock();}
 
+    public int[] getScore() { return new int[] {_gameModel.getPlayerScore1(), _gameModel.getPlayerScore2() }; }
+
     public void placeTile(int x,int y, String letter, int letterId) {
         _gameModel.placeTile(new Vector2(x, y), letter, letterId);
         boardView = getViewCasted();
