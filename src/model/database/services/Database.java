@@ -294,6 +294,15 @@ public class Database {
 
                     var foreignKeyField = output.getDeclaredField(annotation.output());
                     if (annotation.result() == ResultMethod.SINGLE) {
+                        String value = data.getString(combinedName);
+
+                        if ((value == null || value.equals(""))) {
+                            if (field.isAnnotationPresent(Nullable.class))
+                                continue;
+                            else
+                                throw new Exception("ForeignKey is not allowed to be null!");
+                        }
+
                         foreignKeyField.setAccessible(true);
                         foreignKeyField.set(dto, this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins));
                     } else {
@@ -314,7 +323,7 @@ public class Database {
             } catch (Exception e) {
                 if (!field.isAnnotationPresent(Nullable.class))
                     throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)", e);
-                e.printStackTrace();
+                Log.error(e);
             }
 
         }
