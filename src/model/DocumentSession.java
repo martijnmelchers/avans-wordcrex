@@ -10,6 +10,8 @@ public class DocumentSession
 {
     private static Database database;
 
+    private static String playerUsername;
+
     private static synchronized Database getConnection(boolean debug) throws SQLException {
         if(database == null)
         {
@@ -19,6 +21,14 @@ public class DocumentSession
         }
 
         return database;
+    }
+
+    public static String getPlayerUsername() {
+        return playerUsername;
+    }
+
+    public static void setPlayerUsername(String playerUsername) {
+        DocumentSession.playerUsername = playerUsername;
     }
 
     public static Database getDatabase(boolean debug) throws SQLException {

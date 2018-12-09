@@ -6,8 +6,6 @@ import javafx.stage.Stage;
 import model.DocumentSession;
 import model.EnvironmentVariables;
 
-import java.sql.SQLException;
-
 public class Main extends Application {
     public static void main(String[] args) {
         launch(EnvironmentVariables.MAIN_VIEW);
@@ -18,7 +16,7 @@ public class Main extends Application {
         initializeApp(primaryStage);
     }
 
-    private void initializeApp(Stage primaryStage) throws SQLException {
+    private void initializeApp(Stage primaryStage) {
         var tryAgainButton = new ButtonType("Probeer opnieuw");
         var closeAppButton = new ButtonType("Afsluiten");
 
@@ -53,8 +51,6 @@ public class Main extends Application {
             System.exit(1);
         }
 
-        /* This will be run when the app is closed */
-        DocumentSession.getDatabase().close();
-        System.out.println("Database connection closed. Closing application");
+        Runtime.getRuntime().addShutdownHook(new BeforeShutdown());
     }
 }
