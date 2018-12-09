@@ -11,7 +11,7 @@ public class GameController extends Controller{
 
     public GameController() {
 
-        DocumentSession.setPlayerUsername("stan");//TODO: Authentication branch will set the player this is for testing purposes. Remove after branch merged
+        DocumentSession.setPlayerUsername("jagermeester");//TODO: Authentication branch will set the player this is for testing purposes. Remove after branch merged
         _gameModel = new GameModel(new Game(502, "playing", "NL", "jagermeester", "rik", "accepted")); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
     }
 
