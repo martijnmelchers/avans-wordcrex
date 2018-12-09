@@ -5,9 +5,13 @@ import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.tables.HandLetter;
+import model.tables.TurnBoardLetter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Dock
 {
@@ -58,27 +62,63 @@ public class Dock
         }
     }
 
-    public void refill() // on next turn refill dock positions that are empty
+    public void refill(int gameId,int turnId) // on next turn refill dock positions that are empty
     {
-        for(HandLetter letter : letters )
+
+        for(int i =0; i<letters.length;i++)
         {
-            if(letter == null)
+            List<Letter> notUsed = notUsedLetters(gameId);
+            try
             {
-                try
-                {
 
-                }
-                catch (Exception e)
-                {
-
-                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            if(letters[i] == null)
+            {
+                int randomIndex = new Random().nextInt(notUsed.size());
+                Letter l = notUsed.get(randomIndex);
+                letters[i] = new HandLetter(l.getid(),turnId, gameId);
             }
         }
+
+
     }
 
-    private Letter getLetterFromRemainingLetters()
+    private List<Letter> notUsedLetters(int gameId)
     {
-        return null;
+        List<Letter> availableLetters = new ArrayList<>();
+        try
+        {
+            availableLetters = db.select(Letter.class,null );
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        List<TurnBoardLetter> usedLetters = new ArrayList<>();
+
+        try
+        {
+            ArrayList<Clause> clauses = new ArrayList<>();
+            clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1),"game_id" ,CompareMethod.EQUAL , gameId));
+            usedLetters = db.select(TurnBoardLetter.class,clauses);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        String[] ids = usedLetters.stream().map(a->a.letter.get_letterId()).toArray(String[]::new);
+        List<Letter> usableLetters = availableLetters.stream()
+                .filter(a-> Arrays.stream(ids).anyMatch(
+                        b-> b.equals(a.getid()+"")))
+                .collect(Collectors.toList());
+
+        return usableLetters;
     }
 
     private void addLetterToHand()

@@ -27,4 +27,9 @@ public class HandLetter {
     public Turn turn;
 
     public HandLetter() {}
+
+    public HandLetter(int _letterId,int _turnId,int _gameId)
+    {
+
+    }
 }
