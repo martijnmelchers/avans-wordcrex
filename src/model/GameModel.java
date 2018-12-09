@@ -7,6 +7,7 @@ import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.tables.*;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -308,6 +309,16 @@ public class GameModel {
 
     private boolean isNewTurn()
     {
+        ArrayList<Clause> clauses = new ArrayList<>();
+        clauses.add(new Clause(new TableAlias("Turn",-1), "game_id", CompareMethod.EQUAL,_turnId++ ));
+        try
+        {
+             return db.select(Turn.class,  clauses).size()>0;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         return false;
     }
 
