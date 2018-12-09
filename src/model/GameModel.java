@@ -137,7 +137,7 @@ public class GameModel {
             createNewTurn();
 
             //refill winners hand + insert hand to database
-            dock.refill();
+            dock.refill(_gameId,_turnId);
         }
         else // other player not finished
         {

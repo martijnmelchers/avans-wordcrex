@@ -23,10 +23,6 @@ public class Dock
     {
         db = DocumentSession.getDatabase();
         letters = new HandLetter[7];
-        if(createNewHand)
-        {
-            refill();
-        }
     }
 
     public void update(int _gameId,Integer turn_id) // update to turn specific hand (For history mode)
@@ -68,14 +64,6 @@ public class Dock
         for(int i =0; i<letters.length;i++)
         {
             List<Letter> notUsed = notUsedLetters(gameId);
-            try
-            {
-
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
             if(letters[i] == null)
             {
                 int randomIndex = new Random().nextInt(notUsed.size());
@@ -84,6 +72,14 @@ public class Dock
             }
         }
 
+        try
+        {
+            db.insert(Arrays.stream(letters).filter(a-> a!=null).collect(Collectors.toList()));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
     }
 
@@ -119,10 +115,5 @@ public class Dock
                 .collect(Collectors.toList());
 
         return usableLetters;
-    }
-
-    private void addLetterToHand()
-    {
-
     }
 }
