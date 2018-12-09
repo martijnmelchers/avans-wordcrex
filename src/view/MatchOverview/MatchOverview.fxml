@@ -12,9 +12,9 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchOverview.MatchOverview">
    <children>
-      <VBox fx:id="_content" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
+      <VBox fx:id="_content" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
          <children>
-            <FlowPane fx:id="_toolBar" alignment="CENTER_RIGHT" columnHalignment="CENTER" prefHeight="47.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;">
+            <FlowPane fx:id="_toolBar" alignment="CENTER_RIGHT" columnHalignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;" VBox.vgrow="NEVER">
                <children>
                   <TextField fx:id="_searchBar" focusTraversable="false" promptText="Spelers zoeken">
                      <FlowPane.margin>
@@ -33,7 +33,7 @@
                   <String fx:value="-fx-background-insets: 0;" />
                </styleClass>
             </ScrollPane>
-            <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="100.0" minHeight="43.0" minWidth="100.0" prefHeight="43.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;">
+            <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="100.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="43.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;">
                <children>
                   <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Uitloggen">
                      <cursor>

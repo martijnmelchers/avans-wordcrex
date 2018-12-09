@@ -15,7 +15,7 @@ public class Main {
          */
 
         try {
-            var _db = DocumentSession.getDatabase(false);
+            var _db = DocumentSession.getDatabase(true);
 
             var clauses = new ArrayList<Clause>();
 
@@ -38,7 +38,7 @@ public class Main {
             }*/
 
             App application = new App();
-            application.load("LoginView");
+            application.load("MatchOverview");
 
             // close the connection
             _db.close();

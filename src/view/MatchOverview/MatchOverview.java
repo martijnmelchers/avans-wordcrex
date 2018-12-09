@@ -11,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
-import model.MatchOverviewModel;
 import model.tables.Game;
 import view.View;
 
@@ -261,7 +260,7 @@ public class MatchOverview extends View {
 
         _headerObserver = new Header("Spellen");
 
-        _headerObserver.addInformationToButton(this, this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), " replace this");
+        _headerObserver.addObserverButton(controller, this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), " replace this");
 
         _vBox.getChildren().addAll(_headerObserver.getContent());
 

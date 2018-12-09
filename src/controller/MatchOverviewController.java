@@ -16,7 +16,7 @@ public class MatchOverviewController extends Controller
 
     public ArrayList<Game> getGames()
     {
-        return model.getGames();
+        return model.getCurrentPlayerGames();
     }
 
     public ArrayList<Game> getAllGames()
@@ -42,5 +42,10 @@ public class MatchOverviewController extends Controller
 
     public ArrayList<Game> searchForAllGamesAsPlayer(String currentGamesToSearch) {
         return model.searchForGamesAsPlayer(currentGamesToSearch);
+    }
+
+    public MatchOverviewModel.GameScore getPlayerScores(Game game)
+    {
+        return model.getPlayerScores(game);
     }
 }

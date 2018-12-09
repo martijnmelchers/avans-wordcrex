@@ -1,14 +1,13 @@
 package view.MatchOverview;
 
+import controller.MatchOverviewController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import model.MatchOverviewModel;
@@ -45,14 +44,14 @@ class Header {
         createButton(onClick, game, comment, null, null, 0);
     }
 
-    public void addInformationToButton(MatchOverview view, Consumer<Game> onClick, ArrayList<Game> games, String comment)
+    public void addObserverButton(MatchOverviewController controller, Consumer<Game> onClick, ArrayList<Game> games, String comment)
     {
         // programma toont de spelers, de <spelscore> en of een spel <bezig> of <geëindigd> is
         for (Game game : games)
         {
             var title = new Text(game.player1.getUsername() + " - " + game.player2.getUsername() + "\n");
             var description = new Text(game.letterSet.getDescription() + " " + comment);
-            GameScore scores = getPlayerScores(game);
+            MatchOverviewModel.GameScore scores = controller.getPlayerScores(game);
             String score1 = "0";
             String score2 = "0";
 
@@ -62,27 +61,39 @@ class Header {
                 score2 = Integer.toString(scores.player2);
             }
 
-            createButton(onClick, game, comment, title, description, 20);
+            createButton(onClick, game, comment, title, description, 40);
 
+            // check what to add
             var textToAdd = new ArrayList<InformationData>();
-            textToAdd.add(new InformationData("Score:", "Player 1 = " + score1 + " \nPlayer 2 = " + score2));
-            AddTextFlowToButton(new Insets(0,0,0, 15), textToAdd);
+            if(!game.gameState.isRequest())
+            {
+                textToAdd.add(new InformationData("Punten:", "Speler 1 = " + score1 + " \nSpeler 2 = " + score2));
+            }
+            textToAdd.add(new InformationData("Status:", game.gameState.getState()));
+
+            if(game.winner != null && (game.gameState.isFinished() || game.gameState.isResigned()))
+            {
+                textToAdd.add(new InformationData("Winnaar:", game.winner.getUsername()));
+            }
+
+            AddTextFlowToButton(new Insets(0,100,0, 0), textToAdd);
         }
     }
 
     private void createButton(Consumer<Game> onClick, Game game, String comment, Text gameTitle, Text description, int widthOfTextFlow)
     {
-        var flowPane = new FlowPane();
-        flowPane.setRowValignment(VPos.CENTER);
-        flowPane.setAlignment(Pos.BASELINE_LEFT);
+        var hBox = new HBox();
+        hBox.setAlignment(Pos.CENTER_LEFT);
 
-        flowPane.setStyle("-fx-border-width: 1 0 1 0; -fx-border-color:#" + Integer.toHexString(MatchOverview.LABEL_COLOR.hashCode()) + ";");
-        flowPane.setOnMouseClicked(event -> onClick.accept(game));
+        hBox.setStyle("-fx-border-width: 1 0 1 0; -fx-border-color:#" + Integer.toHexString(MatchOverview.LABEL_COLOR.hashCode()) + ";");
+        hBox.setOnMouseClicked(event -> onClick.accept(game));
 
         // Pane for an image
         var pane = new Pane();
         pane.setPrefHeight(50);
         pane.setPrefWidth(50);
+        pane.setMaxHeight(50);
+        pane.setMaxWidth(50);
 
         // Text
         var text1 = gameTitle == null ? new Text(game.player2.getUsername() + " - " + game.letterSet.getDescription() + "\n") : gameTitle;
@@ -94,9 +105,9 @@ class Header {
         var textFlow = new TextFlow(text1, text2);
         textFlow.setPadding(new Insets(0, widthOfTextFlow, 0,0));
 
-        MatchOverview.FillBackground(flowPane, MatchOverview.BUTTON_COLOR);
-        flowPane.getChildren().addAll(pane, textFlow);
-        _vBox.getChildren().add(flowPane);
+        MatchOverview.FillBackground(hBox, MatchOverview.BUTTON_COLOR);
+        hBox.getChildren().addAll(pane, textFlow);
+        _vBox.getChildren().add(hBox);
     }
 
     // Add a text flow to the last button.
@@ -106,8 +117,8 @@ class Header {
         if(children.size() == 0 || children == null)
             throw new RuntimeException("Please add a Button first");
 
-        FlowPane button = (FlowPane)children.get(children.size() - 1);
-        button.setPadding(new Insets(2,0,2,0));
+        var button = (HBox)children.get(children.size() - 1);
+        button.setPadding(new Insets(2 + margin.getTop(),0 + margin.getRight(), 2 + margin.getBottom(),0 + margin.getLeft()));
 
         for (InformationData info : textToAdd)
         {
@@ -116,16 +127,29 @@ class Header {
 
             var borderPane = new BorderPane();
 
-//            head.setTextAlignment(TextAlignment.CENTER);
-//            body.setTextAlignment(TextAlignment.CENTER);
-
             borderPane.setTop(head);
             borderPane.setCenter(body);
 
+            borderPane.setMaxHeight(60);
+            borderPane.setMaxWidth(60);
+
             MatchOverview.FillBackground(borderPane, MatchOverview.LABEL_COLOR);
+            borderPane.setStyle("-fx-border-color: #" + Integer.toHexString(MatchOverview.BUTTON_COLOR.hashCode()) + " ;\n" +
+                                "    -fx-border-width: 1 ; ");
 
             button.getChildren().add(borderPane);
             borderPane.setPadding(new Insets(0,2,0,2));
+        }
+
+        int btnCount = button.getChildren().size();
+        for (Node node : button.getChildren())
+        {
+            if(node instanceof Region)
+            {
+                Region region = (Region)node;
+                region.prefWidthProperty().bind(button.widthProperty().divide(btnCount));
+                region.prefWidthProperty().bind(button.widthProperty().divide(btnCount));
+            }
         }
     }
 
@@ -158,22 +182,5 @@ class Header {
             _Head = head;
             _body = text;
         }
-    }
-
-    // get turns from database query and use the game id.
-    // has to be done in Model.
-    private GameScore getPlayerScores(Game game) {
-        GameScore score = new GameScore();
-
-        ArrayList<Integer> player1 = new ArrayList<>();
-        ArrayList<Integer> player2 = new ArrayList<>();
-
-        return score;
-    }
-
-    class GameScore
-    {
-        public int player1;
-        public int player2;
     }
 }
