@@ -68,8 +68,13 @@ public class MatchOverview extends View {
     }
 
     @Override
-    public void start() {
-        controller = this.getController(MatchOverviewController.class);
+    protected void loadFinished() {
+        try {
+            controller = this.getController(MatchOverviewController.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         _filterGameView = new FilterGameView(this, _searchBar);
 
         // Check the role of the player.

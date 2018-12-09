@@ -1,13 +1,12 @@
 package model;
 
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.enumerators.LinkMethod;
 import model.database.services.Database;
-import model.tables.Game;
-import model.tables.TurnPlayer1;
-import model.tables.TurnPlayer2;
+import model.tables.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

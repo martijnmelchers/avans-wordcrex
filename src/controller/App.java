@@ -2,8 +2,10 @@ package controller;
 
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import model.helper.Log;
 import view.View;
@@ -19,7 +21,7 @@ public class App {
     private Stage primaryStage;
     private View view;
 
-    private Scene scene;
+    private Scene _scene;
 
     public App(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
@@ -27,10 +29,6 @@ public class App {
         primaryStage.show();
 
         loadControllers();
-        navigate(this.getParameters().getRaw().get(0));
-
-        view.start();
-
 
         if(_isMaximized)
         {
@@ -100,16 +98,21 @@ public class App {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fxmlFileName + "/" + fxmlFileName + ".fxml"));
         Parent root = fxmlLoader.load();
 
-        if (scene == null) {
-            scene = new Scene(root);
+        if (_scene == null) {
+            _scene = new Scene(root);
         } else {
-            scene.setRoot(root);
+            _scene.setRoot(root);
         }
 
         view = fxmlLoader.getController();
         view.setApp(this);
-        primaryStage.setScene(scene);
+        primaryStage.setScene(_scene);
         primaryStage.setHeight(height);
         primaryStage.setWidth(width);
+    }
+
+    public Scene getScene()
+    {
+        return _scene;
     }
 }

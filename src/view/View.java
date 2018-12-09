@@ -8,8 +8,10 @@ public abstract class View {
     private App application;
 
     protected Scene scene;
+
     public void setApp(App app) {
         application = app;
+        scene = application.getScene();
         loadFinished();
     }
 
