@@ -7,7 +7,6 @@ import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.tables.*;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -38,11 +37,11 @@ public class GameModel {
     public int getPlayerScore2() { return _playerScore2; }
     public int turn() { return _turnId; }
 
-    public GameModel(int gameId)
+    public GameModel(Game game)
     {
 
         this.db = DocumentSession.getDatabase();
-        _gameId = gameId;
+        _gameId = game.getGameId();
         _board = new Board();
         dock = new Dock(isPlayerOne());
 
@@ -54,13 +53,15 @@ public class GameModel {
                 if(_turnId < turn.getTurnId()) _turnId = turn.getTurnId();
             }
 
+            _playerName1 = game.getUsernamePlayer1();
+            _playerName2 = game.getUsernamePlayer2();
+
             clauses.clear();
 
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId));
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
 
            for (TurnPlayer1 turnPlayer1 : db.select(TurnPlayer1.class, clauses)){
-               _playerName1 = turnPlayer1.getUsernamePlayer1();
                _playerScore1 = turnPlayer1.getScore()  + turnPlayer1.getBonus();
            }
 
@@ -69,8 +70,7 @@ public class GameModel {
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, _turnId));
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _gameId));
 
-            for (TurnPlayer1 turnPlayer2 : db.select(TurnPlayer1.class, clauses)){
-                _playerName2 = turnPlayer2.getUsernamePlayer1();
+            for (TurnPlayer2 turnPlayer2 : db.select(TurnPlayer2.class, clauses)){
                 _playerScore2 = turnPlayer2.getScore()  + turnPlayer2.getBonus();
             }
 
@@ -210,7 +210,6 @@ public class GameModel {
 
             boolean uploadedLast = results.size() > 0;
 
-            db.insert(new Turn(_gameId, _turnId));
             db.insert(new TurnPlayer1(1,5, _playerName1, 10, 1, "play"));
 
             if(uploadedLast) {
@@ -233,7 +232,7 @@ public class GameModel {
                 int letterId = checkInfo.getTiles()[i].getLetterType().getid();
 
                 db.insert(new model.tables.BoardPlayer1(_gameId, _playerName1, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 1
-                db.insert(new model.tables.TurnBoardLetter(letterId, _gameId, _turnId, c[i].getX(), c[i].getY())); //Insert in TurnBoardLetter
+                //db.insert(new model.tables.TurnBoardLetter(letterId, _gameId, _turnId, c[i].getX(), c[i].getY())); //Insert in TurnBoardLetter
             }
 
         }catch (Exception e){
@@ -254,8 +253,7 @@ public class GameModel {
 
             boolean uploadedLast = results.size() > 0;
 
-            db.insert(new Turn(_gameId, _turnId));
-            db.insert(new TurnPlayer2(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
+            db.insert(new TurnPlayer2(_gameId,_turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
 
             if(uploadedLast) {
 
@@ -267,17 +265,14 @@ public class GameModel {
             }
 
             Vector2[] c = checkInfo.getCoordinates();
-
+            Tile[] tiles = checkInfo.getTiles();
             //insert alle tiles in tile en boardplayer1
 
             //TODO in database tileType moet je kijke nwat -- en * zijn (default?)
             for (int i = 0; i < c.length; i++){
 
-                TileType tileType = checkInfo.getTiles()[i].getType();
-                int letterId = checkInfo.getTiles()[i].getLetterType().getid();
-
+                int letterId = tiles[i].getLetterType().getid();
                 db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 2
-                db.insert(new model.tables.TurnBoardLetter(letterId, _gameId, _turnId, c[i].getX(), c[i].getY())); //Insert in TurnBoardLetter
             }
 
         }catch (Exception e){

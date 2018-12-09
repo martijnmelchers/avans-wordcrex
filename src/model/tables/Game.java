@@ -38,5 +38,27 @@ public class Game {
     public Account player2;
     public Answer answer;
 
+    public Game(Integer gameId, String gameState, String letterSetCode, String usernamePlayer1, String usernamePlayer2, String answerPlayer2){
+        _gameId = gameId;
+        _gameState = gameState;
+        _letterSetCode = letterSetCode;
+        _usernamePlayer1 = usernamePlayer1;
+        _usernamePlayer2 = usernamePlayer2;
+        _answerPlayer2 = answerPlayer2;
+    }
+
+    public Integer getGameId() { return _gameId; }
+
+    public String getGamestate() { return _gameState; }
+
+    public String getLetterSetCode() { return _letterSetCode; }
+
+    public String getUsernamePlayer1() { return _usernamePlayer1; }
+
+    public String getUsernamePlayer2() { return _usernamePlayer2; }
+
     public Game(){}
+
+    public String getAnswerPlayer2() { return _answerPlayer2; }
+
 }

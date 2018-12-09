@@ -28,11 +28,11 @@ public class BoardPlayer2 {
     @ForeignKey(type = Turn.class, field = "letter_id", output = "turn")
     private Integer _letterId;
 
-    @Column("tyle_x")
+    @Column("tile_x")
     @ForeignKey(type = Tile.class, field = "tile_x", output = "tile")
     private Integer _tileX;
 
-    @Column("tyle_y")
+    @Column("tile_y")
     @ForeignKey(type = Tile.class, field = "tile_y", output = "tile")
     private Integer _tileY;
 

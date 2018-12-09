@@ -14,7 +14,7 @@ public class CheckInfo {
 
     public Points getPoints(){ return _score; }
 
-    public Tile[] getTiles(){ return getTiles(); }
+    public Tile[] getTiles(){ return _tiles; }
 
     public Vector2[] getCoordinates() {return _coordinates; }
 
