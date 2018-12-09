@@ -19,10 +19,11 @@ public class Dock
     private Database db;
 
 
-    public Dock(boolean createNewHand)
+    public Dock(boolean createNewHand,int gameId,int turnId)
     {
         db = DocumentSession.getDatabase();
         letters = new HandLetter[7];
+        refill(gameId, turnId);
     }
 
     public void update(int _gameId,Integer turn_id) // update to turn specific hand (For history mode)
@@ -48,6 +49,11 @@ public class Dock
             letters[i] = handLetters.get(i);
         }
 
+    }
+
+    public HandLetter[] getLetters()
+    {
+        return letters;
     }
 
     private void clearAll()

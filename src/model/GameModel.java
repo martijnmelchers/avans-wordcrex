@@ -7,6 +7,7 @@ import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.tables.*;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -43,7 +44,7 @@ public class GameModel {
         this.db = DocumentSession.getDatabase();
         _gameId = game.getGameId();
         _board = new Board();
-        dock = new Dock(isPlayerOne());
+        dock = new Dock(isPlayerOne(),_gameId,_turnId);
 
         try{
             var clauses = new ArrayList<Clause>();
@@ -79,6 +80,11 @@ public class GameModel {
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public HandLetter[] getLetters()
+    {
+        return dock.getLetters();
     }
 
     private boolean isPlayerOne()
@@ -118,19 +124,10 @@ public class GameModel {
         timer.schedule(task, 3000,3000);
     }
 
-    public Letter[] getDock()
+    public HandLetter[] getDock()
     {
         //TODO: get letters from database
-        return new Letter[]
-        {
-            new Letter("A"),
-            new Letter("G"),
-            new Letter("D"),
-            new Letter("L"),
-            new Letter("E"),
-            new Letter("N"),
-            new Letter("E"),
-        };
+        return dock.getLetters();
     }
 
     public Tile[][] getTiles(){ return _board.getTiles(); }
@@ -176,10 +173,10 @@ public class GameModel {
                 @Override
                 protected Object call() // This gets called when other player is ready
                 {
-                // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
-                _board.getBoardFromDatabase(_gameId,_turnId);
-                dock.update(_gameId,_turnId);// update hand
-                return null;
+                    // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
+                    _board.getBoardFromDatabase(_gameId,_turnId);
+                    dock.update(_gameId,_turnId);// update hand
+                    return null;
                 }
             });
         }

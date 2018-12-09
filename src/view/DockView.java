@@ -14,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import model.Letter;
+import model.tables.HandLetter;
 
 import java.util.List;
 
@@ -33,10 +34,13 @@ public class DockView
 
     public void updateDock()
     {
-        Letter[] letters = controller.getDock();
+        HandLetter[] letters = controller.getDock();
         makeTransparent();
-        for (Letter letter : letters) {
-            addCharacter(letter.getLetter());
+        for (HandLetter letter : letters) {
+            if(letter!=null)
+            {
+                addCharacter(letter.letter.get_symbol()+"",letter.letter.get_letterId());
+            }
         }
     }
 
@@ -87,7 +91,7 @@ public class DockView
                     {
                         continue;
                     }
-                    controller.placeTile(row,column ,text.getText(), 0);
+                    controller.placeTile(row,column ,text.getText(), (int)stackPane.getProperties().get("game_id"));
                     hBoxDock.getChildren().remove(stackPane);
                     System.out.println("row:" + row);
                     System.out.println("column:" + column);
@@ -98,12 +102,13 @@ public class DockView
         jumpBack((StackPane) tile.getParent());
     }
 
-    public StackPane addCharacter(String character, double x, double y)
+    public StackPane addCharacter(String character, double x, double y,int letterId)
     {
         StackPane sp = new StackPane();
         sp.setAlignment(Pos.CENTER);
         sp.setOnMouseDragged(e -> blockMoved(e,sp));
         sp.setOnMouseReleased(e-> blockReleased(e,sp ));
+        sp.getProperties().put("id", letterId);
         Rectangle r = new Rectangle();
         r.setFill(Color.WHITE);
         r.setArcHeight(10);
@@ -129,9 +134,9 @@ public class DockView
         return sp;
     }
 
-    public void addCharacter(String character)
+    public void addCharacter(String character,int letterId)
     {
-        addCharacter(character,0,0);
+        addCharacter(character,0,0,letterId);
     }
 
     private void jumpBack(StackPane sp)
