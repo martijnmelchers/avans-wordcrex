@@ -18,6 +18,9 @@ public class BoardView extends View {
 
     @FXML private DockView dockController;
 
+    @FXML private Text _scoreP1;
+    @FXML private Text _scoreP2;
+
     private GameController _controller;
 
     @Override
@@ -25,14 +28,21 @@ public class BoardView extends View {
         _controller = this.getController(GameController.class);
         dockController.setParent(this);
         init();
+        updateScore();
     }
-
-
 
     public void update()
     {
         clearGrid();
         init();
+    }
+
+
+    private void updateScore(){
+        String[] playerNames = _controller.getPlayerNames();
+        int[] scores = _controller.getScore();
+        _scoreP1.setText(playerNames[0] + " : " + Integer.toString(scores[0]));
+        _scoreP2.setText(playerNames[1] + " : " +Integer.toString(scores[1]));
     }
 
     public void clearGrid()
@@ -74,6 +84,7 @@ public class BoardView extends View {
     private void submitTurn()
     {
         _controller.submitTurn();
+        updateScore();
     }
 
     private void tileClicked(MouseEvent e, StackPane tile)

@@ -36,6 +36,10 @@ public class GameModel {
 
     public int getPlayerScore1() { return _playerScore1; }
     public int getPlayerScore2() { return _playerScore2; }
+
+    public String getPlayerName1() { return _playerName1; }
+    public String getPlayername2() { return _playerName2; }
+
     public int turn() { return _turnId; }
 
     public GameModel(Game game)
@@ -74,8 +78,6 @@ public class GameModel {
             for (TurnPlayer2 turnPlayer2 : db.select(TurnPlayer2.class, clauses)){
                 _playerScore2 = turnPlayer2.getScore()  + turnPlayer2.getBonus();
             }
-
-
         }
         catch (Exception e){
             e.printStackTrace();
