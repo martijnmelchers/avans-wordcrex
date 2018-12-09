@@ -18,16 +18,16 @@ import java.util.List;
 
 public class AdminModel {
     private Database _db;
+
     /**
-     * Instantiate database connection
+     * Load the database connection
      */
     public AdminModel(){
         try{
-            Connection conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
-            this._db = new Database(conn);
+            this._db = DocumentSession.getDatabase(EnvironmentVariables.DEBUG);
         }
         catch(Exception e){
-
+            ErrorHandler.handle(e);
         }
     }
 
@@ -36,16 +36,13 @@ public class AdminModel {
      * @return List<Account>
      */
     public List<AccountInfo> getUsers(){
-
         var clauses = new ArrayList <Clause>();
         List<AccountInfo> accounts = new ArrayList<>();
-
         try{
             accounts = this._db.select(AccountInfo.class,clauses);
         }
 
         catch(Exception e){
-
         }
         return accounts;
     }
