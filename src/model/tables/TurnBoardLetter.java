@@ -41,4 +41,13 @@ public class TurnBoardLetter {
         _tileX = x;
         _tileY = y;
     }
+
+    public int getX()
+    {
+        return _tileX;
+    }
+    public int getY()
+    {
+        return _tileY;
+    }
 }

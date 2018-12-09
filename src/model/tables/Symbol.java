@@ -29,4 +29,8 @@ public class Symbol {
 
     public Symbol() {}
 
+    public Integer get_value()
+    {
+        return _value;
+    }
 }

@@ -1,9 +1,14 @@
 package model;
 
 import javafx.scene.paint.Color;
+import model.database.classes.Clause;
+import model.database.classes.TableAlias;
+import model.database.enumerators.CompareMethod;
+import model.tables.TurnBoardLetter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Board {
 
@@ -17,6 +22,29 @@ public class Board {
         put("Z", 6);
     }};
     private Tile[][] _tiles = new Tile[15][15];
+
+    public void getBoardFromDatabase(int gameId,Integer turn_id) // with turn_id you can return state of board that moment (For history mode)
+    {
+        ArrayList<Clause> clauses = new ArrayList<>();
+        clauses.add(new Clause(new TableAlias("turnboardletter", -1),"game_id" , CompareMethod.EQUAL, gameId ));
+        clauses.add(new Clause(new TableAlias("turnboardletter", -1),"game_id" , CompareMethod.EQUAL, turn_id ));
+        if(turn_id != null)
+        {
+
+        }
+        try
+        {
+            List<TurnBoardLetter> grid = DocumentSession.getDatabase().select(TurnBoardLetter.class, clauses);
+            for (TurnBoardLetter letter : grid)
+            {
+                _tiles[letter.getX()][letter.getY()].replace(letter.letter.get_symbol()+"", letter.letter.symbol.get_value(), letter.letter.get_letterId());
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public ArrayList<Vector2> getPlacedCoords(){ return _placedCoords; }
     public void clearPlacedCoords() { _placedCoords.clear(); }
