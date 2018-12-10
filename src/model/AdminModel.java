@@ -26,11 +26,7 @@ public class AdminModel {
             Log.error(e, true);
         }
     }
-
-    /**
-     * Haalt alle users uit de db.
-     * @return List<Account>
-     */
+    
     public List<AccountInfo> getUsers(){
         var clauses = new ArrayList <Clause>();
         List<AccountInfo> accounts = new ArrayList<>();
@@ -64,12 +60,7 @@ public class AdminModel {
 
         List<AccountInfo> roles  = this._db.select(AccountInfo.class, clauses);
         if(roles.size()  > 0){
-            try{
-                this._db.delete(roles);
-            }
-            catch (Exception e){
-                throw e;
-            }
+            this._db.delete(roles);
         }
     }
 
