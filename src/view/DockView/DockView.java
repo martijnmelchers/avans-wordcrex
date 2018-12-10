@@ -136,7 +136,7 @@ public class DockView
             double Xdiff = x - currentX;
             double Ydiff = y - currentY;
             double extraOffset = (7-hBoxDock.getChildren().size()) * 30;
-            System.out.println( (Xdiff) - 270 +  " " + extraOffset);
+
             sp.setTranslateX((Xdiff ) - 180 + extraOffset);
             sp.setTranslateY((Ydiff) - 39);
         }

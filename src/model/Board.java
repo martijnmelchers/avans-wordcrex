@@ -84,38 +84,54 @@ public class Board {
         return prevTile;
     }
 
-
     //Returned de punten die het woord geeft
     public CheckInfo check(){
-
+        //TODO check elke keer als een tile geplaatst word
         ArrayList<Tile> tiles = new ArrayList<>();
         ArrayList<String> tileIds = new ArrayList<>();
 
-        for (Vector2 placedCoord : _placedCoords) {
-            //TODO dit afmaken
-            String wordX = ""; //0 = x - 1 = y;
-            String wordY = "";
+        boolean usedStartingTile = !_tiles[7][7].isEmpty();
+        boolean isStraight = _placedCoords.stream().allMatch(x -> x.getX() == _placedCoords.get(0).getX()) || _placedCoords.stream().allMatch(x -> x.getY() == _placedCoords.get(0).getY());
 
-            int coordX = placedCoord.getX();
-            int coordY = placedCoord.getY();
+        boolean isConnected = true;
+        for (int i = 0; i + 1 < _placedCoords.size(); i++){
+
+            Vector2 currentCoords = _placedCoords.get(i);
+            Vector2 futureCoords =  _placedCoords.get(i + 1);
+
+            isConnected = currentCoords.getX() + 1 == futureCoords.getX() || !_tiles[currentCoords.getX() + 1][currentCoords.getY()].isEmpty()
+                    || currentCoords.getY() + 1 == futureCoords.getY() || !_tiles[currentCoords.getX()][currentCoords.getY() + 1].isEmpty();
+
+            if(!isConnected) break;
+        }
+
+        if(!usedStartingTile || !isStraight || !isConnected) return null;
+
+        for (Vector2 placedCoords : _placedCoords) {
+
+            String wX = ""; //0 = x - 1 = y;
+            String wY = "";
+
+            int x = placedCoords.getX();
+            int y = placedCoords.getY();
 
             String tileId = "";
 
             for (int j = 0; j < 15; j++) {
-                if (!_tiles[coordX][j].isEmpty()) {
-                    tiles.add(_tiles[coordX][j]);
-                    wordY = wordY.concat(_tiles[coordX][j].getLetterType().getLetter());
-                    tileId += coordX + j;
+                if (!_tiles[x][j].isEmpty()) {
+                    tiles.add(_tiles[x][j]);
+                    wY = wY.concat(_tiles[x][j].getLetterType().getLetter());
+                    tileId += x + j;
                 }
-                if (!_tiles[j][coordY].isEmpty()) {
-                    tiles.add(_tiles[j][coordY]);
-                    wordX = wordX.concat(_tiles[j][coordY].getLetterType().getLetter());
+                if (!_tiles[j][y].isEmpty()) {
+                    tiles.add(_tiles[j][y]);
+                    wX = wX.concat(_tiles[j][y].getLetterType().getLetter());
                 }
             }
 
             WordChecker checker = new WordChecker();
-            if (checker.check(wordX) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
-            if (checker.check(wordY) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
+            if (checker.check(wX) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
+            if (checker.check(wY) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
         }
 
         Tile[] tileArr = tiles.toArray(new Tile[0]);
@@ -125,7 +141,6 @@ public class Board {
 
         return new CheckInfo(points, tileArr, coordinatesArr);
     }
-
 
     private Points calculatePoints(Tile[] tiles){
 

@@ -1,7 +1,6 @@
 package model;
 
 import javafx.concurrent.Task;
-import jdk.nashorn.api.tree.TryTree;
 import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
@@ -10,8 +9,6 @@ import model.database.services.Database;
 import model.helper.Log;
 import model.tables.*;
 
-import javax.swing.text.Document;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -210,7 +207,7 @@ public class GameModel {
 
             boolean uploadedLast = results.size() > 0;
 
-            db.insert(new TurnPlayer1(1,5, _playerName1, 10, 1, "play"));
+            db.insert(new TurnPlayer1(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
 
             if(uploadedLast) {
 
@@ -231,7 +228,6 @@ public class GameModel {
                 int letterId = checkInfo.getTiles()[i].getLetterType().getid();
 
                 db.insert(new model.tables.BoardPlayer1(_gameId, _playerName1, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 1
-                //db.insert(new model.tables.TurnBoardLetter(letterId, _gameId, _turnId, c[i].getX(), c[i].getY())); //Insert in TurnBoardLetter
             }
 
         }catch (Exception e){
