@@ -96,7 +96,7 @@ public class MatchOverview extends View {
             @Override
             public void handle(long now) {
 
-                ScaleScreen();
+                ScaleScreen(_content);
                 _filterGameView.updateTimer(now - lastUpdate);
                 lastUpdate = now;
             }
@@ -111,30 +111,6 @@ public class MatchOverview extends View {
         }
 
         return false;
-    }
-
-    private void ScaleScreen()
-    {
-        final double newWidth = scene.getWidth();
-        final double newHeight = scene.getHeight();
-
-        final double ratio = 1.2;
-
-        double scaleFactor =
-                newWidth / newHeight > ratio ? newHeight / 600 : newWidth / 800;
-
-        if (scaleFactor > 1) {
-            Scale scale = new Scale(scaleFactor, scaleFactor);
-            scale.setPivotX(0);
-            scale.setPivotY(0);
-            scene.getRoot().getTransforms().setAll(scale);
-
-            _content.setPrefWidth(newWidth / scaleFactor);
-            _content.setPrefHeight(newHeight / scaleFactor);
-        } else {
-            _content.setPrefWidth(Math.max(800, newWidth));
-            _content.setPrefHeight(Math.max(600, newHeight));
-        }
     }
 
     private boolean player2TurnHasAction(Game game) {
@@ -186,7 +162,7 @@ public class MatchOverview extends View {
         System.out.println(game.getGameID());
     }
 
-    public void filterObserverGames(String currentGamesToSearch) {
+    protected void filterObserverGames(String currentGamesToSearch) {
         DestroyViewList();
 
         if(currentGamesToSearch.length() == 0) //Reset the view if nothing is searched.
