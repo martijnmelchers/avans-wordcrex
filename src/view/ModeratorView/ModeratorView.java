@@ -114,7 +114,7 @@ public class ModeratorView extends View {
         try {
             this.moderatorController = this.getController(ModeratorController.class);
         } catch (Exception e) {
-            Log.error(e)
+            Log.error(e);
         }
 
     }

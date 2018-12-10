@@ -1,10 +1,12 @@
 package controller;
 
 
+
 import controller.Controller;
 import model.DocumentSession;
 import model.database.services.Database;
 import model.moderator.ModeratorDictionary;
+import model.helper.ErrorHandler;
 
 import java.sql.SQLException;
 
@@ -17,10 +19,10 @@ public class ModeratorController extends Controller {
         try {
             this.moderatorDictionary = new ModeratorDictionary(DocumentSession.getDatabase());
         } catch (SQLException e) {
-            Log.error(e);
+             Log.error(e);
 
         }
-        username = DocumentSession.getPlayerUsername();
+        //username = ;
 
     }
 
