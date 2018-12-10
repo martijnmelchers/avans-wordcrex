@@ -2,7 +2,15 @@ package model;
 
 public class EnvironmentVariables
 {
-    public static final Boolean DEBUG = false;
+    /**
+     * 0 = None
+     * 1 = Errors
+     * 2 = Errors, Warnings
+     * 3 = Errors, Warnings, Info
+     */
+    public static final Integer DEBUG_LEVEL = 3;
+    public static final Boolean LOG_QUERIES = false;
+    public static final Boolean USE_COLOR = true;
     public static final String MAIN_VIEW = "LoginView";
     public static final String CONN_USERNAME = "fjmelche";
     public static final String CONN_PASSWORD = "Ab12345";

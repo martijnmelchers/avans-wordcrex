@@ -1,27 +1,27 @@
 package model;
 
 import controller.AccountController;
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
-import model.helper.ErrorHandler;
+import model.helper.Log;
 import model.tables.Account;
 import model.tables.AccountInfo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class AccountModel
-{
+public class AccountModel {
     private Database _db;
     private static String username;
 
     public AccountModel() {
         try {
-            _db = DocumentSession.getDatabase(EnvironmentVariables.DEBUG);
+            this._db = DocumentSession.getDatabase();
         } catch (SQLException e) {
-            ErrorHandler.handle(e);
+            Log.error(e, true);
         }
     }
 
@@ -41,7 +41,7 @@ public class AccountModel
             _db.insert(new Account(lowerUsername, lowerPassword));
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e, true);
             return e.getMessage();
         }
     }
@@ -56,6 +56,7 @@ public class AccountModel
             AccountModel.username = username;
             return _db.select(Account.class, clauses).get(0);
         } catch (Exception e) {
+            Log.error(e);
             return null;
         }
     }

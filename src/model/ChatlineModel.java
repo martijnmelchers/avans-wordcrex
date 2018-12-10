@@ -1,27 +1,26 @@
 package model;
 
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
-import model.database.services.Connector;
 import model.database.services.Database;
+import model.helper.Log;
 import model.tables.Chatline;
 
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ChatlineModel {
 
     private Database _db;
 
     public ChatlineModel() {
-        try
-        {
-            Connection conn = new Connector().connect("databases.aii.avans.nl", "jjadema", "Ab12345", "smendel_db2");
-            this._db = new Database(conn, true);
-        }
-        catch(Exception e){
-            e.printStackTrace();
+        try {
+            this._db = DocumentSession.getDatabase();
+        } catch (SQLException e) {
+            Log.error(e, true);
         }
     }
 
@@ -34,8 +33,16 @@ public class ChatlineModel {
         try {
             chatlines.addAll(_db.select(Chatline.class, clauses));
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e, true);
         }
+
+        chatlines.sort(new Comparator<Chatline>() {
+            public int compare(Chatline o1, Chatline o2) {
+                if (o1.getMoment() == null || o2.getMoment() == null)
+                    return 0;
+                return o1.getMoment().compareTo(o2.getMoment());
+            }
+        });
 
         return chatlines;
     }
@@ -44,7 +51,7 @@ public class ChatlineModel {
         try {
             _db.insert(chatline);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e, true);
         }
     }
 }

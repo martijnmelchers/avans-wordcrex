@@ -32,8 +32,11 @@ public class TurnPlayer1
 
     public Turn turn;
 
-
     public TurnPlayer1() {}
 
     public String getTurnActionType(){ return _turnactionType; }
+
+    public Integer getScore() {return _score;}
+
+    public Integer getBonus() {return _bonus;}
 }

@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -17,7 +18,10 @@
         </Pane>
         <ScrollPane fx:id="MessagesScrollpane" fitToWidth="true" layoutX="13.0" layoutY="70.0" prefHeight="252.0" prefWidth="572.0">
             <content>
-                <VBox fx:id="messagesVbox" layoutX="1.0" layoutY="1.0" prefHeight="249.0" prefWidth="570.0" />
+                <VBox fx:id="messagesVbox" layoutX="1.0" layoutY="1.0" prefHeight="249.0" prefWidth="215.0">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0" />
+               </children></VBox>
             </content>
         </ScrollPane>
         <TextField fx:id="messageField" layoutX="13.0" layoutY="331.0" onAction="#onEnter" prefHeight="49.0" prefWidth="430.0" promptText="Typ hier uw bericht" />

@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import model.helper.ErrorHandler;
+import model.helper.Log;
 import view.View;
 
 public class LoginView extends View {
@@ -22,7 +22,7 @@ public class LoginView extends View {
         try {
             accountController = this.getController(AccountController.class);
         } catch (Exception e) {
-            ErrorHandler.handle(e);
+            Log.error(e, true);
         }
     }
 
@@ -34,7 +34,7 @@ public class LoginView extends View {
         try {
             this.getController(AccountController.class).navigate("RegisterView", 350, 550);
         } catch (Exception e) {
-            ErrorHandler.handle(e);
+            Log.error(e, true);
         }
     }
 
@@ -47,7 +47,7 @@ public class LoginView extends View {
         try {
             this.getController(AccountController.class).navigate("AccountInformation", 1600, 1200);
         } catch (Exception e) {
-            ErrorHandler.handle(e);
+            Log.error(e, true);
         }
     }
 
