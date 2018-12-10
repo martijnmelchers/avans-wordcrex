@@ -21,6 +21,12 @@ public class AccountInfo {
     public Account account;
     public Role role;
 
+    public AccountInfo()
+    {
+
+    }
+
+
     public AccountInfo(String role, String username){
         this.usernameId = username;
         this.roleId = role;
