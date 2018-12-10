@@ -10,6 +10,7 @@ import model.tables.Chatline;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ChatlineModel {
 
@@ -34,6 +35,14 @@ public class ChatlineModel {
         } catch (Exception e) {
             Log.error(e, true);
         }
+
+        chatlines.sort(new Comparator<Chatline>() {
+            public int compare(Chatline o1, Chatline o2) {
+                if (o1.getMoment() == null || o2.getMoment() == null)
+                    return 0;
+                return o1.getMoment().compareTo(o2.getMoment());
+            }
+        });
 
         return chatlines;
     }
