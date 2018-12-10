@@ -116,18 +116,20 @@ public class Dock
     public void refill(int gameId,int turnId) // on next turn refill dock positions that are empty
     {
 
+        if(!isLetterSetPresent(gameId)) //letterset is not present
+        {
+            insertLetterCollection(gameId);
+        }
+
         List<Letter> notUsed = notUsedLetters(gameId);
 
         for(int i =0; i<letters.length;i++)
         {
-            notUsed.remove(letters[i]);
-            /* if the above does not work
             if(letters[i]!= null)
             {
                 int finalI = i;
                 notUsed.remove(notUsed.stream().filter(a->a.get_letterId() == letters[finalI].letter.get_letterId()).collect(Collectors.toList()).get(0));
             }
-           */
         }
 
         for(int i =0; i<letters.length;i++)
@@ -144,7 +146,6 @@ public class Dock
 
         try
         {
-            insertLetterCollection(gameId);
             db.insert(Arrays.stream(letters).filter(a-> a!=null).collect(Collectors.toList()));
         }
         catch (Exception e)
@@ -154,12 +155,29 @@ public class Dock
 
     }
 
+    private boolean isLetterSetPresent(int gameId)
+    {
+        ArrayList<Clause> clauses = new ArrayList<>();
+        clauses.add(new Clause(new TableAlias("Letter",-1 ),"game_id" , CompareMethod.EQUAL,gameId));
+        try
+        {
+            return db.select(Letter.class, clauses).size()>1;
+        }
+        catch (Exception e)
+        {
+            Log.error(e,false );
+        }
+        return false;
+    }
+
     private List<Letter> notUsedLetters(int gameId)
     {
+        ArrayList<Clause> clauses = new ArrayList<>();
+        clauses.add(new Clause(new TableAlias("Letter", -1),"game_id" ,CompareMethod.EQUAL , gameId));
         List<Letter> availableLetters = new ArrayList<>();
         try
         {
-            availableLetters = db.select(Letter.class);
+            availableLetters = db.select(Letter.class,clauses);
         }
         catch (Exception e)
         {
@@ -170,7 +188,7 @@ public class Dock
 
         try
         {
-            ArrayList<Clause> clauses = new ArrayList<>();
+            clauses = new ArrayList<>();
             clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1),"game_id" ,CompareMethod.EQUAL , gameId));
             usedLetters = db.select(TurnBoardLetter.class,clauses);
         }

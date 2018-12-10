@@ -92,6 +92,7 @@ public class BoardView extends View {
     private void submitTurn()
     {
         _controller.submitTurn();
+        //TODO: remove the Letters that are used in the dock (Model)
         updateScore();
     }
 
