@@ -16,7 +16,12 @@ public class MatchOverviewController extends Controller
 
     public ArrayList<Game> getGames()
     {
-        return model.getGames();
+        return model.getCurrentPlayerGames();
+    }
+
+    public ArrayList<Game> getAllGames()
+    {
+        return model.getAllGames();
     }
 
     public boolean currentTurnHasAction(Game game) {
@@ -25,5 +30,22 @@ public class MatchOverviewController extends Controller
 
     public boolean currentTurnPlayer2HasAction(Game game) {
         return model.currentTurnPlayer2HasAction(game);
+    }
+
+    public ArrayList<Game> searchForAllGamesAsObserver(String currentGamesToSearch) {
+        return model.searchForGamesAsObserver(currentGamesToSearch);
+    }
+
+    public ArrayList<String> getPlayerRoles() {
+        return model.getPlayerRoles();
+    }
+
+    public ArrayList<Game> searchForAllGamesAsPlayer(String currentGamesToSearch) {
+        return model.searchForGamesAsPlayer(currentGamesToSearch);
+    }
+
+    public MatchOverviewModel.GameScore getPlayerScores(Game game)
+    {
+        return model.getPlayerScores(game);
     }
 }

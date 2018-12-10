@@ -20,28 +20,15 @@ public class AccountInfo {
 
     public Account account;
     public Role role;
+
     public AccountInfo(){}
 
-
-    public AccountInfo(String role, String user){
-        this.usernameId = user;
-        this.roleId = role;
-    }
-
+    // What kind of naming is this??
     public String doStuff() {
         return usernameId;
     }
 
     public void setRoleId(String role) {
         this.roleId = role;
-    }
-
-
-    public String getUsername(){
-        return this.usernameId;
-    }
-
-    public String getRole(){
-        return this.roleId;
     }
 }

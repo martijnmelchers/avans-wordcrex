@@ -290,10 +290,19 @@ public class Database {
                     var join = this.findJoin(joins, annotation.output());
 
                     if (join == null)
-                        throw new Exception("A join was not found in the foreign key list; error!");
+                        throw new Exception("An error occured while processing the results. A join that should be present was not present.");
 
                     var foreignKeyField = output.getDeclaredField(annotation.output());
                     if (annotation.result() == ResultMethod.SINGLE) {
+                        String value = data.getString(combinedName);
+
+                        if ((value == null || value.equals(""))) {
+                            if (field.isAnnotationPresent(Nullable.class))
+                                continue;
+                            else
+                                throw new Exception("ForeignKey is not allowed to be null!");
+                        }
+
                         foreignKeyField.setAccessible(true);
                         foreignKeyField.set(dto, this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins));
                     } else {
@@ -303,18 +312,24 @@ public class Database {
 
                 String value = data.getString(combinedName);
 
-                var customParser = ObjectHelper.SQLToObject(field, data, combinedName);
+                try {
+                    var customParser = ObjectHelper.SQLToObject(field, data, combinedName);
 
-                if (customParser == null)
-                    field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
-                else
-                    field.set(dto, customParser);
+                    if (customParser == null)
+                        field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
+                    else
+                        field.set(dto, customParser);
+                } catch (Exception e) {
+                    Log.error(e);
+                    throw new Exception("Could not parse field " + combinedName + " to type " + field.getType() + ". This could be caused because the type is primitive, has no constructor or has no custom parser.");
+                }
 
 
             } catch (Exception e) {
+                Log.error(e);
+
                 if (!field.isAnnotationPresent(Nullable.class))
                     throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)", e);
-                e.printStackTrace();
             }
 
         }
