@@ -32,6 +32,7 @@ public class Dock
         }
         letters = new HandLetter[7];
         refill(gameId, turnId);
+
     }
 
     public void update(int _gameId,Integer turn_id) // update to turn specific hand (For history mode)
@@ -70,6 +71,11 @@ public class Dock
         {
             letters[i] = null;
         }
+    }
+
+    private void insertPot()
+    {
+
     }
 
     public void refill(int gameId,int turnId) // on next turn refill dock positions that are empty

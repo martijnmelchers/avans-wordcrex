@@ -56,7 +56,6 @@ public class GameModel {
 
         _gameId = game.getGameId();
         _board = new Board();
-        dock = new Dock(isPlayerOne(),_gameId,_turnId);
 
         try{
             var clauses = new ArrayList<Clause>();
@@ -68,6 +67,15 @@ public class GameModel {
 
             _playerName1 = game.getUsernamePlayer1();
             _playerName2 = game.getUsernamePlayer2();
+
+            if(isPlayerOne())
+            {
+                if(_turnId==0)
+                {
+                    createNewTurn();
+                }
+                dock = new Dock(isPlayerOne(),_gameId,_turnId);
+            }
 
             clauses.clear();
 
@@ -90,6 +98,7 @@ public class GameModel {
         catch (Exception e){
             e.printStackTrace();
         }
+
     }
 
     public HandLetter[] getLetters()
@@ -99,7 +108,7 @@ public class GameModel {
 
     private boolean isPlayerOne()
     {
-        return _playerName1 == "jaagermeester";
+        return _playerName1 == "jagermeester";
     }
 
     public void waitForPlayer(Task finished)
@@ -121,7 +130,6 @@ public class GameModel {
 
     public HandLetter[] getDock()
     {
-        //TODO: get letters from database
         return dock.getLetters();
     }
 
