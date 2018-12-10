@@ -74,7 +74,7 @@ public class AccountModel {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
             return e.getMessage();
         }
     }
@@ -89,6 +89,7 @@ public class AccountModel {
             GameSession.setRole(this._db.select(AccountInfo.class, clauses).get(0).role);
             return GameSession.getRole().getRole();
         } catch (Exception e) {
+            Log.error(e);
             return null;
         }
     }
