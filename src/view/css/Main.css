@@ -70,21 +70,6 @@ TextField:focused {
 
 .Chat-Message-Container {
     -fx-background-color: purple;
-    -fx-start-margin: 45;
-    -fx-end-margin: 45;
-    -fx-padding:  3 0 3 0;
-    -fx-border-radius: 5px;
-    -fx-pref-width: 200px;
-    -fx-min-width: 200px;
-    -fx-max-width: 90%;
-}
-
-.Chat-Message-Container-Left {
-    -fx-text-alignment: left;
-}
-
-.Chat-Message-Container-Right {
-    -fx-text-alignment: right;
 }
 
 .Chat-Message {

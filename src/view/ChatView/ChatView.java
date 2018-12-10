@@ -1,6 +1,7 @@
 package view.ChatView;
 
 import controller.ChatController;
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -8,6 +9,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import model.GameSession;
 import model.helper.Log;
 import model.tables.Account;
@@ -25,7 +28,10 @@ public class ChatView extends View {
     private GameSession _session;
 
     @FXML
-    private Pane messagesVbox;
+    private Pane messagesVboxLeft;
+
+    @FXML
+    private Pane messagesVboxRight;
 
     @FXML
     private ScrollPane MessagesScrollpane;
@@ -36,19 +42,23 @@ public class ChatView extends View {
     @FXML
     private TextField messageField;
 
+    @FXML
+    private VBox _parent;
+
     public ChatView() {
         _controller = new ChatController();
         _session = new GameSession();
     }
 
     public void initialize() {
-        _session.setSession(new Account("bookowner", "no"));
+        _session.setSession(new Account("lidewij", "no"));
         displayOpponentsName();
         displayMessages();
     }
 
     private void displayMessages() {
-        messagesVbox.getChildren().clear();
+        messagesVboxLeft.getChildren().clear();
+        messagesVboxRight.getChildren().clear();
 
         ArrayList<Chatline> chatlines = _controller.getChatlines(502);
 
@@ -71,7 +81,17 @@ public class ChatView extends View {
             messageViewController.setMessageLabel(chatline.getMessage());
             messageViewController.setMomentLabel(chatline.getMoment().toString());
 
-            messagesVbox.getChildren().add(messagePane);
+
+            if(chatline.account.getUsername().equals("bookowner")) {
+                messagesVboxRight.getChildren().add(messagePane);
+                messagesVboxLeft.getChildren().add(createEmptyPane(messagePane));
+            } else {
+                messagesVboxLeft.getChildren().add(messagePane);
+                messagesVboxRight.getChildren().add(createEmptyPane(messagePane));
+            }
+
+
+
         } catch (IOException e) {
             Log.error(e);
         }
@@ -94,6 +114,22 @@ public class ChatView extends View {
         }
     }
 
+    public Pane createEmptyPane(Pane messagePane) {
+        Pane emptyPane = new Pane();
+
+        emptyPane.setPrefSize(messagePane.getPrefWidth(), messagePane.getPrefHeight());
+        emptyPane.setMinSize(200,400);
+        emptyPane.setMaxSize(messagePane.getMaxWidth(), messagePane.getMaxHeight());
+
+        // TEST
+        emptyPane.setStyle("-fx-background-color: RED");
+
+        Text test = new Text(" ");
+
+        emptyPane.getChildren().add(test);
+        return emptyPane;
+    }
+
     public void onEnter() {
         sendMessage();
     }
@@ -105,6 +141,13 @@ public class ChatView extends View {
 
     @Override
     protected void loadFinished() {
-
+        new AnimationTimer()
+        {
+            @Override
+            public void handle(long now)
+            {
+                ScaleScreen(_parent);
+            }
+        }.start();
     }
 }
