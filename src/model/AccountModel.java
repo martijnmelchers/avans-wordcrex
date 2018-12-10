@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class AccountModel
 {
     private Database db;
-    private String username;
+    private static String username;
 
     public AccountModel()
     {
@@ -65,7 +65,7 @@ public class AccountModel
 
         try
         {
-            this.username = username;
+            AccountModel.username = username;
             return db.select(Account.class,clauses ).get(0);
         }
         catch (Exception e)
@@ -95,8 +95,8 @@ public class AccountModel
         }
     }
 
-    public String getUsername()
+    public static String getUsername()
     {
-        return this.username;
+        return AccountModel.username;
     }
 }
