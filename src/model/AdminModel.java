@@ -26,7 +26,7 @@ public class AdminModel {
             Log.error(e, true);
         }
     }
-    
+
     public List<AccountInfo> getUsers(){
         var clauses = new ArrayList <Clause>();
         List<AccountInfo> accounts = new ArrayList<>();
@@ -35,6 +35,7 @@ public class AdminModel {
         }
 
         catch(Exception e){
+            Log.error(e);
         }
         return accounts;
     }
@@ -44,12 +45,7 @@ public class AdminModel {
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
         clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
         if(this._db.select(AccountInfo.class, clauses).size()  == 0){
-            try{
-                this._db.insert(info);
-            }
-            catch (Exception e){
-                throw e;
-            }
+            this._db.insert(info);
         }
     }
 
