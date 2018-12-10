@@ -1,7 +1,9 @@
 package controller;
 
 import model.AccountModel;
+import model.GameSession;
 import model.helper.Log;
+import model.tables.Account;
 import view.LoginView.LoginView;
 import view.RegisterView.RegisterView;
 import view.AccountInformation.AccountInformation;
@@ -65,11 +67,15 @@ public class AccountController extends Controller
             return;
         }
 
-        if(model.getAccount(username,password ) == null)
+        Account account = model.getAccount(username, password);
+
+        if(account == null)
         {
             loginView.showError("Inloggegevens onjuist");
             return;
         }
+
+        GameSession.setSession(account);
 
         loginView.loginSucces();
     }
@@ -100,7 +106,7 @@ public class AccountController extends Controller
 
     public String getUsername()
     {
-        return model.getUsername();
+        return GameSession.getUsername();
     }
 
     public String getRole()

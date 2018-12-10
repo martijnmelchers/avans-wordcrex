@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 public class AccountModel {
     private Database _db;
-    private static String username;
 
     public AccountModel() {
         try {
@@ -53,7 +52,6 @@ public class AccountModel {
         clauses.add(new Clause(new TableAlias("account", -1), "password", CompareMethod.EQUAL, password));
 
         try {
-            AccountModel.username = username;
             return _db.select(Account.class, clauses).get(0);
         } catch (Exception e) {
             Log.error(e);
@@ -82,19 +80,15 @@ public class AccountModel {
         }
     }
 
-    public static String getUsername()
-    {
-        return AccountModel.username;
-    }
-
     public String getRole()
     {
         var clauses = new ArrayList<Clause>();
 
-        clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, AccountModel.username));
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, GameSession.getUsername()));
 
         try {
-            return _db.select(AccountInfo.class, clauses).get(0).role.getRole();
+            GameSession.setRole(_db.select(AccountInfo.class, clauses).get(0).role);
+            return GameSession.getRole().getRoleToString();
         } catch (Exception e) {
             return null;
         }

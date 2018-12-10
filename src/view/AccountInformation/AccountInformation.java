@@ -4,7 +4,7 @@ import controller.AccountController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import model.helper.ErrorHandler;
+import model.helper.Log;
 import view.View;
 
 public class AccountInformation extends View {
@@ -22,7 +22,7 @@ public class AccountInformation extends View {
         try {
             accountController = this.getController(AccountController.class);
         } catch (Exception e) {
-            ErrorHandler.handle(e);
+            Log.error(e, true);
         }
         getAccountInformation();
     }
@@ -43,7 +43,7 @@ public class AccountInformation extends View {
         try {
             this.getController(AccountController.class).navigate("MatchOverview");
         } catch (Exception e) {
-            ErrorHandler.handle(e);
+            Log.error(e, true);
         }
     }
 
