@@ -51,6 +51,7 @@ AnchorPane {
 
 }
 
+
 TextField {
     -fx-border-color: #2c3e50;
     -fx-border-width: 0 0 2 0;
