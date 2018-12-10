@@ -210,7 +210,8 @@ public class GameModel {
         var clauses = new ArrayList<Clause>();
 
         try{
-            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, _turnId + 1));
+            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _turnId));
+            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, _turnId));
 
             var results = db.select(TurnPlayer2.class, clauses);
 
@@ -233,10 +234,9 @@ public class GameModel {
             //TODO in database tileType moet je kijke wat -- en * zijn (default?)
             for (int i = 0; i < c.length; i++){
 
-                TileType tileType = checkInfo.getTiles()[i].getType();
-                int letterId = checkInfo.getTiles()[i].getLetterType().getid();
+                int letterId = _board.getTiles()[c[i].getX()][c[i].getY()].getLetterType().getid();
 
-                db.insert(new model.tables.BoardPlayer1(_gameId, _playerName1, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 1
+                db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 1
             }
 
         }catch (Exception e){
@@ -309,7 +309,7 @@ public class GameModel {
     private boolean isNewTurn()
     {
         ArrayList<Clause> clauses = new ArrayList<>();
-        clauses.add(new Clause(new TableAlias("Turn",-1), "game_id", CompareMethod.EQUAL,_turnId++ ));
+        clauses.add(new Clause(new TableAlias("Turn",-1), "game_id", CompareMethod.EQUAL,_turnId+1 ));
         try
         {
              return db.select(Turn.class,  clauses).size()>0;
@@ -349,6 +349,8 @@ public class GameModel {
         return false;
 
     }
+
+
 
 }
 

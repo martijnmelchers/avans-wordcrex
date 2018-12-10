@@ -181,6 +181,20 @@ public class Board {
         return new Points(score, bonus);
     }
 
+    public void printBoard()//Testmethod
+    {
+        for(int i =0;i<14;i++)
+        {
+            String line = "";
+            for(int k =0;k<14;k++)
+            {
+                String s = _tiles[i][k].getLetterType().getLetter();
+                line += s==""?".":s ;
+            }
+            System.out.println(line);
+        }
+    }
+
     private Tile decideTileType(Vector2 vector2) {
 
         int x = vector2.getX();
