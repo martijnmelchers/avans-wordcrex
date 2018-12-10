@@ -2,6 +2,8 @@ package controller;
 
 import view.View;
 
+import java.io.IOException;
+
 public abstract class Controller
 {
     private App application;
@@ -21,13 +23,11 @@ public abstract class Controller
         return application.getView();
     }
 
-    public void navigate(String fxmlFileName)
-    {
+    public void navigate(String fxmlFileName) throws IOException {
         application.navigate(fxmlFileName);
     }
 
-    public void navigate(String fxmlFileName, int width, int height)
-    {
+    public void navigate(String fxmlFileName, int width, int height) throws IOException {
         application.navigate(fxmlFileName, width, height);
     }
 }

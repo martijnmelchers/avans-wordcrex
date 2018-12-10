@@ -23,9 +23,9 @@ public class AccountInfo {
 
     public AccountInfo(){}
 
+    // What kind of naming is this??
     public String doStuff() {
-        System.out.println("waa!!");
-        return "Dit is stuff";
+        return usernameId;
     }
 
     public void setRoleId(String role) {

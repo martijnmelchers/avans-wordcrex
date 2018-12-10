@@ -1,48 +1,59 @@
 import controller.App;
-import model.database.classes.Clause;
-import model.database.services.Connector;
-import model.database.services.Database;
-import model.tables.BoardPlayer1;
-import model.tables.Game;
+import javafx.application.Application;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
+import model.EnvironmentVariables;
+import model.database.DocumentSession;
+import model.helper.Log;
 
-import java.util.ArrayList;
-
-public class Main {
+public class Main extends Application {
     public static void main(String[] args) {
-        /*
-        Thus us a database example :)
-         */
+        Log.info("Launching application...");
+        launch(EnvironmentVariables.MAIN_VIEW);
+    }
 
+    @Override
+    public void start(Stage primaryStage) {
+        initializeApp(primaryStage);
+    }
+
+    private void initializeApp(Stage primaryStage) {
+        var tryAgainButton = new ButtonType("Probeer opnieuw");
+        var closeAppButton = new ButtonType("Afsluiten");
+
+        /* Initialize the database */
+        Log.info("Initializing database...");
         try {
-            var conn = new Connector().connect("databases.aii.avans.nl", "fjmelche", "Ab12345", "smendel_db2");
-            var _db = new Database(conn, true);
-
-            var clauses = new ArrayList<Clause>();
-
-
-//            var accountInfoTest = new AccountInfo();
-//            accountInfoTest.account = new Account("Mega Neger #" + new Random().nextInt(5000), "Gangnam stijl");
-//            accountInfoTest.setRoleId("player");
-//
-//            _db.insert(accountInfoTest);
-
-
-            /*for (AccountInfo ac : _db.select(AccountInfo.class, clauses)) {
-                System.out.println(ac);
-                System.out.println(ac.account);
-                System.out.println(ac.role);
-            }*/
-
-            for(Game game : _db.select(Game.class, clauses)) {
-                System.out.println("Game found!");
-
-            }
-
+            DocumentSession.getDatabase();
+            Log.info("Database connection established!");
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Tijdens opstarten van de database is de volgende fout opgetreden:\n\n" + e.getMessage(), closeAppButton, tryAgainButton);
+            alert.showAndWait();
+
+            Log.error(e);
+
+            if (alert.getResult() == tryAgainButton)
+                initializeApp(primaryStage);
+            else
+                System.exit(1);
         }
 
-        App application = new App();
-        //application.load("MatchOverview.fxml");
+        /* Start the main app */
+        Log.info("Starting views...");
+        try {
+            var app = new App(primaryStage);
+
+            app.navigate(EnvironmentVariables.MAIN_VIEW);
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
+            alert.showAndWait();
+
+            Log.error(e);
+
+            System.exit(1);
+        }
+
+        Runtime.getRuntime().addShutdownHook(new BeforeShutdown());
     }
 }

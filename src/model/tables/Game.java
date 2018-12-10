@@ -1,9 +1,7 @@
 package model.tables;
 
-import model.database.annotations.Column;
-import model.database.annotations.ForeignKey;
-import model.database.annotations.PrimaryKey;
-import model.database.annotations.Table;
+import model.database.annotations.*;
+import model.database.enumerators.JoinMethod;
 
 @Table("game")
 public class Game {
@@ -32,11 +30,21 @@ public class Game {
     @ForeignKey(type = Answer.class, field = "type", output = "answer")
     private String _answerPlayer2;
 
+
+    @Nullable
+    @Column("username_winner")
+    @ForeignKey(type = Account.class, field = "username", output = "winner", joinMethod = JoinMethod.LEFT)
+    private String _usernameWinner;
+
     public GameState gameState;
     public LetterSet letterSet;
     public Account player1;
     public Account player2;
     public Answer answer;
+    public Account winner;
+
 
     public Game(){}
+
+    public Integer getGameID() { return _gameId; }
 }

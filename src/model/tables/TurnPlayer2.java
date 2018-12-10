@@ -1,12 +1,10 @@
 package model.tables;
 
-import model.database.annotations.Column;
-import model.database.annotations.ForeignKey;
-import model.database.annotations.PrimaryKey;
-import model.database.annotations.Table;
+import model.database.annotations.*;
 
 @Table("turnplayer2")
-public class TurnPlayer2 {
+public class TurnPlayer2
+{
 
     @PrimaryKey
     @Column("game_id")
@@ -22,16 +20,29 @@ public class TurnPlayer2 {
     @Column("username_player2")
     private String _usernamePlayer1;
 
+
+
     @Column("bonus")
     private Integer _bonus;
 
     @Column("score")
     private Integer _score;
 
+    @Nullable
     @Column("turnaction_type")
     private String _turnactionType;
 
     public Turn turn;
 
     public TurnPlayer2() {}
+
+    public String getTurnActionType(){ return _turnactionType; }
+
+    public Integer getBonus() {
+        return _bonus;
+    }
+
+    public Integer getScore() {
+        return _score;
+    }
 }
