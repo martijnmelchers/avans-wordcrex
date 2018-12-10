@@ -70,8 +70,17 @@ public class GameModel {
                 if(_turnId==0)
                 {
                     createNewTurn();
+                    dock = new Dock(true,_gameId,_turnId);
                 }
-                dock = new Dock(isPlayerOne(),_gameId,_turnId);
+                else
+                {
+                    dock = new Dock(false,_gameId ,_turnId );
+                }
+
+            }
+            else
+            {
+                dock = new Dock(false,_gameId ,_turnId );
             }
 
             clauses.clear();

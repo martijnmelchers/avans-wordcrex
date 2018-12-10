@@ -29,35 +29,4 @@ public class Letter {
 
     public int getid() { return _letterId; }
 
-    public static final String[] defaultLetters()
-    {
-       return new String[]{
-            "A", "A", "A", "A", "A", "A", "A",
-            "B", "B",
-            "C", "C",
-            "D", "D", "D", "D", "D",
-            "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E", "E",
-            "F", "F",
-            "G", "G", "G",
-            "H", "H",
-            "I", "I", "I", "I",
-            "J","J",
-            "K", "K", "K",
-            "L", "L", "L",
-            "M", "M", "M",
-            "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N",
-            "O", "O", "O", "O", "O", "O",
-            "P", "P",
-            "Q",
-            "R", "R", "R", "R", "R",
-            "S", "S", "S", "S", "S",
-            "T", "T", "T", "T", "T",
-            "U", "U", "U",
-            "V", "V",
-            "W", "W",
-            "X",
-            "Y",
-            "Z", "Z"
-       };
-    }
 }
