@@ -17,7 +17,7 @@ public class ModeratorController extends Controller {
         try {
             this.moderatorDictionary = new ModeratorDictionary(DocumentSession.getDatabase());
         } catch (SQLException e) {
-            e.printStackTrace();
+            Log.error(e);
 
         }
         username = DocumentSession.getPlayerUsername();
