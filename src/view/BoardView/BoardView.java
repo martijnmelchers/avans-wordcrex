@@ -1,16 +1,18 @@
-package view;
+package view.BoardView;
 
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.Tile;
+import model.TileState;
+import model.helper.Log;
+import view.DockView.DockView;
+import view.View;
 
 
 public class BoardView extends View {
@@ -19,20 +21,36 @@ public class BoardView extends View {
 
     @FXML private DockView dockController;
 
+    @FXML private Text _scoreP1;
+    @FXML private Text _scoreP2;
+
     private GameController _controller;
 
     @Override
     protected void loadFinished() {
-        _controller = this.getController(GameController.class);
+        try {
+            _controller = this.getController(GameController.class);
+        } catch (Exception e){
+            Log.error(e);
+        }
+
         dockController.setParent(this);
         init();
+        updateScore();
     }
-
 
     public void update()
     {
         clearGrid();
         init();
+    }
+
+
+    private void updateScore(){
+        String[] playerNames = _controller.getPlayerNames();
+        int[] scores = _controller.getScore();
+        _scoreP1.setText(playerNames[0] + " : " + Integer.toString(scores[0]));
+        _scoreP2.setText(playerNames[1] + " : " +Integer.toString(scores[1]));
     }
 
     public void clearGrid()
@@ -56,6 +74,7 @@ public class BoardView extends View {
                 rect.setOnMousePressed(event-> tileClicked(event,stackPane));
 
                 Text text = new Text();
+                text.setMouseTransparent(true);
 
                 var letter = tiles[x][y].getLetterType().getLetter();
                 text.setText(letter.equals("") ? tiles[x][y].getType().toString() : tiles[x][y].getLetterType().getLetter());
@@ -69,13 +88,25 @@ public class BoardView extends View {
         }
     }
 
+    @FXML
+    private void submitTurn()
+    {
+        _controller.submitTurn();
+        updateScore();
+    }
+
     private void tileClicked(MouseEvent e, StackPane tile)
     {
-        if(true)// check if tile is unlocked
+        Tile[][] tiles = _controller.getTiles();
+        int row = GridPane.getRowIndex(tile);
+        int col = GridPane.getColumnIndex(tile);
+        if(tiles[row][col].getState() == TileState.UNLOCKED)
         {
-            //reset tile
             String character = ((Text)tile.getChildren().get(1)).getText();
-            StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY());
+            _controller.resetTile(row,col);
+            update();
+            StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY(),tiles[row][col].getLetterType().getid());
+
             tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
             tile.setOnMouseReleased(event-> Event.fireEvent(sp,event ));
         }

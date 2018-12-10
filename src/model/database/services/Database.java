@@ -5,6 +5,7 @@ import model.database.classes.*;
 import model.database.enumerators.CompareMethod;
 import model.database.enumerators.LinkMethod;
 import model.database.enumerators.ResultMethod;
+import model.helper.Log;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -22,15 +23,9 @@ import java.util.List;
  */
 public class Database {
     private Connection connection;
-    private boolean debug;
 
     public Database(Connection connection) {
         this.connection = connection;
-    }
-
-    public Database(Connection connection, boolean debug) {
-        this.connection = connection;
-        this.debug = debug;
     }
 
     public <T> ArrayList<InsertedKeys> insert(T item) throws Exception {
@@ -54,13 +49,14 @@ public class Database {
     }
 
     public <T> List<T> select(Class<T> output, List<Clause> clauses) throws Exception {
+        Log.info("Building select query for class: " + output + " with " + clauses.size() + " clauses");
         var tableName = this.getTableName(output);
         var result = this.findForeignKeys(output, new TableAlias(tableName, -1));
 
         var query = QueryBuilder.buildSelect(tableName, result.getSelects(), clauses, result.getJoins());
 
-        if (this.debug)
-            LogWriter.PrintLog("Query built: " + query);
+        Log.info("Successfully built select query for class " + output);
+        Log.query(query);
 
         return this.select(output, result.getJoins(), query);
     }
@@ -90,6 +86,7 @@ public class Database {
     }
 
     private <T> ArrayList<InsertedKeys> insert(T item, String table) throws Exception {
+        Log.info("Building insert query for class " + item.getClass());
         /* Store the keys to insert and values separately */
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<Object> values = new ArrayList<>();
@@ -162,9 +159,10 @@ public class Database {
 
         var sql = QueryBuilder.buildInsert(table, columns, values);
 
-        if (this.debug)
-            LogWriter.PrintLog(sql);
+        Log.info("Successfully built insert query for class " + item.getClass());
+        Log.query(sql);
 
+        Log.info("Executing insert query for class " + item.getClass());
         var statement = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         var rowsAffected = statement.executeUpdate();
@@ -191,17 +189,21 @@ public class Database {
     }
 
     private <T> ArrayList<T> select(Class<T> output, ArrayList<Join> join, String sql) throws Exception {
+        Log.info("Executing select query for class " + output);
         var resultSet = this.connection.createStatement().executeQuery(sql);
 
         ArrayList<T> list = new ArrayList<>();
+        Log.info("Select query success! Processing result for class " + output + "...");
         while (resultSet.next()) {
             list.add(this.processResult(output, resultSet, this.getTableName(output), list, join));
         }
+        Log.info("Result processing finished. Found " + list.size() + " results");
 
         return list;
     }
 
     private <T> void delete(T item, String table) throws Exception {
+        Log.info("Building delete query for class: " + item.getClass());
         ArrayList<Clause> clauses = new ArrayList<>();
 
         for (Field field : item.getClass().getDeclaredFields()) {
@@ -217,13 +219,15 @@ public class Database {
 
         var query = QueryBuilder.buildDelete(table, clauses);
 
-        if (this.debug)
-            LogWriter.PrintLog("Query built: " + query);
+        Log.info("Successfully built delete query for class " + item.getClass());
+        Log.query(query);
 
+        Log.info("Executing delete query for class " + item.getClass());
         this.connection.prepareStatement(query).execute();
     }
 
     private <T> void update(T item, String table) throws Exception {
+        Log.info("Building update query for class " + item.getClass());
         ArrayList<Clause> clauses = new ArrayList<>();
         HashMap<String, Object> updated = new HashMap<>();
 
@@ -237,15 +241,8 @@ public class Database {
             if (field.isAnnotationPresent(PrimaryKey.class))
                 clauses.add(new Clause(new TableAlias(table, -1), name, CompareMethod.EQUAL, field.get(item)));
 
-            if (field.isAnnotationPresent(PrimaryKey.class) && !field.isAnnotationPresent(ForeignKey.class))
+            if (field.isAnnotationPresent(PrimaryKey.class) || field.isAnnotationPresent(ForeignKey.class))
                 continue;
-
-
-            if (field.isAnnotationPresent(ForeignKey.class)) {
-                var annotation = field.getAnnotation(ForeignKey.class);
-                var foreignKeyField = item.getClass().getDeclaredField(annotation.output());
-                this.update(foreignKeyField.get(item));
-            }
 
             var v = field.get(item);
 
@@ -262,10 +259,10 @@ public class Database {
             return;
 
         var query = QueryBuilder.buildUpdate(table, updated, clauses);
+        Log.info("Successfully built update query for class " + item.getClass());
+        Log.query(query);
 
-        if (this.debug)
-            LogWriter.PrintLog("Query built: " + query);
-
+        Log.info("Executing update query for class " + item.getClass());
         this.connection.prepareStatement(query).execute();
     }
 
@@ -297,6 +294,15 @@ public class Database {
 
                     var foreignKeyField = output.getDeclaredField(annotation.output());
                     if (annotation.result() == ResultMethod.SINGLE) {
+                        String value = data.getString(combinedName);
+
+                        if ((value == null || value.equals(""))) {
+                            if (field.isAnnotationPresent(Nullable.class))
+                                continue;
+                            else
+                                throw new Exception("ForeignKey is not allowed to be null!");
+                        }
+
                         foreignKeyField.setAccessible(true);
                         foreignKeyField.set(dto, this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins));
                     } else {
@@ -317,6 +323,7 @@ public class Database {
             } catch (Exception e) {
                 if (!field.isAnnotationPresent(Nullable.class))
                     throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)", e);
+                Log.error(e);
             }
 
         }

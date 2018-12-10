@@ -12,7 +12,7 @@ public class Tile {
     private Letter _letter;
 
     public Tile() {}
-    //LAden van de tiles
+    //Laden van de tiles
     public Tile(TileType tileType, Color color) {
         _tileState = TileState.LOCKED;
         _tileType = tileType;
@@ -30,6 +30,7 @@ public class Tile {
     public TileType getType() {
         return _tileType;
     }
+    public void setState(TileState tileState) {_tileState = tileState; }
 
     public TileState getState() { return _tileState; }
 
@@ -39,10 +40,11 @@ public class Tile {
 
     public Letter getLetterType() { return _letter; }
 
-    public boolean isEmpty(){ return _letter.getLetter().equals(""); }
+    public boolean isEmpty(){ System.out.println(_letter.getLetter());return _letter.getLetter().equals(""); }
 
-    public void replace( String letter, int points){
+    public void replace(String letter, int points, int letterId){
         _letter.setLetter(letter);
         _letter.setPoints(points);
+        _letter.setId(letterId);
     }
 }

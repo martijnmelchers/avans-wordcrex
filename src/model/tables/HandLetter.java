@@ -5,8 +5,8 @@ import model.database.annotations.ForeignKey;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
-@Table("handleletter")
-public class HandleLetter {
+@Table("HandLetter")
+public class HandLetter {
 
     @Column("game_id")
     @PrimaryKey
@@ -26,5 +26,14 @@ public class HandleLetter {
     public Letter letter;
     public Turn turn;
 
-    public HandleLetter() {}
+    public HandLetter() {}
+
+    public HandLetter(Integer _letterId, Integer _turnId, Integer _gameId, Letter letter, Turn turn)
+    {
+        this._gameId = _gameId;
+        this.letter = letter;
+        this.turn = turn;
+        this._turnId = _turnId;
+        this._letterId = _letterId;
+    }
 }

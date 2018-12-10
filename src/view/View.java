@@ -2,19 +2,20 @@ package view;
 
 import controller.App;
 import controller.Controller;
+import javafx.scene.Scene;
 
-public abstract class View
-{
+public abstract class View {
     private App application;
 
-    public void setApp(App app)
-    {
+    protected Scene scene;
+
+    public void setApp(App app) {
         application = app;
+        scene = application.getScene();
         loadFinished();
     }
 
-    protected  <T extends Controller> T getController(Class<T> cType)
-    {
+    public  <T extends Controller> T getController(Class<T> cType) throws Exception {
         return application.getController(cType);
     }
 

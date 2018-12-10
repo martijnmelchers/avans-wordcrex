@@ -20,5 +20,4 @@ public class ChatController extends Controller {
     public void sendChatline(Chatline chatline) {
         model.sendChatline(chatline);
     }
-
 }

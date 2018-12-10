@@ -2,23 +2,21 @@ package model;
 
 public class CheckInfo {
 
-    private String[] _words;
-
-    private Score _score;
+    private Points _score;
 
     private Tile[] _tiles;
 
-    public String[] getWords(){ return _words; }
+    private Vector2[] _coordinates;
 
-    public Score getScore(){ return _score; }
+    public Points getPoints(){ return _score; }
 
-    public Tile[] getTiles(){ return getTiles(); }
+    public Tile[] getTiles(){ return _tiles; }
 
-    public CheckInfo(String[] words, Score score, Tile[] tiles){
-        _words = words;
-        _score = score;
+    public Vector2[] getCoordinates() {return _coordinates; }
+
+    public CheckInfo(Points score, Tile[] tiles, Vector2[] coordinates){
         _score = score;
         _tiles = tiles;
+        _coordinates = coordinates;
     }
-
 }

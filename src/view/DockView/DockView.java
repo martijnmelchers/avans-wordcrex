@@ -1,6 +1,5 @@
-package view;
+package view.DockView;
 
-import controller.App;
 import controller.GameController;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
@@ -8,18 +7,17 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import model.Letter;
-import model.Tile;
+import model.helper.Log;
+import model.tables.HandLetter;
+import view.BoardView.BoardView;
 
 import java.util.List;
-import java.util.Stack;
 
 public class DockView
 {
@@ -31,18 +29,26 @@ public class DockView
     public void setParent(BoardView board)
     {
         this.board = board;
-        controller = board.getController(GameController.class);
+
+        try{
+            controller = board.getController(GameController.class);
+        } catch (Exception e){
+            Log.error(e);
+        }
+
+
         updateDock();
     }
 
     public void updateDock()
     {
-        Letter[] letters = controller.getDock();
+        HandLetter[] letters = controller.getDock();
         makeTransparent();
-        List<Node> children = hBoxDock.getChildren();
-        for(int i =0;i<letters.length;i++)
-        {
-            addCharacter(letters[i].getLetter());
+        for (HandLetter letter : letters) {
+            if(letter!=null)
+            {
+                addCharacter(letter.letter.get_symbol()+"",letter.letter.get_letterId());
+            }
         }
     }
 
@@ -89,12 +95,12 @@ public class DockView
             {
                 if (bounds.getMaxX() + 1 > x && bounds.getMinX() - 1 < x)
                 {
-                    if(!controller.tileEmpty(column,row))
+                    if(!controller.tileEmpty(row,column))
                     {
                         continue;
                     }
-                    controller.placeTile(row,column ,text.getText());
-                    hBoxDock.getChildren().remove(hBoxDock.getChildren().indexOf(stackPane));
+                    controller.placeTile(row,column ,text.getText(), (int)stackPane.getProperties().get("id"));
+                    hBoxDock.getChildren().remove(stackPane);
                     System.out.println("row:" + row);
                     System.out.println("column:" + column);
                     return;
@@ -104,17 +110,17 @@ public class DockView
         jumpBack((StackPane) tile.getParent());
     }
 
-    public StackPane addCharacter(String character, double x, double y)
+    public StackPane addCharacter(String character, double x, double y,int letterId)
     {
         StackPane sp = new StackPane();
         sp.setAlignment(Pos.CENTER);
         sp.setOnMouseDragged(e -> blockMoved(e,sp));
         sp.setOnMouseReleased(e-> blockReleased(e,sp ));
+        sp.getProperties().put("id", letterId);
         Rectangle r = new Rectangle();
         r.setFill(Color.WHITE);
         r.setArcHeight(10);
         r.setArcWidth(10);
-        r.setWidth(10);
         r.setWidth(30);
         r.setHeight(30);
         Text t = new Text();
@@ -129,16 +135,18 @@ public class DockView
             double currentY = ((b.getMinY() + b.getMaxY())/2);
             double Xdiff = x - currentX;
             double Ydiff = y - currentY;
-            sp.setTranslateX((Xdiff-30)-262);
-            sp.setTranslateY(Ydiff-30);
+            double extraOffset = (7-hBoxDock.getChildren().size()) * 30;
+            System.out.println( (Xdiff) - 270 +  " " + extraOffset);
+            sp.setTranslateX((Xdiff ) - 180 + extraOffset);
+            sp.setTranslateY((Ydiff) - 39);
         }
         sp.getParent().getParent().toFront();
         return sp;
     }
 
-    public void addCharacter(String character)
+    public void addCharacter(String character,int letterId)
     {
-        addCharacter(character,0,0);
+        addCharacter(character,0,0,letterId);
     }
 
     private void jumpBack(StackPane sp)

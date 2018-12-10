@@ -1,13 +1,15 @@
 package model;
 
 import javafx.scene.paint.Color;
-import model.database.classes.InsertedKeys;
-import model.database.services.Database;
-import model.tables.TurnPlayer1;
+import model.database.DocumentSession;
+import model.database.classes.Clause;
+import model.database.classes.TableAlias;
+import model.database.enumerators.CompareMethod;
+import model.tables.TurnBoardLetter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Board {
 
@@ -21,6 +23,29 @@ public class Board {
         put("Z", 6);
     }};
     private Tile[][] _tiles = new Tile[15][15];
+
+    public void getBoardFromDatabase(int gameId,Integer turn_id) // with turn_id you can return state of board that moment (For history mode)
+    {
+        ArrayList<Clause> clauses = new ArrayList<>();
+        clauses.add(new Clause(new TableAlias("turnboardletter", -1),"game_id" , CompareMethod.EQUAL, gameId ));
+        clauses.add(new Clause(new TableAlias("turnboardletter", -1),"game_id" , CompareMethod.EQUAL, turn_id ));
+        if(turn_id != null)
+        {
+
+        }
+        try
+        {
+            List<TurnBoardLetter> grid = DocumentSession.getDatabase().select(TurnBoardLetter.class, clauses);
+            for (TurnBoardLetter letter : grid)
+            {
+                _tiles[letter.getX()][letter.getY()].replace(letter.letter.get_symbol()+"", letter.letter.symbol.get_value(), letter.letter.get_letterId());
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public ArrayList<Vector2> getPlacedCoords(){ return _placedCoords; }
     public void clearPlacedCoords() { _placedCoords.clear(); }
@@ -38,50 +63,71 @@ public class Board {
 
     public boolean isEmpty(Vector2 vector2) { return (_tiles[vector2.getX()][vector2.getY()].isEmpty()); }
 
-    public void place(Vector2 vector2, String letter) {
-        _tiles[vector2.getX()][vector2.getY()].replace(letter, _letterValues.get(letter.toUpperCase()));
-        _tiles[vector2.getX()][vector2.getY()].setColor(Color.WHITE);
+    public void place(Vector2 vector2, String letter, int letterId) {
+        Tile tile = _tiles[vector2.getX()][vector2.getY()];
+
+        tile.replace(letter, _letterValues.get(letter.toUpperCase()), letterId);
+        tile.setColor(Color.WHITE);
+        tile.setState(TileState.UNLOCKED);
+
         _placedCoords.add(vector2);
     }
 
     //Remove a piece
     public Tile remove(Vector2 vector2){
         Tile prevTile = _tiles[vector2.getX()][vector2.getY()];
+
         _tiles[vector2.getX()][vector2.getY()] = decideTileType(vector2);
+        _tiles[vector2.getX()][vector2.getY()].setState(TileState.LOCKED);
+
+        _placedCoords.remove(vector2);
         return prevTile;
     }
 
 
     //Returned de punten die het woord geeft
-    public CheckInfo check(Vector2 vector2){
+    public CheckInfo check(){
 
         ArrayList<Tile> tiles = new ArrayList<>();
-        String[] words = new String[2]; //0 = x - 1 = y;
+        ArrayList<String> tileIds = new ArrayList<>();
 
-        for (int x = 0; x < 15; x++){
-            if(!_tiles[x][vector2.getY()].isEmpty()){
-                tiles.add(_tiles[x][vector2.getY()]);
-                words[0] = words[0].concat(_tiles[x][vector2.getY()].getLetterType().getLetter());
+        for (Vector2 placedCoord : _placedCoords) {
+            //TODO dit afmaken
+            String wordX = ""; //0 = x - 1 = y;
+            String wordY = "";
+
+            int coordX = placedCoord.getX();
+            int coordY = placedCoord.getY();
+
+            String tileId = "";
+
+            for (int j = 0; j < 15; j++) {
+                if (!_tiles[coordX][j].isEmpty()) {
+                    tiles.add(_tiles[coordX][j]);
+                    wordY = wordY.concat(_tiles[coordX][j].getLetterType().getLetter());
+                    tileId += coordX + j;
+                }
+                if (!_tiles[j][coordY].isEmpty()) {
+                    tiles.add(_tiles[j][coordY]);
+                    wordX = wordX.concat(_tiles[j][coordY].getLetterType().getLetter());
+                }
             }
+
+            WordChecker checker = new WordChecker();
+            if (checker.check(wordX) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
+            if (checker.check(wordY) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
         }
 
-        for (int y = 0; y < 15; y++){
-            if(!_tiles[vector2.getX()][y].isEmpty()){
-                tiles.add(_tiles[vector2.getX()][y]);
-                words[1] = words[1].concat(_tiles[vector2.getX()][y].getLetterType().getLetter());
-            }
-        }
+        Tile[] tileArr = tiles.toArray(new Tile[0]);
+        Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
 
-        WordChecker checker = new WordChecker();
-        if(!checker.check(words[0]) && !checker.check(words[1])) return null;
+        Points points = calculatePoints(tileArr);
 
-        Tile[] tileArr = tiles.toArray(new Tile[tiles.size()]);
-        Score score = calculatePoints(tileArr);
-
-        return new CheckInfo(words, score, tileArr);
+        return new CheckInfo(points, tileArr, coordinatesArr);
     }
 
-    private Score calculatePoints(Tile[] tiles){
+
+    private Points calculatePoints(Tile[] tiles){
 
         int score = 0;
         int bonus = 0;
@@ -89,13 +135,13 @@ public class Board {
         int w3 = 0;
         int w4 = 0;
 
-        for (int i = 0; i < tiles.length; i++){
-            TileType tileType = tiles[i].getType();
+        for (Tile tile : tiles) {
+            TileType tileType = tile.getType();
 
-            int letterValue = _letterValues.get(tiles[i].getLetterType().getLetter());
+            int letterValue = _letterValues.get(tile.getLetterType().getLetter());
             score += letterValue;
 
-            switch (tileType){
+            switch (tileType) {
                 case LETTER_TIMES_TWO:
                     bonus += letterValue * 2;
                     break;
@@ -117,7 +163,7 @@ public class Board {
         for (int j = 0; j < w3; j++){ bonus *= 3; }
         for (int j =0; j< w4; j++){ bonus  *= 4;}
 
-        return new Score(score, bonus);
+        return new Points(score, bonus);
     }
 
     private Tile decideTileType(Vector2 vector2) {
@@ -193,6 +239,8 @@ public class Board {
             case 105:
             case 119:
                 return new Tile(TileType.WORD_TIMES_FOUR, Color.rgb(232, 183, 39));
+                case 112:
+                    return new Tile(TileType.STARTING_TILE, Color.rgb(252, 192, 30));
         }
         return new Tile(TileType.STANDARD, Color.rgb(51, 43, 124));
     }

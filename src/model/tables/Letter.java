@@ -23,10 +23,20 @@ public class Letter {
 
     @Column("symbol")
     @ForeignKey(type = Symbol.class, field = "symbol", output = "symbol")
-    private char _symbol;
+    private String _symbol;
 
     public Symbol symbol;
     public Game game;
 
     public Letter(){}
+
+    public String get_symbol()
+    {
+        return _symbol;
+    }
+
+    public Integer get_letterId()
+    {
+        return _letterId;
+    }
 }

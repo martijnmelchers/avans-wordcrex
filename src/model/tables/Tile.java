@@ -25,4 +25,10 @@ public class Tile {
 
     public Tile() {}
 
+    public Tile(Integer x, Integer y, model.TileType tileType){
+        _xPosition = x;
+        _yPosition = y;
+        _tileType = tileType.toString();
+    }
+
 }

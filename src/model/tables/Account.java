@@ -1,6 +1,7 @@
 package model.tables;
 
 import model.database.annotations.Column;
+import model.database.annotations.Nullable;
 import model.database.annotations.PrimaryKey;
 import model.database.annotations.Table;
 
@@ -20,4 +21,6 @@ public class Account {
         this.username = username;
         this.password = password;
     }
+
+    public String getUsername(){ return username; }
 }

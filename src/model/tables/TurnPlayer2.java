@@ -1,9 +1,6 @@
 package model.tables;
 
-import model.database.annotations.Column;
-import model.database.annotations.ForeignKey;
-import model.database.annotations.PrimaryKey;
-import model.database.annotations.Table;
+import model.database.annotations.*;
 
 @Table("turnplayer2")
 public class TurnPlayer2 {
@@ -28,8 +25,11 @@ public class TurnPlayer2 {
     @Column("score")
     private Integer _score;
 
+    @Nullable
     @Column("turnaction_type")
     private String _turnactionType;
+
+    public Turn turn;
 
     public Integer getGameId() { return _gameId; }
     public Integer getturnId() { return _turnId; }
@@ -38,7 +38,7 @@ public class TurnPlayer2 {
     public Integer getScore() { return  _score; }
     public String getTurnAction() { return _turnactionType; }
 
-    public Turn turn;
+    public TurnPlayer2() {}
 
     public TurnPlayer2(Integer gameId, Integer turnId, String usernamePlayer2, Integer score, Integer bonus, String turnactionType ) {
         _gameId = gameId;

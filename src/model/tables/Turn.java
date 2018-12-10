@@ -19,6 +19,11 @@ public class Turn {
 
     public Game game;
 
+    public int getTurnId() { return _turnId; }
+    public int getGameId() { return _gameId; }
+
+    public Turn() {}
+
     public Turn(Integer gameId, Integer turnId) {
         _gameId = gameId;
         _turnId = turnId;
