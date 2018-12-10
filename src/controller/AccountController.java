@@ -1,7 +1,7 @@
 package controller;
 
 import model.AccountModel;
-import model.helper.ErrorHandler;
+import model.helper.Log;
 import view.LoginView.LoginView;
 import view.RegisterView.RegisterView;
 
@@ -49,7 +49,7 @@ public class AccountController extends Controller
         try {
             navigate("loginView", 350, 550);
         } catch (IOException e) {
-            ErrorHandler.handle(e);
+            Log.error(e, true);
         }
 
         LoginView loginView = getViewCasted();

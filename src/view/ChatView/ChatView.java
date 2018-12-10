@@ -2,23 +2,27 @@ package view.ChatView;
 
 import controller.ChatController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import model.DocumentSession;
+import model.GameSession;
+import model.helper.Log;
+import model.tables.Account;
 import model.tables.Chatline;
 import view.View;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ChatView extends View {
 
-    private ChatController _controller = new ChatController();
+    private ChatController _controller;
+    private GameSession _session;
 
     @FXML
     private Pane messagesVbox;
@@ -32,8 +36,13 @@ public class ChatView extends View {
     @FXML
     private TextField messageField;
 
+    public ChatView() {
+        _controller = new ChatController();
+        _session = new GameSession();
+    }
 
     public void initialize() {
+        _session.setSession(new Account("bookowner", "no"));
         displayOpponentsName();
         displayMessages();
     }
@@ -52,33 +61,22 @@ public class ChatView extends View {
     }
 
     private void displayMessage(Chatline chatline) {
-        // create vbox for a single message
-        VBox messageVBox = new VBox();
-        messageVBox.setPrefWidth(200);
-        messageVBox.setStyle("-fx-background-color: #800080;");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MessageView.fxml"));
 
-        if(chatline.account.getUsername().equals(DocumentSession.getPlayerUsername())) {
-           // messageVBox.getStyleClass().add("Chat-Message-Container-Right");
-        } else {
-           // messageVBox.getStyleClass().add("Chat-Message-Container-Left");
+            AnchorPane messagePane = loader.load();
+
+            MessageView messageViewController = loader.getController();
+
+            messageViewController.setMessageLabel(chatline.getMessage());
+            messageViewController.setMomentLabel(chatline.getMoment().toString());
+
+            messagesVbox.getChildren().add(messagePane);
+        } catch (IOException e) {
+            Log.error(e);
         }
 
-        // create text for message
-        Text message = new Text();
-        message.setText(chatline.getMessage());
-        message.getStyleClass().add("Chat-Message");
 
-        // create text for moment
-        Text moment = new Text();
-        moment.setText(chatline.getMoment().toString());
-        moment.getStyleClass().add("Chat-Moment");
-
-        // insert the message and moment into the vbox
-        messageVBox.getChildren().add(message);
-        messageVBox.getChildren().add(moment);
-
-        // insert vbox into vbox for all the messages
-        messagesVbox.getChildren().add(messageVBox);
     }
 
     public void sendMessage() {
@@ -87,11 +85,8 @@ public class ChatView extends View {
         if (!message.isEmpty()) {
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
-            // TEST
-            System.out.println(timestamp);
-
             // TODO: insert gameid dynamically
-            Chatline chatline = new Chatline(DocumentSession.getPlayerUsername(), 502, timestamp, message);
+            Chatline chatline = new Chatline(_session.getUsername(), 502, timestamp, message);
             _controller.sendChatline(chatline);
 
             messageField.clear();
@@ -99,7 +94,7 @@ public class ChatView extends View {
         }
     }
 
-    public void onEnter(javafx.event.ActionEvent actionEvent) {
+    public void onEnter() {
         sendMessage();
     }
 
