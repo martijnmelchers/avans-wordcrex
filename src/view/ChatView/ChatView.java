@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import model.GameSession;
+import model.helper.Log;
 import model.tables.Account;
 import model.tables.Chatline;
 import view.View;
@@ -72,7 +73,7 @@ public class ChatView extends View {
 
             messagesVbox.getChildren().add(messagePane);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.error(e);
         }
 
 
@@ -104,6 +105,6 @@ public class ChatView extends View {
 
     @Override
     protected void loadFinished() {
-        System.out.println("Load is finished!");
+
     }
 }
