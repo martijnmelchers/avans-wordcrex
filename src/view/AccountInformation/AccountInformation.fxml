@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AccountInformation.AccountInformation">
+<GridPane alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AccountInformation.AccountInformation">
     <stylesheets>
         <URL value="@../css/Main.css" />
     </stylesheets>
@@ -29,12 +29,12 @@
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
     </Label>
-    <TextField fx:id="password" focusTraversable="false" promptText="Wachtwoord" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+    <TextField fx:id="password" focusTraversable="false" maxWidth="400" promptText="Wachtwoord" GridPane.halignment="CENTER" GridPane.rowIndex="3">
         <GridPane.margin>
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
     </TextField>
-    <TextField fx:id="confirmationPassword" focusTraversable="false" promptText="Herhaal wachtwoord" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+    <TextField fx:id="confirmationPassword" focusTraversable="false" maxWidth="400" promptText="Herhaal wachtwoord" GridPane.halignment="CENTER" GridPane.rowIndex="4">
         <GridPane.margin>
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
@@ -59,7 +59,7 @@
       <ColumnConstraints hgrow="ALWAYS" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints />
+      <RowConstraints prefHeight="200" />
       <RowConstraints />
       <RowConstraints />
       <RowConstraints />

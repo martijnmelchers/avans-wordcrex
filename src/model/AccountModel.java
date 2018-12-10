@@ -88,7 +88,7 @@ public class AccountModel {
 
         try {
             GameSession.setRole(_db.select(AccountInfo.class, clauses).get(0).role);
-            return GameSession.getRole().getRoleToString();
+            return GameSession.getRole().getRole();
         } catch (Exception e) {
             return null;
         }

@@ -13,5 +13,5 @@ public class Role {
 
     public Role(){}
 
-    public String getRoleToString(){return role;}
+    public String getRole(){return role;}
 }
