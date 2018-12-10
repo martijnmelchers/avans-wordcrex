@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import model.tables.Account;
 import model.tables.AccountInfo;
+import model.tables.Role;
 import view.View;
 import view.moderator.ModeratorView;
 
@@ -89,15 +90,15 @@ public class AdminView extends View {
         roleViewItems.clear();
 
         List<AccountInfo> userList = this.controller.getUserList();
+        List<Role> roleList = this.controller.getRoles();
+
+        for(Role role: roleList){
+            roleViewItems.add(role.getRole());
+        }
 
         for (AccountInfo user: userList){
-
             if(!listViewItems.contains(user.account.getUsername())){
                 listViewItems.add(user.account.getUsername());
-            }
-
-            if(!roleViewItems.contains(user.role.getRole())){
-                roleViewItems.add(user.role.getRole());
             }
         }
     }

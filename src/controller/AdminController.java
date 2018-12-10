@@ -4,6 +4,7 @@ import model.AdminModel;
 import model.helper.Log;
 import model.tables.Account;
 import model.tables.AccountInfo;
+import model.tables.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +45,9 @@ public class AdminController extends Controller {
 
     public List<AccountInfo> getRoles(String username){
         return this.adminModel.getRoles(username);
+    }
+
+    public List<Role> getRoles(){
+        return this.adminModel.getAllRoles();
     }
 }

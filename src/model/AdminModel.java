@@ -7,6 +7,8 @@ import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.helper.Log;
 import model.tables.AccountInfo;
+import model.tables.Role;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +73,20 @@ public class AdminModel {
         }
     }
 
+
+    public List<Role> getAllRoles(){
+        List<Role> roles = new ArrayList<>();
+
+        try{
+            roles = this._db.select(Role.class);
+        }
+
+        catch(Exception e ){
+            Log.error(e);
+        }
+
+        return roles;
+    }
     public List<AccountInfo> getRoles(String username){
         List<AccountInfo> roles = new ArrayList<>();
         var clauses = new ArrayList<Clause>();
