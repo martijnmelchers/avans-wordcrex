@@ -32,7 +32,7 @@ public class LoginView extends View {
 
     public void registerClicked() {
         try {
-            this.getController(AccountController.class).navigate("RegisterView.fxml", 350, 550);
+            this.getController(AccountController.class).navigate("RegisterView", 350, 550);
         } catch (Exception e) {
             ErrorHandler.handle(e);
         }
@@ -44,7 +44,11 @@ public class LoginView extends View {
     }
 
     public void loginSucces() {
-        //TODO: accountController.navigatie("") << Main menu here
+        try {
+            this.getController(AccountController.class).navigate("AccountInformation", 1600, 1200);
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
     }
 
     public void setCredentials(String username, String password) {

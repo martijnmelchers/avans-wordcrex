@@ -19,22 +19,27 @@
             <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
         </padding>
     </Button>
-    <Label fx:id="username" text="Username" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+    <Label id="username" fx:id="username" text="Username" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="1">
         <GridPane.margin>
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
     </Label>
-    <TextField fx:id="password" focusTraversable="false" promptText="Wachtwoord" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+    <Label id="role" fx:id="role" text="Role" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+        <GridPane.margin>
+            <Insets left="25" right="25" top="30" />
+        </GridPane.margin>
+    </Label>
+    <TextField fx:id="password" focusTraversable="false" promptText="Wachtwoord" GridPane.halignment="CENTER" GridPane.rowIndex="3">
         <GridPane.margin>
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
     </TextField>
-    <TextField fx:id="confirmationPassword" focusTraversable="false" promptText="Herhaal wachtwoord" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+    <TextField fx:id="confirmationPassword" focusTraversable="false" promptText="Herhaal wachtwoord" GridPane.halignment="CENTER" GridPane.rowIndex="4">
         <GridPane.margin>
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
     </TextField>
-    <Button onMouseClicked="#changePassword" text="Wijzig" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+    <Button onMouseClicked="#changePassword" text="Wijzig" GridPane.halignment="CENTER" GridPane.rowIndex="5">
         <GridPane.margin>
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
@@ -45,15 +50,16 @@
          <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
       </padding>
     </Button>
-    <Label fx:id="error" text="Error" textAlignment="CENTER" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="5">
+    <Label fx:id="error" text="Error" textAlignment="CENTER" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="6">
         <GridPane.margin>
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
     </Label>
    <columnConstraints>
-      <ColumnConstraints />
+      <ColumnConstraints hgrow="ALWAYS" />
    </columnConstraints>
    <rowConstraints>
+      <RowConstraints />
       <RowConstraints />
       <RowConstraints />
       <RowConstraints />

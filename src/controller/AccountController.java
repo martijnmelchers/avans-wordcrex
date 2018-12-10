@@ -102,4 +102,9 @@ public class AccountController extends Controller
     {
         return model.getUsername();
     }
+
+    public String getRole()
+    {
+        return model.getRole();
+    }
 }

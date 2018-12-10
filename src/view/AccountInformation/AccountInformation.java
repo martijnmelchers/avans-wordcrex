@@ -4,12 +4,14 @@ import controller.AccountController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.helper.ErrorHandler;
 import view.View;
 
 public class AccountInformation extends View {
 
     private AccountController accountController;
     @FXML private Label username;
+    @FXML private Label role;
     @FXML private Label error;
     @FXML private TextField password;
     @FXML private TextField confirmationPassword;
@@ -17,12 +19,17 @@ public class AccountInformation extends View {
     @Override
     protected void loadFinished()
     {
-        accountController = this.getController(AccountController.class);
+        try {
+            accountController = this.getController(AccountController.class);
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
         getAccountInformation();
     }
 
     private void getAccountInformation()
     {
+        role.setText(accountController.getRole());
         username.setText(accountController.getUsername());
     }
 
@@ -33,7 +40,11 @@ public class AccountInformation extends View {
 
     public void backMain()
     {
-        accountController.navigate("BoardView");
+        try {
+            this.getController(AccountController.class).navigate("MatchOverview");
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
     }
 
     public void showError(String errorMessage)

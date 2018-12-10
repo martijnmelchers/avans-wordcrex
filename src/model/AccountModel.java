@@ -1,11 +1,13 @@
 package model;
 
+import controller.AccountController;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.helper.ErrorHandler;
 import model.tables.Account;
+import model.tables.AccountInfo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -82,5 +84,18 @@ public class AccountModel
     public static String getUsername()
     {
         return AccountModel.username;
+    }
+
+    public String getRole()
+    {
+        var clauses = new ArrayList<Clause>();
+
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, AccountModel.username));
+
+        try {
+            return _db.select(AccountInfo.class, clauses).get(0).role.getRole();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
