@@ -45,8 +45,7 @@ public class BoardView extends View {
     }
 
     @Override
-    protected void loadFinished()
-    {
+    protected void loadFinished() {
 
     }
 }

@@ -1,9 +1,10 @@
-package view.AdminView;
+package view.MainView;
 
 import view.View;
 
-public class AdminView extends View {
-    public AdminView(){
+public class MainView extends View
+{
+    public MainView(){
 
     }
 

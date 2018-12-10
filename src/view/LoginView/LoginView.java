@@ -1,13 +1,14 @@
-package view;
+package view.LoginView;
 
 import controller.AccountController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import model.helper.ErrorHandler;
+import view.View;
 
-public class LoginView extends View
-{
+public class LoginView extends View {
 
     private AccountController accountController;
 
@@ -17,36 +18,36 @@ public class LoginView extends View
 
     @FXML private PasswordField passwordFieldPassword;
 
-    @Override
-    protected void loadFinished()
-    {
-        accountController = this.getController(AccountController.class);
+    protected void loadFinished() {
+        try {
+            accountController = this.getController(AccountController.class);
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
     }
 
-    public void loginClicked()
-    {
-        accountController.checkUserCredentials(textFieldUsername.getText(),passwordFieldPassword.getText());
+    public void loginClicked() {
+        accountController.checkUserCredentials(textFieldUsername.getText(), passwordFieldPassword.getText());
     }
 
-    public void registerClicked()
-    {
-        accountController.navigate("RegisterView", 350, 550);
+    public void registerClicked() {
+        try {
+            this.getController(AccountController.class).navigate("RegisterView.fxml", 350, 550);
+        } catch (Exception e) {
+            ErrorHandler.handle(e);
+        }
     }
 
-    public void showError(String error)
-    {
+    public void showError(String error) {
         labelError.setText(error);
         labelError.setVisible(true);
     }
 
-    public void loginSucces()
-    {
+    public void loginSucces() {
         //TODO: accountController.navigatie("") << Main menu here
-        accountController.navigate("AccountInformation");
     }
 
-    public void setCredentials(String username, String password)
-    {
+    public void setCredentials(String username, String password) {
         textFieldUsername.setText(username);
         passwordFieldPassword.setText(password);
     }

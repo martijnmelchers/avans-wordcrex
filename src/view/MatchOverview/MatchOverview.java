@@ -41,8 +41,7 @@ public class MatchOverview extends View
         _headerTheirTurn = new Header("Hun Beurt");
     }
 
-    public void start()
-    {
+    public void start() throws Exception {
         controller = this.getController(MatchOverviewController.class);
 
         var invitations = new ArrayList<Game>();
@@ -148,8 +147,7 @@ public class MatchOverview extends View
     }
 
     @Override
-    protected void loadFinished()
-    {
+    protected void loadFinished() {
 
     }
 
