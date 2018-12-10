@@ -19,7 +19,7 @@ public class TurnBoardLetter {
     private Integer _gameId;
 
     @Column("turn_id")
-    @ForeignKey(type = Turn.class, field = "turn_id", output = "letter")
+    @ForeignKey(type = Turn.class, field = "turn_id", output = "turn")
     private Integer _turnId;
 
     @Column("tile_x")
@@ -32,6 +32,7 @@ public class TurnBoardLetter {
 
     public Letter letter;
     public Tile tile;
+    public Turn turn;
 
     public TurnBoardLetter() {}
     public TurnBoardLetter(Integer letterId, Integer gameId, Integer turnId, Integer x, Integer y) {

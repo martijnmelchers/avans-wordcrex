@@ -99,22 +99,7 @@ public class GameModel {
 
     private boolean isPlayerOne()
     {
-        try
-        {
-            List<Clause> clauses = new ArrayList<>();
-            clauses.add(new Clause(new TableAlias("game",-1 ), "game_id",CompareMethod.EQUAL ,_gameId ));
-            //clauses.add(new Clause(new TableAlias("game",-1 ), "username_player1",CompareMethod.EQUAL ,DocumentSession.getPlayerUsername() ));
-            List<Game> game = db.select(Game.class, clauses);
-            if(game.size()==1)
-            {
-                return true;
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return false;
+        return _playerName1 == "jaagermeester";
     }
 
     public void waitForPlayer(Task finished)

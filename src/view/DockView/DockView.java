@@ -99,7 +99,7 @@ public class DockView
                     {
                         continue;
                     }
-                    controller.placeTile(row,column ,text.getText(), (int)stackPane.getProperties().get("game_id"));
+                    controller.placeTile(row,column ,text.getText(), (int)stackPane.getProperties().get("id"));
                     hBoxDock.getChildren().remove(stackPane);
                     System.out.println("row:" + row);
                     System.out.println("column:" + column);
@@ -135,8 +135,10 @@ public class DockView
             double currentY = ((b.getMinY() + b.getMaxY())/2);
             double Xdiff = x - currentX;
             double Ydiff = y - currentY;
-            sp.setTranslateX((Xdiff) - 270);
-            sp.setTranslateY((Ydiff) - 9);
+            double extraOffset = (7-hBoxDock.getChildren().size()) * 30;
+            System.out.println( (Xdiff) - 270 +  " " + extraOffset);
+            sp.setTranslateX((Xdiff ) - 180 + extraOffset);
+            sp.setTranslateY((Ydiff) - 39);
         }
         sp.getParent().getParent().toFront();
         return sp;

@@ -7,6 +7,7 @@ import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.helper.Log;
 import model.tables.HandLetter;
+import model.tables.Turn;
 import model.tables.TurnBoardLetter;
 import model.tables.Letter;
 
@@ -81,7 +82,8 @@ public class Dock
             {
                 int randomIndex = new Random().nextInt(notUsed.size());
                 Letter l = notUsed.get(randomIndex);
-                letters[i] = new HandLetter(l.get_letterId(),turnId, gameId);
+                Turn t = new Turn(gameId,turnId);
+                letters[i] = new HandLetter(l.get_letterId(),turnId, gameId,l,t);
             }
         }
 
@@ -121,10 +123,9 @@ public class Dock
             e.printStackTrace();
         }
 
-        String[] ids = usedLetters.stream().map(a->a.letter.get_letterId()).toArray(String[]::new);
+        List<Integer> ids = usedLetters.stream().map(a->a.letter.get_letterId()).collect(Collectors.toList());
         List<Letter> usableLetters = availableLetters.stream()
-                .filter(a-> Arrays.stream(ids).anyMatch(
-                        b-> b.equals(a.get_letterId()+"")))
+                .filter(a-> !ids.contains(a))
                 .collect(Collectors.toList());
 
         return usableLetters;

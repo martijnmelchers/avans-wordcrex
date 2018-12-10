@@ -16,7 +16,7 @@ public class Symbol {
 
     @PrimaryKey
     @Column("symbol")
-    private char _symbol;
+    private String _symbol;
 
     @Column("value")
     private Integer _value;
