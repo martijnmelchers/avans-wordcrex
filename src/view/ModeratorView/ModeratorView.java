@@ -10,6 +10,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.helper.Log;
 import view.View;
 
 import java.util.ArrayList;

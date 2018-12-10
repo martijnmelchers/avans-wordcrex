@@ -3,10 +3,13 @@ package controller;
 
 
 import controller.Controller;
-import model.DocumentSession;
-import model.database.services.Database;
+
+import model.GameSession;
+import model.database.DocumentSession;
+
+import model.helper.Log;
 import model.moderator.ModeratorDictionary;
-import model.helper.ErrorHandler;
+
 
 import java.sql.SQLException;
 
@@ -22,7 +25,7 @@ public class ModeratorController extends Controller {
              Log.error(e);
 
         }
-        //username = ;
+        //username = GameSession.getUsername;
 
     }
 
