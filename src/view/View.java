@@ -10,7 +10,6 @@ public abstract class View {
         application = app;
         loadFinished();
     }
-///needs throw??????? waaat?
     protected <T extends Controller> T getController(Class<T> cType) throws Exception {
         return application.getController(cType);
     }
