@@ -13,11 +13,11 @@ import java.io.IOException;
 public class AccountController extends Controller
 {
 
-    private AccountModel model;
+    private AccountModel _model;
 
     public AccountController()
     {
-        model = new AccountModel();
+        this._model = new AccountModel();
     }
 
     private boolean checkPasswords(String password, String confirmationPassword)
@@ -40,7 +40,7 @@ public class AccountController extends Controller
             return;
         }
 
-        String error = model.registerAccount(username, password);
+        String error = this._model.registerAccount(username, password);
 
         if(!error.equals(""))
         {
@@ -67,7 +67,7 @@ public class AccountController extends Controller
             return;
         }
 
-        Account account = model.getAccount(username, password);
+        Account account = this._model.getAccount(username, password);
 
         if(account == null)
         {
@@ -95,7 +95,7 @@ public class AccountController extends Controller
             return;
         }
 
-        String error = model.changePassword(username, password);
+        String error = this._model.changePassword(username, password);
 
         if(!error.equals(""))
         {
@@ -111,6 +111,6 @@ public class AccountController extends Controller
 
     public String getRole()
     {
-        return model.getRole();
+        return this._model.getRole();
     }
 }

@@ -10,7 +10,7 @@ import view.View;
 
 public class LoginView extends View {
 
-    private AccountController accountController;
+    private AccountController _accountController;
 
     @FXML private Label labelError;
 
@@ -20,14 +20,14 @@ public class LoginView extends View {
 
     protected void loadFinished() {
         try {
-            accountController = this.getController(AccountController.class);
+            this._accountController = this.getController(AccountController.class);
         } catch (Exception e) {
             Log.error(e, true);
         }
     }
 
     public void loginClicked() {
-        accountController.checkUserCredentials(textFieldUsername.getText(), passwordFieldPassword.getText());
+        this._accountController.checkUserCredentials(textFieldUsername.getText(), passwordFieldPassword.getText());
     }
 
     public void registerClicked() {

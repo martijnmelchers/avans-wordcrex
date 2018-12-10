@@ -9,7 +9,7 @@ import view.View;
 
 public class AccountInformation extends View {
 
-    private AccountController accountController;
+    private AccountController _accountController;
     @FXML private Label username;
     @FXML private Label role;
     @FXML private Label error;
@@ -20,7 +20,7 @@ public class AccountInformation extends View {
     protected void loadFinished()
     {
         try {
-            accountController = this.getController(AccountController.class);
+            this._accountController = this.getController(AccountController.class);
         } catch (Exception e) {
             Log.error(e, true);
         }
@@ -29,13 +29,13 @@ public class AccountInformation extends View {
 
     private void getAccountInformation()
     {
-        role.setText(accountController.getRole());
-        username.setText(accountController.getUsername());
+        role.setText(this._accountController.getRole());
+        username.setText(this._accountController.getUsername());
     }
 
     public void changePassword()
     {
-        accountController.changePassword(username.getText(), password.getText(), confirmationPassword.getText());
+        this._accountController.changePassword(username.getText(), password.getText(), confirmationPassword.getText());
     }
 
     public void backMain()

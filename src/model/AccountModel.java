@@ -1,6 +1,5 @@
 package model;
 
-import controller.AccountController;
 import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
@@ -37,7 +36,7 @@ public class AccountModel {
         String lowerPassword = password.toLowerCase();
 
         try {
-            _db.insert(new Account(lowerUsername, lowerPassword));
+            this._db.insert(new Account(lowerUsername, lowerPassword));
             return null;
         } catch (Exception e) {
             Log.error(e, true);
@@ -52,7 +51,7 @@ public class AccountModel {
         clauses.add(new Clause(new TableAlias("account", -1), "password", CompareMethod.EQUAL, password));
 
         try {
-            return _db.select(Account.class, clauses).get(0);
+            return this._db.select(Account.class, clauses).get(0);
         } catch (Exception e) {
             Log.error(e);
             return null;
@@ -70,7 +69,7 @@ public class AccountModel {
 
         try
         {
-            _db.update(new Account(username, lowerPassword));
+            this._db.update(new Account(username, lowerPassword));
             return null;
         }
         catch (Exception e)
@@ -87,7 +86,7 @@ public class AccountModel {
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, GameSession.getUsername()));
 
         try {
-            GameSession.setRole(_db.select(AccountInfo.class, clauses).get(0).role);
+            GameSession.setRole(this._db.select(AccountInfo.class, clauses).get(0).role);
             return GameSession.getRole().getRole();
         } catch (Exception e) {
             return null;
