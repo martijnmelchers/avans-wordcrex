@@ -20,6 +20,8 @@ public class TurnPlayer2
     @Column("username_player2")
     private String _usernamePlayer1;
 
+
+
     @Column("bonus")
     private Integer _bonus;
 
@@ -35,4 +37,12 @@ public class TurnPlayer2
     public TurnPlayer2() {}
 
     public String getTurnActionType(){ return _turnactionType; }
+
+    public Integer getBonus() {
+        return _bonus;
+    }
+
+    public Integer getScore() {
+        return _score;
+    }
 }

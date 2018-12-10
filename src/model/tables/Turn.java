@@ -20,4 +20,9 @@ public class Turn {
     public Game game;
 
     public Turn() {}
+
+    public Integer getTurnID()
+    {
+        return _turnId;
+    }
 }
