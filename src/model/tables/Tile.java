@@ -21,6 +21,16 @@ public class Tile {
     private String _tileType;
 
 
+    public Integer getX()
+    {
+        return  _xPosition;
+    }
+
+    public Integer getY()
+    {
+        return  _yPosition;
+    }
+
     public TileType tileType;
 
     public Tile() {}

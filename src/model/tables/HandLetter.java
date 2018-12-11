@@ -26,6 +26,11 @@ public class HandLetter {
     public Letter letter;
     public Turn turn;
 
+    public Integer get_letterId()
+    {
+        return _letterId;
+    }
+
     public HandLetter() {}
 
     public HandLetter(Integer _letterId, Integer _turnId, Integer _gameId, Letter letter, Turn turn)

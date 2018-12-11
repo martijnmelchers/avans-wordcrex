@@ -9,10 +9,8 @@ import model.database.services.Database;
 import model.helper.Log;
 import model.tables.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameModel {
 
@@ -167,10 +165,12 @@ public class GameModel {
         if(bothPlayersFinished())//players both finished
         {
             //submit tiles of the winner to the database table:'turnboardletters'
-            submitWinnerBoard(checkInfo);
+            submitWinnerBoard();
 
             // Create new turn
             createNewTurn();
+
+            removeUsedLettersInDock(checkInfo);
 
             //refill winners hand + insert hand to database
             dock.refill(_gameId,_turnId);
@@ -189,6 +189,17 @@ public class GameModel {
                 }
             });
         }
+    }
+
+    public void removeUsedLettersInDock(CheckInfo info)
+    {
+        Vector2[] coords = info.getCoordinates();
+        ArrayList<Integer> usedLetterIds = new ArrayList<Integer>();
+        for(Vector2 coord : coords)
+        {
+            usedLetterIds.add(_board.getTiles()[coord.getX()][coord.getY()].getLetterType().getid());
+        }
+        dock.removeUsedLetters(usedLetterIds);
     }
 
     private void createNewTurn()
@@ -287,11 +298,79 @@ public class GameModel {
 
     }
 
-    private void submitWinnerBoard(CheckInfo checkInfo)
+    private String getWinner()
     {
-        ArrayList<TurnBoardLetter> turnBoardLetters = new ArrayList<>();
-        for(Vector2 vector2 : checkInfo.getCoordinates())
+        List<Clause> player1Clauses = new ArrayList<>();
+        List<Clause> player2Clauses = new ArrayList<>();
+        player1Clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
+        player1Clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+        player2Clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
+        player2Clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+        try
         {
+            List<TurnPlayer1> turnPlayer1 = db.select(TurnPlayer1.class, player1Clauses);
+            List<TurnPlayer2> turnPlayer2 = db.select(TurnPlayer2.class, player2Clauses);
+
+            if(!(turnPlayer1.size()<1)&&!(turnPlayer2.size()<1))
+            {
+                int scoreP1 = turnPlayer1.get(0).getScore() + turnPlayer1.get(0).getBonus();
+                int scoreP2 = turnPlayer2.get(0).getScore() + turnPlayer2.get(0).getBonus();
+                if(scoreP1 > scoreP2 )
+                {
+                    return "player1";
+                }
+                else
+                {
+                    return "player2";
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void submitWinnerBoard()
+    {
+        String winner = getWinner();
+
+        List<Clause> clauses = new ArrayList<>();
+        clauses.add(new Clause( new TableAlias("Board" + winner,-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
+        clauses.add(new Clause( new TableAlias("Board" + winner,-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+
+        Vector2[] coords;
+
+        try
+        {
+            if(winner.equals("player1"))
+            {
+                List<BoardPlayer1> boardPlayer1 = db.select(BoardPlayer1.class, clauses);
+                coords = boardPlayer1.stream().map(a-> new Vector2(a.tile.getX(),a.tile.getY())).toArray(Vector2[]::new);
+            }
+            else
+            {
+                List<BoardPlayer2> boardPlayer2 = db.select(BoardPlayer2.class, clauses);
+                coords = boardPlayer2.stream().map(a-> new Vector2(a.tile.getX(),a.tile.getY())).toArray(Vector2[]::new);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.error(e,false );
+            return;
+        }
+
+        //filter because database returns double results (autojoins)
+
+        ArrayList<TurnBoardLetter> turnBoardLetters = new ArrayList<>();
+        for(Vector2 vector2 : coords)
+        {
+            if(turnBoardLetters.stream().anyMatch(a-> a.getX() == vector2.getX()&& a.getY() == vector2.getY() ))
+            {
+                continue;
+            }
             Tile tile = _board.getTiles()[vector2.getX()][vector2.getY()];
             TurnBoardLetter turnBoardLetter = new TurnBoardLetter(tile.getLetterType().getid(),_gameId,_turnId,vector2.getX(),vector2.getY());
             turnBoardLetters.add(turnBoardLetter);

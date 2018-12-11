@@ -155,6 +155,29 @@ public class Dock
 
     }
 
+    public void removeUsedLetters(List<Integer> ids)
+    {
+        for(Integer id : ids)
+        {
+            HandLetter handLetter;
+            try
+            {
+                 handLetter = Arrays.stream(this.letters)
+                         .filter(a->a != null)
+                         .filter(a->a.letter.get_letterId() == id)
+                         .collect(Collectors.toList()).get(0);
+
+            }
+            catch (Exception e)
+            {
+                new Exception("Letter id not found").printStackTrace();
+                continue;
+            }
+            int index = Arrays.stream(letters).collect(Collectors.toList()).indexOf(handLetter);
+            letters[index] = null;
+        }
+    }
+
     private boolean isLetterSetPresent(int gameId)
     {
         ArrayList<Clause> clauses = new ArrayList<>();
