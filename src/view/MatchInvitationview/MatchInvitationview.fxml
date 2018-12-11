@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
 
 <AnchorPane prefHeight="463.0" prefWidth="600.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchInvitationview.MatchInvitationview">
-
+   <children>
+      <TextField layoutX="437.0" layoutY="14.0" promptText="Zoek speler" />
+      <ListView layoutX="14.0" layoutY="39.0" prefHeight="412.0" prefWidth="574.0" />
+   </children>
 </AnchorPane>
