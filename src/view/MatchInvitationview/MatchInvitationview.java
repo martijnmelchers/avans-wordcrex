@@ -40,7 +40,11 @@ public class MatchInvitationview extends View{
         } catch (Exception e) {
             Log.error(e);
         }
-        this.getController(MatchFixerController.class).navigate("MatchOverview");
+        try {
+            this.getController(MatchFixerController.class).navigate("MatchOverview");
+        } catch (Exception e) {
+            Log.error(e);
+        }
     }
 
     @Override
