@@ -53,7 +53,6 @@ public class AccountModel {
         try {
             return this._db.select(Account.class, clauses).get(0);
         } catch (Exception e) {
-            Log.error(e);
             return null;
         }
     }
