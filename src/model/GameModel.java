@@ -112,7 +112,7 @@ public class GameModel {
 
     private boolean isPlayerOne()
     {
-        return _playerName1 == "jagermeester";
+        return _playerName1 == "Lidewij";
     }
 
     public void waitForPlayer(Task finished)

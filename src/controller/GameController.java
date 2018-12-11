@@ -42,7 +42,7 @@ public class GameController extends Controller{
     public void submitTurn(){
         CheckInfo info = _gameModel.checkBoard();
 
-        if(info == null) return;
+        if(info == null) return; //TODO: create error
 
         _gameModel.submitTurn(info);
     }
