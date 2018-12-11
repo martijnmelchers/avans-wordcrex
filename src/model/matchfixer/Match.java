@@ -33,9 +33,14 @@ public class Match {
         this.username_player1 = username_player1;
         this.username_player2 = username_player2;
         this.answer_player2 = answer_player2;
+        this.username_winner = null;
     }
     public boolean Participates(String name) {
-        return (username_player1 == name || username_player2 == name);
+
+        return (IsOngoing() && username_player1 == name || username_player2 == name  );
+    }
+    public boolean IsOngoing(){
+        return (game_state == "playing" || game_state == "request" && answer_player2 != "rejected");
     }
 
 }

@@ -33,6 +33,15 @@ public class MatchInvitationview extends View{
             Log.error(e);
         }
     }
+    @FXML
+    private void RequestGame(){
+        try {
+            this.getController(MatchFixerController.class).RequestGame(PlayerListView.getSelectionModel().getSelectedItem().toString());
+        } catch (Exception e) {
+            Log.error(e);
+        }
+        this.getController(MatchFixerController.class).navigate("MatchOverview");
+    }
 
     @Override
     protected void loadFinished() {

@@ -11,4 +11,7 @@ public class MatchFixerController extends Controller {
     public String[] SearchPlayers(String name){
         return matchfixer.searchPlayers(name).stream().map(x -> x.getUsername()).toArray(String[]::new);
     }
+    public void RequestGame(String player){
+        matchfixer.invitePlayer(player);
+    }
 }

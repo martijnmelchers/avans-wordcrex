@@ -42,7 +42,8 @@ public class Matchfixer {
 
     public boolean invitePlayer(String Player){
         try {
-            dB.update(new Match("request","NL", GameSession.getUsername(),Player,"unknown"));
+            Match temp = new Match("request","NL", GameSession.getUsername(),Player,"unknown");
+            dB.insert(temp);
         } catch (Exception e) {
             Log.error(e);
         }
