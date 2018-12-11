@@ -3,8 +3,8 @@ package model.database.services;
 import model.database.classes.Clause;
 import model.database.classes.Join;
 import model.database.classes.Select;
-import model.database.classes.TableAlias;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,18 +25,13 @@ class QueryBuilder {
     }
 
     static String buildInsert(String table, List<String> columns, List<Object> values) throws Exception {
-        var insertString = new StringBuilder();
+        var correctValues = new ArrayList<String>();
 
         for (Object object : values) {
-            boolean addComma = true;
-
-            if (values.indexOf(object) == values.size() - 1)
-                addComma = false;
-
-            insertString.append(ObjectHelper.objectToSQL(object)).append(addComma ? ", " : "");
+            correctValues.add(ObjectHelper.objectToSQL(object));
         }
 
-        return String.format("INSERT INTO %s (`%s`) VALUES (%s)", table, String.join("`, `", columns), insertString);
+        return String.format("INSERT INTO %s (`%s`) VALUES (%s)", table, String.join("`, `", columns), String.join(", ", correctValues));
     }
 
     static String buildUpdate(String table, HashMap<String, Object> updatedValues, List<Clause> clauses) throws Exception {
