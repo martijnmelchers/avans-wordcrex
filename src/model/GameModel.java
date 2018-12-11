@@ -112,7 +112,8 @@ public class GameModel {
 
     private boolean isPlayerOne()
     {
-        return _playerName1 == "Lidewij";
+        return true;
+     //   return _playerName1 == "Lidewij";
     }
 
     public void waitForPlayer(Task finished)
@@ -262,7 +263,8 @@ public class GameModel {
         var clauses = new ArrayList<Clause>();
 
         try{
-            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId + 1));
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _turnId));
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId));
 
             var results = db.select(TurnPlayer1.class, clauses);
 
@@ -286,7 +288,7 @@ public class GameModel {
             //TODO in database tileType moet je kijke nwat -- en * zijn (default?)
             for (int i = 0; i < c.length; i++){
 
-                int letterId = tiles[i].getLetterType().getid();
+                int letterId = _board.getTiles()[c[i].getX()][c[i].getY()].getLetterType().getid();
                 db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 2
             }
 

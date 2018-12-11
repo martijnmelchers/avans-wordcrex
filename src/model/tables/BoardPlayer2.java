@@ -25,20 +25,21 @@ public class BoardPlayer2 {
 
     @PrimaryKey
     @Column("letter_id")
-    @ForeignKey(type = Turn.class, field = "letter_id", output = "turn")
+    @ForeignKey(type = Letter.class, field = "letter_id", output = "letter")
     private Integer _letterId;
 
     @Column("tile_x")
-    @ForeignKey(type = Tile.class, field = "tile_x", output = "tile")
+    @ForeignKey(type = Tile.class, field = "x", output = "tile")
     private Integer _tileX;
 
     @Column("tile_y")
-    @ForeignKey(type = Tile.class, field = "tile_y", output = "tile")
+    @ForeignKey(type = Tile.class, field = "y", output = "tile")
     private Integer _tileY;
 
     public TurnPlayer2 turnPlayer2;
     public Turn turn;
     public Tile tile;
+    public Letter letter;
 
     public BoardPlayer2() {}
 

@@ -10,6 +10,7 @@ import model.tables.TurnBoardLetter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Board {
 
@@ -80,7 +81,7 @@ public class Board {
         _tiles[vector2.getX()][vector2.getY()] = decideTileType(vector2);
         _tiles[vector2.getX()][vector2.getY()].setState(TileState.LOCKED);
 
-        _placedCoords.remove(vector2);
+        _placedCoords.remove(_placedCoords.stream().filter(a->a.getY() == vector2.getY()&&a.getX() == vector2.getX()).collect(Collectors.toList()).get(0));
         return prevTile;
     }
 

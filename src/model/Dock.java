@@ -146,7 +146,8 @@ public class Dock
 
         try
         {
-            db.insert(Arrays.stream(letters).filter(a-> a!=null).collect(Collectors.toList()));
+            var let = Arrays.stream(letters).filter(a-> a!=null).collect(Collectors.toList());
+            db.insert(let);
         }
         catch (Exception e)
         {
