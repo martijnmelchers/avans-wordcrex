@@ -4,6 +4,6 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.control.Label?>
-<AnchorPane fx:id="anchor" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchOverview.MatchView">
-            <Label textAlignment="CENTER">test</Label>
+<AnchorPane fx:id="anchor" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+            <Label fx:id="" textAlignment="CENTER">test</Label>
 </AnchorPane>
