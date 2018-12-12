@@ -2,44 +2,40 @@ package model;
 
 import model.tables.Account;
 import model.tables.Game;
-import model.tables.Role;
 
 public final class GameSession {
-    private static Account account;
-    private static Role role;
-    private static Game game;
+    private Account account;
+    private Game game;
 
-    public static void setSession(Account user) { GameSession.account = user; }
-
-    public static void endSession() {
-        GameSession.account = null;
+    public void setSession(Account user) {
+        this.account = user;
     }
 
-    public static boolean loggedIn() {
-        return GameSession.account != null;
+    public void endSession() {
+        this.account = null;
     }
 
-    public static String getUsername() {
-        return GameSession.account.getUsername();
+    public boolean loggedIn() {
+        return this.account != null;
     }
 
-    public static boolean inGame() {
-        return GameSession.game != null;
+    public String getUsername() {
+        return this.account.getUsername();
     }
 
-    public static  Game getGame() {
-        return GameSession.game;
+    public boolean inGame() {
+        return this.game != null;
     }
 
-    public static void setGame(Game game) {
-        GameSession.game = game;
+    public Game getGame() {
+        return this.game;
     }
 
-    public static void exitGame() {
-        GameSession.game = null;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
-    public static void setRole(Role role) { GameSession.role = role; }
-
-    public static Role getRole() { return GameSession.role; }
+    public void exitGame() {
+        this.game = null;
+    }
 }

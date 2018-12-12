@@ -1,23 +1,20 @@
 package controller;
 
 import model.AccountModel;
-import model.GameSession;
 import model.helper.Log;
-import model.tables.Account;
 import view.LoginView.LoginView;
 import view.RegisterView.RegisterView;
-import view.AccountInformation.AccountInformation;
 
 import java.io.IOException;
 
 public class AccountController extends Controller
 {
 
-    private AccountModel _model;
+    private AccountModel model;
 
     public AccountController()
     {
-        this._model = new AccountModel();
+        model = new AccountModel();
     }
 
     private boolean checkPasswords(String password, String confirmationPassword)
@@ -27,6 +24,7 @@ public class AccountController extends Controller
 
     public void registerUser(String username, String password, String confirmationPassword)
     {
+
         RegisterView registerView = getViewCasted();
         if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
         {
@@ -40,7 +38,7 @@ public class AccountController extends Controller
             return;
         }
 
-        String error = this._model.registerAccount(username, password);
+        String error = model.registerAccount(username, password);
 
         if(!error.equals(""))
         {
@@ -67,50 +65,12 @@ public class AccountController extends Controller
             return;
         }
 
-        Account account = this._model.getAccount(username, password);
-
-        if(account == null)
+        if(model.getAccount(username,password ) == null)
         {
             loginView.showError("Inloggegevens onjuist");
             return;
         }
 
-        GameSession.setSession(account);
-
         loginView.loginSucces();
-    }
-
-    public void changePassword(String username, String password, String confirmationPassword)
-    {
-        AccountInformation accountInformation = getViewCasted();
-        if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
-        {
-            accountInformation.showError("Vul alle velden in");
-            return;
-        }
-
-        if(!checkPasswords(password,confirmationPassword ))
-        {
-            accountInformation.showError("De wachtwoorden komen niet overeen");
-            return;
-        }
-
-        String error = this._model.changePassword(username, password);
-
-        if(!error.equals(""))
-        {
-            accountInformation.showError(error);
-            return;
-        }
-    }
-
-    public String getUsername()
-    {
-        return GameSession.getUsername();
-    }
-
-    public String getRole()
-    {
-        return this._model.getRole();
     }
 }

@@ -12,18 +12,23 @@ import java.io.IOException;
 
 public class RegisterView extends View
 {
-    private AccountController _accountController;
+
+
+
+    private AccountController accountController;
 
     @FXML private Label labelError;
+
     @FXML private PasswordField passwordFieldPassword;
     @FXML private PasswordField passwordFieldConfirmationPassword;
+
     @FXML private TextField textFieldUsername;
 
-    @Override
+
     protected void loadFinished()
     {
         try {
-            this._accountController = this.getController(AccountController.class);
+            accountController = this.getController(AccountController.class);
         } catch (Exception e) {
             Log.error(e, true);
         }
@@ -32,7 +37,7 @@ public class RegisterView extends View
     public void backClicked()
     {
         try {
-            this._accountController.navigate("LoginView", 350, 550);
+            accountController.navigate("LoginView", 350, 550);
         } catch (IOException e) {
             Log.error(e, true);
         }
@@ -40,7 +45,7 @@ public class RegisterView extends View
 
     public void registerClicked()
     {
-        this._accountController.registerUser(textFieldUsername.getText(), passwordFieldPassword.getText(),passwordFieldConfirmationPassword.getText());
+        accountController.registerUser(textFieldUsername.getText(), passwordFieldPassword.getText(),passwordFieldConfirmationPassword.getText());
     }
 
     public void showError(String error)

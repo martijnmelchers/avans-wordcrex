@@ -10,29 +10,33 @@ import view.View;
 
 public class LoginView extends View {
 
-    private AccountController _accountController;
+    private AccountController accountController;
 
-    @FXML private Label labelError;
+    @FXML
+    private Label labelError;
 
-    @FXML private TextField textFieldUsername;
+    @FXML
+    private TextField textFieldUsername;
 
-    @FXML private PasswordField passwordFieldPassword;
+    @FXML
+    private PasswordField passwordFieldPassword;
+
 
     protected void loadFinished() {
         try {
-            this._accountController = this.getController(AccountController.class);
+            accountController = this.getController(AccountController.class);
         } catch (Exception e) {
             Log.error(e, true);
         }
     }
 
     public void loginClicked() {
-        this._accountController.checkUserCredentials(textFieldUsername.getText(), passwordFieldPassword.getText());
+        accountController.checkUserCredentials(textFieldUsername.getText(), passwordFieldPassword.getText());
     }
 
     public void registerClicked() {
         try {
-            this.getController(AccountController.class).navigate("RegisterView", 350, 550);
+            this.getController(AccountController.class).navigate("RegisterView.fxml", 350, 550);
         } catch (Exception e) {
             Log.error(e, true);
         }
@@ -44,11 +48,8 @@ public class LoginView extends View {
     }
 
     public void loginSucces() {
-        try {
-            this.getController(AccountController.class).navigate("MatchOverview", 1600, 1200);
-        } catch (Exception e) {
-            Log.error(e, true);
-        }
+
+        //TODO: accountController.navigatie("") << Main menu here
     }
 
     public void setCredentials(String username, String password) {
