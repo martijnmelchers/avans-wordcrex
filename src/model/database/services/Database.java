@@ -312,6 +312,7 @@ public class Database {
 
                 String value = data.getString(combinedName);
 
+
                 try {
                     var customParser = ObjectHelper.SQLToObject(field, data, combinedName);
 
@@ -321,6 +322,9 @@ public class Database {
                         field.set(dto, customParser);
                 } catch (Exception e) {
                     Log.error(e);
+                    if (field.isAnnotationPresent(Nullable.class))
+                        continue;
+
                     throw new Exception("Could not parse field " + combinedName + " to type " + field.getType() + ". This could be caused because the type is primitive, has no constructor or has no custom parser.");
                 }
 
