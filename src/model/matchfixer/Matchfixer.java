@@ -42,6 +42,7 @@ public class Matchfixer {
         try {
             Match temp = new Match("request", "NL", GameSession.getUsername(), Player, "unknown");
             dB.insert(temp);
+            return true;
         } catch (Exception e) {
             Log.error(e);
         }
