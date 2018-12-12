@@ -1,6 +1,7 @@
 package controller;
 
 import model.matchfixer.Matchfixer;
+import model.matchfixer.Player;
 
 public class MatchFixerController extends Controller {
     private Matchfixer matchfixer;
@@ -9,7 +10,7 @@ public class MatchFixerController extends Controller {
         this.matchfixer = new Matchfixer();
     }
     public String[] SearchPlayers(String name){
-        return matchfixer.searchPlayers(name).stream().map(x -> x.getUsername()).toArray(String[]::new);
+        return matchfixer.searchPlayers(name).stream().map(Player::getUsername).toArray(String[]::new);
     }
     public void RequestGame(String player){
         matchfixer.invitePlayer(player);
