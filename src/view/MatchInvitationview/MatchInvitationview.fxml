@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="463.0" prefWidth="600.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchInvitationview.MatchInvitationview">
+<AnchorPane prefHeight="459.0" prefWidth="378.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchInvitationview.MatchInvitationview">
    <children>
-      <TextField fx:id="SearchBar" layoutX="437.0" layoutY="14.0" onKeyReleased="#Search" promptText="Zoek speler" />
-      <ListView fx:id="PlayerListView" layoutX="14.0" layoutY="39.0" prefHeight="412.0" prefWidth="574.0" />
+      <TextField fx:id="SearchBar" layoutX="217.0" layoutY="14.0" onKeyReleased="#Search" promptText="Zoek speler" />
+      <ListView fx:id="PlayerListView" layoutX="14.0" layoutY="35.0" prefHeight="369.0" prefWidth="347.0" />
+      <Button layoutX="13.0" layoutY="413.0" mnemonicParsing="false" onAction="#RequestGame" prefHeight="34.0" prefWidth="347.0" text="Daag uit !" />
    </children>
 </AnchorPane>
