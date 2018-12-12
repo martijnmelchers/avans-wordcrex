@@ -121,8 +121,15 @@ ScrollPane{
     -fx-font-size: 14;
 }
 
+.Chat-Moment {
+    -fx-font-size: 10;
 }
-BoardGridPane{
-    display: GridPane;
-    -fx-background-color: #383093;
+
+#btBack {
+    -fx-background-color: transparent;
+    -fx-font-size: 24;
+}
+
+#username, #role {
+    -fx-font-size: 20;
 }
