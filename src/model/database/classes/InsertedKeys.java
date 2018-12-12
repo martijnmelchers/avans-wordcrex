@@ -3,7 +3,6 @@ package model.database.classes;
 public class InsertedKeys {
     private String table;
     private String column;
-    private String originColumn;
     private Object value;
 
     public InsertedKeys(String table, String column, Object value) {

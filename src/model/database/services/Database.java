@@ -90,6 +90,7 @@ public class Database {
         /* Store the keys to insert and values separately */
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<Object> values = new ArrayList<>();
+        ArrayList<String> expectedKeys = new ArrayList<>();
         ArrayList<InsertedKeys> keys = new ArrayList<>();
         boolean hasGeneratedId = false;
 
@@ -103,9 +104,13 @@ public class Database {
             /* If the field is auto increment, we don't have to insert a value */
             if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null) {
                 hasGeneratedId = true;
+                expectedKeys.add(this.getColumnName(field));
                 continue;
             }
 
+
+            if (field.isAnnotationPresent(Nullable.class) && field.get(item) == null)
+                continue;
 
 
             /* If the field is a foreign key to another table we have to create that first. */
@@ -173,11 +178,10 @@ public class Database {
 
         if (hasGeneratedId) {
             var generatedKeys = statement.getGeneratedKeys();
-            var metadata = statement.getMetaData();
             int size = 0;
             while (generatedKeys.next()) {
+                keys.add(new InsertedKeys(table, expectedKeys.get(size), generatedKeys.getInt(size + 1)));
                 size++;
-                keys.add(new InsertedKeys(metadata.getTableName(size + 1), metadata.getColumnName(size + 1), generatedKeys.getInt(size + 1)));
             }
 
             if (size == 0)
