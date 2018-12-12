@@ -1,5 +1,6 @@
 package model;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import model.database.DocumentSession;
 import model.database.classes.Clause;
@@ -129,12 +130,13 @@ public class GameModel {
                     if(timer != null)
                     {
                         timer.cancel();
+                        timer.purge();
                     }
 
                 }
             }
         };
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.schedule(task, 3000,3000);
     }
 
@@ -180,6 +182,10 @@ public class GameModel {
 
             //refill winners hand + insert hand to database
             dock.refill(_gameId,_turnId);
+
+            _board.getBoardFromDatabase(_gameId,_turnId);
+
+            onEndTurn.run();
         }
         else // other player not finished
         {
@@ -189,9 +195,15 @@ public class GameModel {
                 protected Object call() // This gets called when other player is ready
                 {
                     // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
-                    _board.getBoardFromDatabase(_gameId,_turnId);
                     dock.update(_gameId,_turnId);// update hand
-                    onEndTurn.run();
+                    _board.getBoardFromDatabase(_gameId,_turnId);
+                    Platform.runLater(new Runnable(){
+                        @Override
+                        public void run()
+                        {
+                            onEndTurn.run();
+                        }
+                    });
                     return null;
                 }
             });

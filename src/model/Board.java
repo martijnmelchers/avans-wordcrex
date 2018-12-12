@@ -76,7 +76,6 @@ public class Board {
 
         _tiles[vector2.getX()][vector2.getY()] = decideTileType(vector2);
         _tiles[vector2.getX()][vector2.getY()].setState(TileState.LOCKED);
-
         _placedCoords.remove(_placedCoords.stream().filter(a->a.getY() == vector2.getY()&&a.getX() == vector2.getX()).collect(Collectors.toList()).get(0));
         return prevTile;
     }
