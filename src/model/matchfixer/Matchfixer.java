@@ -29,7 +29,7 @@ public class Matchfixer {
         }
         playersLike = new ArrayList<Clause>();
         playersLike.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, "player"));
-        //playersLike.add(null);
+        playersLike.add(null);
         playersIAmIngameWith = new ArrayList<Clause>();
         playersIAmIngameWith.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, GameSession.getUsername(), LinkMethod.OR));
         playersIAmIngameWith.add(new Clause(new TableAlias("game", -1), "username_player2", CompareMethod.EQUAL, GameSession.getUsername(), LinkMethod.OR));
@@ -51,7 +51,7 @@ public class Matchfixer {
     }
 
     public List<Player> searchPlayers(String name) {
-        playersLike.add(1, new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.LIKE, "%" + name + "%"));
+        playersLike.set(1, new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.LIKE, "%" + name + "%"));
 
 
         try {
@@ -73,12 +73,16 @@ public class Matchfixer {
         }
 
 
-        for (int i = 0; i < Players.size(); i++) {
+        for (int i = 0; i < Players.size(); ) {
             final String name = Players.get(i).getUsername();
             Optional<Match> optional = matches.stream().filter(x -> x.Participates(name)).findFirst();
-            if (optional.isPresent())
+            if (optional.isPresent()) {
                 Players.remove(i);
+                continue;
+            }
+            i++;
         }
+
         return Players;
     }
 

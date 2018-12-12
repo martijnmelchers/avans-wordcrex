@@ -37,10 +37,11 @@ public class Match {
     }
     public boolean Participates(String name) {
 
-        return (IsOngoing() && username_player1 == name || username_player2 == name  );
+        return (IsOngoing() && (username_player1.equals(name) || username_player2.equals(name))  );
     }
     public boolean IsOngoing(){
-        return (game_state == "playing" || game_state == "request" && answer_player2 != "rejected");
+        return (game_state.equals("playing") || answer_player2.equals("unknown") || (game_state.equals("request") && answer_player2.equals("accepted")));
+        //answer_player2.equals("unknown") || game_state.equals("playing") || (game_state.equals("request") && !answer_player2.equals("rejected"))
     }
 
 }
