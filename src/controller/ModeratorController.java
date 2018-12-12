@@ -1,15 +1,32 @@
-package model.moderator;
+package controller;
 
 
-import model.database.services.Database;
 
-public class Moderator {
+import controller.Controller;
+
+import model.GameSession;
+import model.database.DocumentSession;
+
+import model.helper.Log;
+import model.moderator.ModeratorDictionary;
+
+
+import java.sql.SQLException;
+
+public class ModeratorController extends Controller {
 
     private ModeratorDictionary moderatorDictionary;
-    private String username = "Daan";
+    private String username;
     private String letterset = "NL";
-    public Moderator(Database dB){
-        this.moderatorDictionary = new ModeratorDictionary(dB);
+    public ModeratorController(){
+        try {
+            this.moderatorDictionary = new ModeratorDictionary(DocumentSession.getDatabase());
+        } catch (SQLException e) {
+             Log.error(e);
+
+        }
+        username = GameSession.getUsername();
+
     }
 
     public String[] getSuggestedWords(){
@@ -25,7 +42,7 @@ public class Moderator {
         return moderatorDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
     }
     public void rejectSuggestedWords(String[] words){
-
+        moderatorDictionary.declineWords(words,username,letterset);
     }
     public void acceptSuggestedWords(String[] words){
         moderatorDictionary.acceptWords(words,username,letterset);
