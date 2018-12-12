@@ -25,7 +25,7 @@ public class ModeratorController extends Controller {
              Log.error(e);
 
         }
-        //username = GameSession.getUsername;
+        username = GameSession.getUsername();
 
     }
 
