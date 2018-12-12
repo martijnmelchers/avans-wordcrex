@@ -4,13 +4,30 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import model.EnvironmentVariables;
+import model.GameSession;
 import model.database.DocumentSession;
 import model.helper.Log;
+import model.tables.Account;
 
 public class Main extends Application {
     public static void main(String[] args) {
         Log.info("Launching application...");
         launch(EnvironmentVariables.MAIN_VIEW);
+    }
+
+    private static void askPlayer1Or2() // [Testmethod] account need to be set by Authentication feature
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Klik op OK om player 1 te zijn. \n\nKlik op cancel om player 2 te zijn.");
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                GameSession.setSession(new Account("jagermeester","rrr"));
+            }
+            else
+            {
+                GameSession.setSession(new Account("Lidewij","mmm"));
+            }
+        });
     }
 
     @Override
@@ -21,6 +38,8 @@ public class Main extends Application {
     private void initializeApp(Stage primaryStage) {
         var tryAgainButton = new ButtonType("Probeer opnieuw");
         var closeAppButton = new ButtonType("Afsluiten");
+
+        askPlayer1Or2();
 
         /* Initialize the database */
         Log.info("Initializing database...");

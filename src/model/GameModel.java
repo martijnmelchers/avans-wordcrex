@@ -112,8 +112,7 @@ public class GameModel {
 
     private boolean isPlayerOne()
     {
-        return true;
-     //   return _playerName1 == "Lidewij";
+       return _playerName1.equals(GameSession.getUsername());
     }
 
     public void waitForPlayer(Task finished)
