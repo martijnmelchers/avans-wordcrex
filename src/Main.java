@@ -4,8 +4,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import model.EnvironmentVariables;
+import model.GameSession;
 import model.database.DocumentSession;
 import model.helper.Log;
+import model.tables.Account;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -40,11 +42,12 @@ public class Main extends Application {
         }
 
         /* Start the main app */
+        GameSession.setSession(new Account("jagermeester","rrr"));
         Log.info("Starting views...");
         try {
             var app = new App(primaryStage);
 
-            app.navigate(EnvironmentVariables.MAIN_VIEW);
+            app.navigate("MatchInvitationview", 350, 550);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
             alert.showAndWait();
