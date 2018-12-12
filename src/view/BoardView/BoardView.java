@@ -67,7 +67,7 @@ public class BoardView extends View {
                 StackPane stackPane = new StackPane();
                 Rectangle rect = new Rectangle(30, 30);
 
-                rect.setFill(tiles[x][y].getColor());
+                rect.setFill(tiles[y][x].getColor());
                 rect.setArcWidth(10);
                 rect.setArcHeight(10);
 
@@ -76,11 +76,11 @@ public class BoardView extends View {
                 Text text = new Text();
                 text.setMouseTransparent(true);
 
-                var letter = tiles[x][y].getLetterType().getLetter();
-                text.setText(letter.equals("") ? tiles[x][y].getType().toString() : tiles[x][y].getLetterType().getLetter());
+                var letter = tiles[y][x].getLetterType().getLetter();
+                text.setText(letter.equals("") ? tiles[y][x].getType().toString() : tiles[y][x].getLetterType().getLetter());
 
-                GridPane.setRowIndex(stackPane, x);
-                GridPane.setColumnIndex(stackPane, y);
+                GridPane.setRowIndex(stackPane, y);
+                GridPane.setColumnIndex(stackPane, x);
 
                 stackPane.getChildren().addAll(rect, text);
                 _gridPane.getChildren().add(stackPane);
@@ -104,7 +104,7 @@ public class BoardView extends View {
         {
             String character = ((Text)tile.getChildren().get(1)).getText();
             int letterid = tiles[row][col].getLetterType().getid();
-            _controller.resetTile(row,col);
+            _controller.resetTile(col,row);
             update();
             StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY(),letterid);
 

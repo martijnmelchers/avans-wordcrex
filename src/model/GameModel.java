@@ -391,7 +391,7 @@ public class GameModel {
             {
                 continue;
             }
-            Tile tile = _board.getTiles()[vector2.getX()][vector2.getY()];
+            Tile tile = _board.getTiles()[vector2.getY()][vector2.getX()];
             TurnBoardLetter turnBoardLetter = new TurnBoardLetter(tile.getLetterType().getid(),_gameId,_turnId,vector2.getX(),vector2.getY());
             turnBoardLetters.add(turnBoardLetter);
         }

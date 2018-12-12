@@ -84,11 +84,11 @@ public class DockView
             {
                 if (bounds.getMaxX() + 1 > x && bounds.getMinX() - 1 < x)
                 {
-                    if(!controller.tileEmpty(row,column))
+                    if(!controller.tileEmpty(column,row))
                     {
                         continue;
                     }
-                    controller.placeTile(row,column ,text.getText(), (Integer) stackPane.getProperties().get("id"));
+                    controller.placeTile(column,row ,text.getText(), (Integer) stackPane.getProperties().get("id"));
                     hBoxDock.getChildren().remove(stackPane);
                     System.out.println("row:" + row);
                     System.out.println("column:" + column);

@@ -58,10 +58,10 @@ public class Board {
 
     public Tile[][] getTiles() { return _tiles; }
 
-    public boolean isEmpty(Vector2 vector2) { return (_tiles[vector2.getX()][vector2.getY()].isEmpty()); }
+    public boolean isEmpty(Vector2 vector2) { return (_tiles[vector2.getY()][vector2.getX()].isEmpty()); }
 
     public void place(Vector2 vector2, String letter, int letterId) {
-        Tile tile = _tiles[vector2.getX()][vector2.getY()];
+        Tile tile = _tiles[vector2.getY()][vector2.getX()];// omgedraaid
 
         tile.replace(letter, _letterValues.get(letter.toUpperCase()), letterId);
         tile.setColor(Color.WHITE);
@@ -72,10 +72,10 @@ public class Board {
 
     //Remove a piece
     public Tile remove(Vector2 vector2){
-        Tile prevTile = _tiles[vector2.getX()][vector2.getY()];
+        Tile prevTile = _tiles[vector2.getY()][vector2.getX()];
 
-        _tiles[vector2.getX()][vector2.getY()] = decideTileType(vector2);
-        _tiles[vector2.getX()][vector2.getY()].setState(TileState.LOCKED);
+        _tiles[vector2.getY()][vector2.getX()] = decideTileType(vector2);
+        _tiles[vector2.getY()][vector2.getX()].setState(TileState.LOCKED);
         _placedCoords.remove(_placedCoords.stream().filter(a->a.getY() == vector2.getY()&&a.getX() == vector2.getX()).collect(Collectors.toList()).get(0));
         return prevTile;
     }
