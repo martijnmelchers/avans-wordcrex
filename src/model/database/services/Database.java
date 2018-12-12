@@ -316,6 +316,11 @@ public class Database {
                 try {
                     var customParser = ObjectHelper.SQLToObject(field, data, combinedName);
 
+                    if (!field.isAnnotationPresent(Nullable.class) && value == null)
+                        throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)");
+                    else if (field.isAnnotationPresent(Nullable.class) && value == null)
+                        continue;
+
                     if (customParser == null)
                         field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
                     else
@@ -331,9 +336,6 @@ public class Database {
 
             } catch (Exception e) {
                 Log.error(e);
-
-                if (!field.isAnnotationPresent(Nullable.class))
-                    throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)", e);
             }
 
         }
