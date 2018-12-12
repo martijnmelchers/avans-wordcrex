@@ -15,6 +15,7 @@ public final class ListViewCell extends ListCell<Game> {
     {
         super.updateItem(game,empty);
         if(empty){
+            //TODO: headers can be implemented this way.
             setGraphic(null);
         }
         else{
