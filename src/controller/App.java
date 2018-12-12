@@ -25,8 +25,6 @@ public class App {
 
     public App(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        primaryStage.setWidth(350);
-        primaryStage.setHeight(550.5);
         primaryStage.setTitle("Wordcrex");
         primaryStage.show();
 

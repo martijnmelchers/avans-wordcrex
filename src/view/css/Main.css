@@ -10,11 +10,6 @@ Button {
     -fx-background-radius: 0;
 
 }
-Text{
-    -fx-fill: #ecf0f1;
-    -fx-text-fill: #ecf0f1;
-    -fx-font-family: "Tahoma", "Comic Sans MS";
-}
 
 VBox {
 
@@ -22,12 +17,6 @@ VBox {
 
 ListView {
     -fx-border-color: #2c3e50;
-}
-
-
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
-    -fx-text-fill: white;
 }
 
 ListView :even {
@@ -38,10 +27,6 @@ ListView :even {
 ListView :odd {
     -fx-background-color: #2c3e50;
 
-}
-
-Pane {
-    -fx-background-color: #207BCF;
 }
 
 ScrollPane {
@@ -59,7 +44,6 @@ FlowPane {
 AnchorPane {
 
 }
-
 
 TextField {
     -fx-border-color: #2c3e50;
@@ -109,13 +93,4 @@ TextField:focused {
 
 .Chat-Moment {
     -fx-font-size: 10;
-}
-
-#btBack {
-    -fx-background-color: transparent;
-    -fx-font-size: 24;
-}
-
-#username, #role {
-    -fx-font-size: 20;
 }

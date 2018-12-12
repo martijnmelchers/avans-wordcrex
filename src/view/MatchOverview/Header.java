@@ -1,4 +1,4 @@
-package view.MatchOverview_old;
+package view.MatchOverview;
 
 import controller.MatchOverviewController;
 import javafx.geometry.Insets;
