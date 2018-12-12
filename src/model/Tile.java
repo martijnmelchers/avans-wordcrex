@@ -47,4 +47,10 @@ public class Tile {
         _letter.setPoints(points);
         _letter.setId(letterId);
     }
+    public void replace(String letter, int points, int letterId, Color color){
+        _letter.setLetter(letter);
+        _letter.setPoints(points);
+        _letter.setId(letterId);
+        _tileColor = color;
+    }
 }
