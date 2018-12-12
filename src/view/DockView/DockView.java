@@ -43,23 +43,12 @@ public class DockView
     public void updateDock()
     {
         HandLetter[] letters = controller.getDock();
-        makeTransparent();
+        hBoxDock.getChildren().clear();
         for (HandLetter letter : letters) {
             if(letter!=null)
             {
                 addCharacter(letter.letter.get_symbol()+"",letter.letter.get_letterId());
             }
-        }
-    }
-
-    private void makeTransparent()
-    {
-        for (Node child : hBoxDock.getChildren())
-        {
-            StackPane tile = (StackPane) child;
-            List<Node> elements = tile.getChildren();
-            Rectangle block = (Rectangle) elements.get(0);
-            block.setFill(Color.TRANSPARENT);
         }
     }
 

@@ -42,14 +42,39 @@ public class Dock
 
     }
 
-    public void update(int _gameId,Integer turn_id) // update to turn specific hand (For history mode)
+    public List<TurnBoardLetter> getAllPlacedLetters(int gameId, int turn_id)
     {
+        ArrayList<Clause> clauses = new ArrayList<>();
+
+        clauses.add(new Clause( new TableAlias("TurnBoardLetter",-1) ,"game_id", CompareMethod.EQUAL ,gameId ));
+        clauses.add(new Clause( new TableAlias("TurnBoardLetter",-1) ,"turn_id", CompareMethod.LESS_EQUAL ,turn_id ));
+
+        try
+        {
+            return db.select(TurnBoardLetter.class, clauses).stream().collect(Collectors.toList());
+        }
+        catch (Exception e)
+        {
+            Log.error(e,false );
+            return null;
+        }
+    }
+
+    public void update(int gameId,Integer turn_id) // update to turn specific hand (For history mode)
+    {
+        List<TurnBoardLetter> placed = getAllPlacedLetters(gameId, turn_id);
+
         List<HandLetter> handLetters;
 
         ArrayList<Clause> clauses = new ArrayList<>();
 
-        clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"game_id", CompareMethod.EQUAL ,_gameId ));
-        clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"turn_id", CompareMethod.EQUAL ,turn_id ));
+        clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"game_id", CompareMethod.EQUAL ,gameId ));
+        clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"turn_id", CompareMethod.LESS_EQUAL ,turn_id ));
+
+        for(TurnBoardLetter turnBoardLetter : placed)
+        {
+            clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"letter_id", CompareMethod.NOT_EQUAL ,turnBoardLetter.letter.get_letterId()));
+        }
 
         try
         {
@@ -63,11 +88,10 @@ public class Dock
 
         ArrayList<HandLetter> filtered = new ArrayList<>();
 
-
         // Database returns double results of one table so this function filters doubles
         for(HandLetter h : handLetters)
         {
-            if(!filtered.stream().anyMatch(a->a.letter.get_letterId() == h.letter.get_letterId()&& a.letter.game.getGameId() == _gameId))
+            if(!filtered.stream().anyMatch(a->a.letter.get_letterId() == h.letter.get_letterId()&& a.letter.game.getGameId() == gameId))
             {
                 filtered.add(h);
             }
@@ -141,19 +165,16 @@ public class Dock
                 Turn t = new Turn(gameId,turnId);
                 letters[i] = new HandLetter(l.get_letterId(),turnId, gameId,l,t);
                 notUsed.remove(randomIndex);
+                try
+                {
+                    db.insert(letters[i]);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
         }
-
-        try
-        {
-            var let = Arrays.stream(letters).filter(a-> a!=null).collect(Collectors.toList());
-            db.insert(let);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
     }
 
     public void removeUsedLetters(List<Integer> ids)

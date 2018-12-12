@@ -81,6 +81,8 @@ public class GameModel {
                 dock = new Dock(false,_gameId ,_turnId );
             }
 
+            _board.getBoardFromDatabase(_gameId,_turnId );
+
             clauses.clear();
 
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId));
@@ -148,7 +150,7 @@ public class GameModel {
     public CheckInfo checkBoard() { return _board.check(); }
 
 
-    public void submitTurn(CheckInfo checkInfo)
+    public void submitTurn(CheckInfo checkInfo,Task onEndTurn)
     {
         // submit turn to database tables: boardplayer1, turnplayer1 OR boardplayer2,
 
@@ -185,6 +187,7 @@ public class GameModel {
                     // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
                     _board.getBoardFromDatabase(_gameId,_turnId);
                     dock.update(_gameId,_turnId);// update hand
+                    onEndTurn.run();
                     return null;
                 }
             });
@@ -389,7 +392,8 @@ public class GameModel {
     private boolean isNewTurn()
     {
         ArrayList<Clause> clauses = new ArrayList<>();
-        clauses.add(new Clause(new TableAlias("Turn",-1), "game_id", CompareMethod.EQUAL,_turnId+1 ));
+        clauses.add(new Clause(new TableAlias("Turn",-1), "turn_id", CompareMethod.EQUAL,_turnId+1 ));
+        clauses.add(new Clause(new TableAlias("Turn",-1), "game_id", CompareMethod.EQUAL,_gameId ));
         try
         {
              return db.select(Turn.class,  clauses).size()>0;

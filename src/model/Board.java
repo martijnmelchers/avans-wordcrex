@@ -29,11 +29,7 @@ public class Board {
     {
         ArrayList<Clause> clauses = new ArrayList<>();
         clauses.add(new Clause(new TableAlias("turnboardletter", -1),"game_id" , CompareMethod.EQUAL, gameId ));
-        clauses.add(new Clause(new TableAlias("turnboardletter", -1),"game_id" , CompareMethod.EQUAL, turn_id ));
-        if(turn_id != null)
-        {
-
-        }
+        clauses.add(new Clause(new TableAlias("turnboardletter", -1),"turn_id" , CompareMethod.LESS_EQUAL, turn_id ));
         try
         {
             List<TurnBoardLetter> grid = DocumentSession.getDatabase().select(TurnBoardLetter.class, clauses);

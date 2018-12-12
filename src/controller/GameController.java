@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.concurrent.Task;
 import model.*;
 import model.database.DocumentSession;
 import model.tables.Game;
@@ -44,7 +45,19 @@ public class GameController extends Controller{
 
         if(info == null) return; //TODO: create error
 
-        _gameModel.submitTurn(info);
+        Task nextTurn = new Task() {
+            @Override
+            protected Object call() throws Exception
+            {
+                updateView();
+                return null;
+            }
+        };
+        _gameModel.submitTurn(info,nextTurn);
     }
 
+    private void updateView()
+    {
+        boardView.update();
+    }
 }
