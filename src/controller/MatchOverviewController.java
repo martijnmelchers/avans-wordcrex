@@ -1,5 +1,6 @@
 package controller;
 
+import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
 
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 
 public class MatchOverviewController extends Controller
 {
+
     private MatchOverviewModel model;
 
     public MatchOverviewController()
@@ -16,7 +18,8 @@ public class MatchOverviewController extends Controller
 
     public ArrayList<Game> getGames()
     {
-        return model.getCurrentPlayerGames();
+        System.out.println(GameSession.getUsername());
+        return model.getCurrentPlayerGames(GameSession.getUsername());
     }
 
     public ArrayList<Game> getAllGames()

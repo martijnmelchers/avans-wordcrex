@@ -237,13 +237,9 @@ public class MatchOverview extends View {
 
     private void ChangeToObserverMode(ArrayList<Game> foundGames) {
         _viewModeButton.setText("Speel Mode");
-
         _headerObserver = new Header("Spellen");
-
         _headerObserver.addObserverButton(controller, this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), " replace this");
-
         _vBox.getChildren().addAll(_headerObserver.getContent());
-
         _matchScrollPane.setContent(_vBox);
     }
 

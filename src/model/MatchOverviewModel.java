@@ -21,10 +21,10 @@ public class MatchOverviewModel {
     private Database _db;
 
     // TODO: Fill the username automatically in using the authentication feature.
-    private String _username = "Huseyin-Testing";
+    private String _username = "jagermeester";
 
-    public ArrayList<Game> getCurrentPlayerGames() {
-        return findCurrentPlayerGame();
+    public ArrayList<Game> getCurrentPlayerGames(String username) {
+        return findCurrentPlayerGame(username);
     }
 
     public MatchOverviewModel() {
@@ -35,21 +35,30 @@ public class MatchOverviewModel {
         }
     }
 
-    private ArrayList<Game> findCurrentPlayerGame() {
-        var clauses = new ArrayList<Clause>();
-        var foundGames = new ArrayList<Game>();
+    private ArrayList<Game> findCurrentPlayerGame(String username) {
+        try {
+            ArrayList<Game> games = new ArrayList<Game>();
 
-        clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, _username));
-        try
-        {
-            foundGames.addAll(_db.select(Game.class, clauses));
+            var clauses = new ArrayList<Clause>();
+
+            clauses.add(new Clause(new TableAlias("game", -1),"username_player1",CompareMethod.EQUAL, username, LinkMethod.OR));
+            clauses.add(new Clause(new TableAlias("game", -1),"username_player2",CompareMethod.EQUAL, username, LinkMethod.OR));
+            for (Game game : _db.select(Game.class, clauses))
+            {
+                if(!game.gameState.isPlaying())
+                    continue;
+
+                games.add(game);
+            }
+
+            return games;
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }
 
-        return foundGames;
+        return null;
     }
 
     public boolean currentTurnHasAction(Game game) {
@@ -122,10 +131,12 @@ public class MatchOverviewModel {
         try {
             ArrayList<Game> games = new ArrayList<Game>();
 
-            for (Game game : _db.select(Game.class, new ArrayList<Clause>()))
+            var clauses = new ArrayList<Clause>();
+
+            for (Game game : _db.select(Game.class, clauses))
             {
-                if(game.gameState.isRequest())
-                    continue;
+                if(!game.gameState.isPlaying())
+//                    continue;
 
                 games.add(game);
             }
@@ -139,6 +150,8 @@ public class MatchOverviewModel {
 
         return null;
     }
+
+
 
     public ArrayList<Game> searchForGamesAsObserver(String gamesToSearch) {
         var clauses = new ArrayList<Clause>();
@@ -241,6 +254,16 @@ public class MatchOverviewModel {
         }
 
         return score;
+    }
+
+
+    public void updateGameState(GameState state){
+        try{
+            _db.update(state);
+        }
+        catch(Exception e){
+
+        }
     }
 
     public class GameScore
