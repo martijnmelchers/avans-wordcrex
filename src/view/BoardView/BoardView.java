@@ -43,7 +43,6 @@ public class BoardView extends View {
     {
         clearGrid();
         init();
-        dockController.updateDock();
     }
 
 

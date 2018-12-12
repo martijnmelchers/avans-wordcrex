@@ -1,8 +1,11 @@
 package controller;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import model.*;
 import model.database.DocumentSession;
+import model.tables.Account;
 import model.tables.Game;
 import model.tables.HandLetter;
 import view.BoardView.*;
@@ -43,7 +46,16 @@ public class GameController extends Controller{
     public void submitTurn(){
         CheckInfo info = _gameModel.checkBoard();
 
-        if(info == null) return; //TODO: create error
+        if(info == null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText("Foute zet");
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    GameSession.setSession(new Account("jagermeester","rrr"));
+                }
+            });
+            return;
+        }
 
         Task nextTurn = new Task() {
             @Override

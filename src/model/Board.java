@@ -91,6 +91,12 @@ public class Board {
         boolean isStraight = _placedCoords.stream().allMatch(x -> x.getX() == _placedCoords.get(0).getX()) || _placedCoords.stream().allMatch(x -> x.getY() == _placedCoords.get(0).getY());
 
         boolean isConnected = true;
+
+        if(_placedCoords.size()==0)
+        {
+            return null;
+        }
+
         for (int i = 0; i + 1 < _placedCoords.size(); i++){
 
             Vector2 currentCoords = _placedCoords.get(i);
@@ -129,6 +135,11 @@ public class Board {
             WordChecker checker = new WordChecker();
             if (checker.check(wX) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
             if (checker.check(wY) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
+        }
+
+        if(tileIds.size()<1)
+        {
+            return null;
         }
 
         Tile[] tileArr = tiles.toArray(new Tile[0]);

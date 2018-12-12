@@ -51,7 +51,8 @@ public class Dock
 
         try
         {
-            return db.select(TurnBoardLetter.class, clauses).stream().collect(Collectors.toList());
+            var test = db.select(TurnBoardLetter.class, clauses).stream().collect(Collectors.toList());
+            return test;
         }
         catch (Exception e)
         {

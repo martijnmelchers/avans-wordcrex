@@ -126,7 +126,11 @@ public class GameModel {
                 if(isNewTurn())
                 {
                     finished.run();
-                    timer.cancel();
+                    if(timer != null)
+                    {
+                        timer.cancel();
+                    }
+
                 }
             }
         };
