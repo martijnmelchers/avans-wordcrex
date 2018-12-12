@@ -92,21 +92,10 @@ public class Board {
 
         boolean isConnected = true;
 
-        if(_placedCoords.size()==0)
-        {
-            return null;
-        }
+        if(_placedCoords.size() < 1) { return null; }
 
-        for (int i = 0; i + 1 < _placedCoords.size(); i++){
-
-            Vector2 currentCoords = _placedCoords.get(i);
-            Vector2 futureCoords =  _placedCoords.get(i + 1);
-
-            isConnected = currentCoords.getX() + 1 == futureCoords.getX() || !_tiles[currentCoords.getX() + 1][currentCoords.getY()].isEmpty()
-                    || currentCoords.getY() + 1 == futureCoords.getY() || !_tiles[currentCoords.getX()][currentCoords.getY() + 1].isEmpty();
-
-            if(!isConnected) break;
-        }
+        isConnected = !_placedCoords.stream().allMatch( a-> _tiles[a.getX()][a.getY()-1].isEmpty()  || _tiles[a.getX()][a.getY()+1].isEmpty())
+        || !_placedCoords.stream().allMatch( a-> _tiles[a.getX()-1][a.getY()].isEmpty()  || _tiles[a.getX()+1][a.getY()].isEmpty());
 
         if(!usedStartingTile || !isStraight || !isConnected) return null;
 
