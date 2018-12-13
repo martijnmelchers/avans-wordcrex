@@ -57,11 +57,13 @@ public class GameController extends Controller{
             return;
         }
 
+        boardView.startLoadingScreen();
         Task nextTurn = new Task() {
             @Override
             protected Object call() throws Exception
             {
                 updateView();
+                boardView.stopLoadingScreen();
                 return null;
             }
         };

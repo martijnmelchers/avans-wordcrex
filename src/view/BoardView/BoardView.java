@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.Tile;
@@ -13,6 +14,8 @@ import model.TileState;
 import model.helper.Log;
 import view.DockView.DockView;
 import view.View;
+
+import java.awt.*;
 
 
 public class BoardView extends View {
@@ -23,6 +26,10 @@ public class BoardView extends View {
 
     @FXML private Text _scoreP1;
     @FXML private Text _scoreP2;
+
+    @FXML private Label labelLoadingscreen;
+
+    @FXML private VBox vboxLoadingScreen;
 
     private GameController _controller;
 
@@ -58,6 +65,21 @@ public class BoardView extends View {
         _gridPane.getChildren().removeAll(_gridPane.getChildren().filtered(a->a instanceof StackPane));
     }
 
+    public void startLoadingScreen()
+    {
+        startLoadingScreen("");
+    }
+
+    public void startLoadingScreen(String message)
+    {
+        vboxLoadingScreen.setVisible(true);
+        labelLoadingscreen.setText(message);
+    }
+
+    public void stopLoadingScreen()
+    {
+        vboxLoadingScreen.setVisible(false);
+    }
 
     public void init()
     {
