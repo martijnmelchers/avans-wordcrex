@@ -262,7 +262,7 @@ public class Dock
 
         List<Integer> ids = usedLetters.stream().map(a->a.letter.get_letterId()).collect(Collectors.toList());
         List<Letter> usableLetters = availableLetters.stream()
-                .filter(a-> !ids.contains(a))
+                .filter(a-> !ids.contains(a.get_letterId()))
                 .collect(Collectors.toList());
 
         return usableLetters;
