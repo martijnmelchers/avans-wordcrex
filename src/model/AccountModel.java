@@ -37,6 +37,7 @@ public class AccountModel {
 
         try {
             this._db.insert(new Account(lowerUsername, lowerPassword));
+            this._db.insert(new AccountInfo("player", lowerUsername));
             return "";
         } catch (Exception e) {
             Log.error(e, true);
