@@ -42,6 +42,11 @@ public class Dock
 
     }
 
+    public String getNotUsed(int gameId)
+    {
+        return String.valueOf(notUsedLetters(gameId).size());
+    }
+
     public List<TurnBoardLetter> getAllPlacedLetters(int gameId, int turn_id)
     {
         ArrayList<Clause> clauses = new ArrayList<>();

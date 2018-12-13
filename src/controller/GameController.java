@@ -112,7 +112,13 @@ public class GameController extends Controller{
         boardView.update(updateDock);
         _gameModel.updateScore();
         boardView.updateScore();
+        boardView.updateTilesLeft();
         checkScore();
+    }
+
+    public String getNotUsedTiles()
+    {
+        return _gameModel.getNotUsed();
     }
 
 }

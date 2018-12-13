@@ -11,7 +11,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.Tile;
@@ -34,6 +33,7 @@ public class BoardView extends View {
     @FXML private Text _scoreP1;
     @FXML private Text _scoreP2;
     @FXML private Text _addedScore;
+    @FXML private Text _tilesLeft;
 
     @FXML private Button _submit;
     @FXML private Button _pass;
@@ -55,6 +55,7 @@ public class BoardView extends View {
         dockController.setParent(this);
         init();
         updateScore();
+        updateTilesLeft();
     }
 
     public void update(boolean updateDock)
@@ -72,6 +73,11 @@ public class BoardView extends View {
         int[] scores = _controller.getScore();
         _scoreP1.setText(playerNames[0] + " : " + Integer.toString(scores[0]));
         _scoreP2.setText(playerNames[1] + " : " +Integer.toString(scores[1]));
+    }
+
+    public void updateTilesLeft()
+    {
+        _tilesLeft.setText("Stenen : " + _controller.getNotUsedTiles());
     }
 
     public void updateLocalScore(String score){
@@ -140,6 +146,7 @@ public class BoardView extends View {
     {
         _controller.submitTurn();
         updateScore();
+        updateTilesLeft();
     }
 
     @FXML
@@ -147,6 +154,7 @@ public class BoardView extends View {
     {
         _controller.passTurn();
         updateScore();
+        updateTilesLeft();
     }
 
     private void tileClicked(MouseEvent e, StackPane tile)
