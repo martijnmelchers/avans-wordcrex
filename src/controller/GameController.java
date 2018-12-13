@@ -78,7 +78,7 @@ public class GameController extends Controller{
             }
         };
         _gameModel.submitTurn(info,nextTurn);
-        _gameModel.updateScore();
+
     }
 
     public void showTurn(int turn){
@@ -97,6 +97,8 @@ public class GameController extends Controller{
     private void updateView(boolean updateDock)
     {
         boardView.update(updateDock);
+        _gameModel.updateScore();
+        boardView.updateScore();
         checkScore();
     }
 }

@@ -59,7 +59,7 @@ public class BoardView extends View {
         }
     }
 
-    private void updateScore(){
+    public void updateScore(){
         String[] playerNames = _controller.getPlayerNames();
         int[] scores = _controller.getScore();
         _scoreP1.setText(playerNames[0] + " : " + Integer.toString(scores[0]));
