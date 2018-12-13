@@ -3,6 +3,7 @@ package view.BoardView;
 import controller.BoardController;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.Tile;
 import view.View;

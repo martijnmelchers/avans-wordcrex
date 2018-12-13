@@ -2,6 +2,16 @@
     -fx-text-fill: #ecf0f1;
     -fx-font-family: "Tahoma", "Comic Sans MS";
     -fx-background-color: #34495e;
+
+}
+* .scroll-bar{
+    -fx-background-color: #34495e;
+
+}
+* .scroll-bar:horizontal .track,
+* .scroll-bar:vertical .track{
+    -fx-background-color: #2c3e50;
+
 }
 
 Button {
@@ -17,6 +27,13 @@ VBox {
 
 ListView {
     -fx-border-color: #2c3e50;
+
+}
+
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
 }
 
 ListView :even {
@@ -63,6 +80,19 @@ TextField:focused {
     -fx-background-color: transparent;
     -fx-font-size: 16;
 }
+*:even:selected {
+    -fx-background-color: #9b59b6;
+
+    -fx-text-fill: #130F0E;
+
+}
+*:odd:selected {
+    -fx-background-color: #8e44ad;
+    -fx-text-fill: #130F0E;
+
+}
+
+ScrollPane{
 
 .Chat-MessagesVBox {
 
@@ -78,4 +108,13 @@ TextField:focused {
 
 .Chat-Moment {
     -fx-font-size: 10;
+}
+
+#btBack {
+    -fx-background-color: transparent;
+    -fx-font-size: 24;
+}
+
+#username, #role {
+    -fx-font-size: 20;
 }

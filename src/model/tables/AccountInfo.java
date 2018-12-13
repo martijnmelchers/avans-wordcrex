@@ -21,7 +21,16 @@ public class AccountInfo {
     public Account account;
     public Role role;
 
-    public AccountInfo(){}
+    public AccountInfo()
+    {
+
+    }
+
+
+    public AccountInfo(String role, String username){
+        this.usernameId = username;
+        this.roleId = role;
+    }
 
     // What kind of naming is this??
     public String doStuff() {
@@ -30,5 +39,13 @@ public class AccountInfo {
 
     public void setRoleId(String role) {
         this.roleId = role;
+    }
+
+    public String getUsername() {
+        return this.roleId;
+    }
+
+    public String getRole(){
+        return this.roleId;
     }
 }
