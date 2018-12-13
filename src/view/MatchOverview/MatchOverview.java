@@ -69,6 +69,10 @@ public class MatchOverview extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        renderGames();
+    }
+
+    private void renderGames(){
         gameObservableList = FXCollections.observableArrayList();
         gameObservableList1 = FXCollections.observableArrayList();
         gameObservableList2 = FXCollections.observableArrayList();
@@ -81,18 +85,17 @@ public class MatchOverview extends View {
 
         List<Game> games = this._controller.getGames();
 
-        for (var game : games){
-            switch (game.gameState.getState()){
+        for (var game : games) {
+            switch (game.gameState.getState()) {
                 case "request": {
                     gameObservableList.add(game);
                     break;
                 }
 
                 case "playing": {
-                    if(this._controller.isMyTurn(game)){
+                    if (this._controller.isMyTurn(game)) {
                         gameObservableList1.add(game);
-                    }
-                    else{
+                    } else {
                         gameObservableList2.add(game);
                     }
                 }
@@ -105,33 +108,27 @@ public class MatchOverview extends View {
 
                 }
             }
+
+            gameListview.setCellFactory(studentListView -> {
+                var listViewCell = new ListViewCell();
+                listViewCell.setController(this._controller);
+                return listViewCell;
+            });
+
+
+            gameListview1.setCellFactory(studentListView -> {
+                var listViewCell = new ListViewCell();
+                listViewCell.setController(this._controller);
+                return listViewCell;
+            });
+
+            gameListview2.setCellFactory(studentListView -> {
+                var listViewCell = new ListViewCell();
+                listViewCell.setController(this._controller);
+                return listViewCell;
+            });
+
         }
-
-
-
-//        if(gameObservableList1.size() == 0){
-//            gameListview1.setVisible(false);
-//            yourTurnPane.setVisible(false);
-//        }
-
-        gameListview.setCellFactory(studentListView -> {
-            var listViewCell = new ListViewCell();
-            listViewCell.setController(this._controller);
-            return listViewCell;
-        });
-
-
-        gameListview1.setCellFactory(studentListView -> {
-            var listViewCell = new ListViewCell();
-            listViewCell.setController(this._controller);
-            return listViewCell;
-        });
-
-        gameListview2.setCellFactory(studentListView -> {
-            var listViewCell = new ListViewCell();
-            listViewCell.setController(this._controller);
-            return listViewCell;
-        });
     }
 
     @FXML
