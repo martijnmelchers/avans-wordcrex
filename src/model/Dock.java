@@ -51,8 +51,18 @@ public class Dock
 
         try
         {
-            var test = db.select(TurnBoardLetter.class, clauses).stream().collect(Collectors.toList());
-            return test;
+            var turnBoardLetters = db.select(TurnBoardLetter.class, clauses).stream().collect(Collectors.toList());
+            ArrayList<TurnBoardLetter> filtered = new ArrayList<>();
+
+            // Database returns double results of one table so this function filters doubles
+            for(TurnBoardLetter turnBoardLetter : turnBoardLetters)
+            {
+                if(!filtered.stream().anyMatch(a->a.getX() == turnBoardLetter.getX()&& a.getY() == turnBoardLetter.getY()))
+                {
+                    filtered.add(turnBoardLetter);
+                }
+            }
+            return turnBoardLetters;
         }
         catch (Exception e)
         {

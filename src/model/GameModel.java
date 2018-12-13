@@ -1,7 +1,9 @@
 package model;
 
+import com.sun.source.tree.NewClassTree;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.util.Pair;
 import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class GameModel {
 
@@ -362,19 +365,28 @@ public class GameModel {
         clauses.add(new Clause( new TableAlias("Board" + winner,-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
         clauses.add(new Clause( new TableAlias("Board" + winner,-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
 
-        Vector2[] coords;
+        List<Pair<Vector2,Integer>> idsAndXY = new ArrayList<>();
 
         try
         {
             if(winner.equals("player1"))
             {
                 List<BoardPlayer1> boardPlayer1 = db.select(BoardPlayer1.class, clauses);
-                coords = boardPlayer1.stream().map(a-> new Vector2(a.tile.getX(),a.tile.getY())).toArray(Vector2[]::new);
+                for(BoardPlayer1 bp : boardPlayer1)
+                {
+                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2(bp.tile.getX(),bp.tile.getY() ),bp.letter.get_letterId());
+                    idsAndXY.add(pair);
+                }
             }
             else
             {
                 List<BoardPlayer2> boardPlayer2 = db.select(BoardPlayer2.class, clauses);
-                coords = boardPlayer2.stream().map(a-> new Vector2(a.tile.getX(),a.tile.getY())).toArray(Vector2[]::new);
+                for(BoardPlayer2 bp : boardPlayer2)
+                {
+                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2(bp.tile.getX(),bp.tile.getY() ),bp.letter.get_letterId());
+                    idsAndXY.add(pair);
+                }
+
             }
         }
         catch (Exception e)
@@ -386,14 +398,14 @@ public class GameModel {
         //filter because database returns double results (autojoins)
 
         ArrayList<TurnBoardLetter> turnBoardLetters = new ArrayList<>();
-        for(Vector2 vector2 : coords)
+        for(Pair<Vector2,Integer> pair : idsAndXY)
         {
-            if(turnBoardLetters.stream().anyMatch(a-> a.getX() == vector2.getX()&& a.getY() == vector2.getY() ))
+            if(turnBoardLetters.stream().anyMatch(a-> a.getX() == pair.getKey().getX()&& a.getY() == pair.getKey().getY() ))
             {
                 continue;
             }
-            Tile tile = _board.getTiles()[vector2.getY()][vector2.getX()];
-            TurnBoardLetter turnBoardLetter = new TurnBoardLetter(tile.getLetterType().getid(),_gameId,_turnId,vector2.getX(),vector2.getY());
+            Tile tile = _board.getTiles()[pair.getKey().getY()][pair.getKey().getX()];
+            TurnBoardLetter turnBoardLetter = new TurnBoardLetter(pair.getValue(),_gameId,_turnId,pair.getKey().getX(),pair.getKey().getY());
             turnBoardLetters.add(turnBoardLetter);
         }
         try

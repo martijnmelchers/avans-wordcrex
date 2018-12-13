@@ -62,7 +62,7 @@ public class GameController extends Controller{
             @Override
             protected Object call() throws Exception
             {
-                updateView();
+                updateView(true);
                 Platform.runLater(new Runnable(){
                     @Override
                     public void run()
@@ -86,8 +86,8 @@ public class GameController extends Controller{
        boardView.updateLocalScore(total);
     }
 
-    private void updateView()
+    private void updateView(boolean updateDock)
     {
-        boardView.update(false);
+        boardView.update(updateDock);
     }
 }
