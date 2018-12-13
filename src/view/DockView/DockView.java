@@ -111,8 +111,8 @@ public class DockView
         r.setFill(Color.WHITE);
         r.setArcHeight(10);
         r.setArcWidth(10);
-        r.setWidth(30);
-        r.setHeight(30);
+        r.setWidth(35);
+        r.setHeight(35);
         Text t = new Text();
         t.setText(character);
         sp.getChildren().add(r);
@@ -125,9 +125,9 @@ public class DockView
             double currentY = ((b.getMinY() + b.getMaxY())/2);
             double Xdiff = x - currentX;
             double Ydiff = y - currentY;
-            double extraOffset = (7-hBoxDock.getChildren().size()) * 30;
+            double extraOffset = (7-hBoxDock.getChildren().size()) * 19;
 
-            sp.setTranslateX((Xdiff ) - 180 + extraOffset);
+            sp.setTranslateX((Xdiff ) - 400 + extraOffset);
             sp.setTranslateY((Ydiff) - 39);
         }
         sp.getParent().getParent().toFront();

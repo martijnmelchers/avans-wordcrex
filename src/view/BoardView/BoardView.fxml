@@ -3,10 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="642.0" prefWidth="575.0" style="-fx-background-color: rgb(28, 20, 58)" xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="view.BoardView.BoardView">
-    <AnchorPane prefHeight="642.0" prefWidth="568.0">
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="835.0" prefWidth="836.0" style="-fx-background-color: rgb(28, 20, 58)" xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="view.BoardView.BoardView">
+    <AnchorPane prefHeight="658.0" prefWidth="617.0">
         <children>
-            <GridPane fx:id="_gridPane" layoutX="22.0" layoutY="53.0" prefHeight="550.0" prefWidth="450.0" style="-fx-border-color: white;">
+            <GridPane fx:id="_gridPane" layoutX="22.0" layoutY="53.0" prefHeight="739.0" prefWidth="621.0" style="-fx-border-color: white;">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -53,7 +53,7 @@
                     </rowConstraints>
                 </GridPane>
             </GridPane>
-         <Text fx:id="_addedScore" fill="#fcbc32" layoutX="234.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0p">
+         <Text fx:id="_addedScore" fill="#fcbc32" layoutX="333.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0p">
             <font>
                <Font size="23.0" />
             </font>
@@ -64,14 +64,14 @@
                     <Font size="18.0" />
                 </font>
             </Text>
-            <Text fx:id="_scoreP2" fill="WHITE" layoutX="375.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2 : 0p">
+            <Text fx:id="_scoreP2" fill="WHITE" layoutX="546.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2 : 0p">
                 <font>
                     <Font size="18.0" />
                 </font>
             </Text>
-            <Button layoutX="482.0" layoutY="53.0" onMouseClicked="#submitTurn" prefHeight="34.0" prefWidth="85.0" style="-fx-background-color: #f4d941;" text="Submit" textAlignment="CENTER" />
-         <Button fx:id="_pass" layoutX="482.0" layoutY="108.0" onMouseClicked="#submitTurn" prefHeight="34.0" prefWidth="85.0" style="-fx-background-color: #f4d941;" text="Pass" textAlignment="CENTER" />
-         <Slider fx:id="_slider" layoutX="22.0" layoutY="614.0" onMouseReleased="#showTurnOnBoard" prefHeight="14.0" prefWidth="450.0" />
+            <Button layoutX="655.0" layoutY="53.0" onMouseClicked="#submitTurn" prefHeight="42.0" prefWidth="168.0" style="-fx-background-color: #f4d941;" text="Submit" textAlignment="CENTER" />
+         <Button fx:id="_pass" layoutX="655.0" layoutY="123.0" onMouseClicked="#submitTurn" prefHeight="42.0" prefWidth="168.0" style="-fx-background-color: #f4d941;" text="Pass" textAlignment="CENTER" />
+         <Slider fx:id="_slider" layoutX="22.0" layoutY="801.0" onMouseReleased="#showTurnOnBoard" prefHeight="27.0" prefWidth="621.0" />
         </children>
     </AnchorPane>
     <VBox fx:id="vboxLoadingScreen" alignment="CENTER" prefHeight="639.0" prefWidth="955.0" style="-fx-background-color: rgba(255,255,255,0.65)" visible="false">

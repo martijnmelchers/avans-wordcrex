@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:id="hBoxDock"
-      fx:controller="view.DockView.DockView" alignment="CENTER" prefHeight="100">
+      fx:controller="view.DockView.DockView" alignment="CENTER" prefHeight="100" prefWidth="675">
     <HBox.margin>
         <Insets top="25"/>
     </HBox.margin>
