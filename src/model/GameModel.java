@@ -286,7 +286,7 @@ public class GameModel {
     public void updateScore(int turnId)
     {
         List<Clause> clausesP1 =new ArrayList<>();
-        clausesP1.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.LESS_EQUAL, _gameId));
+        clausesP1.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
         clausesP1.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.LESS_EQUAL, turnId));
         try
         {
@@ -304,7 +304,7 @@ public class GameModel {
         }
 
         List<Clause> clausesP2 =new ArrayList<>();
-        clausesP2.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.LESS_EQUAL, _gameId));
+        clausesP2.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _gameId));
         clausesP2.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.LESS_EQUAL, turnId));
         try
         {
