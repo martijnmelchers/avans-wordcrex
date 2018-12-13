@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import model.GameSession;
 import model.MatchOverviewModel;
@@ -23,7 +24,7 @@ import java.util.List;
 
 public class MatchView {
     @FXML
-    private AnchorPane rootAnchor;
+    private HBox rootHbox;
 
     @FXML
     private Text matchScore;
@@ -53,7 +54,7 @@ public class MatchView {
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
             fxmlLoader.load();
-            boolean player1turn = mod.currentTurnHasAction(match);
+            boolean isMyTurn = mod.isMyTurn(match);
 
             String player = GameSession.getUsername();
             String player1 =  match.player1.getUsername();
@@ -61,8 +62,8 @@ public class MatchView {
             String enemy  = player1.equals(player) ?  player2 : player1;
 
             matchEnemy.setText(enemy);
-            matchScore.setText(Integer.toString(scores.player1));
-            matchTurn.setText(player1turn ? player1 : player2);
+            matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
+            matchTurn.setText(isMyTurn ? GameSession.getUsername() : enemy);
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -73,8 +74,8 @@ public class MatchView {
 
     }
 
-    public AnchorPane getAnchor(){
-        return  this.rootAnchor;
+    public HBox getAnchor(){
+        return  this.rootHbox;
     }
 
     public Button getMatchPlayButton(){

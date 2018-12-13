@@ -10,6 +10,7 @@ import model.tables.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,7 +24,9 @@ public class MatchOverviewModel {
     // TODO: Fill the username automatically in using the authentication feature.
     private String _username = "jagermeester";
 
-    public ArrayList<Game> getCurrentPlayerGames(String username) {
+    private HashMap<Game, Boolean> currentTurns = new HashMap<>();
+
+    public List<Game> getCurrentPlayerGames(String username) {
         return findCurrentPlayerGame(username);
     }
 
@@ -35,20 +38,31 @@ public class MatchOverviewModel {
         }
     }
 
-    private ArrayList<Game> findCurrentPlayerGame(String username) {
+    public boolean isMyTurn(Game game){
+        if(this.currentTurns.containsKey(game)){
+            return this.currentTurns.get(game);
+        }
+        else {
+            return false;
+        }
+    }
+
+    private List<Game> findCurrentPlayerGame(String username) {
         try {
-            ArrayList<Game> games = new ArrayList<Game>();
+            List<Game> games = new ArrayList<Game>();
 
             var clauses = new ArrayList<Clause>();
 
             clauses.add(new Clause(new TableAlias("game", -1),"username_player1",CompareMethod.EQUAL, username, LinkMethod.OR));
             clauses.add(new Clause(new TableAlias("game", -1),"username_player2",CompareMethod.EQUAL, username, LinkMethod.OR));
-            for (Game game : _db.select(Game.class, clauses))
-            {
-                if(!game.gameState.isPlaying())
-                    continue;
 
-                games.add(game);
+            games = _db.select(Game.class, clauses);
+
+            for(var game : games){
+                if(currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)){
+                    // Opponent turn
+                    this.currentTurns.put(game, (GameSession.getUsername().equals(game.player1.getUsername())));
+                }
             }
 
             return games;
@@ -59,6 +73,11 @@ public class MatchOverviewModel {
         }
 
         return null;
+    }
+
+
+    public void loadTurns(){
+
     }
 
     public boolean currentTurnHasAction(Game game) {

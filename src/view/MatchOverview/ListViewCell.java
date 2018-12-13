@@ -22,6 +22,12 @@ public final class ListViewCell extends ListCell<Game> {
             MatchView view = new MatchView(game);
             setGraphic(view.getAnchor());
 
+
+            if(game.gameState.isRequest()){
+                view.getMatchPlayButton().setDisable(true);
+                view.getMatchSurrenderButton().setDisable(true);
+            }
+
             view.getMatchPlayButton().setOnAction((e) -> {
                 GameSession.setGame(game);
                 try{

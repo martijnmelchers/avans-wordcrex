@@ -5,6 +5,7 @@ import model.MatchOverviewModel;
 import model.tables.Game;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MatchOverviewController extends Controller
 {
@@ -16,7 +17,7 @@ public class MatchOverviewController extends Controller
         model = new MatchOverviewModel();
     }
 
-    public ArrayList<Game> getGames()
+    public List<Game> getGames()
     {
         System.out.println(GameSession.getUsername());
         return model.getCurrentPlayerGames(GameSession.getUsername());
@@ -47,6 +48,10 @@ public class MatchOverviewController extends Controller
         return model.searchForGamesAsPlayer(currentGamesToSearch);
     }
 
+
+    public boolean isMyTurn(Game game){
+        return this.model.isMyTurn(game);
+    }
     public MatchOverviewModel.GameScore getPlayerScores(Game game)
     {
         return model.getPlayerScores(game);
