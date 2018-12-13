@@ -8,6 +8,7 @@ import model.database.enumerators.CompareMethod;
 import model.tables.TurnBoardLetter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 public class Board {
 
     private ArrayList<Vector2> _placedCoords = new ArrayList<>();
+
     private HashMap<String, Integer> _letterValues = new HashMap<>() {{
         put("A", 2); put("B", 3); put("C", 6); put("D", 2); put("E", 1);
         put("F", 6); put("G", 4); put("H", 5); put("I", 2); put("J", 5);
@@ -85,18 +87,56 @@ public class Board {
         //TODO check elke keer als een tile geplaatst word
         ArrayList<Tile> tiles = new ArrayList<>();
         ArrayList<String> tileIds = new ArrayList<>();
+        ArrayList<Boolean> tilesConnected = new ArrayList<>();
 
         boolean usedStartingTile = !_tiles[7][7].isEmpty();
         boolean isStraight = _placedCoords.stream().allMatch(x -> x.getX() == _placedCoords.get(0).getX()) || _placedCoords.stream().allMatch(x -> x.getY() == _placedCoords.get(0).getY());
 
-        boolean isConnected = true;
-
         if(_placedCoords.size() < 1) { return null; }
 
-        isConnected = !_placedCoords.stream().allMatch( a-> _tiles[a.getX()][a.getY()-1].isEmpty()  || _tiles[a.getX()][a.getY()+1].isEmpty())
-        || !_placedCoords.stream().allMatch( a-> _tiles[a.getX()-1][a.getY()].isEmpty()  || _tiles[a.getX()+1][a.getY()].isEmpty());
+        boolean isConnected;
+        boolean boardHasOldTiles = Arrays.stream(_tiles).anyMatch(c -> Arrays.stream(c).anyMatch(o -> o.getState() == TileState.LOCKED && !o.getLetterType().getLetter().equals("")));
+        boolean isConnectedToOld = true;
 
-        if(!usedStartingTile || !isStraight || !isConnected) return null;
+       for (var c : _placedCoords) {
+
+           ArrayList<Boolean> isEmpty = new ArrayList<>();
+           ArrayList<Boolean> connectedToOld = new ArrayList<>();
+
+           //TODO refactor dit nog wel een keer want mn ogen doen pijn
+
+           if (c.getX()-1 > -1) {
+               isEmpty.add(_tiles[c.getY()][c.getX() - 1].isEmpty());// Check of hij leeg is
+               connectedToOld.add(_tiles[c.getY()][c.getX() - 1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() - 1].getLetterType().getLetter().equals("")); // Check of hij aan een oud block gevoegd is
+           }
+           if(c.getX()+1 < _placedCoords.size()){
+               isEmpty.add(_tiles[c.getY()][c.getX() + 1].isEmpty());
+               connectedToOld.add(_tiles[c.getY()][c.getX() + 1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() + 1].getLetterType().getLetter().equals(""));
+           }
+
+           if (c.getY()-1 > -1) {
+               isEmpty.add(_tiles[c.getY() - 1][c.getX()].isEmpty());
+               connectedToOld.add(_tiles[c.getY() - 1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY() - 1][c.getX()].getLetterType().getLetter().equals(""));
+           }
+           if(c.getY()+1 < _placedCoords.size()){
+                isEmpty.add(_tiles[c.getY()+1][c.getX()].isEmpty());
+                connectedToOld.add(_tiles[c.getY()+1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY()+1][c.getX()].getLetterType().getLetter().equals(""));
+           }
+
+            if(isEmpty.contains(false)) { tilesConnected.add(true); }
+            if(boardHasOldTiles) { isConnectedToOld = connectedToOld.contains(true); }
+        }
+
+        isConnected = _placedCoords.size() == tilesConnected.size();
+
+        /*boolean isAlone = (_placedCoords.stream().filter(o -> _tiles[o.getY()][o.getX()-1] != null).allMatch( a-> _tiles[a.getY()][a.getX()-1].isEmpty())
+                || _placedCoords.stream().filter(o -> _tiles[o.getY()][o.getX()+1] != null).allMatch(a ->  _tiles[a.getY()][a.getX()+1].isEmpty()))
+                && (_placedCoords.stream().filter(o -> _tiles[o.getY()-1][o.getX()] != null).allMatch( a-> _tiles[a.getY()-1][a.getX()].isEmpty())
+                || _placedCoords.stream().filter(o -> _tiles[o.getY()+1][o.getX()] != null).allMatch(a -> _tiles[a.getY()+1][a.getX()].isEmpty()));
+        */
+
+
+        if(!usedStartingTile || !isStraight || !isConnected || !isConnectedToOld) return null;
 
         for (Vector2 placedCoords : _placedCoords) {
 
@@ -109,14 +149,14 @@ public class Board {
             String tileId = "";
 
             for (int j = 0; j < 15; j++) {
-                if (!_tiles[x][j].isEmpty()) {
-                    tiles.add(_tiles[x][j]);
-                    wY = wY.concat(_tiles[x][j].getLetterType().getLetter());
-                    tileId += x + j;
+                if (!_tiles[y][j].isEmpty()) {
+                    tiles.add(_tiles[y][j]);
+                    wY = wY.concat(_tiles[y][j].getLetterType().getLetter());
+                    tileId += y + j;
                 }
-                if (!_tiles[j][y].isEmpty()) {
-                    tiles.add(_tiles[j][y]);
-                    wX = wX.concat(_tiles[j][y].getLetterType().getLetter());
+                if (!_tiles[j][x].isEmpty()) {
+                    tiles.add(_tiles[j][x]);
+                    wX = wX.concat(_tiles[j][x].getLetterType().getLetter());
                 }
             }
 
