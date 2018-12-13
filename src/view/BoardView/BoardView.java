@@ -97,7 +97,7 @@ public class BoardView extends View {
         for (int y = 0; y < tiles.length; y++) {
             for (int x = 0; x < tiles[y].length; x++) {
                 StackPane stackPane = new StackPane();
-                Rectangle rect = new Rectangle(30, 30);
+                Rectangle rect = new Rectangle(40, 40);
 
                 rect.setFill(tiles[y][x].getColor());
                 rect.setArcWidth(10);
