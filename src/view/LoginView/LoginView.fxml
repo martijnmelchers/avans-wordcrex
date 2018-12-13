@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane id="login_grid" style="-fx-background-color: grey" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginView" stylesheets="@../css/Authentication.css" >
+<BorderPane id="login_grid" style="-fx-background-color: grey" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginView.LoginView" stylesheets="@../css/Authentication.css" >
     <top>
         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="TOP_CENTER" GridPane.columnSpan="2">
             <image>
