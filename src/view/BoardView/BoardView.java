@@ -144,8 +144,7 @@ public class BoardView extends View {
 
     public void getTurn(Integer turn){
 
-       /* var db = DocumentSession.getDatabase();
-        db.select()*/
+       //var db = DocumentSession.getDatabase();
 
     }
 }

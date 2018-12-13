@@ -126,6 +126,7 @@ public class Board {
 
     private boolean moveIsLegit(){
         ArrayList<Boolean> tilesConnected = new ArrayList<>();
+        ArrayList<Boolean> connectedToOldTiles = new ArrayList<>();
 
         boolean usedStartingTile = !_tiles[7][7].isEmpty();
         boolean isStraight = _placedCoords.stream().allMatch(x -> x.getX() == _placedCoords.get(0).getX()) || _placedCoords.stream().allMatch(x -> x.getY() == _placedCoords.get(0).getY());
@@ -134,7 +135,7 @@ public class Board {
 
         boolean isConnected;
         boolean boardHasOldTiles = Arrays.stream(_tiles).anyMatch(c -> Arrays.stream(c).anyMatch(o -> o.getState() == TileState.LOCKED && !o.getLetterType().getLetter().equals("")));
-        boolean isConnectedToOld = false;
+        boolean isConnectedToOld = true;
 
         for (var c : _placedCoords) {
 
@@ -162,10 +163,12 @@ public class Board {
             }
 
             if(isEmpty.contains(false)) { tilesConnected.add(true); }
-            if(boardHasOldTiles && !isConnectedToOld) { isConnectedToOld = connectedToOld.contains(true); }
+            if(boardHasOldTiles) { connectedToOldTiles.add(connectedToOld.contains(true)); }
         }
 
         isConnected = _placedCoords.size() == tilesConnected.size();
+        if(boardHasOldTiles) { isConnectedToOld = connectedToOldTiles.contains(true); }
+
         if(!usedStartingTile || !isStraight || !isConnected || !isConnectedToOld) return false;
 
         return true;
