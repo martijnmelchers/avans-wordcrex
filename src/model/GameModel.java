@@ -131,13 +131,13 @@ public class GameModel {
             {
                 if(isNewTurn())
                 {
+                    _turnId++;
                     finished.run();
                     if(timer != null)
                     {
                         timer.cancel();
                         timer.purge();
                     }
-                    _turnId++;
                 }
             }
         };
