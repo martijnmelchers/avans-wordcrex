@@ -21,6 +21,8 @@ public class GameController extends Controller{
 
     public Tile[][] getTiles() { return _gameModel.getTiles(); }
 
+    public int getCurrentTurn() { return _gameModel.turn(); }
+
     public HandLetter[] getDock(){ return _gameModel.getDock(); }
 
     public int[] getScore() { return new int[] {_gameModel.getPlayerScore1(), _gameModel.getPlayerScore2() }; }
@@ -77,7 +79,11 @@ public class GameController extends Controller{
         _gameModel.submitTurn(info,nextTurn);
     }
 
-    public CheckInfo getCheckInfo() { return _gameModel.checkBoard(); }
+    public void showTurn(int turn){
+        _gameModel.setTurn(turn);
+        boardView = getViewCasted();
+        updateView();
+    }
 
     public void checkScore(){
        CheckInfo info = _gameModel.checkBoard();

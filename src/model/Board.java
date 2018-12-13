@@ -89,10 +89,15 @@ public class Board {
     //Returned de punten die het woord geeft
     public CheckInfo check(){
 
-        ArrayList<Tile> tiles = new ArrayList<>();
+        ArrayList<Tile> words = new ArrayList<>();
+
         ArrayList<String> tileIds = new ArrayList<>();
 
+
         for (Vector2 placedCoords : _placedCoords) {
+
+            ArrayList<Tile> tilesX = new ArrayList<>();
+            ArrayList<Tile> tilesY = new ArrayList<>();
 
             String wX = ""; //0 = x - 1 = y;
             String wY = "";
@@ -104,27 +109,27 @@ public class Board {
 
             for (int j = 0; j < 15; j++) {
                 if (!_tiles[y][j].isEmpty()) {
-                    tiles.add(_tiles[y][j]);
+                    tilesY.add(_tiles[y][j]);
                     wY = wY.concat(_tiles[y][j].getLetterType().getLetter());
                     tileId += y + j;
                 }
                 if (!_tiles[j][x].isEmpty()) {
-                    tiles.add(_tiles[j][x]);
+                    tilesX.add(_tiles[j][x]);
                     wX = wX.concat(_tiles[j][x].getLetterType().getLetter());
                 }
             }
 
             WordChecker checker = new WordChecker();
-            if (checker.check(wX) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
-            if (checker.check(wY) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
+            if (checker.check(wX) && !tileIds.contains(tileId)){ tileIds.add(tileId); words.addAll(tilesX); }
+            if (checker.check(wY) && !tileIds.contains(tileId)){ tileIds.add(tileId); words.addAll(tilesY);}
         }
 
         if(tileIds.size()<1 || !moveIsLegit()) { return null; }
 
-        Tile[] tileArr = tiles.toArray(new Tile[0]);
+        Tile[] tileArr = words.toArray(new Tile[0]);
         Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
 
-        Points points = calculatePoints(tileArr);
+        Points points = calculatePoints(words.toArray(new Tile[0]));
 
         return new CheckInfo(points, tileArr, coordinatesArr);
     }
@@ -187,8 +192,8 @@ public class Board {
         int w3 = 0;
         int w4 = 0;
 
-        for (Tile tile : tiles) {
-            TileType tileType = tile.getType();
+    for (Tile tile : tiles) {
+        TileType tileType = tile.getType();
 
             int letterValue = _letterValues.get(tile.getLetterType().getLetter());
             score += letterValue;

@@ -18,7 +18,6 @@ import view.DockView.DockView;
 import view.View;
 
 
-
 public class BoardView extends View {
 
     @FXML public GridPane _gridPane;
@@ -119,6 +118,11 @@ public class BoardView extends View {
                 _gridPane.getChildren().add(stackPane);
             }
         }
+        _slider.setMin(0);
+        _slider.setMax(_controller.getCurrentTurn());
+        _slider.setShowTickLabels(true);
+        _slider.setShowTickMarks(true);
+        _slider.setBlockIncrement(10);
     }
 
     @FXML
@@ -146,9 +150,8 @@ public class BoardView extends View {
         }
     }
 
-    public void getTurn(Integer turn){
-
-       //var db = DocumentSession.getDatabase();
-
+    @FXML
+    public void showTurnOnBoard(){
+        _controller.showTurn((int)_slider.getValue());
     }
 }
