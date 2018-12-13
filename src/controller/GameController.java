@@ -38,6 +38,7 @@ public class GameController extends Controller{
     public void resetTile(int x, int y)
     {
         _gameModel.removeTile(new Vector2(x, y));
+        checkScore();
     }
 
     public boolean tileEmpty(int x,int y)
@@ -77,6 +78,7 @@ public class GameController extends Controller{
             }
         };
         _gameModel.submitTurn(info,nextTurn);
+        _gameModel.updateScore();
     }
 
     public void showTurn(int turn){
@@ -95,5 +97,6 @@ public class GameController extends Controller{
     private void updateView(boolean updateDock)
     {
         boardView.update(updateDock);
+        checkScore();
     }
 }

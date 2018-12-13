@@ -6,6 +6,7 @@ import javafx.concurrent.Task;
 import javafx.util.Pair;
 import model.database.DocumentSession;
 import model.database.classes.Clause;
+import model.database.classes.Select;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
@@ -244,7 +245,7 @@ public class GameModel {
         var clauses = new ArrayList<Clause>();
 
         try{
-            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _turnId));
+            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _gameId));
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, _turnId));
 
             var results = db.select(TurnPlayer2.class, clauses);
@@ -280,12 +281,57 @@ public class GameModel {
         _board.clearPlacedCoords();
     }
 
+    public void updateScore()
+    {
+        updateScore(_turnId);
+    }
+
+    public void updateScore(int turnId)
+    {
+        List<Clause> clausesP1 =new ArrayList<>();
+        clausesP1.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
+        clausesP1.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, turnId));
+        try
+        {
+            int score = 0;
+            List<TurnPlayer1> turnPlayer1s = db.select(TurnPlayer1.class, clausesP1);
+            for (TurnPlayer1 turnPlayer1 : turnPlayer1s)
+            {
+                score += (turnPlayer1.getScore() + turnPlayer1.getBonus());
+            }
+            this._playerScore1 = score;
+        }
+        catch (Exception e)
+        {
+            Log.error(e,false );
+        }
+
+        List<Clause> clausesP2 =new ArrayList<>();
+        clausesP1.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _gameId));
+        clausesP1.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, turnId));
+        try
+        {
+            int score = 0;
+            List<TurnPlayer2> turnPlayer2s = db.select(TurnPlayer2.class, clausesP2);
+            for (TurnPlayer2 turnPlayer2 : turnPlayer2s)
+            {
+                score += (turnPlayer2.getScore() + turnPlayer2.getBonus());
+            }
+            this._playerScore2 = score;
+        }
+        catch (Exception e)
+        {
+            Log.error(e,false );
+        }
+
+    }
+
     private void submitTurnP2(CheckInfo checkInfo){
         //TODO zorg dat hij weet of hij speler 1 of 2 is en die database tabel aanpast
         var clauses = new ArrayList<Clause>();
 
         try{
-            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _turnId));
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId));
 
             var results = db.select(TurnPlayer1.class, clauses);
