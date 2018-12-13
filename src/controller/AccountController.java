@@ -1,13 +1,16 @@
 package controller;
 
 import model.AccountModel;
-import view.LoginView;
+import model.helper.Log;
+import view.LoginView.LoginView;
 import view.RegisterView.RegisterView;
+
+import java.io.IOException;
 
 public class AccountController extends Controller
 {
 
-    AccountModel model;
+    private AccountModel model;
 
     public AccountController()
     {
@@ -43,7 +46,11 @@ public class AccountController extends Controller
             return;
         }
 
-        navigate("loginView.fxml", 350, 550);
+        try {
+            navigate("loginView", 350, 550);
+        } catch (IOException e) {
+            Log.error(e, true);
+        }
 
         LoginView loginView = getViewCasted();
         loginView.setCredentials(username,password);
