@@ -178,8 +178,8 @@ public class GameModel {
             // Create new turn
             createNewTurn();
 
-            removeUsedLettersInDock(checkInfo);
-
+            //removeUsedLettersInDock(checkInfo);
+            dock.update(_gameId,_turnId );
             //refill winners hand + insert hand to database
             dock.refill(_gameId,_turnId);
 
@@ -264,7 +264,7 @@ public class GameModel {
             //TODO in database tileType moet je kijke wat -- en * zijn (default?)
             for (int i = 0; i < c.length; i++){
 
-                int letterId = _board.getTiles()[c[i].getX()][c[i].getY()].getLetterType().getid();
+                int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
 
                 db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 1
             }
@@ -306,7 +306,7 @@ public class GameModel {
             //TODO in database tileType moet je kijke nwat -- en * zijn (default?)
             for (int i = 0; i < c.length; i++){
 
-                int letterId = _board.getTiles()[c[i].getX()][c[i].getY()].getLetterType().getid();
+                int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
                 db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 2
             }
 

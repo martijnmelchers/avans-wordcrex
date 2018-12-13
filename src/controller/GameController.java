@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -57,13 +58,20 @@ public class GameController extends Controller{
             return;
         }
 
-        boardView.startLoadingScreen();
+        boardView.startLoadingScreen("Wachten op andere speler.");
         Task nextTurn = new Task() {
             @Override
             protected Object call() throws Exception
             {
                 updateView();
-                boardView.stopLoadingScreen();
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run()
+                    {
+                        boardView.stopLoadingScreen();
+                    }
+                });
+
                 return null;
             }
         };

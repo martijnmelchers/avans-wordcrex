@@ -72,14 +72,14 @@ public class DockView
 
         for (int i = 0; i < 225; i++)
         {
-            int column = i/15;
-            int row = i%15;
+            int row = i/15;
+            int column = i%15;
             Node child = children.get(i);
             Bounds b = tile.localToScreen(tile.getBoundsInLocal());
             double x = ((b.getMinX() + b.getMaxX())/2);
             double y = ((b.getMinY() + b.getMaxY())/2);
             Bounds bounds = child.localToScreen(child.getBoundsInLocal());
-            
+
             if(bounds.getMaxY()+1 > y && bounds.getMinY()-1 < y)
             {
                 if (bounds.getMaxX() + 1 > x && bounds.getMinX() - 1 < x)
