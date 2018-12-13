@@ -97,6 +97,7 @@ public class GameController extends Controller{
         _gameModel.setTurn(turn);
         boardView = getViewCasted();
         updateView(true);
+        _gameModel.updateScore(turn);
     }
 
     public void checkScore(){

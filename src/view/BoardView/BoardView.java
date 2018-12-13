@@ -3,12 +3,15 @@ package view.BoardView;
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.Tile;
@@ -16,6 +19,8 @@ import model.TileState;
 import model.helper.Log;
 import view.DockView.DockView;
 import view.View;
+
+import java.util.stream.Collectors;
 
 
 public class BoardView extends View {
@@ -29,6 +34,9 @@ public class BoardView extends View {
     @FXML private Text _scoreP1;
     @FXML private Text _scoreP2;
     @FXML private Text _addedScore;
+
+    @FXML private Button _submit;
+    @FXML private Button _pass;
 
     @FXML private Label labelLoadingScreen;
 
@@ -166,5 +174,24 @@ public class BoardView extends View {
         var snap = Math.round(_slider.getValue());
         _controller.showTurn((int)snap);
         _slider.setValue(snap);
+        updateScore();
+        if ((_controller.getCurrentTurn() - 1) != (int)snap)
+        {
+            GridPane block = new GridPane();
+            block.setId("block");
+            _gridPane.add(block, 0, 0, 15, 17);
+            _submit.setDisable(true);
+            _pass.setDisable(true);
+        }
+        else
+        {
+           _gridPane.getChildren().removeAll(
+                   _gridPane.getChildren().stream()
+                           .filter(x -> x.getId() != null && x.getId().equals("block"))
+                           .collect(Collectors.toList())
+           );
+            _submit.setDisable(false);
+            _pass.setDisable(false);
+        }
     }
 }
