@@ -72,8 +72,8 @@ public class DockView
 
         for (int i = 0; i < 225; i++)
         {
-            int row = i/15;
-            int column = i%15;
+            int column = i/15;
+            int row = i%15;
             Node child = children.get(i);
             Bounds b = tile.localToScreen(tile.getBoundsInLocal());
             double x = ((b.getMinX() + b.getMaxX())/2);
@@ -84,11 +84,11 @@ public class DockView
             {
                 if (bounds.getMaxX() + 1 > x && bounds.getMinX() - 1 < x)
                 {
-                    if(!controller.tileEmpty(column,row))
+                    if(!controller.tileEmpty(column, row))
                     {
                         continue;
                     }
-                    controller.placeTile(row, column ,text.getText(), (Integer) stackPane.getProperties().get("id"));
+                    controller.placeTile(column, row ,text.getText(), (Integer) stackPane.getProperties().get("id"));
                     hBoxDock.getChildren().remove(stackPane);
                     System.out.println("row:" + row);
                     System.out.println("column:" + column);

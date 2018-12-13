@@ -106,19 +106,19 @@ public class Board {
            //TODO refactor dit nog wel een keer want mn ogen doen pijn
 
            if (c.getX()-1 > -1) {
-               isEmpty.add(_tiles[c.getY()][c.getX() - 1].isEmpty());// Check of hij leeg is
-               connectedToOld.add(_tiles[c.getY()][c.getX() - 1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() - 1].getLetterType().getLetter().equals("")); // Check of hij aan een oud block gevoegd is
+               isEmpty.add(_tiles[c.getY()][c.getX()-1].isEmpty());// Check of hij leeg is
+               connectedToOld.add(_tiles[c.getY()][c.getX()-1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() - 1].getLetterType().getLetter().equals("")); // Check of hij aan een oud block gevoegd is
            }
-           if(c.getX()+1 < _placedCoords.size()){
-               isEmpty.add(_tiles[c.getY()][c.getX() + 1].isEmpty());
-               connectedToOld.add(_tiles[c.getY()][c.getX() + 1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() + 1].getLetterType().getLetter().equals(""));
+           if(c.getX()+1 < 15){
+               isEmpty.add(_tiles[c.getY()][c.getX()+1].isEmpty());
+               connectedToOld.add(_tiles[c.getY()][c.getX()+1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() + 1].getLetterType().getLetter().equals(""));
            }
 
            if (c.getY()-1 > -1) {
-               isEmpty.add(_tiles[c.getY() - 1][c.getX()].isEmpty());
+               isEmpty.add(_tiles[c.getY()-1][c.getX()].isEmpty());
                connectedToOld.add(_tiles[c.getY() - 1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY() - 1][c.getX()].getLetterType().getLetter().equals(""));
            }
-           if(c.getY()+1 < _placedCoords.size()){
+           if(c.getY()+1 < 15){
                 isEmpty.add(_tiles[c.getY()+1][c.getX()].isEmpty());
                 connectedToOld.add(_tiles[c.getY()+1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY()+1][c.getX()].getLetterType().getLetter().equals(""));
            }
@@ -224,7 +224,7 @@ public class Board {
             String line = "";
             for(int k =0;k<14;k++)
             {
-                String s = _tiles[i][k].getLetterType().getLetter();
+                String s = _tiles[k][i].getLetterType().getLetter();
                 line += s==""?".":s ;
             }
             System.out.println(line);
