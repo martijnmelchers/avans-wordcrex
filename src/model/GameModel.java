@@ -196,6 +196,16 @@ public class GameModel {
                 @Override
                 protected Object call() // This gets called when other player is ready
                 {
+                    // wait one second for the other player to insert data in the database
+                    try
+                    {
+                        Thread.sleep(2000);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.error(e,false );
+                    }
+
                     // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
                     dock.update(_gameId,_turnId);// update hand
                     _board.getBoardFromDatabase(_gameId,_turnId);
