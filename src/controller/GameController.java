@@ -16,7 +16,7 @@ public class GameController extends Controller{
     private GameModel _gameModel;
 
     public GameController() {
-        _gameModel = new GameModel(new Game(505, "playing", "NL", "jagermeester", "Lidewij", "accepted", null)); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
+        _gameModel = new GameModel(new Game(504, "playing", "NL", "jagermeester", "Lidewij", "accepted", null)); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
     }
 
     public Tile[][] getTiles() { return _gameModel.getTiles(); }
@@ -46,10 +46,15 @@ public class GameController extends Controller{
         return  _gameModel.tileIsEmpty(new Vector2(x, y));
     }
 
-    public void submitTurn(){
+    public void submitTurn()
+    {
+        submitTurn(false);
+    }
+
+    public void submitTurn(boolean pass){
         CheckInfo info = _gameModel.checkBoard();
 
-        if(info == null) {
+        if(info == null &&!pass) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setContentText("Foute zet");
             alert.showAndWait().ifPresent(response -> {
@@ -59,6 +64,7 @@ public class GameController extends Controller{
             });
             return;
         }
+
 
         boardView.startLoadingScreen("Wachten op andere speler.");
         Task nextTurn = new Task() {
@@ -81,6 +87,12 @@ public class GameController extends Controller{
 
     }
 
+    public void passTurn()
+    {
+        boardView = getViewCasted();
+        submitTurn(true);
+    }
+
     public void showTurn(int turn){
         _gameModel.setTurn(turn);
         boardView = getViewCasted();
@@ -101,4 +113,5 @@ public class GameController extends Controller{
         boardView.updateScore();
         checkScore();
     }
+
 }

@@ -133,6 +133,13 @@ public class BoardView extends View {
         updateScore();
     }
 
+    @FXML
+    private void passTurn()
+    {
+        _controller.passTurn();
+        updateScore();
+    }
+
     private void tileClicked(MouseEvent e, StackPane tile)
     {
         Tile[][] tiles = _controller.getTiles();

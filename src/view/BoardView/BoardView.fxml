@@ -70,7 +70,7 @@
                 </font>
             </Text>
             <Button layoutX="482.0" layoutY="53.0" onMouseClicked="#submitTurn" prefHeight="34.0" prefWidth="85.0" style="-fx-background-color: #f4d941;" text="Submit" textAlignment="CENTER" />
-         <Button fx:id="_pass" layoutX="482.0" layoutY="108.0" onMouseClicked="#submitTurn" prefHeight="34.0" prefWidth="85.0" style="-fx-background-color: #f4d941;" text="Pass" textAlignment="CENTER" />
+         <Button fx:id="_pass" layoutX="482.0" layoutY="108.0" onMouseClicked="#passTurn" prefHeight="34.0" prefWidth="85.0" style="-fx-background-color: #f4d941;" text="Pass" textAlignment="CENTER" />
          <Slider fx:id="_slider" layoutX="22.0" layoutY="614.0" onDragDetected="#showTurnOnBoard" prefHeight="14.0" prefWidth="450.0" />
         </children>
     </AnchorPane>
