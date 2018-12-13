@@ -78,7 +78,7 @@
             <ScrollPane fx:id="_scrollPane" layoutX="494.0" layoutY="43.0" prefHeight="505.0" prefWidth="450.0" style="-fx-background-color: #332b7c;" />
         </children>
     </AnchorPane>
-    <VBox  fx:id="vboxLoadingScreen" alignment="CENTER" visible="true" style="-fx-background-color: rgba(255,255,255,0.65)">
+    <VBox  fx:id="vboxLoadingScreen" alignment="CENTER" visible="false" style="-fx-background-color: rgba(255,255,255,0.65)">
         <Label fx:id="labelLoadingScreen" text="Loadingscreen text"></Label>
         <ProgressIndicator progress="-1"></ProgressIndicator>
     </VBox>
