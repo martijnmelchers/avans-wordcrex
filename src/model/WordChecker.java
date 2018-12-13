@@ -24,6 +24,7 @@ public class WordChecker {
 
     public boolean check(String word){
 
+        if(word.length() < 2) return true;
         if(word == null) return false;
 
         var clauses = new ArrayList<Clause>();

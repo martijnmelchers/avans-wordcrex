@@ -118,11 +118,12 @@ public class BoardView extends View {
                 _gridPane.getChildren().add(stackPane);
             }
         }
-        _slider.setMin(0);
+        _slider.setMin(1);
         _slider.setMax(_controller.getCurrentTurn());
         _slider.setShowTickLabels(true);
         _slider.setShowTickMarks(true);
         _slider.setBlockIncrement(10);
+        //TODO update MAX naar laatste turn
     }
 
     @FXML

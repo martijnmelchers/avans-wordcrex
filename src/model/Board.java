@@ -99,29 +99,86 @@ public class Board {
             ArrayList<Tile> tilesX = new ArrayList<>();
             ArrayList<Tile> tilesY = new ArrayList<>();
 
-            String wX = ""; //0 = x - 1 = y;
-            String wY = "";
-
             int x = placedCoords.getX();
             int y = placedCoords.getY();
 
+            String woordX = "";
+            String woordY = "";
+
             String tileId = "";
 
-            for (int j = 0; j < 15; j++) {
-                if (!_tiles[y][j].isEmpty()) {
+            for (int j = 0; j < 14; j++){ //Eerst links checken dan rechts
+                if(x - j == -1) break;
+                if(_tiles[y][x - j].isEmpty()) break;
+
+                tilesX.add(_tiles[y][x - j]);
+                woordX += _tiles[y][x - j].getLetterType().getLetter();
+
+                tileId += y +(x - j);
+            }
+
+            woordX = ReverseString(woordX);
+
+            for (int j = 1; x + j < 14; j++){ //Begint bij 1 want dan overlappen ze niet met elkaar
+                if(_tiles[y][x + j].isEmpty()) break;
+
+                tilesX.add(_tiles[y][x + j]);
+
+                woordX += _tiles[y][x + j].getLetterType().getLetter();
+                tileId += y +(x + j);
+            }
+
+
+            for (int j = 0; j < 14; j++){ //Eerst links checken dan rechts
+                if(y - j == -1) break;
+                if(_tiles[y - j][x].isEmpty()) break;
+
+                tilesY.add(_tiles[y - j][x]);
+                woordY += _tiles[y - j][x].getLetterType().getLetter();
+            }
+
+            woordY = ReverseString(woordY);
+
+            for (int j = 1; y + j < 14; j++){ //Begint bij 1 want dan overlappen ze niet met elkaar
+                if(_tiles[y + j][x].isEmpty()) break;
+
+                tilesY.add(_tiles[y + j][x]);
+                woordY += _tiles[y + j][x].getLetterType().getLetter();
+
+            }
+
+            /*for (int j = 0; j < 15; j++) {
+                if (!_tiles[y][x + j].isEmpty()) {
+
                     tilesY.add(_tiles[y][j]);
                     wY = wY.concat(_tiles[y][j].getLetterType().getLetter());
+                    c = true;
                     tileId += y + j;
-                }
+
+                } else if (c && _tiles[y][j].isEmpty()) { c = false; break; }
+
+
+            }
+
+            for (int j = 0; j < 15; j++) {
                 if (!_tiles[j][x].isEmpty()) {
                     tilesX.add(_tiles[j][x]);
                     wX = wX.concat(_tiles[j][x].getLetterType().getLetter());
-                }
-            }
+                    c = true;
 
+                } else if(c && _tiles[j][x].isEmpty()) { break;}
+            }*/
+
+
+            System.out.println("Woord X: " + woordX +" Woord Y:"+ woordY);
             WordChecker checker = new WordChecker();
-            if (checker.check(wX) && !tileIds.contains(tileId)){ tileIds.add(tileId); words.addAll(tilesX); }
-            if (checker.check(wY) && !tileIds.contains(tileId)){ tileIds.add(tileId); words.addAll(tilesY);}
+            boolean bothSidesCorrect = checker.check(woordX) && checker.check(woordY);
+
+            if(bothSidesCorrect && !tileIds.contains(tileId)){
+                tileIds.add(tileId);
+                words.addAll(tilesX);
+                words.addAll(tilesY);
+            }
         }
 
         if(tileIds.size()<1 || !moveIsLegit()) { return null; }
@@ -315,4 +372,14 @@ public class Board {
         }
         return new Tile(TileType.STANDARD, Color.rgb(51, 43, 124));
     }
+
+    private String ReverseString(String string){
+        String temp = "";
+        for (int i = string.length() - 1; i > -1; i--){
+            temp += string.toCharArray()[i];
+        }
+
+        return temp;
+    }
+
 }
