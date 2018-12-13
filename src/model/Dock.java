@@ -161,7 +161,7 @@ public class Dock
         {
             if(letters[i] == null)
             {
-                int randomIndex = new Random().nextInt(notUsed.size());
+                int randomIndex = new Random().nextInt(notUsed.size()-1)+1;
                 Letter l = notUsed.get(randomIndex);
                 Turn t = new Turn(gameId,turnId);
                 letters[i] = new HandLetter(l.get_letterId(),turnId, gameId,l,t);
@@ -249,5 +249,18 @@ public class Dock
                 .collect(Collectors.toList());
 
         return usableLetters;
+    }
+
+    public void print()
+    {
+        String s = "";
+        String s1 = "";
+        for (HandLetter l : letters)
+        {
+            s+= l.get_letterId()+" ";
+            s1+= l.letter.get_symbol();
+        }
+        System.out.println(s);
+        System.out.println(s1);
     }
 }

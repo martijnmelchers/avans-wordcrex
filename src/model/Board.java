@@ -37,7 +37,7 @@ public class Board {
             List<TurnBoardLetter> grid = DocumentSession.getDatabase().select(TurnBoardLetter.class, clauses);
             for (TurnBoardLetter letter : grid)
             {
-                _tiles[letter.getX()][letter.getY()].replace(letter.letter.get_symbol()+"", letter.letter.symbol.get_value(), letter.letter.get_letterId(), Color.rgb(247, 235, 160));
+                _tiles[letter.getY()][letter.getX()].replace(letter.letter.get_symbol()+"", letter.letter.symbol.get_value(), letter.letter.get_letterId(), Color.rgb(247, 235, 160));
             }
         }
         catch (Exception e)
@@ -53,7 +53,7 @@ public class Board {
 
         for (int x = 0; x < _tiles.length; x++) {
             for (int y = 0; y < _tiles[x].length; y++) {
-                _tiles[x][y] = decideTileType(new Vector2(x, y));
+                _tiles[y][x] = decideTileType(new Vector2(x, y));
             }
         }
     }
@@ -75,7 +75,6 @@ public class Board {
     //Remove a piece
     public Tile remove(Vector2 vector2){
         Tile prevTile = _tiles[vector2.getY()][vector2.getX()];
-
         _tiles[vector2.getY()][vector2.getX()] = decideTileType(vector2);
         _tiles[vector2.getY()][vector2.getX()].setState(TileState.LOCKED);
         _placedCoords.remove(_placedCoords.stream().filter(a->a.getY() == vector2.getY()&&a.getX() == vector2.getX()).collect(Collectors.toList()).get(0));
@@ -230,7 +229,7 @@ public class Board {
         int x = vector2.getX();
         int y = vector2.getY();
 
-        int position = (x * 15) + y;
+        int position = (y * 15) + x;
 
         switch (position) {
             case 0:

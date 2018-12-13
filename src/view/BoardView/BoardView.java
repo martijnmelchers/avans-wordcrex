@@ -3,6 +3,7 @@ package view.BoardView;
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -16,7 +17,6 @@ import model.helper.Log;
 import view.DockView.DockView;
 import view.View;
 
-import java.awt.*;
 
 
 public class BoardView extends View {
@@ -31,7 +31,7 @@ public class BoardView extends View {
     @FXML private Text _scoreP2;
     @FXML private Text _addedScore;
 
-    @FXML private Label labelLoadingscreen;
+    @FXML private Label labelLoadingScreen;
 
     @FXML private VBox vboxLoadingScreen;
 
@@ -80,7 +80,7 @@ public class BoardView extends View {
     public void startLoadingScreen(String message)
     {
         vboxLoadingScreen.setVisible(true);
-        labelLoadingscreen.setText(message);
+        labelLoadingScreen.setText(message);
     }
 
     public void stopLoadingScreen()
@@ -91,8 +91,8 @@ public class BoardView extends View {
     public void init()
     {
         Tile[][] tiles = _controller.getTiles();
-        for (int x = 0; x < tiles.length; x++) {
-            for (int y = 0; y < tiles[x].length; y++) {
+        for (int y = 0; y < tiles.length; y++) {
+            for (int x = 0; x < tiles[y].length; x++) {
                 StackPane stackPane = new StackPane();
                 Rectangle rect = new Rectangle(30, 30);
 
