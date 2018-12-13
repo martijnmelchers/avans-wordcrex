@@ -4,10 +4,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="642.0" prefWidth="575.0" style="-fx-background-color: rgb(28, 20, 58)" xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="view.BoardView.BoardView">
-    <VBox fx:id="vboxLoadingScreen" alignment="CENTER" prefHeight="639.0" prefWidth="955.0" style="-fx-background-color: rgba(255,255,255,0.65)" visible="false">
-        <Label fx:id="labelLoadingScreen" text="Loadingscreen text" />
-        <ProgressIndicator progress="-1" />
-    </VBox>
     <AnchorPane prefHeight="642.0" prefWidth="568.0">
         <children>
             <GridPane fx:id="_gridPane" layoutX="22.0" layoutY="53.0" prefHeight="550.0" prefWidth="450.0" style="-fx-border-color: white;">
@@ -78,4 +74,8 @@
          <Slider fx:id="_slider" layoutX="22.0" layoutY="614.0" onDragDetected="#showTurnOnBoard" onDragDone="#showTurnOnBoard" onDragDropped="#showTurnOnBoard" onDragEntered="#showTurnOnBoard" onDragExited="#showTurnOnBoard" prefHeight="14.0" prefWidth="450.0" />
         </children>
     </AnchorPane>
+    <VBox fx:id="vboxLoadingScreen" alignment="CENTER" prefHeight="639.0" prefWidth="955.0" style="-fx-background-color: rgba(255,255,255,0.65)" visible="false">
+        <Label fx:id="labelLoadingScreen" text="Loadingscreen text" />
+        <ProgressIndicator progress="-1" />
+    </VBox>
 </StackPane>
