@@ -62,7 +62,7 @@ public class Dock
                     filtered.add(turnBoardLetter);
                 }
             }
-            return turnBoardLetters;
+            return filtered;
         }
         catch (Exception e)
         {
@@ -96,6 +96,8 @@ public class Dock
             e.printStackTrace();
             return;
         }
+
+
 
         ArrayList<HandLetter> filtered = new ArrayList<>();
 
