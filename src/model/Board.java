@@ -29,6 +29,7 @@ public class Board {
 
     public void getBoardFromDatabase(int gameId,Integer turn_id) // with turn_id you can return state of board that moment (For history mode)
     {
+        createDefaultBoard();
         ArrayList<Clause> clauses = new ArrayList<>();
         clauses.add(new Clause(new TableAlias("turnboardletter", -1),"game_id" , CompareMethod.EQUAL, gameId ));
         clauses.add(new Clause(new TableAlias("turnboardletter", -1),"turn_id" , CompareMethod.LESS_EQUAL, turn_id ));
@@ -50,7 +51,11 @@ public class Board {
     public void clearPlacedCoords() { _placedCoords.clear(); }
 
     public Board() {
+        createDefaultBoard();
+    }
 
+    private void createDefaultBoard()
+    {
         for (int x = 0; x < _tiles.length; x++) {
             for (int y = 0; y < _tiles[x].length; y++) {
                 _tiles[y][x] = decideTileType(new Vector2(x, y));

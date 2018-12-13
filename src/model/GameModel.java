@@ -134,7 +134,7 @@ public class GameModel {
                         timer.cancel();
                         timer.purge();
                     }
-
+                    _turnId++;
                 }
             }
         };

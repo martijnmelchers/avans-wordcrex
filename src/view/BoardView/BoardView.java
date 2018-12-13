@@ -50,10 +50,14 @@ public class BoardView extends View {
         updateScore();
     }
 
-    public void update()
+    public void update(boolean updateDock)
     {
         clearGrid();
         init();
+        if (updateDock)
+        {
+            dockController.updateDock();
+        }
     }
 
     private void updateScore(){
@@ -134,7 +138,7 @@ public class BoardView extends View {
             String character = ((Text)tile.getChildren().get(1)).getText();
             int letterid = tiles[row][col].getLetterType().getid();
             _controller.resetTile(col,row);
-            update();
+            update(false);
             StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY(),letterid);
 
             tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
