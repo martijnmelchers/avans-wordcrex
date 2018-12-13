@@ -113,8 +113,6 @@ public class Board {
 
                 tilesX.add(_tiles[y][x - j]);
                 woordX += _tiles[y][x - j].getLetterType().getLetter();
-
-                tileId += y +(x - j);
             }
 
             woordX = ReverseString(woordX);
@@ -147,37 +145,14 @@ public class Board {
 
             }
 
-            /*for (int j = 0; j < 15; j++) {
-                if (!_tiles[y][x + j].isEmpty()) {
-
-                    tilesY.add(_tiles[y][j]);
-                    wY = wY.concat(_tiles[y][j].getLetterType().getLetter());
-                    c = true;
-                    tileId += y + j;
-
-                } else if (c && _tiles[y][j].isEmpty()) { c = false; break; }
-
-
-            }
-
-            for (int j = 0; j < 15; j++) {
-                if (!_tiles[j][x].isEmpty()) {
-                    tilesX.add(_tiles[j][x]);
-                    wX = wX.concat(_tiles[j][x].getLetterType().getLetter());
-                    c = true;
-
-                } else if(c && _tiles[j][x].isEmpty()) { break;}
-            }*/
-
-
             System.out.println("Woord X: " + woordX +" Woord Y:"+ woordY);
             WordChecker checker = new WordChecker();
             boolean bothSidesCorrect = checker.check(woordX) && checker.check(woordY);
 
             if(bothSidesCorrect && !tileIds.contains(tileId)){
                 tileIds.add(tileId);
-                words.addAll(tilesX);
-                words.addAll(tilesY);
+                if(tilesX.size() > 1)words.addAll(tilesX);
+                if(tilesY.size() > 1)words.addAll(tilesY);
             }
         }
 
@@ -253,7 +228,6 @@ public class Board {
         TileType tileType = tile.getType();
 
             int letterValue = _letterValues.get(tile.getLetterType().getLetter());
-            score += letterValue;
 
             switch (tileType) {
                 case LETTER_TIMES_TWO:
@@ -271,6 +245,9 @@ public class Board {
                 case WORD_TIMES_FOUR:
                     w4++;
                     break;
+                default:
+                    score += letterValue;
+                break;
             }
         }
 
