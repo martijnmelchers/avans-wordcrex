@@ -70,7 +70,7 @@ public class AccountModel {
         try
         {
             this._db.update(new Account(username, lowerPassword));
-            return null;
+            return "";
         }
         catch (Exception e)
         {
