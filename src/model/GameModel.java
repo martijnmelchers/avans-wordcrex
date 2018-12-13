@@ -10,8 +10,10 @@ import model.database.services.Database;
 import model.helper.Log;
 import model.tables.*;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameModel {
 
@@ -154,7 +156,6 @@ public class GameModel {
     public Tile removeTile(Vector2 vector2) { return _board.remove(vector2); }
 
     public CheckInfo checkBoard() { return _board.check(); }
-
 
     public void submitTurn(CheckInfo checkInfo,Task onEndTurn)
     {

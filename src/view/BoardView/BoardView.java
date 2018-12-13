@@ -3,6 +3,7 @@ package view.BoardView;
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -24,8 +25,11 @@ public class BoardView extends View {
 
     @FXML private DockView dockController;
 
+    @FXML private Slider _slider;
+
     @FXML private Text _scoreP1;
     @FXML private Text _scoreP2;
+    @FXML private Text _addedScore;
 
     @FXML private Label labelLoadingscreen;
 
@@ -52,12 +56,15 @@ public class BoardView extends View {
         init();
     }
 
-
     private void updateScore(){
         String[] playerNames = _controller.getPlayerNames();
         int[] scores = _controller.getScore();
         _scoreP1.setText(playerNames[0] + " : " + Integer.toString(scores[0]));
         _scoreP2.setText(playerNames[1] + " : " +Integer.toString(scores[1]));
+    }
+
+    public void updateLocalScore(String score){
+        _addedScore.setText(score);
     }
 
     public void clearGrid()
@@ -133,5 +140,12 @@ public class BoardView extends View {
             tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
             tile.setOnMouseReleased(event-> Event.fireEvent(sp,event ));
         }
+    }
+
+    public void getTurn(Integer turn){
+
+       /* var db = DocumentSession.getDatabase();
+        db.select()*/
+
     }
 }

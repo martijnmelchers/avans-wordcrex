@@ -1,21 +1,16 @@
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.layout.VBox?>
-
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
-<StackPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: rgb(28, 20, 58)" fx:controller="view.BoardView.BoardView" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" >
-    <AnchorPane >
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="642.0" prefWidth="575.0" style="-fx-background-color: rgb(28, 20, 58)" xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="view.BoardView.BoardView">
+    <VBox fx:id="vboxLoadingScreen" alignment="CENTER" prefHeight="639.0" prefWidth="955.0" style="-fx-background-color: rgba(255,255,255,0.65)" visible="false">
+        <Label fx:id="labelLoadingScreen" text="Loadingscreen text" />
+        <ProgressIndicator progress="-1" />
+    </VBox>
+    <AnchorPane prefHeight="642.0" prefWidth="568.0">
         <children>
-            <GridPane fx:id="_gridPane" layoutX="14.0" layoutY="14.0" prefHeight="550.0" prefWidth="450.0">
+            <GridPane fx:id="_gridPane" layoutX="22.0" layoutY="53.0" prefHeight="550.0" prefWidth="450.0" style="-fx-border-color: white;">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -62,24 +57,25 @@
                     </rowConstraints>
                 </GridPane>
             </GridPane>
+         <Text fx:id="_addedScore" fill="#fcbc32" layoutX="234.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0p">
+            <font>
+               <Font size="23.0" />
+            </font>
+         </Text>
 
-            <Text fx:id="_scoreP1" layoutX="497.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1 : 0p">
+            <Text fx:id="_scoreP1" fill="WHITE" layoutX="22.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1 : 0p">
                 <font>
                     <Font size="18.0" />
                 </font>
             </Text>
-            <Text fx:id="_scoreP2" layoutX="784.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2 : 0p">
+            <Text fx:id="_scoreP2" fill="WHITE" layoutX="375.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2 : 0p">
                 <font>
                     <Font size="18.0" />
                 </font>
             </Text>
-            <Button onMouseClicked="#submitTurn" text="Klaar" />
-            <ScrollPane fx:id="_scrollPane" layoutX="494.0" layoutY="43.0" prefHeight="505.0" prefWidth="450.0" style="-fx-background-color: #332b7c;" />
+            <Button layoutX="482.0" layoutY="53.0" onMouseClicked="#submitTurn" prefHeight="34.0" prefWidth="85.0" style="-fx-background-color: #f4d941;" text="Submit" textAlignment="CENTER" />
+         <Button fx:id="_pass" layoutX="482.0" layoutY="108.0" onMouseClicked="#submitTurn" prefHeight="34.0" prefWidth="85.0" style="-fx-background-color: #f4d941;" text="Pass" textAlignment="CENTER" />
+         <Slider fx:id="_slider" layoutX="22.0" layoutY="614.0" prefHeight="14.0" prefWidth="450.0" />
         </children>
     </AnchorPane>
-    <VBox  fx:id="vboxLoadingScreen" alignment="CENTER" visible="false" style="-fx-background-color: rgba(255,255,255,0.65)">
-        <Label fx:id="labelLoadingScreen" text="Loadingscreen text"></Label>
-        <ProgressIndicator progress="-1"></ProgressIndicator>
-    </VBox>
 </StackPane>
-

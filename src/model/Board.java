@@ -84,59 +84,9 @@ public class Board {
 
     //Returned de punten die het woord geeft
     public CheckInfo check(){
-        //TODO check elke keer als een tile geplaatst word
+
         ArrayList<Tile> tiles = new ArrayList<>();
         ArrayList<String> tileIds = new ArrayList<>();
-        ArrayList<Boolean> tilesConnected = new ArrayList<>();
-
-        boolean usedStartingTile = !_tiles[7][7].isEmpty();
-        boolean isStraight = _placedCoords.stream().allMatch(x -> x.getX() == _placedCoords.get(0).getX()) || _placedCoords.stream().allMatch(x -> x.getY() == _placedCoords.get(0).getY());
-
-        if(_placedCoords.size() < 1) { return null; }
-
-        boolean isConnected;
-        boolean boardHasOldTiles = Arrays.stream(_tiles).anyMatch(c -> Arrays.stream(c).anyMatch(o -> o.getState() == TileState.LOCKED && !o.getLetterType().getLetter().equals("")));
-        boolean isConnectedToOld = true;
-
-       for (var c : _placedCoords) {
-
-           ArrayList<Boolean> isEmpty = new ArrayList<>();
-           ArrayList<Boolean> connectedToOld = new ArrayList<>();
-
-           //TODO refactor dit nog wel een keer want mn ogen doen pijn
-
-           if (c.getX()-1 > -1) {
-               isEmpty.add(_tiles[c.getY()][c.getX()-1].isEmpty());// Check of hij leeg is
-               connectedToOld.add(_tiles[c.getY()][c.getX()-1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() - 1].getLetterType().getLetter().equals("")); // Check of hij aan een oud block gevoegd is
-           }
-           if(c.getX()+1 < 15){
-               isEmpty.add(_tiles[c.getY()][c.getX()+1].isEmpty());
-               connectedToOld.add(_tiles[c.getY()][c.getX()+1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() + 1].getLetterType().getLetter().equals(""));
-           }
-
-           if (c.getY()-1 > -1) {
-               isEmpty.add(_tiles[c.getY()-1][c.getX()].isEmpty());
-               connectedToOld.add(_tiles[c.getY() - 1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY() - 1][c.getX()].getLetterType().getLetter().equals(""));
-           }
-           if(c.getY()+1 < 15){
-                isEmpty.add(_tiles[c.getY()+1][c.getX()].isEmpty());
-                connectedToOld.add(_tiles[c.getY()+1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY()+1][c.getX()].getLetterType().getLetter().equals(""));
-           }
-
-            if(isEmpty.contains(false)) { tilesConnected.add(true); }
-            if(boardHasOldTiles) { isConnectedToOld = connectedToOld.contains(true); }
-        }
-
-        isConnected = _placedCoords.size() == tilesConnected.size();
-
-        /*boolean isAlone = (_placedCoords.stream().filter(o -> _tiles[o.getY()][o.getX()-1] != null).allMatch( a-> _tiles[a.getY()][a.getX()-1].isEmpty())
-                || _placedCoords.stream().filter(o -> _tiles[o.getY()][o.getX()+1] != null).allMatch(a ->  _tiles[a.getY()][a.getX()+1].isEmpty()))
-                && (_placedCoords.stream().filter(o -> _tiles[o.getY()-1][o.getX()] != null).allMatch( a-> _tiles[a.getY()-1][a.getX()].isEmpty())
-                || _placedCoords.stream().filter(o -> _tiles[o.getY()+1][o.getX()] != null).allMatch(a -> _tiles[a.getY()+1][a.getX()].isEmpty()));
-        */
-
-
-        if(!usedStartingTile || !isStraight || !isConnected || !isConnectedToOld) return null;
 
         for (Vector2 placedCoords : _placedCoords) {
 
@@ -165,10 +115,7 @@ public class Board {
             if (checker.check(wY) && !tileIds.contains(tileId)){ tileIds.add(tileId); }
         }
 
-        if(tileIds.size()<1)
-        {
-            return null;
-        }
+        if(tileIds.size()<1 || !moveIsLegit()) { return null; }
 
         Tile[] tileArr = tiles.toArray(new Tile[0]);
         Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
@@ -176,6 +123,53 @@ public class Board {
         Points points = calculatePoints(tileArr);
 
         return new CheckInfo(points, tileArr, coordinatesArr);
+    }
+
+    private boolean moveIsLegit(){
+        ArrayList<Boolean> tilesConnected = new ArrayList<>();
+
+        boolean usedStartingTile = !_tiles[7][7].isEmpty();
+        boolean isStraight = _placedCoords.stream().allMatch(x -> x.getX() == _placedCoords.get(0).getX()) || _placedCoords.stream().allMatch(x -> x.getY() == _placedCoords.get(0).getY());
+
+        if(_placedCoords.size() < 1) { return false; }
+
+        boolean isConnected;
+        boolean boardHasOldTiles = Arrays.stream(_tiles).anyMatch(c -> Arrays.stream(c).anyMatch(o -> o.getState() == TileState.LOCKED && !o.getLetterType().getLetter().equals("")));
+        boolean isConnectedToOld = false;
+
+        for (var c : _placedCoords) {
+
+            ArrayList<Boolean> isEmpty = new ArrayList<>();
+            ArrayList<Boolean> connectedToOld = new ArrayList<>();
+
+            //TODO refactor dit nog wel een keer want mn ogen doen pijn
+
+            if (c.getX()-1 > -1) {
+                isEmpty.add(_tiles[c.getY()][c.getX()-1].isEmpty());// Check of hij leeg is
+                connectedToOld.add(_tiles[c.getY()][c.getX()-1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() - 1].getLetterType().getLetter().equals("")); // Check of hij aan een oud block gevoegd is
+            }
+            if(c.getX()+1 < 15){
+                isEmpty.add(_tiles[c.getY()][c.getX()+1].isEmpty());
+                connectedToOld.add(_tiles[c.getY()][c.getX()+1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() + 1].getLetterType().getLetter().equals(""));
+            }
+
+            if (c.getY()-1 > -1) {
+                isEmpty.add(_tiles[c.getY()-1][c.getX()].isEmpty());
+                connectedToOld.add(_tiles[c.getY() - 1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY() - 1][c.getX()].getLetterType().getLetter().equals(""));
+            }
+            if(c.getY()+1 < 15){
+                isEmpty.add(_tiles[c.getY()+1][c.getX()].isEmpty());
+                connectedToOld.add(_tiles[c.getY()+1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY()+1][c.getX()].getLetterType().getLetter().equals(""));
+            }
+
+            if(isEmpty.contains(false)) { tilesConnected.add(true); }
+            if(boardHasOldTiles && !isConnectedToOld) { isConnectedToOld = connectedToOld.contains(true); }
+        }
+
+        isConnected = _placedCoords.size() == tilesConnected.size();
+        if(!usedStartingTile || !isStraight || !isConnected || !isConnectedToOld) return false;
+
+        return true;
     }
 
     private Points calculatePoints(Tile[] tiles){

@@ -4,11 +4,10 @@ import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import model.*;
-import model.database.DocumentSession;
 import model.tables.Account;
 import model.tables.Game;
 import model.tables.HandLetter;
-import view.BoardView.*;
+import view.BoardView.BoardView;
 
 public class GameController extends Controller{
 
@@ -68,6 +67,15 @@ public class GameController extends Controller{
             }
         };
         _gameModel.submitTurn(info,nextTurn);
+    }
+
+    public CheckInfo getCheckInfo() { return _gameModel.checkBoard(); }
+
+    public void checkScore(){
+       CheckInfo info = _gameModel.checkBoard();
+       String total = (info == null) ? "0p" : info.getPoints().total() + "p";
+
+       boardView.updateLocalScore(total);
     }
 
     private void updateView()
