@@ -119,11 +119,12 @@ public class BoardView extends View {
             }
         }
         _slider.setMin(1);
-        _slider.setMax(_controller.getCurrentTurn());
+        _slider.setMax(_controller.getCurrentTurn() - 1);
+        _slider.setValue(_controller.getCurrentTurn() -1);
+
         _slider.setShowTickLabels(true);
         _slider.setShowTickMarks(true);
-        _slider.setBlockIncrement(10);
-        //TODO update MAX naar laatste turn
+        _slider.setBlockIncrement(1);
     }
 
     @FXML
@@ -153,6 +154,10 @@ public class BoardView extends View {
 
     @FXML
     public void showTurnOnBoard(){
-        _controller.showTurn((int)_slider.getValue());
+        //TODO update score erbij
+        //TODO lock dock
+        var snap = Math.round(_slider.getValue());
+        _controller.showTurn((int)snap);
+        _slider.setValue(snap);
     }
 }

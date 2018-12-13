@@ -175,7 +175,7 @@ public class Board {
 
         if(_placedCoords.size() < 1) { return false; }
 
-        boolean isConnected;
+
         boolean boardHasOldTiles = Arrays.stream(_tiles).anyMatch(c -> Arrays.stream(c).anyMatch(o -> o.getState() == TileState.LOCKED && !o.getLetterType().getLetter().equals("")));
         boolean isConnectedToOld = true;
 
@@ -208,7 +208,7 @@ public class Board {
             if(boardHasOldTiles) { connectedToOldTiles.add(connectedToOld.contains(true)); }
         }
 
-        isConnected = _placedCoords.size() == tilesConnected.size();
+        boolean isConnected = _placedCoords.size() == tilesConnected.size();
         if(boardHasOldTiles) { isConnectedToOld = connectedToOldTiles.contains(true); }
 
         if(!usedStartingTile || !isStraight || !isConnected || !isConnectedToOld) return false;
