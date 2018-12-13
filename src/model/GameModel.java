@@ -451,7 +451,6 @@ public class GameModel {
 
     }
 
-
-
+    public void setTurn(int turnId){  _board.getBoardFromDatabase(_gameId, turnId);}
 }
 
