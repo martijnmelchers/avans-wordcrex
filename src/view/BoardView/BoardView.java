@@ -56,6 +56,7 @@ public class BoardView extends View {
         init();
         updateScore();
         updateTilesLeft();
+        checkIfTurnPlayed();
     }
 
     public void update(boolean updateDock)
@@ -78,6 +79,11 @@ public class BoardView extends View {
     public void updateTilesLeft()
     {
         _tilesLeft.setText("Stenen : " + _controller.getNotUsedTiles());
+    }
+
+    private void checkIfTurnPlayed()
+    {
+        _controller.checkIfTurnPlayed();
     }
 
     // get older turns

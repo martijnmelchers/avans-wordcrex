@@ -110,6 +110,32 @@ public class GameController extends Controller{
        boardView.updateLocalScore(total);
     }
 
+    public void checkIfTurnPlayed()
+    {
+       if( _gameModel.checkIfTurnPlayed())
+       {
+           boardView = getViewCasted();
+           boardView.startLoadingScreen("Wachten op andere speler.");
+           Task nextTurn = new Task() {
+               @Override
+               protected Object call() throws Exception
+               {
+                   updateView(true);
+                   Platform.runLater(new Runnable(){
+                       @Override
+                       public void run()
+                       {
+                           boardView.stopLoadingScreen();
+                       }
+                   });
+
+                   return null;
+               }
+           };
+           _gameModel.alreadyPlayed(nextTurn);
+       }
+    }
+
     private void updateView(boolean updateDock)
     {
         boardView.update(updateDock);

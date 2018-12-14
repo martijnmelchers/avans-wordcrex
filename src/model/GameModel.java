@@ -178,6 +178,50 @@ public class GameModel {
 
     public CheckInfo checkBoard() { return _board.check(); }
 
+    public boolean checkIfTurnPlayed()
+    {
+        if (isPlayerOne())
+        {
+            List<Clause> clauses = new ArrayList<>();
+            clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
+            clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+            try
+            {
+                List<TurnPlayer1> turnPlayer1 = db.select(TurnPlayer1.class, clauses);
+
+                if(turnPlayer1.size() != 0)
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return false;
+        }
+        else
+        {
+            List<Clause> clauses = new ArrayList<>();
+            clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"turn_id",CompareMethod.EQUAL ,_turnId ));
+            clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+            try
+            {
+                List<TurnPlayer2> turnPlayer2 = db.select(TurnPlayer2.class, clauses);
+
+                if(turnPlayer2.size() != 0)
+                {
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return false;
+        }
+    }
+
     public void submitTurn(CheckInfo checkInfo,Task onEndTurn)
     {
         // submit turn to database tables: boardplayer1, turnplayer1 OR boardplayer2,
@@ -211,35 +255,39 @@ public class GameModel {
         }
         else // other player not finished
         {
-            // wait for other player 3 seconds timer interval
-            waitForPlayer(new Task() {
-                @Override
-                protected Object call() // This gets called when other player is ready
-                {
-                    // wait one second for the other player to insert data in the database
-                    try
-                    {
-                        Thread.sleep(2000);
-                    }
-                    catch (Exception e)
-                    {
-                        Log.error(e,false );
-                    }
-
-                    // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
-                    dock.update(_gameId,_turnId);// update hand
-                    _board.getBoardFromDatabase(_gameId,_turnId);
-                    Platform.runLater(new Runnable(){
-                        @Override
-                        public void run()
-                        {
-                            onEndTurn.run();
-                        }
-                    });
-                    return null;
-                }
-            });
+            alreadyPlayed(onEndTurn);
         }
+    }
+
+    public void alreadyPlayed(Task onEndTurn)
+    {
+        waitForPlayer(new Task() {
+            @Override
+            protected Object call() // This gets called when other player is ready
+            {
+                // wait one second for the other player to insert data in the database
+                try
+                {
+                    Thread.sleep(2000);
+                }
+                catch (Exception e)
+                {
+                    Log.error(e,false );
+                }
+
+                // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
+                dock.update(_gameId,_turnId);// update hand
+                _board.getBoardFromDatabase(_gameId,_turnId);
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run()
+                    {
+                        onEndTurn.run();
+                    }
+                });
+                return null;
+            }
+        });
     }
 
     public void removeUsedLettersInDock(CheckInfo info)
