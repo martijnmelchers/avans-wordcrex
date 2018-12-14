@@ -101,11 +101,10 @@ public class MatchOverview extends View {
                 }
 
                 case "finished": {
-
+                    //TODO: show finished games
                 }
-
                 case "resigned": {
-
+                    //TODO: show resigned games??
                 }
             }
 

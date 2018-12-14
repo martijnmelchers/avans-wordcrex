@@ -11,7 +11,7 @@
 
 <HBox fx:id="rootHbox" prefWidth="601.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane layoutX="101.0" prefHeight="97.0" prefWidth="283.0">
+      <Pane fx:id="infoPane" layoutX="101.0" prefHeight="97.0" prefWidth="283.0">
          <children>
             <Text layoutX="3.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scores:" />
           <Text layoutX="3.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tegenstander:" wrappingWidth="81.13671875" />

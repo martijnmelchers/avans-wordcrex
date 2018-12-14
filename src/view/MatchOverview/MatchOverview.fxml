@@ -17,13 +17,13 @@
     <RowConstraints maxHeight="128.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <AnchorPane style="-fx-background-color: #2c3e50;">
+      <AnchorPane style="-fx-background-color: #212048;">
          <children>
             <TextField fx:id="_searchBar" focusTraversable="false" layoutX="342.0" layoutY="17.0" onKeyTyped="#filter" promptText="Spelers zoeken" />
-            <Button layoutX="497.0" layoutY="18.0" onAction="#invitationView" mnemonicParsing="false" text="Speler uitnodigen" />
+            <Button layoutX="497.0" layoutY="18.0" mnemonicParsing="false" onAction="#invitationView" text="Speler uitnodigen" />
          </children>
       </AnchorPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="70.0" prefWidth="620.0" style="-fx-background-color: #2c3e50;" GridPane.rowIndex="2">
+      <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="70.0" prefWidth="620.0" style="-fx-background-color: #212048;" GridPane.rowIndex="2">
          <children>
             <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Uitloggen">
                <cursor>
@@ -38,7 +38,7 @@
                   <Insets />
                </FlowPane.margin>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false"  text="Account Gegevens">
+            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Account Gegevens">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -63,19 +63,19 @@
                   <Text layoutX="274.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Uitnodigingen" />
                </children>
             </Pane>
-            <ListView fx:id="gameListview" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="620.0" style="-fx-background-color: #212048;" />
+            <ListView fx:id="gameListview" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="620.0" />
             <Pane fx:id="yourTurnPane" layoutX="10.0" layoutY="10.0" prefHeight="32.0" prefWidth="620.0" style="-fx-background-color: #2c3e50;">
                <children>
                   <Text layoutX="281.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jouw beurt" />
                </children>
             </Pane>
-            <ListView fx:id="gameListview1" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="245.0" prefWidth="620.0" style="-fx-background-color: #212048;" />
+            <ListView fx:id="gameListview1" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="245.0" prefWidth="620.0" />
             <Pane fx:id="theirTurnPane" layoutX="10.0" layoutY="187.0" prefHeight="32.0" prefWidth="620.0" style="-fx-background-color: #2c3e50;">
                <children>
                   <Text layoutX="270.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zijn/Haar beurt" />
                </children>
             </Pane>
-            <ListView fx:id="gameListview2" layoutX="10.0" layoutY="194.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="620.0" style="-fx-background-color: #212048;" />
+            <ListView fx:id="gameListview2" layoutX="10.0" layoutY="194.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="620.0" />
          </children>
       </VBox>
    </children>

@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import model.GameSession;
 import model.MatchOverviewModel;
@@ -42,6 +43,8 @@ public class MatchView {
     private Button matchSurrenderButton;
 
 
+    @FXML
+    private Pane infoPane;
 
     private Game match;
     public MatchView(Game match){
@@ -51,9 +54,11 @@ public class MatchView {
         this.match = match;
         try
         {
+
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
             fxmlLoader.load();
+
             boolean isMyTurn = mod.isMyTurn(match);
 
             String player = GameSession.getUsername();
@@ -61,9 +66,56 @@ public class MatchView {
             String player2 =  match.player2.getUsername();
             String enemy  = player1.equals(player) ?  player2 : player1;
 
-            matchEnemy.setText(enemy);
-            matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
-            matchTurn.setText(isMyTurn ? GameSession.getUsername() : enemy);
+            if(match.gameState.isRequest()){
+                infoPane.getChildren().clear();
+                Text inviteTxt = new Text();
+                Text inviteStatusTxt = new Text();
+                matchPlayButton.setDisable(true);
+                matchSurrenderButton.setDisable(true);
+                if(GameSession.getUsername().equals(player1)){
+                    //Uitnodiging van ons
+                    inviteTxt.setText("Uitnodiging naar: " + player2);
+
+                    String antwoord = "reactie: ";
+
+
+                    System.out.println(match.answer.get_type());
+                    switch(match.answer.get_type()){
+
+                        case "accepted": {
+                            inviteStatusTxt.setText(antwoord+"Geaccepteerd");
+                            matchPlayButton.setDisable(false);
+                            break;
+                        }
+
+                        case "declined": {
+                            inviteStatusTxt.setText(antwoord+"Geweigerd");
+                            break;
+                        }
+
+                        case "unknown": {
+                            inviteStatusTxt.setText(antwoord+"Nog geen antwoord gegeven.");
+                            break;
+                        }
+                    }
+                }
+                else {
+                    //Uitnodiging van tegenstander
+                    inviteTxt.setText("Uitnodiging van: " + player1);
+                }
+                
+                infoPane.getChildren().add(inviteTxt);
+                infoPane.getChildren().add(inviteStatusTxt);
+                inviteTxt.setX(5);
+                inviteTxt.setY(20);
+                inviteStatusTxt.setX(5);
+                inviteStatusTxt.setY(35);
+            }
+            else {
+                matchEnemy.setText(enemy);
+                matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
+                matchTurn.setText(isMyTurn ? GameSession.getUsername() : enemy);
+            }
         }
         catch (Exception e) {
             throw new RuntimeException(e);
