@@ -118,7 +118,13 @@ public class GameController extends Controller{
 
     public String getNotUsedTiles()
     {
-        return _gameModel.getNotUsed();
+        return _gameModel.getNotUsedTiles(getCurrentTurn());
+    }
+
+    // get older turns
+    public String getNotUsedTiles(int turnId)
+    {
+        return _gameModel.getNotUsedTiles(turnId);
     }
 
 }

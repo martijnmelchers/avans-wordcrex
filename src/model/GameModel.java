@@ -518,9 +518,9 @@ public class GameModel {
 
     public void setTurn(int turnId){  _board.getBoardFromDatabase(_gameId, turnId);}
 
-    public String getNotUsed()
+    public String getNotUsedTiles(int turnId)
     {
-        return dock.getNotUsed(_gameId);
+        return dock.getNotUsedTiles(_gameId, turnId);
     }
 }
 

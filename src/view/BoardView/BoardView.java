@@ -80,6 +80,12 @@ public class BoardView extends View {
         _tilesLeft.setText("Stenen : " + _controller.getNotUsedTiles());
     }
 
+    // get older turns
+    public void updateTilesLeft(int turn)
+    {
+        _tilesLeft.setText("Stenen : " + _controller.getNotUsedTiles(turn));
+    }
+
     public void updateLocalScore(String score){
         _addedScore.setText(score);
     }
@@ -183,6 +189,8 @@ public class BoardView extends View {
         _controller.showTurn((int)snap);
         _slider.setValue(snap);
         updateScore();
+        updateTilesLeft((int)snap);
+
         if ((_controller.getCurrentTurn() - 1) != (int)snap)
         {
             GridPane block = new GridPane();

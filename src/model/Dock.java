@@ -42,9 +42,9 @@ public class Dock
 
     }
 
-    public String getNotUsed(int gameId)
+    public String getNotUsedTiles(int gameId, int turnId)
     {
-        return String.valueOf(notUsedLetters(gameId).size());
+        return String.valueOf(notUsedLetters(gameId, turnId).size());
     }
 
     public List<TurnBoardLetter> getAllPlacedLetters(int gameId, int turn_id)
@@ -163,7 +163,7 @@ public class Dock
             insertLetterCollection(gameId);
         }
 
-        List<Letter> notUsed = notUsedLetters(gameId);
+        List<Letter> notUsed = notUsedLetters(gameId, turnId);
 
         for(int i =0; i<letters.length;i++)
         {
@@ -233,7 +233,7 @@ public class Dock
         return false;
     }
 
-    private List<Letter> notUsedLetters(int gameId)
+    private List<Letter> notUsedLetters(int gameId, int turnId)
     {
         ArrayList<Clause> clauses = new ArrayList<>();
         clauses.add(new Clause(new TableAlias("Letter", -1),"game_id" ,CompareMethod.EQUAL , gameId));
@@ -253,6 +253,7 @@ public class Dock
         {
             clauses = new ArrayList<>();
             clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1),"game_id" ,CompareMethod.EQUAL , gameId));
+            clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1), "turn_id", CompareMethod.LESS_EQUAL, turnId));
             usedLetters = db.select(TurnBoardLetter.class,clauses);
         }
         catch (Exception e)
