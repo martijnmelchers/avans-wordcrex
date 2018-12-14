@@ -67,6 +67,8 @@ public class MatchView {
             String enemy  = player1.equals(player) ?  player2 : player1;
 
             if(match.gameState.isRequest()){
+
+
                 infoPane.getChildren().clear();
                 Text inviteTxt = new Text();
                 Text inviteStatusTxt = new Text();
@@ -75,11 +77,7 @@ public class MatchView {
                 if(GameSession.getUsername().equals(player1)){
                     //Uitnodiging van ons
                     inviteTxt.setText("Uitnodiging naar: " + player2);
-
                     String antwoord = "reactie: ";
-
-
-                    System.out.println(match.answer.get_type());
                     switch(match.answer.get_type()){
 
                         case "accepted": {
