@@ -453,7 +453,7 @@ public class GameModel {
         ArrayList<TurnBoardLetter> turnBoardLetters = new ArrayList<>();
         for(Pair<Vector2,Integer> pair : idsAndXY)
         {
-            if(turnBoardLetters.stream().anyMatch(a-> a.getX() == pair.getKey().getX()&& a.getY() == pair.getKey().getY() ))
+            if(turnBoardLetters.stream().anyMatch(a-> a.getX() == (pair.getKey().getX() + 1)&& a.getY() == (pair.getKey().getY() + 1) ))
             {
                 continue;
             }
