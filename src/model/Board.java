@@ -38,7 +38,7 @@ public class Board {
             List<TurnBoardLetter> grid = DocumentSession.getDatabase().select(TurnBoardLetter.class, clauses);
             for (TurnBoardLetter letter : grid)
             {
-                _tiles[letter.getY()][letter.getX()].replace(letter.letter.get_symbol()+"", letter.letter.symbol.get_value(), letter.letter.get_letterId(), Color.rgb(247, 235, 160));
+                _tiles[(letter.getY() - 1)][(letter.getX() - 1)].replace(letter.letter.get_symbol()+"", letter.letter.symbol.get_value(), letter.letter.get_letterId(), Color.rgb(247, 235, 160));
             }
         }
         catch (Exception e)

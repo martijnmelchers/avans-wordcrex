@@ -278,7 +278,7 @@ public class GameModel {
 
                 int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
 
-                db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 1
+                db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId,(c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 1
             }
 
         }catch (Exception e){
@@ -364,7 +364,7 @@ public class GameModel {
             for (int i = 0; i < c.length; i++){
 
                 int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
-                db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId,c[i].getX(), c[i].getY())); // Insert in Boardplayer 2
+                db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId,(c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 2
             }
 
         }catch (Exception e){
@@ -427,7 +427,7 @@ public class GameModel {
                 List<BoardPlayer1> boardPlayer1 = db.select(BoardPlayer1.class, clauses);
                 for(BoardPlayer1 bp : boardPlayer1)
                 {
-                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2(bp.tile.getX(),bp.tile.getY() ),bp.letter.get_letterId());
+                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2((bp.tile.getX() - 1), (bp.tile.getY() - 1) ),bp.letter.get_letterId());
                     idsAndXY.add(pair);
                 }
             }
@@ -436,7 +436,7 @@ public class GameModel {
                 List<BoardPlayer2> boardPlayer2 = db.select(BoardPlayer2.class, clauses);
                 for(BoardPlayer2 bp : boardPlayer2)
                 {
-                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2(bp.tile.getX(),bp.tile.getY() ),bp.letter.get_letterId());
+                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2((bp.tile.getX() - 1), (bp.tile.getY() - 1) ),bp.letter.get_letterId());
                     idsAndXY.add(pair);
                 }
 
@@ -458,7 +458,7 @@ public class GameModel {
                 continue;
             }
             Tile tile = _board.getTiles()[pair.getKey().getY()][pair.getKey().getX()];
-            TurnBoardLetter turnBoardLetter = new TurnBoardLetter(pair.getValue(),_gameId,_turnId,pair.getKey().getX(),pair.getKey().getY());
+            TurnBoardLetter turnBoardLetter = new TurnBoardLetter(pair.getValue(),_gameId,_turnId,(pair.getKey().getX() + 1),(pair.getKey().getY() + 1));
             turnBoardLetters.add(turnBoardLetter);
         }
         try
