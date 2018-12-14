@@ -89,20 +89,40 @@ public class GameModel {
 
             clauses.clear();
 
-            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId));
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
-
-           for (TurnPlayer1 turnPlayer1 : db.select(TurnPlayer1.class, clauses)){
-               _playerScore1 = turnPlayer1.getScore()  + turnPlayer1.getBonus();
-           }
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.LESS_EQUAL, _turnId));
+            try
+            {
+                int score = 0;
+                List<TurnPlayer1> turnPlayer1s = db.select(TurnPlayer1.class, clauses);
+                for (TurnPlayer1 turnPlayer1 : turnPlayer1s)
+                {
+                    score += (turnPlayer1.getScore() + turnPlayer1.getBonus());
+                }
+                this._playerScore1 = score;
+            }
+            catch (Exception e)
+            {
+                Log.error(e,false );
+            }
 
             clauses.clear();
 
-            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, _turnId));
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _gameId));
-
-            for (TurnPlayer2 turnPlayer2 : db.select(TurnPlayer2.class, clauses)){
-                _playerScore2 = turnPlayer2.getScore()  + turnPlayer2.getBonus();
+            clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.LESS_EQUAL, _turnId));
+            try
+            {
+                int score = 0;
+                List<TurnPlayer2> turnPlayer2s = db.select(TurnPlayer2.class, clauses);
+                for (TurnPlayer2 turnPlayer2 : turnPlayer2s)
+                {
+                    score += (turnPlayer2.getScore() + turnPlayer2.getBonus());
+                }
+                this._playerScore2 = score;
+            }
+            catch (Exception e)
+            {
+                Log.error(e,false );
             }
         }
         catch (Exception e){
@@ -521,6 +541,11 @@ public class GameModel {
     public String getNotUsedTiles(int turnId)
     {
         return dock.getNotUsedTiles(_gameId, turnId);
+    }
+
+    public void getOldDock(int turnId)
+    {
+        dock.update(_gameId, turnId);
     }
 }
 

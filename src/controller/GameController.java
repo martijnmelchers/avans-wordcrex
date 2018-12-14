@@ -127,4 +127,9 @@ public class GameController extends Controller{
         return _gameModel.getNotUsedTiles(turnId);
     }
 
+    public void getOldDock(int turn)
+    {
+        _gameModel.getOldDock(turn);
+    }
+
 }

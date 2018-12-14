@@ -193,6 +193,8 @@ public class BoardView extends View {
 
         if ((_controller.getCurrentTurn() - 1) != (int)snap)
         {
+            _controller.getOldDock((int)snap);
+            dockController.updateDock();
             GridPane block = new GridPane();
             block.setId("block");
             _gridPane.add(block, 0, 0, 15, 17);
@@ -201,6 +203,8 @@ public class BoardView extends View {
         }
         else
         {
+            _controller.getOldDock(_controller.getCurrentTurn());
+            dockController.updateDock();
            _gridPane.getChildren().removeAll(
                    _gridPane.getChildren().stream()
                            .filter(x -> x.getId() != null && x.getId().equals("block"))
