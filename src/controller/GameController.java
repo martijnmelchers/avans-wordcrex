@@ -65,6 +65,9 @@ public class GameController extends Controller{
             return;
         }
 
+        if (info == null && pass) {
+            info = new CheckInfo(new Points(0, 0), null, null);
+        }
 
         boardView.startLoadingScreen("Wachten op andere speler.");
         Task nextTurn = new Task() {

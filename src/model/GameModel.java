@@ -279,14 +279,26 @@ public class GameModel {
 
             boolean uploadedLast = results.size() > 0;
 
-            db.insert(new TurnPlayer1(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
+            if (checkInfo.getPoints().total() == 0 && checkInfo.getTiles() == null && checkInfo.getCoordinates() == null)
+            {
+                db.insert(new TurnPlayer1(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
+            }
+            else
+            {
+                db.insert(new TurnPlayer1(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
+            }
 
             if(uploadedLast) {
 
                 var result = results.get(0);
 
                 boolean equalScore = results.get(0).getScore().equals(checkInfo.getPoints().score()); //Compare player 2 score with own score
-                if(equalScore) { db.update(new TurnPlayer2(_gameId, _turnId, _playerName2, result.getScore(), result.getBonus() + 5, "play")); }
+
+                // Checken of niet beide players hebben gepassed
+                if (!(checkInfo.getPoints().total() == 0 && (result.getScore() + result.getBonus()) == 0))
+                {
+                    if(equalScore) { db.update(new TurnPlayer2(_gameId, _turnId, _playerName2, result.getScore(), result.getBonus() + 5, "play")); }
+                }
             }
 
             Vector2[] c = checkInfo.getCoordinates();
@@ -365,7 +377,14 @@ public class GameModel {
 
             boolean uploadedLast = results.size() > 0;
 
-            db.insert(new TurnPlayer2(_gameId,_turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
+            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null && checkInfo.getTiles() == null)
+            {
+                db.insert(new TurnPlayer2(_gameId,_turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
+            }
+            else
+            {
+                db.insert(new TurnPlayer2(_gameId,_turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
+            }
 
             if(uploadedLast) {
 
@@ -373,7 +392,11 @@ public class GameModel {
 
                 var result = results.get(0);
 
-                if(equalScore) { db.update(new TurnPlayer1(_gameId, _turnId, _playerName1, result.getScore(), result.getBonus() + 5, "play")); }
+                // Checken of niet beide players hebben gepassed
+                if (!(checkInfo.getPoints().total() == 0 && (result.getScore() + result.getBonus()) == 0))
+                {
+                    if(equalScore) { db.update(new TurnPlayer1(_gameId, _turnId, _playerName1, result.getScore(), result.getBonus() + 5, "play")); }
+                }
             }
 
             Vector2[] c = checkInfo.getCoordinates();
