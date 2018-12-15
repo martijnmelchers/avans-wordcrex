@@ -57,7 +57,25 @@ public class BoardView extends View {
         init();
         updateScore();
         updateTilesLeft();
+        checkRole();
         checkIfTurnPlayed();
+    }
+
+    private void checkRole()
+    {
+        if (GameSession.getRole().getRole().equals("observer"))
+        {
+            _controller.getOldDock(_controller.getCurrentTurn());
+            dockController.updateDock();
+            GridPane block = new GridPane();
+            block.setId("block");
+            _gridPane.add(block, 0, 0, 15, 17);
+            _submit.setVisible(false);
+            _pass.setVisible(false);
+            _reset.setVisible(false);
+            _shuffle.setVisible(false);
+            _surrender.setVisible(false);
+        }
     }
 
     public void update(boolean updateDock)
