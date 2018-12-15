@@ -89,6 +89,17 @@ public class GameModel {
 
             clauses.clear();
 
+            // TODO For testing observer can be removed after merging
+            clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, GameSession.getUsername()));
+            try {
+                GameSession.setRole(db.select(AccountInfo.class, clauses).get(0).role);
+            } catch (Exception e) {
+                Log.error(e);
+            }
+            ////////////////////
+
+            clauses.clear();
+
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.LESS_EQUAL, _turnId));
             try
@@ -651,6 +662,26 @@ public class GameModel {
         else {
             try {
                 db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
+            } catch (Exception e) {
+                Log.error(e);
+            }
+        }
+    }
+
+    public void surrender()
+    {
+        if (isPlayerOne())
+        {
+            try {
+                db.update(new Game(_gameId, "resigned", "NL", _playerName1, _playerName2, "accepted", _playerName2));
+            } catch (Exception e) {
+                Log.error(e);
+            }
+        }
+        else
+        {
+            try {
+                db.update(new Game(_gameId, "resigned", "NL", _playerName1, _playerName2, "accepted", _playerName1));
             } catch (Exception e) {
                 Log.error(e);
             }
