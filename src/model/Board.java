@@ -86,6 +86,20 @@ public class Board {
         return prevTile;
     }
 
+    public ArrayList<Tile> removeTiles()
+    {
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for (Vector2 vector2 : _placedCoords)
+        {
+            Tile prevTile = _tiles[vector2.getY()][vector2.getX()];
+            _tiles[vector2.getY()][vector2.getX()] = decideTileType(vector2);
+            _tiles[vector2.getY()][vector2.getX()].setState(TileState.LOCKED);
+            tiles.add(prevTile);
+        }
+        _placedCoords.clear();
+        return tiles;
+    }
+
     //Returned de punten die het woord geeft
     public CheckInfo check(){
 

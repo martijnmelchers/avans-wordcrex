@@ -37,6 +37,8 @@ public class BoardView extends View {
 
     @FXML private Button _submit;
     @FXML private Button _pass;
+    @FXML private Button _reset;
+    @FXML private Button _shuffle;
 
     @FXML private Label labelLoadingScreen;
 
@@ -169,6 +171,24 @@ public class BoardView extends View {
         updateTilesLeft();
     }
 
+    @FXML
+    public void resetTiles()
+    {
+       for (Tile tile : _controller.resetTiles())
+       {
+           int letterid = tile.getLetterType().getid();
+           dockController.addCharacter(tile.getLetterType().getLetter(), tile.getLetterType().getid());
+       }
+       update(false);
+       updateLocalScore("0p");
+    }
+
+    @FXML
+    public void shuffleTiles()
+    {
+        dockController.shuffleDock();
+    }
+
     private void tileClicked(MouseEvent e, StackPane tile)
     {
         Tile[][] tiles = _controller.getTiles();
@@ -206,6 +226,8 @@ public class BoardView extends View {
             _gridPane.add(block, 0, 0, 15, 17);
             _submit.setDisable(true);
             _pass.setDisable(true);
+            _reset.setDisable(true);
+            _shuffle.setDisable(true);
         }
         else
         {
@@ -218,6 +240,8 @@ public class BoardView extends View {
            );
             _submit.setDisable(false);
             _pass.setDisable(false);
+            _reset.setDisable(false);
+            _shuffle.setDisable(false);
         }
     }
 }

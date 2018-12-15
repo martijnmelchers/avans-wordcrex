@@ -10,6 +10,8 @@ import model.tables.Game;
 import model.tables.HandLetter;
 import view.BoardView.BoardView;
 
+import java.util.ArrayList;
+
 public class GameController extends Controller{
 
     private BoardView boardView;
@@ -39,6 +41,11 @@ public class GameController extends Controller{
     {
         _gameModel.removeTile(new Vector2(x, y));
         checkScore();
+    }
+
+    public ArrayList<Tile> resetTiles()
+    {
+        return _gameModel.removeTiles();
     }
 
     public boolean tileEmpty(int x,int y)

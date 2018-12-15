@@ -18,6 +18,7 @@ import model.tables.HandLetter;
 import view.BoardView.BoardView;
 
 import java.util.List;
+import java.util.Random;
 
 public class DockView
 {
@@ -50,6 +51,32 @@ public class DockView
                 addCharacter(letter.letter.get_symbol()+"",letter.letter.get_letterId());
             }
         }
+    }
+
+    public void shuffleDock()
+    {
+        HandLetter[] letters = controller.getDock();
+        hBoxDock.getChildren().clear();
+        HandLetter[] shuffledLetters = shuffleDockArray(letters);
+        for (HandLetter letter : shuffledLetters) {
+            if(letter!=null)
+            {
+                addCharacter(letter.letter.get_symbol()+"",letter.letter.get_letterId());
+            }
+        }
+    }
+
+    private HandLetter[] shuffleDockArray(HandLetter[] letters)
+    {
+        Random rnd = new Random();
+        for (int i = letters.length - 1; i > 0; i--)
+        {
+            int index = rnd.nextInt(i + 1);
+            HandLetter a = letters[index];
+            letters[index] = letters[i];
+            letters[i] = a;
+        }
+        return letters;
     }
 
     private void blockMoved(MouseEvent e,StackPane tile)

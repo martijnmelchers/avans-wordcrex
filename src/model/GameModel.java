@@ -176,6 +176,8 @@ public class GameModel {
 
     public Tile removeTile(Vector2 vector2) { return _board.remove(vector2); }
 
+    public ArrayList<Tile> removeTiles() { return _board.removeTiles(); }
+
     public CheckInfo checkBoard() { return _board.check(); }
 
     public boolean checkIfTurnPlayed()
@@ -252,6 +254,8 @@ public class GameModel {
             _board.getBoardFromDatabase(_gameId,_turnId);
 
             onEndTurn.run();
+
+            checkGameFinished();
         }
         else // other player not finished
         {
@@ -285,6 +289,8 @@ public class GameModel {
                         onEndTurn.run();
                     }
                 });
+
+                checkGameFinished();
                 return null;
             }
         });
@@ -617,6 +623,38 @@ public class GameModel {
     public void getOldDock(int turnId)
     {
         dock.update(_gameId, turnId);
+    }
+
+    private void checkGameFinished()
+    {
+        if (!getNotUsedTiles(_turnId).equals("0"))
+        {
+            return;
+        }
+
+        if (_playerScore1 > _playerScore2)
+        {
+            try {
+                db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
+            } catch (Exception e) {
+                Log.error(e);
+            }
+        }
+        else if (_playerScore1 < _playerScore2)
+        {
+            try {
+                db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName2));
+            } catch (Exception e) {
+                Log.error(e);
+            }
+        }
+        else {
+            try {
+                db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
+            } catch (Exception e) {
+                Log.error(e);
+            }
+        }
     }
 }
 
