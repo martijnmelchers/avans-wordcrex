@@ -13,5 +13,10 @@ public class Role {
 
     public Role(){}
 
+    public Role(String role)
+    {
+        this.role = role;
+    }
+
     public String getRole(){return role;}
 }

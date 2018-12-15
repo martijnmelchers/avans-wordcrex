@@ -29,10 +29,12 @@ public class Main extends Application {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 GameSession.setSession(new Account("jagermeester","rrr"));
+                GameSession.setRole(new Role("player"));
             }
             else
             {
                 GameSession.setSession(new Account("Lidewij","mmm"));
+                GameSession.setRole(new Role("player"));
             }
         });
     }

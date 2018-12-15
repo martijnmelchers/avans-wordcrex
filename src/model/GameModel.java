@@ -676,5 +676,45 @@ public class GameModel {
             }
         }
     }
+
+    public boolean checkGameDone()
+    {
+        List<Clause> clauses = new ArrayList<>();
+        clauses.add(new Clause( new TableAlias("Game",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+        try {
+            Game game = db.select(Game.class, clauses).get(0);
+            if (game.gameState.getState().equals("finished") || game.gameState.getState().equals("resigned"))
+            {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Log.error(e);
+        }
+        return false;
+    }
+
+    public String getGameWinner()
+    {
+        List<Clause> clauses = new ArrayList<>();
+        clauses.add(new Clause( new TableAlias("Game",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
+        try {
+            return db.select(Game.class, clauses).get(0).winner.getUsername();
+        } catch (Exception e) {
+            Log.error(e);
+        }
+
+        return null;
+    }
+
+    public String getGameWinnerScore()
+    {
+        if (_playerName1.equals(getGameWinner()))
+        {
+            return Integer.toString(_playerScore1);
+        }
+
+        return Integer.toString(_playerScore2);
+    }
 }
 

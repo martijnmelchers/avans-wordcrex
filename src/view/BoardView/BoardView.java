@@ -236,6 +236,17 @@ public class BoardView extends View {
         }
     }
 
+    public void gameDone()
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("De game is klaar \n\n " + _controller.getGameWinner() + " is gewonnen met " + _controller.getGameWinnerScore() + " punten");
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                // TODO navigate to matchoverview
+            }
+        });
+    }
+
     @FXML
     public void showTurnOnBoard(){
         //TODO update score erbij

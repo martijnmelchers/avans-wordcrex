@@ -65,6 +65,10 @@ public class GameController extends Controller{
                     public void run()
                     {
                         boardView.stopLoadingScreen();
+                        if (_gameModel.checkGameDone())
+                        {
+                            boardView.gameDone();
+                        }
                     }
                 });
 
@@ -159,6 +163,16 @@ public class GameController extends Controller{
     public void getOldDock(int turn)
     {
         _gameModel.getOldDock(turn);
+    }
+
+    public String getGameWinner()
+    {
+        return _gameModel.getGameWinner();
+    }
+
+    public String getGameWinnerScore()
+    {
+        return _gameModel.getGameWinnerScore();
     }
 
 }
