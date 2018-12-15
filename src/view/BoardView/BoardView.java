@@ -3,16 +3,14 @@ package view.BoardView;
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import model.GameSession;
 import model.Tile;
 import model.TileState;
 import model.helper.Log;
@@ -39,6 +37,7 @@ public class BoardView extends View {
     @FXML private Button _pass;
     @FXML private Button _reset;
     @FXML private Button _shuffle;
+    @FXML private Button _surrender;
 
     @FXML private Label labelLoadingScreen;
 
@@ -189,6 +188,18 @@ public class BoardView extends View {
         dockController.shuffleDock();
     }
 
+    @FXML
+    public void surrender()
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Klik op OK om op te geven. \n\nKlik op Cancel om niet op te geven.");
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                _controller.surrender();
+            }
+        });
+    }
+
     private void tileClicked(MouseEvent e, StackPane tile)
     {
         Tile[][] tiles = _controller.getTiles();
@@ -217,17 +228,18 @@ public class BoardView extends View {
         updateScore();
         updateTilesLeft((int)snap);
 
-        if ((_controller.getCurrentTurn() - 1) != (int)snap)
+        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.getRole().getRole().equals("observer"))
         {
             _controller.getOldDock((int)snap);
             dockController.updateDock();
             GridPane block = new GridPane();
             block.setId("block");
             _gridPane.add(block, 0, 0, 15, 17);
-            _submit.setDisable(true);
-            _pass.setDisable(true);
-            _reset.setDisable(true);
-            _shuffle.setDisable(true);
+            _submit.setVisible(false);
+            _pass.setVisible(false);
+            _reset.setVisible(false);
+            _shuffle.setVisible(false);
+            _surrender.setVisible(false);
         }
         else
         {
@@ -238,10 +250,11 @@ public class BoardView extends View {
                            .filter(x -> x.getId() != null && x.getId().equals("block"))
                            .collect(Collectors.toList())
            );
-            _submit.setDisable(false);
-            _pass.setDisable(false);
-            _reset.setDisable(false);
-            _shuffle.setDisable(false);
+            _submit.setVisible(true);
+            _pass.setVisible(true);
+            _reset.setVisible(true);
+            _shuffle.setVisible(true);
+            _surrender.setVisible(true);
         }
     }
 }

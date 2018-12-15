@@ -114,6 +114,11 @@ public class GameController extends Controller{
         _gameModel.updateScore(turn);
     }
 
+    public void surrender()
+    {
+        _gameModel.surrender();
+    }
+
     public void checkScore(){
        CheckInfo info = _gameModel.checkBoard();
        String total = (info == null) ? "0p" : info.getPoints().total() + "p";

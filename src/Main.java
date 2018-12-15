@@ -6,8 +6,15 @@ import javafx.stage.Stage;
 import model.EnvironmentVariables;
 import model.GameSession;
 import model.database.DocumentSession;
+import model.database.classes.Clause;
+import model.database.classes.TableAlias;
+import model.database.enumerators.CompareMethod;
 import model.helper.Log;
 import model.tables.Account;
+import model.tables.AccountInfo;
+import model.tables.Role;
+
+import java.util.ArrayList;
 
 public class Main extends Application {
     public static void main(String[] args) {
