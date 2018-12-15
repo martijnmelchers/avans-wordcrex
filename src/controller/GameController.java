@@ -21,6 +21,7 @@ public class GameController extends Controller{
         _gameModel = new GameModel(new Game(504, "playing", "NL", "jagermeester", "Lidewij", "accepted", null)); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
     }
 
+
     public Tile[][] getTiles() { return _gameModel.getTiles(); }
 
     public int getCurrentTurn() { return _gameModel.turn(); }

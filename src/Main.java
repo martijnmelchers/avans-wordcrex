@@ -29,10 +29,12 @@ public class Main extends Application {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 GameSession.setSession(new Account("jagermeester","rrr"));
+                GameSession.setRole(new Role("observer"));
             }
             else
             {
                 GameSession.setSession(new Account("Lidewij","mmm"));
+                GameSession.setRole(new Role("observer"));
             }
         });
     }
@@ -70,7 +72,7 @@ public class Main extends Application {
         try {
             var app = new App(primaryStage);
 
-            app.navigate(EnvironmentVariables.MAIN_VIEW, 350, 550);
+            app.navigate("ObserverView", 350, 550);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
             alert.showAndWait();

@@ -92,7 +92,10 @@ public class GameModel {
             // TODO For testing observer can be removed after merging
             clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, GameSession.getUsername()));
             try {
-                GameSession.setRole(db.select(AccountInfo.class, clauses).get(0).role);
+                //TODO
+
+                //GameSession.setRole(db.select(AccountInfo.class, clauses).get(0).role);
+                GameSession.setRole(new Role("observer"));
             } catch (Exception e) {
                 Log.error(e);
             }

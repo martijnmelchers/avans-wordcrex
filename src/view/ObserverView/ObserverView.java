@@ -51,6 +51,7 @@ public class ObserverView extends View{
     @Override
     protected void loadFinished() {
         Initialize();
+        Search();
     }
 
 }
