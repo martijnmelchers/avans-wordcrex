@@ -117,7 +117,7 @@ public class Board {
 
             woordX = ReverseString(woordX);
 
-            for (int j = 1; x + j < 14; j++){ //Begint bij 1 want dan overlappen ze niet met elkaar
+            for (int j = 1; x + j <= 14; j++){ //Begint bij 1 want dan overlappen ze niet met elkaar
                 if(_tiles[y][x + j].isEmpty()) break;
 
                 tilesX.add(_tiles[y][x + j]);
@@ -137,7 +137,7 @@ public class Board {
 
             woordY = ReverseString(woordY);
 
-            for (int j = 1; y + j < 14; j++){ //Begint bij 1 want dan overlappen ze niet met elkaar
+            for (int j = 1; y + j <= 14; j++){ //Begint bij 1 want dan overlappen ze niet met elkaar
                 if(_tiles[y + j][x].isEmpty()) break;
 
                 tilesY.add(_tiles[y + j][x]);
