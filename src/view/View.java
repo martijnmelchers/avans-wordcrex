@@ -16,7 +16,8 @@ public abstract class View {
         scene = application.getScene();
         loadFinished();
     }
-    protected <T extends Controller> T getController(Class<T> cType) throws Exception {
+
+    public  <T extends Controller> T getController(Class<T> cType) throws Exception {
         return application.getController(cType);
     }
 

@@ -144,22 +144,22 @@ public class MatchOverview extends View {
 
     private void onInvitationClick(Game game)
     {
-        System.out.println(game.getGameID());
+        System.out.println(game.getGameId());
     }
 
     private void onYourTurnClick(Game game)
     {
-        System.out.println(game.getGameID());
+        System.out.println(game.getGameId());
     }
 
     private void onTheirTurnClick(Game game)
     {
-        System.out.println(game.getGameID());
+        System.out.println(game.getGameId());
     }
 
     private void onObserverGameClick(Game game)
     {
-        System.out.println(game.getGameID());
+        System.out.println(game.getGameId());
     }
 
     protected void filterObserverGames(String currentGamesToSearch) {

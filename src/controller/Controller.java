@@ -1,5 +1,6 @@
 package controller;
 
+import model.helper.Log;
 import view.View;
 
 import java.io.IOException;
@@ -23,11 +24,24 @@ public abstract class Controller
         return application.getView();
     }
 
-    public void navigate(String fxmlFileName) throws IOException {
-        application.navigate(fxmlFileName);
+    public App getApplication()
+    {
+        return application;
     }
 
     public void navigate(String fxmlFileName, int width, int height) throws IOException {
         application.navigate(fxmlFileName, width, height);
+    }
+
+    public void navigate(String fxmlFileName)
+    {
+        try
+        {
+            application.navigate(fxmlFileName);
+        }
+        catch (Exception e)
+        {
+            Log.error(e,false );
+        }
     }
 }
