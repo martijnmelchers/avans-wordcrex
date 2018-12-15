@@ -46,6 +46,26 @@ public class GameController extends Controller{
         return  _gameModel.tileIsEmpty(new Vector2(x, y));
     }
 
+    private Task nextTurn()
+    {
+        return new Task() {
+            @Override
+            protected Object call() throws Exception
+            {
+                updateView(true);
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run()
+                    {
+                        boardView.stopLoadingScreen();
+                    }
+                });
+
+                return null;
+            }
+        };
+    }
+
     public void submitTurn()
     {
         submitTurn(false);
@@ -70,23 +90,7 @@ public class GameController extends Controller{
         }
 
         boardView.startLoadingScreen("Wachten op andere speler.");
-        Task nextTurn = new Task() {
-            @Override
-            protected Object call() throws Exception
-            {
-                updateView(true);
-                Platform.runLater(new Runnable(){
-                    @Override
-                    public void run()
-                    {
-                        boardView.stopLoadingScreen();
-                    }
-                });
-
-                return null;
-            }
-        };
-        _gameModel.submitTurn(info,nextTurn);
+        _gameModel.submitTurn(info, nextTurn());
 
     }
 
@@ -116,23 +120,7 @@ public class GameController extends Controller{
        {
            boardView = getViewCasted();
            boardView.startLoadingScreen("Wachten op andere speler.");
-           Task nextTurn = new Task() {
-               @Override
-               protected Object call() throws Exception
-               {
-                   updateView(true);
-                   Platform.runLater(new Runnable(){
-                       @Override
-                       public void run()
-                       {
-                           boardView.stopLoadingScreen();
-                       }
-                   });
-
-                   return null;
-               }
-           };
-           _gameModel.alreadyPlayed(nextTurn);
+           _gameModel.alreadyPlayed(nextTurn());
        }
     }
 
