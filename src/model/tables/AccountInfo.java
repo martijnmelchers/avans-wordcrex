@@ -18,16 +18,23 @@ public class AccountInfo {
     @ForeignKey(type = Role.class, field = "role", output = "role")
     private String roleId;
 
-    private Account account;
-    private Role role;
+    public Account account;
+    public Role role;
 
-    public AccountInfo() {
+    public AccountInfo()
+    {
 
     }
 
-    public AccountInfo(String role, String username) {
+
+    public AccountInfo(String role, String username){
         this.usernameId = username;
         this.roleId = role;
+    }
+
+    // What kind of naming is this??
+    public String doStuff() {
+        return usernameId;
     }
 
     public void setRoleId(String role) {
@@ -35,18 +42,10 @@ public class AccountInfo {
     }
 
     public String getUsername() {
-        return this.account.getUsername();
-    }
-
-    public String getRoleId() {
         return this.roleId;
     }
 
-    public Role getRole() {
-        return this.role;
-    }
-
-    public Account getAccount() {
-        return account;
+    public String getRole(){
+        return this.roleId;
     }
 }

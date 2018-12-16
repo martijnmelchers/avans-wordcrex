@@ -48,8 +48,8 @@ class Header {
         // programma toont de spelers, de <spelscore> en of een spel <bezig> of <geëindigd> is
         for (Game game : games)
         {
-            var title = new Text(game.getPlayer1().getUsername() + " - " + game.getPlayer2().getUsername() + "\n");
-            var description = new Text(game.getLetterSet().getDescription() + " " + comment);
+            var title = new Text(game.player1.getUsername() + " - " + game.player2.getUsername() + "\n");
+            var description = new Text(game.letterSet.getDescription() + " " + comment);
 
 
             createButton(onClick, game, comment, title, description, 40);
@@ -74,7 +74,7 @@ class Header {
         pane.setMaxWidth(50);
 
         // Text
-        var text1 = gameTitle == null ? new Text(game.getPlayer2().getUsername() + " - " + game.getLetterSet().getDescription() + "\n") : gameTitle;
+        var text1 = gameTitle == null ? new Text(game.player2.getUsername() + " - " + game.letterSet.getDescription() + "\n") : gameTitle;
         text1.setFill(MatchOverview.TEXT_COLOR);
         text1.setFont(MatchOverview.FONT_BOLD);
         var text2 = description == null ? new Text(comment) : description;
@@ -103,15 +103,15 @@ class Header {
 
         // check what to add
         var textToAdd = new ArrayList<InformationData>();
-        if (!game.getGameState().isRequest())
+        if(!game.gameState.isRequest())
         {
-            textToAdd.add(new InformationData("Punten:", game.getPlayer1().getUsername() + " = " + score1 + " \n" + game.getPlayer2().getUsername() + " = " + score2));
+            textToAdd.add(new InformationData("Punten:", game.player1.getUsername() + " = " + score1 + " \n"+game.player2.getUsername()+" = " + score2));
         }
-        textToAdd.add(new InformationData("Status:", game.getGameState().getState()));
+        textToAdd.add(new InformationData("Status:", game.gameState.getState()));
 
-        if (game.getWinner() != null && (game.getGameState().isFinished() || game.getGameState().isResigned()))
+        if(game.winner != null && (game.gameState.isFinished() || game.gameState.isResigned()))
         {
-            textToAdd.add(new InformationData("Winnaar:", game.getWinner().getUsername()));
+            textToAdd.add(new InformationData("Winnaar:", game.winner.getUsername()));
         }
 
         AddTextFlowToButton(new Insets(0,100,0, 0), textToAdd);
