@@ -20,11 +20,12 @@
          <children>
             <TextField fx:id="_searchBar" focusTraversable="false" layoutX="342.0" layoutY="17.0" onKeyTyped="#filter" promptText="Spelers zoeken" />
             <Button layoutX="497.0" layoutY="18.0" mnemonicParsing="false" onAction="#invitationView" text="Speler uitnodigen" />
+            <Button layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
          </children>
       </AnchorPane>
       <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="70.0" prefWidth="620.0" style="-fx-background-color: #212048;" GridPane.rowIndex="2">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Uitloggen">
+            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#logOut" text="Uitloggen">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

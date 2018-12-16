@@ -9,6 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.util.Callback;
+import model.Board;
+import model.GameSession;
+import model.MatchOverviewModel;
+import model.helper.Log;
 import model.tables.Game;
 import view.View;
 
@@ -80,6 +85,7 @@ public class MatchOverview extends View {
 
         List<Game> games = this._controller.getGames();
 
+
         for (var game : games) {
             switch (game.getGameState().getState()) {
                 case "request": {
@@ -88,18 +94,33 @@ public class MatchOverview extends View {
                 }
 
                 case "playing": {
-                    if (this._controller.isMyTurn(game)) {
+                    boolean isMyTurn;
+
+                    try {
+                        isMyTurn = MatchOverviewModel.isMyTurn(game);
+                    }
+                    catch (NullPointerException e){
+                        isMyTurn = true;
+                    }
+
+                    if (isMyTurn) {
                         gameObservableList1.add(game);
                     } else {
                         gameObservableList2.add(game);
                     }
+
+
+                    break;
                 }
 
                 case "finished": {
                     //TODO: show finished games
+                    break;
                 }
+
                 case "resigned": {
                     //TODO: show resigned games??
+                    break;
                 }
             }
 
@@ -167,6 +188,23 @@ public class MatchOverview extends View {
 
     }
 
+
+    @FXML
+    private void logOut(){
+        this._controller.endSession();
+        try{
+            this._controller.navigate("LoginView", 350,550);
+        }
+        catch (Exception e){
+            Log.error(e);
+        }
+    }
+
+
+    @FXML
+    public void refresh(){
+        this.renderGames();
+    }
 
     @FXML
     private void invitationView(){

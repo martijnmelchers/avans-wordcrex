@@ -101,11 +101,19 @@ public class Game {
         return (isActive() && (this._usernamePlayer1.equals(name) || this._usernamePlayer1.equals(name)));
     }
 
-    private boolean isActive() {
-        return (this._gameState.equals("playing") || this._answerPlayer2.equals("unknown") || (this._gameState.equals("request") && this._answerPlayer2.equals("accepted")));
+    public void setWinner(String username){
+        this._usernameWinner = username;
     }
 
-    public Integer getGameID() {
-        return _gameId;
+    public Integer getGameID() { return _gameId; }
+
+    public void setState(String state){
+        this._gameState = state;
+    }
+    public void setAnswer(String answer){
+        this._answerPlayer2 = answer;
+    }
+    private boolean isActive() {
+        return (this._gameState.equals("playing") || this._answerPlayer2.equals("unknown") || (this._gameState.equals("request") && this._answerPlayer2.equals("accepted")));
     }
 }
