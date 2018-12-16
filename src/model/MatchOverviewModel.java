@@ -26,10 +26,6 @@ public class MatchOverviewModel {
 
     private HashMap<Game, Boolean> currentTurns = new HashMap<>();
 
-    public List<Game> getCurrentPlayerGames(String username) {
-        return findCurrentPlayerGame(username);
-    }
-
     public MatchOverviewModel() {
         try {
             this._db = DocumentSession.getDatabase();
@@ -38,11 +34,14 @@ public class MatchOverviewModel {
         }
     }
 
-    public boolean isMyTurn(Game game){
-        if(this.currentTurns.containsKey(game)){
+    public List<Game> getCurrentPlayerGames(String username) {
+        return findCurrentPlayerGame(username);
+    }
+
+    public boolean isMyTurn(Game game) {
+        if (this.currentTurns.containsKey(game)) {
             return this.currentTurns.get(game);
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -53,22 +52,20 @@ public class MatchOverviewModel {
 
             var clauses = new ArrayList<Clause>();
 
-            clauses.add(new Clause(new TableAlias("game", -1),"username_player1",CompareMethod.EQUAL, username, LinkMethod.OR));
-            clauses.add(new Clause(new TableAlias("game", -1),"username_player2",CompareMethod.EQUAL, username, LinkMethod.OR));
+            clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, username, LinkMethod.OR));
+            clauses.add(new Clause(new TableAlias("game", -1), "username_player2", CompareMethod.EQUAL, username, LinkMethod.OR));
 
             games = _db.select(Game.class, clauses);
 
-            for(var game : games){
-                if(currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)){
+            for (var game : games) {
+                if (currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
                     // Opponent turn
                     this.currentTurns.put(game, (GameSession.getUsername().equals(game.getPlayer1().getUsername())));
                 }
             }
 
             return games;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -76,7 +73,7 @@ public class MatchOverviewModel {
     }
 
 
-    public void loadTurns(){
+    public void loadTurns() {
 
     }
 
@@ -89,8 +86,7 @@ public class MatchOverviewModel {
 
         try {
             var turnList = _db.select(TurnPlayer1.class, clauses);
-            if(turnList.size() > 0)
-            {
+            if (turnList.size() > 0) {
                 return true;
             }
         } catch (Exception e) {
@@ -105,12 +101,11 @@ public class MatchOverviewModel {
 
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("turnplayer2", -1), "username_player2", CompareMethod.EQUAL, game.getPlayer2().getUsername(), LinkMethod.AND));
-        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, latestTurn ));
+        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, latestTurn));
 
         try {
             var turnList = _db.select(TurnPlayer2.class, clauses);
-            if(turnList.size() > 0)
-            {
+            if (turnList.size() > 0) {
                 return true;
             }
         } catch (Exception e) {
@@ -121,25 +116,20 @@ public class MatchOverviewModel {
     }
 
 
-    private int GetLatestTurnOfGame(Game game)
-    {
+    private int GetLatestTurnOfGame(Game game) {
         int latestTurn = 0;
 
         var turnClauses = new ArrayList<Clause>();
         turnClauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, game.getGameID()));
 
-        try
-        {
+        try {
             for (Turn turn : _db.select(Turn.class, turnClauses)) {
                 Integer id = turn.getTurnID();
-                if(id > latestTurn)
-                {
+                if (id > latestTurn) {
                     latestTurn = id;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -152,24 +142,20 @@ public class MatchOverviewModel {
 
             var clauses = new ArrayList<Clause>();
 
-            for (Game game : _db.select(Game.class, clauses))
-            {
+            for (Game game : _db.select(Game.class, clauses)) {
                 if (!game.getGameState().isPlaying())
 //                    continue;
 
-                games.add(game);
+                    games.add(game);
             }
 
             return games;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return null;
     }
-
 
 
     public ArrayList<Game> searchForGamesAsObserver(String gamesToSearch) {
@@ -180,21 +166,18 @@ public class MatchOverviewModel {
         try {
             Map<Integer, Game> map = new HashMap<>();
 
-            for (Game game : _db.select(Game.class, clauses))
-            {
+            for (Game game : _db.select(Game.class, clauses)) {
                 if (game.getGameState().isRequest())
                     continue;
 
-                if(map.containsKey(game.getGameID()))
+                if (map.containsKey(game.getGameID()))
                     continue;
 
                 map.put(game.getGameID(), game);
             }
 
             return new ArrayList<Game>(map.values());
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -208,15 +191,12 @@ public class MatchOverviewModel {
 
         try {
             var foundGames = new ArrayList<Game>();
-            for (Game game : _db.select(Game.class, clauses))
-            {
+            for (Game game : _db.select(Game.class, clauses)) {
                 foundGames.add(game);
             }
 
             return foundGames;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -230,15 +210,12 @@ public class MatchOverviewModel {
         try {
             ArrayList<String> accountRoles = new ArrayList<>();
 
-            for (AccountInfo acc : _db.select(AccountInfo.class, clauses))
-            {
+            for (AccountInfo acc : _db.select(AccountInfo.class, clauses)) {
                 accountRoles.add(acc.getRole().getRole());
             }
 
             return accountRoles;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -258,13 +235,11 @@ public class MatchOverviewModel {
         clauses2.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, game.getGameID()));
 
         try {
-            for (TurnPlayer1 turn1 : _db.select(TurnPlayer1.class, clauses1))
-            {
+            for (TurnPlayer1 turn1 : _db.select(TurnPlayer1.class, clauses1)) {
                 score.player1 += turn1.getScore() + turn1.getBonus();
             }
 
-            for (TurnPlayer2 turn2 : _db.select(TurnPlayer2.class, clauses2))
-            {
+            for (TurnPlayer2 turn2 : _db.select(TurnPlayer2.class, clauses2)) {
                 score.player2 += turn2.getScore() + turn2.getBonus();
             }
 
@@ -276,17 +251,15 @@ public class MatchOverviewModel {
     }
 
 
-    public void updateGameState(GameState state){
-        try{
+    public void updateGameState(GameState state) {
+        try {
             _db.update(state);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
 
-    public class GameScore
-    {
+    public class GameScore {
         public int player1;
         public int player2;
     }

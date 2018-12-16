@@ -1,7 +1,6 @@
 package model;
 
-public class EnvironmentVariables
-{
+public class EnvironmentVariables {
     /**
      * 0 = None
      * 1 = Errors

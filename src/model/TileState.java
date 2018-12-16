@@ -1,7 +1,6 @@
 package model;
 
-public enum TileState
-{
+public enum TileState {
     UNLOCKED,
     LOCKED;
 }

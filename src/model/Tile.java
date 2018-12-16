@@ -11,7 +11,9 @@ public class Tile {
 
     private Letter _letter;
 
-    public Tile() {}
+    public Tile() {
+    }
+
     //Laden van de tiles
     public Tile(TileType tileType, Color color) {
         _tileState = TileState.LOCKED;
@@ -19,8 +21,9 @@ public class Tile {
         _tileColor = color;
         _letter = new Letter("");
     }
+
     //Laden van de letters
-    public Tile(String letter){
+    public Tile(String letter) {
         _tileState = TileState.UNLOCKED;
         _tileType = TileType.STANDARD;
         _tileColor = Color.WHITE;
@@ -30,24 +33,39 @@ public class Tile {
     public TileType getType() {
         return _tileType;
     }
-    public void setState(TileState tileState) {_tileState = tileState; }
 
-    public TileState getState() { return _tileState; }
+    public TileState getState() {
+        return _tileState;
+    }
 
-    public Color getColor() { return _tileColor; }
+    public void setState(TileState tileState) {
+        _tileState = tileState;
+    }
 
-    public void setColor(Color color){ _tileColor = color; }
+    public Color getColor() {
+        return _tileColor;
+    }
 
-    public Letter getLetterType() { return _letter; }
+    public void setColor(Color color) {
+        _tileColor = color;
+    }
 
-    public boolean isEmpty(){ System.out.println(_letter.getLetter());return _letter.getLetter().equals(""); }
+    public Letter getLetterType() {
+        return _letter;
+    }
 
-    public void replace(String letter, int points, int letterId){
+    public boolean isEmpty() {
+        System.out.println(_letter.getLetter());
+        return _letter.getLetter().equals("");
+    }
+
+    public void replace(String letter, int points, int letterId) {
         _letter.setLetter(letter);
         _letter.setPoints(points);
         _letter.setId(letterId);
     }
-    public void replace(String letter, int points, int letterId, Color color){
+
+    public void replace(String letter, int points, int letterId, Color color) {
         _letter.setLetter(letter);
         _letter.setPoints(points);
         _letter.setId(letterId);

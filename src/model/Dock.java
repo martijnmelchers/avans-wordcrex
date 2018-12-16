@@ -17,66 +17,54 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class Dock
-{
+public class Dock {
     private HandLetter[] letters;
     private Database _db;
 
 
-    public Dock(boolean createNewHand,int gameId,int turnId)
-    {
+    public Dock(boolean createNewHand, int gameId, int turnId) {
         try {
             _db = DocumentSession.getDatabase();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.error(e);
         }
         letters = new HandLetter[7];
-        if(createNewHand)
-        {
+        if (createNewHand) {
             refill(gameId, turnId);
-        }
-        else
-        {
+        } else {
             update(gameId, turnId);
         }
 
     }
 
-    public String getNotUsedTiles(int gameId, int turnId)
-    {
+    public String getNotUsedTiles(int gameId, int turnId) {
         return String.valueOf(notUsedLetters(gameId, turnId).size());
     }
 
-    public List<TurnBoardLetter> getAllPlacedLetters(int gameId, int turn_id)
-    {
+    public List<TurnBoardLetter> getAllPlacedLetters(int gameId, int turn_id) {
         ArrayList<Clause> clauses = new ArrayList<>();
 
-        clauses.add(new Clause( new TableAlias("TurnBoardLetter",-1) ,"game_id", CompareMethod.EQUAL ,gameId ));
-        clauses.add(new Clause( new TableAlias("TurnBoardLetter",-1) ,"turn_id", CompareMethod.LESS_EQUAL ,turn_id ));
+        clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1), "game_id", CompareMethod.EQUAL, gameId));
+        clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1), "turn_id", CompareMethod.LESS_EQUAL, turn_id));
 
-        try
-        {
+        try {
             var turnBoardLetters = _db.select(TurnBoardLetter.class, clauses).stream().collect(Collectors.toList());
             ArrayList<TurnBoardLetter> filtered = new ArrayList<>();
 
             // Database returns double results of one table so this function filters doubles
-            for(TurnBoardLetter turnBoardLetter : turnBoardLetters)
-            {
-                if(!filtered.stream().anyMatch(a->a.getX() == turnBoardLetter.getX()&& a.getY() == turnBoardLetter.getY()))
-                {
+            for (TurnBoardLetter turnBoardLetter : turnBoardLetters) {
+                if (!filtered.stream().anyMatch(a -> a.getX() == turnBoardLetter.getX() && a.getY() == turnBoardLetter.getY())) {
                     filtered.add(turnBoardLetter);
                 }
             }
             return filtered;
-        }
-        catch (Exception e)
-        {
-            Log.error(e,false );
+        } catch (Exception e) {
+            Log.error(e, false);
             return null;
         }
     }
 
-    public void update(int gameId,Integer turn_id) // update to turn specific hand (For history mode)
+    public void update(int gameId, Integer turn_id) // update to turn specific hand (For history mode)
     {
         List<TurnBoardLetter> placed = getAllPlacedLetters(gameId, turn_id);
 
@@ -84,132 +72,104 @@ public class Dock
 
         ArrayList<Clause> clauses = new ArrayList<>();
 
-        clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"game_id", CompareMethod.EQUAL ,gameId ));
-        clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"turn_id", CompareMethod.LESS_EQUAL ,turn_id ));
+        clauses.add(new Clause(new TableAlias("HandLetter", -1), "game_id", CompareMethod.EQUAL, gameId));
+        clauses.add(new Clause(new TableAlias("HandLetter", -1), "turn_id", CompareMethod.LESS_EQUAL, turn_id));
 
-        for(TurnBoardLetter turnBoardLetter : placed)
-        {
-            clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"letter_id", CompareMethod.NOT_EQUAL ,turnBoardLetter.letter.getLetterId()));
+        for (TurnBoardLetter turnBoardLetter : placed) {
+            clauses.add(new Clause(new TableAlias("HandLetter", -1), "letter_id", CompareMethod.NOT_EQUAL, turnBoardLetter.letter.getLetterId()));
         }
 
-        try
-        {
+        try {
             handLetters = _db.select(HandLetter.class, clauses);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.error(e);
             return;
         }
 
 
-
         ArrayList<HandLetter> filtered = new ArrayList<>();
 
         // Database returns double results of one table so this function filters doubles
-        for(HandLetter h : handLetters)
-        {
-            if(!filtered.stream().anyMatch(a->a.letter.getLetterId() == h.letter.getLetterId()&& a.letter.game.getGameID() == gameId))
-            {
+        for (HandLetter h : handLetters) {
+            if (!filtered.stream().anyMatch(a -> a.letter.getLetterId() == h.letter.getLetterId() && a.letter.game.getGameID() == gameId)) {
                 filtered.add(h);
             }
         }
 
         clearAll();
-        for (int i =0;i<filtered.size();i++)
-        {
+        for (int i = 0; i < filtered.size(); i++) {
             letters[i] = filtered.get(i);
         }
 
     }
 
-    public HandLetter[] getLetters()
-    {
+    public HandLetter[] getLetters() {
         return letters;
     }
 
-    private void clearAll()
-    {
-        for (int i=0;i<letters.length; i++)
-        {
+    private void clearAll() {
+        for (int i = 0; i < letters.length; i++) {
             letters[i] = null;
         }
     }
 
-    private void insertLetterCollection(int gameId)
-    {
-        try
-        {
+    private void insertLetterCollection(int gameId) {
+        try {
             List<String> defaultLetters = Letter.defaultLetters();
             ArrayList<Letter> letterset = new ArrayList<>();
-            for(int i =1;i<=defaultLetters.size();i++)
-            {
-                 letterset.add(new Letter(i,gameId,"NL",defaultLetters.get(i-1)));
+            for (int i = 1; i <= defaultLetters.size(); i++) {
+                letterset.add(new Letter(i, gameId, "NL", defaultLetters.get(i - 1)));
             }
             _db.insert(letterset);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.error(e);
         }
 
     }
 
-    public void refill(int gameId,int turnId) // on next turn refill dock positions that are empty
+    public void refill(int gameId, int turnId) // on next turn refill dock positions that are empty
     {
 
-        if(!isLetterSetPresent(gameId)) //letterset is not present
+        if (!isLetterSetPresent(gameId)) //letterset is not present
         {
             insertLetterCollection(gameId);
         }
 
         List<Letter> notUsed = notUsedLetters(gameId, turnId);
 
-        for(int i =0; i<letters.length;i++)
-        {
-            if(letters[i]!= null)
-            {
+        for (int i = 0; i < letters.length; i++) {
+            if (letters[i] != null) {
                 int finalI = i;
-                notUsed.remove(notUsed.stream().filter(a->a.getLetterId() == letters[finalI].letter.getLetterId()).collect(Collectors.toList()).get(0));
+                notUsed.remove(notUsed.stream().filter(a -> a.getLetterId() == letters[finalI].letter.getLetterId()).collect(Collectors.toList()).get(0));
             }
         }
 
-        for(int i =0; i<letters.length;i++)
-        {
-            if(letters[i] == null)
-            {
-                int randomIndex = new Random().nextInt(notUsed.size()-1)+1;
+        for (int i = 0; i < letters.length; i++) {
+            if (letters[i] == null) {
+                int randomIndex = new Random().nextInt(notUsed.size() - 1) + 1;
                 Letter l = notUsed.get(randomIndex);
-                Turn t = new Turn(gameId,turnId);
-                letters[i] = new HandLetter(l.getLetterId(),turnId, gameId,l,t);
+                Turn t = new Turn(gameId, turnId);
+                letters[i] = new HandLetter(l.getLetterId(), turnId, gameId, l, t);
                 notUsed.remove(randomIndex);
-                try
-                {
+                try {
                     _db.insert(letters[i]);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
     }
 
-    public void removeUsedLetters(List<Integer> ids)
-    {
-        for(Integer id : ids)
-        {
+    public void removeUsedLetters(List<Integer> ids) {
+        for (Integer id : ids) {
             HandLetter handLetter;
-            try
-            {
-                 handLetter = Arrays.stream(this.letters)
-                         .filter(a->a != null)
-                         .filter(a->a.letter.getLetterId() == id)
-                         .collect(Collectors.toList()).get(0);
+            try {
+                handLetter = Arrays.stream(this.letters)
+                        .filter(a -> a != null)
+                        .filter(a -> a.letter.getLetterId() == id)
+                        .collect(Collectors.toList()).get(0);
 
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 new Exception("Letter id not found").printStackTrace();
                 continue;
             }
@@ -218,65 +178,52 @@ public class Dock
         }
     }
 
-    private boolean isLetterSetPresent(int gameId)
-    {
+    private boolean isLetterSetPresent(int gameId) {
         ArrayList<Clause> clauses = new ArrayList<>();
-        clauses.add(new Clause(new TableAlias("Letter",-1 ),"game_id" , CompareMethod.EQUAL,gameId));
-        try
-        {
-            return _db.select(Letter.class, clauses).size()>1;
-        }
-        catch (Exception e)
-        {
-            Log.error(e,false );
+        clauses.add(new Clause(new TableAlias("Letter", -1), "game_id", CompareMethod.EQUAL, gameId));
+        try {
+            return _db.select(Letter.class, clauses).size() > 1;
+        } catch (Exception e) {
+            Log.error(e, false);
         }
         return false;
     }
 
-    private List<Letter> notUsedLetters(int gameId, int turnId)
-    {
+    private List<Letter> notUsedLetters(int gameId, int turnId) {
         ArrayList<Clause> clauses = new ArrayList<>();
-        clauses.add(new Clause(new TableAlias("Letter", -1),"game_id" ,CompareMethod.EQUAL , gameId));
+        clauses.add(new Clause(new TableAlias("Letter", -1), "game_id", CompareMethod.EQUAL, gameId));
         List<Letter> availableLetters = new ArrayList<>();
-        try
-        {
-            availableLetters = _db.select(Letter.class,clauses);
-        }
-        catch (Exception e)
-        {
+        try {
+            availableLetters = _db.select(Letter.class, clauses);
+        } catch (Exception e) {
             Log.error(e, true);
         }
 
         List<TurnBoardLetter> usedLetters = new ArrayList<>();
 
-        try
-        {
+        try {
             clauses = new ArrayList<>();
-            clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1),"game_id" ,CompareMethod.EQUAL , gameId));
+            clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1), "game_id", CompareMethod.EQUAL, gameId));
             clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1), "turn_id", CompareMethod.LESS_EQUAL, turnId));
-            usedLetters = _db.select(TurnBoardLetter.class,clauses);
-        }
-        catch (Exception e)
-        {
+            usedLetters = _db.select(TurnBoardLetter.class, clauses);
+        } catch (Exception e) {
             Log.error(e);
         }
 
-        List<Integer> ids = usedLetters.stream().map(a->a.letter.getLetterId()).collect(Collectors.toList());
+        List<Integer> ids = usedLetters.stream().map(a -> a.letter.getLetterId()).collect(Collectors.toList());
         List<Letter> usableLetters = availableLetters.stream()
-                .filter(a-> !ids.contains(a.getLetterId()))
+                .filter(a -> !ids.contains(a.getLetterId()))
                 .collect(Collectors.toList());
 
         return usableLetters;
     }
 
-    public void print()
-    {
+    public void print() {
         String s = "";
         String s1 = "";
-        for (HandLetter l : letters)
-        {
-            s+= l.get_letterId()+" ";
-            s1+= l.letter.getSymbol();
+        for (HandLetter l : letters) {
+            s += l.get_letterId() + " ";
+            s1 += l.letter.getSymbol();
         }
         System.out.println(s);
         System.out.println(s1);
