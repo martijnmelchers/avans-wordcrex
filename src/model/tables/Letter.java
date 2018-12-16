@@ -42,7 +42,7 @@ public class Letter {
 
     public Letter(){}
 
-    public String get_symbol()
+    public String getSymbol()
     {
         return _symbol;
     }
