@@ -10,7 +10,6 @@ import model.tables.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,12 +21,10 @@ public class MatchOverviewModel {
     private Database _db;
 
     // TODO: Fill the username automatically in using the authentication feature.
-    private String _username = "jagermeester";
+    private String _username = "Huseyin-Testing";
 
-    private HashMap<Game, Boolean> currentTurns = new HashMap<>();
-
-    public List<Game> getCurrentPlayerGames(String username) {
-        return findCurrentPlayerGame(username);
+    public ArrayList<Game> getCurrentPlayerGames() {
+        return findCurrentPlayerGame();
     }
 
     public MatchOverviewModel() {
@@ -38,46 +35,21 @@ public class MatchOverviewModel {
         }
     }
 
-    public boolean isMyTurn(Game game){
-        if(this.currentTurns.containsKey(game)){
-            return this.currentTurns.get(game);
+    private ArrayList<Game> findCurrentPlayerGame() {
+        var clauses = new ArrayList<Clause>();
+        var foundGames = new ArrayList<Game>();
+
+        clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, _username));
+        try
+        {
+            foundGames.addAll(_db.select(Game.class, clauses));
         }
-        else {
-            return false;
-        }
-    }
-
-    private List<Game> findCurrentPlayerGame(String username) {
-        try {
-            List<Game> games = new ArrayList<Game>();
-
-            var clauses = new ArrayList<Clause>();
-
-            clauses.add(new Clause(new TableAlias("game", -1),"username_player1",CompareMethod.EQUAL, username, LinkMethod.OR));
-            clauses.add(new Clause(new TableAlias("game", -1),"username_player2",CompareMethod.EQUAL, username, LinkMethod.OR));
-
-            games = _db.select(Game.class, clauses);
-
-            for(var game : games){
-                if(currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)){
-                    // Opponent turn
-                    this.currentTurns.put(game, (GameSession.getUsername().equals(game.player1.getUsername())));
-                }
-            }
-
-            return games;
-        }
-        catch(Exception e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        return null;
-    }
-
-
-    public void loadTurns(){
-
+        return foundGames;
     }
 
     public boolean currentTurnHasAction(Game game) {
@@ -150,12 +122,10 @@ public class MatchOverviewModel {
         try {
             ArrayList<Game> games = new ArrayList<Game>();
 
-            var clauses = new ArrayList<Clause>();
-
-            for (Game game : _db.select(Game.class, clauses))
+            for (Game game : _db.select(Game.class, new ArrayList<Clause>()))
             {
-                if(!game.gameState.isPlaying())
-//                    continue;
+                if(game.gameState.isRequest())
+                    continue;
 
                 games.add(game);
             }
@@ -169,8 +139,6 @@ public class MatchOverviewModel {
 
         return null;
     }
-
-
 
     public ArrayList<Game> searchForGamesAsObserver(String gamesToSearch) {
         var clauses = new ArrayList<Clause>();
@@ -273,16 +241,6 @@ public class MatchOverviewModel {
         }
 
         return score;
-    }
-
-
-    public void updateGameState(GameState state){
-        try{
-            _db.update(state);
-        }
-        catch(Exception e){
-
-        }
     }
 
     public class GameScore

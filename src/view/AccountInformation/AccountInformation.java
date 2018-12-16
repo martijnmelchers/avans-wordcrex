@@ -35,10 +35,7 @@ public class AccountInformation extends View {
 
     public void changePassword()
     {
-        if(this._accountController.changePassword(username.getText(), password.getText(), confirmationPassword.getText()))
-        {
-            showError("Wachtwoord is gewijzigd");
-        }
+        this._accountController.changePassword(username.getText(), password.getText(), confirmationPassword.getText());
     }
 
     public void backMain()

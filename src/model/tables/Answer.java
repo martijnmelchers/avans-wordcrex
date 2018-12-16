@@ -12,8 +12,4 @@ public class Answer {
     private String _type;
 
     public Answer() {}
-
-    public String get_type() {
-        return _type;
-    }
 }

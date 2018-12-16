@@ -1,57 +1,53 @@
-package view.ModeratorView;
+package controller.moderator;
 
-import controller.ModeratorController;
 import javafx.scene.control.Button;
-
+import model.moderator.Moderator;
+import view.moderator.ModeratorView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import model.helper.Log;
-import view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
-///size 350x by 660Y zet de grootte als je deze maakt
-///
-public class ModeratorView extends View {
+public class ModeratorViewController {
 
 
-    public ModeratorView(){
+    public ModeratorViewController(){
         WordList = FXCollections.observableList(new ArrayList<String>());
-
+        WordList.add("1sukerkool");
+        WordList.add("2sukerkool");
 
 
     }
     public void initialize(){
         WordView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        WordView.setItems(WordList);
-
+        moderatorView = new ModeratorView(WordView,WordList);
 
     }
 
-    @FXML private AnchorPane MainPane;
+
     @FXML private ListView WordView;
     @FXML private Button DenyButton;
     @FXML private Button AddButton;
 
-
+    private ModeratorView moderatorView;
     private ObservableList<String> WordList;
-    private ModeratorController moderatorController;
+    private Moderator moderator;
     private String mode = "pending";
 
+    public void setModerator(Moderator moderator) {
+        this.moderator = moderator;
 
 
+    }
     @FXML
     public void refreshAccepted(){
         mode = "accepted";
-        if(WordList.size() < 1) Refresh();
+        Refresh();
     }
     @FXML
     public void refreshPending(){
@@ -67,30 +63,28 @@ public class ModeratorView extends View {
     @FXML
     private void Refresh(){
         WordList.clear();
-
         if(mode == "pending") {
-             for (String temp : moderatorController.getSuggestedWords()) {
+             for (String temp : moderator.getSuggestedWords()) {
                 WordList.add(temp);
             }
         }
         else if(mode == "declined"){
-            for (String temp : moderatorController.getDeclinedWords()) {
+            for (String temp : moderator.getDeclinedWords()) {
                 WordList.add(temp);
             }
         }
         else if (mode == "accepted"){
-            for (String temp : moderatorController.getAcceptedWords()) {
+            for (String temp : moderator.getAcceptedWords()) {
                 WordList.add(temp);
             }
         }
-        if (WordList.size() == 0) WordList.add("There are no words pending at the moment") ;
 
 
     }
     @FXML
     private void AddWord(){
         if (WordView.getSelectionModel().getSelectedItems().size() == 0) return;
-        moderatorController.acceptSuggestedWords(Arrays.copyOf(WordView.getSelectionModel().getSelectedItems().toArray(),
+        moderator.acceptSuggestedWords(Arrays.copyOf(WordView.getSelectionModel().getSelectedItems().toArray(),
                 WordView.getSelectionModel().getSelectedItems().size(),
                 String[].class));
         Refresh();
@@ -98,7 +92,7 @@ public class ModeratorView extends View {
     @FXML
     private void IgnoreWord(){
         if (WordView.getSelectionModel().getSelectedItems().size() == 0) return;
-        moderatorController.rejectSuggestedWords(Arrays.copyOf(WordView.getSelectionModel().getSelectedItems().toArray(),
+        moderator.rejectSuggestedWords(Arrays.copyOf(WordView.getSelectionModel().getSelectedItems().toArray(),
                 WordView.getSelectionModel().getSelectedItems().size(),
                 String[].class));
         Refresh();
@@ -106,17 +100,8 @@ public class ModeratorView extends View {
 
     public void Dispose(){
         Stage Temp = (Stage)WordView.getScene().getWindow();
-        moderatorController.close();
+        moderator.close();
         Temp.close();
     }
 
-    @Override
-    protected void loadFinished() {
-        try {
-            this.moderatorController = this.getController(ModeratorController.class);
-        } catch (Exception e) {
-            Log.error(e);
-        }
-
-    }
 }

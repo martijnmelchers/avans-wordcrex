@@ -76,25 +76,23 @@ public class AccountController extends Controller
         }
 
         GameSession.setSession(account);
-        // Set role
-        _model.getRole();
 
         loginView.loginSucces();
     }
 
-    public boolean changePassword(String username, String password, String confirmationPassword)
+    public void changePassword(String username, String password, String confirmationPassword)
     {
         AccountInformation accountInformation = getViewCasted();
         if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
         {
             accountInformation.showError("Vul alle velden in");
-            return false;
+            return;
         }
 
         if(!checkPasswords(password,confirmationPassword ))
         {
             accountInformation.showError("De wachtwoorden komen niet overeen");
-            return false;
+            return;
         }
 
         String error = this._model.changePassword(username, password);
@@ -102,10 +100,8 @@ public class AccountController extends Controller
         if(!error.equals(""))
         {
             accountInformation.showError(error);
-            return false;
+            return;
         }
-
-        return true;
     }
 
     public String getUsername()
