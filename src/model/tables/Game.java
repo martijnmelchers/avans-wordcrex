@@ -47,8 +47,21 @@ public class Game {
         this._answerPlayer2 = answer_player2;
     }
 
+    public Game(Integer _gameId, String _gameState, String _letterSetCode, String _usernamePlayer1, String _usernamePlayer2, String _answerPlayer2) {
+        this._gameId = _gameId;
+        this._gameState = _gameState;
+        this._letterSetCode = _letterSetCode;
+        this._usernamePlayer1 = _usernamePlayer1;
+        this._usernamePlayer2 = _usernamePlayer2;
+        this._answerPlayer2 = _answerPlayer2;
+    }
+
     public GameState getGameState() {
         return gameState;
+    }
+
+    public void setGameState(String _gameState) {
+        this._gameState = _gameState;
     }
 
     public LetterSet getLetterSet() {
@@ -69,6 +82,10 @@ public class Game {
 
     public Account getWinner() {
         return winner;
+    }
+
+    public void setWinner(String winner) {
+        this._usernameWinner = winner;
     }
 
     public String getPlayer1Username() {

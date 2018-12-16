@@ -16,12 +16,12 @@ public class Symbol {
 
     @PrimaryKey
     @Column("symbol")
-    private char _symbol;
+    private String _symbol;
 
     @Column("value")
     private Integer _value;
 
-    @Column("Counted")
+    @Column("counted")
     private Integer _counted;
 
 
@@ -29,4 +29,8 @@ public class Symbol {
 
     public Symbol() {}
 
+    public Integer get_value()
+    {
+        return _value;
+    }
 }

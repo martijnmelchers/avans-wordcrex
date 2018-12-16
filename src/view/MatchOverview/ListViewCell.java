@@ -33,7 +33,6 @@ public final class ListViewCell extends ListCell<Game> {
                 if(game.gameState.isRequest() && !game.answer.get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())){
                     this._controller.acceptInvite(game);
                     System.out.println("Invite accepted");
-
                 }
                 else {
                     try{

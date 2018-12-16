@@ -1,20 +1,20 @@
-package model.match;
+        package model.match;
 
-import model.GameSession;
-import model.database.DocumentSession;
-import model.database.classes.Clause;
-import model.database.classes.TableAlias;
-import model.database.enumerators.CompareMethod;
-import model.database.enumerators.LinkMethod;
-import model.database.services.Database;
-import model.helper.Log;
-import model.tables.AccountInfo;
-import model.tables.Game;
+        import model.GameSession;
+        import model.database.DocumentSession;
+        import model.database.classes.Clause;
+        import model.database.classes.TableAlias;
+        import model.database.enumerators.CompareMethod;
+        import model.database.enumerators.LinkMethod;
+        import model.database.services.Database;
+        import model.helper.Log;
+        import model.tables.AccountInfo;
+        import model.tables.Game;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+        import java.sql.SQLException;
+        import java.util.ArrayList;
+        import java.util.List;
+        import java.util.Optional;
 
 public class MatchFixer {
 
