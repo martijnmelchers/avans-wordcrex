@@ -98,7 +98,7 @@ public class Dock
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
             return;
         }
 
