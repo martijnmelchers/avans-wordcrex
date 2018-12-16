@@ -24,7 +24,7 @@ public class GameModel {
 
     private Timer _timer;
 
-    private Dock dock;
+    private Dock _dock;
 
     private Board _board;
 
