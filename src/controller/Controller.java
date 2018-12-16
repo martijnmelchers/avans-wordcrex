@@ -35,4 +35,9 @@ public abstract class Controller {
             Log.error(e, false);
         }
     }
+
+    public  <T extends Controller> T getController(Class<T> cType) throws Exception {
+        return application.getController(cType);
+    }
+
 }

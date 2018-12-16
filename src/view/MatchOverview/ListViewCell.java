@@ -19,12 +19,12 @@ public final class ListViewCell extends ListCell<Game> {
             MatchView view = new MatchView(game);
             setGraphic(view.getAnchor());
 
-
-
-
             view.getMatchPlayButton().setOnAction((e) -> {
+
+
                 GameSession.setGame(game);
                 try{
+                    this._controller.start();
                     this._controller.navigate("BoardView");
                 }
                 catch (Exception ex){

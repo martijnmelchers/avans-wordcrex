@@ -167,6 +167,7 @@ public class MatchOverview extends View {
 
     }
 
+
     @FXML
     private void invitationView(){
 
