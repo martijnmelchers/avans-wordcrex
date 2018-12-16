@@ -26,7 +26,7 @@ public class MessageView extends View {
 
     void setMessageAlignment (int alignment) {
         if (alignment == 0) {
-            MessageVbox.setStyle("-fx-background-color: blue");
+            MessageVbox.setStyle("-fx-background-color: #207BCF");
         } else {
             MessageVbox.setStyle("-fx-background-color: purple");
         }

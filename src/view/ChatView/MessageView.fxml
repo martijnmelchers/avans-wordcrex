@@ -6,28 +6,24 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="202.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView.MessageView">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView.MessageView">
    <children>
-      <VBox fx:id="MessageVbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="202.0" style="-fx-background-color: purple;">
+      <VBox fx:id="MessageVbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: purple;">
          <children>
-            <TextFlow maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="202.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
-               <children>
-                  <Label fx:id="MessageLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="188.0" style="-fx-background-color: transparent;" text="Message">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="MomentLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="183.0" style="-fx-background-color: transparent;" text="Moment">
-                     <font>
-                        <Font size="11.0" />
-                     </font>
-                  </Label>
-               </children>
-            </TextFlow>
+            <Label fx:id="MessageLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" text="Message" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="MomentLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" text="Moment" VBox.vgrow="ALWAYS">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
          </children>
+         <padding>
+            <Insets bottom="3.0" left="5.0" top="10.0" />
+         </padding>
       </VBox>
    </children>
-   <padding>
-      <Insets bottom="5.0" top="5.0" />
-   </padding>
 </AnchorPane>

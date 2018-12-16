@@ -84,9 +84,6 @@ public class ChatView extends View {
                 messageViewController.setMessageAlignment(0);
                 messagesGridpane.add(messagePane, 0, messagesGridpane.getRowCount() + 1);
             }
-
-
-
         } catch (IOException e) {
             Log.error(e);
         }
