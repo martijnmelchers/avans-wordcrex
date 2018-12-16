@@ -30,9 +30,9 @@ public class ObserverController extends Controller{
         }
     }
     public String[] getGames(String name){
-        return model.searchPlayers(name).stream().map(x -> x.getGameId() + " " +
-                x.player1.getUsername() + " VS " +
-                x.player2.getUsername() ).toArray(String[]::new);
+        return model.searchPlayers(name).stream().map(x -> x.getGameID() + " " +
+                x.getPlayer1().getUsername() + " VS " +
+                x.getPlayer2().getUsername() ).toArray(String[]::new);
     }
 
 }
