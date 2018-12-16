@@ -28,7 +28,7 @@ public class Dock
         try {
             db = DocumentSession.getDatabase();
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error(e);
         }
         letters = new HandLetter[7];
         if(createNewHand)
