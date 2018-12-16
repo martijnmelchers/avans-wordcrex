@@ -48,7 +48,7 @@ public class GameModel {
     public GameModel(Game game)
     {
         try{
-            this.db = DocumentSession.getDatabase();
+            this._db = DocumentSession.getDatabase();
         }catch (Exception e){
             Log.error(e);
         }
@@ -60,7 +60,7 @@ public class GameModel {
             var clauses = new ArrayList<Clause>();
             clauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, _gameId));
 
-            for (Turn turn : db.select(Turn.class, clauses)) {
+            for (Turn turn : _db.select(Turn.class, clauses)) {
                 if(_turnId < turn.getTurnId()) _turnId = turn.getTurnId();
             }
 
@@ -72,17 +72,17 @@ public class GameModel {
                 if(_turnId==0)
                 {
                     createNewTurn();
-                    dock = new Dock(true,_gameId,_turnId);
+                    _dock = new Dock(true,_gameId,_turnId);
                 }
                 else
                 {
-                    dock = new Dock(false,_gameId ,_turnId );
+                    _dock = new Dock(false,_gameId ,_turnId );
                 }
 
             }
             else
             {
-                dock = new Dock(false,_gameId ,_turnId );
+                _dock = new Dock(false,_gameId ,_turnId );
             }
 
             _board.getBoardFromDatabase(_gameId,_turnId );
@@ -94,7 +94,7 @@ public class GameModel {
             try
             {
                 int score = 0;
-                List<TurnPlayer1> turnPlayer1s = db.select(TurnPlayer1.class, clauses);
+                List<TurnPlayer1> turnPlayer1s = _db.select(TurnPlayer1.class, clauses);
                 for (TurnPlayer1 turnPlayer1 : turnPlayer1s)
                 {
                     score += (turnPlayer1.getScore() + turnPlayer1.getBonus());
@@ -113,7 +113,7 @@ public class GameModel {
             try
             {
                 int score = 0;
-                List<TurnPlayer2> turnPlayer2s = db.select(TurnPlayer2.class, clauses);
+                List<TurnPlayer2> turnPlayer2s = _db.select(TurnPlayer2.class, clauses);
                 for (TurnPlayer2 turnPlayer2 : turnPlayer2s)
                 {
                     score += (turnPlayer2.getScore() + turnPlayer2.getBonus());
@@ -133,7 +133,7 @@ public class GameModel {
 
     public HandLetter[] getLetters()
     {
-        return dock.getLetters();
+        return _dock.getLetters();
     }
 
     private boolean isPlayerOne()
@@ -151,21 +151,21 @@ public class GameModel {
                 {
                     _turnId++;
                     finished.run();
-                    if(timer != null)
+                    if(_timer != null)
                     {
-                        timer.cancel();
-                        timer.purge();
+                        _timer.cancel();
+                        _timer.purge();
                     }
                 }
             }
         };
-        timer = new Timer();
-        timer.schedule(task, 3000,3000);
+        _timer = new Timer();
+        _timer.schedule(task, 3000,3000);
     }
 
     public HandLetter[] getDock()
     {
-        return dock.getLetters();
+        return _dock.getLetters();
     }
 
     public Tile[][] getTiles(){ return _board.getTiles(); }
@@ -189,7 +189,7 @@ public class GameModel {
             clauses.add(new Clause( new TableAlias("TurnPlayer1",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
             try
             {
-                List<TurnPlayer1> turnPlayer1 = db.select(TurnPlayer1.class, clauses);
+                List<TurnPlayer1> turnPlayer1 = _db.select(TurnPlayer1.class, clauses);
 
                 if(turnPlayer1.size() != 0)
                 {
@@ -209,7 +209,7 @@ public class GameModel {
             clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
             try
             {
-                List<TurnPlayer2> turnPlayer2 = db.select(TurnPlayer2.class, clauses);
+                List<TurnPlayer2> turnPlayer2 = _db.select(TurnPlayer2.class, clauses);
 
                 if(turnPlayer2.size() != 0)
                 {
@@ -247,9 +247,9 @@ public class GameModel {
             createNewTurn();
 
             //removeUsedLettersInDock(checkInfo);
-            dock.update(_gameId,_turnId );
+            _dock.update(_gameId,_turnId );
             //refill winners hand + insert hand to database
-            dock.refill(_gameId,_turnId);
+            _dock.refill(_gameId,_turnId);
 
             _board.getBoardFromDatabase(_gameId,_turnId);
 
@@ -280,7 +280,7 @@ public class GameModel {
                 }
 
                 // when other player ready: get updated board + hand + score (other player created the new hand + updated the board in the database)
-                dock.update(_gameId,_turnId);// update hand
+                _dock.update(_gameId,_turnId);// update hand
                 _board.getBoardFromDatabase(_gameId,_turnId);
                 Platform.runLater(new Runnable(){
                     @Override
@@ -304,7 +304,7 @@ public class GameModel {
         {
             usedLetterIds.add(_board.getTiles()[coord.getX()][coord.getY()].getLetterType().getid());
         }
-        dock.removeUsedLetters(usedLetterIds);
+        _dock.removeUsedLetters(usedLetterIds);
     }
 
     private void createNewTurn()
@@ -312,7 +312,7 @@ public class GameModel {
         _turnId ++;
         try
         {
-            db.insert(new Turn(_gameId, _turnId));
+            _db.insert(new Turn(_gameId, _turnId));
         }
         catch (Exception e)
         {
@@ -329,17 +329,17 @@ public class GameModel {
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _gameId));
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, _turnId));
 
-            var results = db.select(TurnPlayer2.class, clauses);
+            var results = _db.select(TurnPlayer2.class, clauses);
 
             boolean uploadedLast = results.size() > 0;
 
             if (checkInfo.getPoints().total() == 0 && checkInfo.getTiles() == null && checkInfo.getCoordinates() == null)
             {
-                db.insert(new TurnPlayer1(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
+                _db.insert(new TurnPlayer1(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
             }
             else
             {
-                db.insert(new TurnPlayer1(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
+                _db.insert(new TurnPlayer1(_gameId,_turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
             }
 
             if(uploadedLast) {
@@ -351,7 +351,7 @@ public class GameModel {
                 // Checken of niet beide players hebben gepassed
                 if (!(checkInfo.getPoints().total() == 0 && (result.getScore() + result.getBonus()) == 0))
                 {
-                    if(equalScore) { db.update(new TurnPlayer2(_gameId, _turnId, _playerName2, result.getScore(), result.getBonus() + 5, "play")); }
+                    if(equalScore) { _db.update(new TurnPlayer2(_gameId, _turnId, _playerName2, result.getScore(), result.getBonus() + 5, "play")); }
                 }
             }
 
@@ -364,7 +364,7 @@ public class GameModel {
 
                 int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
 
-                db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId,(c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 1
+                _db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId,(c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 1
             }
 
         }catch (Exception e){
@@ -387,7 +387,7 @@ public class GameModel {
         try
         {
             int score = 0;
-            List<TurnPlayer1> turnPlayer1s = db.select(TurnPlayer1.class, clausesP1);
+            List<TurnPlayer1> turnPlayer1s = _db.select(TurnPlayer1.class, clausesP1);
             for (TurnPlayer1 turnPlayer1 : turnPlayer1s)
             {
                 score += (turnPlayer1.getScore() + turnPlayer1.getBonus());
@@ -405,7 +405,7 @@ public class GameModel {
         try
         {
             int score = 0;
-            List<TurnPlayer2> turnPlayer2s = db.select(TurnPlayer2.class, clausesP2);
+            List<TurnPlayer2> turnPlayer2s = _db.select(TurnPlayer2.class, clausesP2);
             for (TurnPlayer2 turnPlayer2 : turnPlayer2s)
             {
                 score += (turnPlayer2.getScore() + turnPlayer2.getBonus());
@@ -427,17 +427,17 @@ public class GameModel {
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
             clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, _turnId));
 
-            var results = db.select(TurnPlayer1.class, clauses);
+            var results = _db.select(TurnPlayer1.class, clauses);
 
             boolean uploadedLast = results.size() > 0;
 
             if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null && checkInfo.getTiles() == null)
             {
-                db.insert(new TurnPlayer2(_gameId,_turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
+                _db.insert(new TurnPlayer2(_gameId,_turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
             }
             else
             {
-                db.insert(new TurnPlayer2(_gameId,_turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
+                _db.insert(new TurnPlayer2(_gameId,_turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
             }
 
             if(uploadedLast) {
@@ -449,7 +449,7 @@ public class GameModel {
                 // Checken of niet beide players hebben gepassed
                 if (!(checkInfo.getPoints().total() == 0 && (result.getScore() + result.getBonus()) == 0))
                 {
-                    if(equalScore) { db.update(new TurnPlayer1(_gameId, _turnId, _playerName1, result.getScore(), result.getBonus() + 5, "play")); }
+                    if(equalScore) { _db.update(new TurnPlayer1(_gameId, _turnId, _playerName1, result.getScore(), result.getBonus() + 5, "play")); }
                 }
             }
 
@@ -461,7 +461,7 @@ public class GameModel {
             for (int i = 0; i < c.length; i++){
 
                 int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
-                db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId,(c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 2
+                _db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId,(c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 2
             }
 
         }catch (Exception e){
@@ -482,8 +482,8 @@ public class GameModel {
         player2Clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
         try
         {
-            List<TurnPlayer1> turnPlayer1 = db.select(TurnPlayer1.class, player1Clauses);
-            List<TurnPlayer2> turnPlayer2 = db.select(TurnPlayer2.class, player2Clauses);
+            List<TurnPlayer1> turnPlayer1 = _db.select(TurnPlayer1.class, player1Clauses);
+            List<TurnPlayer2> turnPlayer2 = _db.select(TurnPlayer2.class, player2Clauses);
 
             if(!(turnPlayer1.size()<1)&&!(turnPlayer2.size()<1))
             {
@@ -521,19 +521,19 @@ public class GameModel {
         {
             if(winner.equals("player1"))
             {
-                List<BoardPlayer1> boardPlayer1 = db.select(BoardPlayer1.class, clauses);
+                List<BoardPlayer1> boardPlayer1 = _db.select(BoardPlayer1.class, clauses);
                 for(BoardPlayer1 bp : boardPlayer1)
                 {
-                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2((bp.tile.getX() - 1), (bp.tile.getY() - 1) ),bp.letter.get_letterId());
+                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2((bp.tile.getX() - 1), (bp.tile.getY() - 1) ),bp.letter.getLetterId());
                     idsAndXY.add(pair);
                 }
             }
             else
             {
-                List<BoardPlayer2> boardPlayer2 = db.select(BoardPlayer2.class, clauses);
+                List<BoardPlayer2> boardPlayer2 = _db.select(BoardPlayer2.class, clauses);
                 for(BoardPlayer2 bp : boardPlayer2)
                 {
-                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2((bp.tile.getX() - 1), (bp.tile.getY() - 1) ),bp.letter.get_letterId());
+                    Pair<Vector2,Integer> pair = new Pair<>(new Vector2((bp.tile.getX() - 1), (bp.tile.getY() - 1) ),bp.letter.getLetterId());
                     idsAndXY.add(pair);
                 }
 
@@ -560,7 +560,7 @@ public class GameModel {
         }
         try
         {
-            db.insert(turnBoardLetters);
+            _db.insert(turnBoardLetters);
         }
         catch (Exception e)
         {
@@ -575,7 +575,7 @@ public class GameModel {
         clauses.add(new Clause(new TableAlias("Turn",-1), "game_id", CompareMethod.EQUAL,_gameId ));
         try
         {
-             return db.select(Turn.class,  clauses).size()>0;
+             return _db.select(Turn.class,  clauses).size()>0;
         }
         catch (Exception e)
         {
@@ -594,8 +594,8 @@ public class GameModel {
         player2Clauses.add(new Clause( new TableAlias("TurnPlayer2",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
         try
         {
-            List<TurnPlayer1> turnPlayer1 = db.select(TurnPlayer1.class, player1Clauses);
-            List<TurnPlayer2> turnPlayer2 = db.select(TurnPlayer2.class, player2Clauses);
+            List<TurnPlayer1> turnPlayer1 = _db.select(TurnPlayer1.class, player1Clauses);
+            List<TurnPlayer2> turnPlayer2 = _db.select(TurnPlayer2.class, player2Clauses);
 
             if(!(turnPlayer1.size()<1)&&!(turnPlayer2.size()<1))
             {
@@ -617,12 +617,12 @@ public class GameModel {
 
     public String getNotUsedTiles(int turnId)
     {
-        return dock.getNotUsedTiles(_gameId, turnId);
+        return _dock.getNotUsedTiles(_gameId, turnId);
     }
 
     public void getOldDock(int turnId)
     {
-        dock.update(_gameId, turnId);
+        _dock.update(_gameId, turnId);
     }
 
     private void checkGameFinished()
@@ -635,7 +635,7 @@ public class GameModel {
         if (_playerScore1 > _playerScore2)
         {
             try {
-                db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
+                _db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
             } catch (Exception e) {
                 Log.error(e);
             }
@@ -643,14 +643,14 @@ public class GameModel {
         else if (_playerScore1 < _playerScore2)
         {
             try {
-                db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName2));
+                _db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName2));
             } catch (Exception e) {
                 Log.error(e);
             }
         }
         else {
             try {
-                db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
+                _db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
             } catch (Exception e) {
                 Log.error(e);
             }
@@ -662,7 +662,7 @@ public class GameModel {
         if (isPlayerOne())
         {
             try {
-                db.update(new Game(_gameId, "resigned", "NL", _playerName1, _playerName2, "accepted", _playerName2));
+                _db.update(new Game(_gameId, "resigned", "NL", _playerName1, _playerName2, "accepted", _playerName2));
             } catch (Exception e) {
                 Log.error(e);
             }
@@ -670,7 +670,7 @@ public class GameModel {
         else
         {
             try {
-                db.update(new Game(_gameId, "resigned", "NL", _playerName1, _playerName2, "accepted", _playerName1));
+                _db.update(new Game(_gameId, "resigned", "NL", _playerName1, _playerName2, "accepted", _playerName1));
             } catch (Exception e) {
                 Log.error(e);
             }
@@ -682,7 +682,7 @@ public class GameModel {
         List<Clause> clauses = new ArrayList<>();
         clauses.add(new Clause( new TableAlias("Game",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
         try {
-            Game game = db.select(Game.class, clauses).get(0);
+            Game game = _db.select(Game.class, clauses).get(0);
             if (game.gameState.getState().equals("finished") || game.gameState.getState().equals("resigned"))
             {
                 return true;
@@ -699,7 +699,7 @@ public class GameModel {
         List<Clause> clauses = new ArrayList<>();
         clauses.add(new Clause( new TableAlias("Game",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
         try {
-            return db.select(Game.class, clauses).get(0).winner.getUsername();
+            return _db.select(Game.class, clauses).get(0).winner.getUsername();
         } catch (Exception e) {
             Log.error(e);
         }

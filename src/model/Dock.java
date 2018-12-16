@@ -26,7 +26,7 @@ public class Dock
     public Dock(boolean createNewHand,int gameId,int turnId)
     {
         try {
-            db = DocumentSession.getDatabase();
+            _db = DocumentSession.getDatabase();
         }catch (Exception e){
             Log.error(e);
         }
@@ -56,7 +56,7 @@ public class Dock
 
         try
         {
-            var turnBoardLetters = db.select(TurnBoardLetter.class, clauses).stream().collect(Collectors.toList());
+            var turnBoardLetters = _db.select(TurnBoardLetter.class, clauses).stream().collect(Collectors.toList());
             ArrayList<TurnBoardLetter> filtered = new ArrayList<>();
 
             // Database returns double results of one table so this function filters doubles
@@ -89,12 +89,12 @@ public class Dock
 
         for(TurnBoardLetter turnBoardLetter : placed)
         {
-            clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"letter_id", CompareMethod.NOT_EQUAL ,turnBoardLetter.letter.get_letterId()));
+            clauses.add(new Clause( new TableAlias("HandLetter",-1) ,"letter_id", CompareMethod.NOT_EQUAL ,turnBoardLetter.letter.getLetterId()));
         }
 
         try
         {
-            handLetters = db.select(HandLetter.class, clauses);
+            handLetters = _db.select(HandLetter.class, clauses);
         }
         catch (Exception e)
         {
@@ -109,7 +109,7 @@ public class Dock
         // Database returns double results of one table so this function filters doubles
         for(HandLetter h : handLetters)
         {
-            if(!filtered.stream().anyMatch(a->a.letter.get_letterId() == h.letter.get_letterId()&& a.letter.game.getGameId() == gameId))
+            if(!filtered.stream().anyMatch(a->a.letter.getLetterId() == h.letter.getLetterId()&& a.letter.game.getGameId() == gameId))
             {
                 filtered.add(h);
             }
@@ -146,7 +146,7 @@ public class Dock
             {
                  letterset.add(new Letter(i,gameId,"NL",defaultLetters.get(i-1)));
             }
-            db.insert(letterset);
+            _db.insert(letterset);
         }
         catch (Exception e)
         {
@@ -170,7 +170,7 @@ public class Dock
             if(letters[i]!= null)
             {
                 int finalI = i;
-                notUsed.remove(notUsed.stream().filter(a->a.get_letterId() == letters[finalI].letter.get_letterId()).collect(Collectors.toList()).get(0));
+                notUsed.remove(notUsed.stream().filter(a->a.getLetterId() == letters[finalI].letter.getLetterId()).collect(Collectors.toList()).get(0));
             }
         }
 
@@ -181,11 +181,11 @@ public class Dock
                 int randomIndex = new Random().nextInt(notUsed.size()-1)+1;
                 Letter l = notUsed.get(randomIndex);
                 Turn t = new Turn(gameId,turnId);
-                letters[i] = new HandLetter(l.get_letterId(),turnId, gameId,l,t);
+                letters[i] = new HandLetter(l.getLetterId(),turnId, gameId,l,t);
                 notUsed.remove(randomIndex);
                 try
                 {
-                    db.insert(letters[i]);
+                    _db.insert(letters[i]);
                 }
                 catch (Exception e)
                 {
@@ -204,7 +204,7 @@ public class Dock
             {
                  handLetter = Arrays.stream(this.letters)
                          .filter(a->a != null)
-                         .filter(a->a.letter.get_letterId() == id)
+                         .filter(a->a.letter.getLetterId() == id)
                          .collect(Collectors.toList()).get(0);
 
             }
@@ -224,7 +224,7 @@ public class Dock
         clauses.add(new Clause(new TableAlias("Letter",-1 ),"game_id" , CompareMethod.EQUAL,gameId));
         try
         {
-            return db.select(Letter.class, clauses).size()>1;
+            return _db.select(Letter.class, clauses).size()>1;
         }
         catch (Exception e)
         {
@@ -240,7 +240,7 @@ public class Dock
         List<Letter> availableLetters = new ArrayList<>();
         try
         {
-            availableLetters = db.select(Letter.class,clauses);
+            availableLetters = _db.select(Letter.class,clauses);
         }
         catch (Exception e)
         {
@@ -254,16 +254,16 @@ public class Dock
             clauses = new ArrayList<>();
             clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1),"game_id" ,CompareMethod.EQUAL , gameId));
             clauses.add(new Clause(new TableAlias("TurnBoardLetter", -1), "turn_id", CompareMethod.LESS_EQUAL, turnId));
-            usedLetters = db.select(TurnBoardLetter.class,clauses);
+            usedLetters = _db.select(TurnBoardLetter.class,clauses);
         }
         catch (Exception e)
         {
             Log.error(e);
         }
 
-        List<Integer> ids = usedLetters.stream().map(a->a.letter.get_letterId()).collect(Collectors.toList());
+        List<Integer> ids = usedLetters.stream().map(a->a.letter.getLetterId()).collect(Collectors.toList());
         List<Letter> usableLetters = availableLetters.stream()
-                .filter(a-> !ids.contains(a.get_letterId()))
+                .filter(a-> !ids.contains(a.getLetterId()))
                 .collect(Collectors.toList());
 
         return usableLetters;
@@ -276,7 +276,7 @@ public class Dock
         for (HandLetter l : letters)
         {
             s+= l.get_letterId()+" ";
-            s1+= l.letter.get_symbol();
+            s1+= l.letter.getSymbol();
         }
         System.out.println(s);
         System.out.println(s1);

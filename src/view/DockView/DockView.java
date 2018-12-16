@@ -48,7 +48,7 @@ public class DockView
         for (HandLetter letter : letters) {
             if(letter!=null)
             {
-                addCharacter(letter.letter.get_symbol()+"",letter.letter.get_letterId());
+                addCharacter(letter.letter.getSymbol()+"",letter.letter.getLetterId());
             }
         }
     }
@@ -61,7 +61,7 @@ public class DockView
         for (HandLetter letter : shuffledLetters) {
             if(letter!=null)
             {
-                addCharacter(letter.letter.get_symbol()+"",letter.letter.get_letterId());
+                addCharacter(letter.letter.getSymbol()+"",letter.letter.getLetterId());
             }
         }
     }

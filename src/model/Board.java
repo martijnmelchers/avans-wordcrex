@@ -5,6 +5,7 @@ import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
+import model.helper.Log;
 import model.tables.TurnBoardLetter;
 
 import java.util.ArrayList;
@@ -38,12 +39,12 @@ public class Board {
             List<TurnBoardLetter> grid = DocumentSession.getDatabase().select(TurnBoardLetter.class, clauses);
             for (TurnBoardLetter letter : grid)
             {
-                _tiles[(letter.getY() - 1)][(letter.getX() - 1)].replace(letter.letter.get_symbol()+"", letter.letter.symbol.get_value(), letter.letter.get_letterId(), Color.rgb(247, 235, 160));
+                _tiles[(letter.getY() - 1)][(letter.getX() - 1)].replace(letter.letter.getSymbol()+"", letter.letter.symbol.get_value(), letter.letter.getLetterId(), Color.rgb(247, 235, 160));
             }
         }
         catch (Exception e)
         {
-            Handle.error(e);
+            Log.error(e);
         }
     }
 
