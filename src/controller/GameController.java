@@ -29,6 +29,7 @@ public class GameController extends Controller{
         startGame(GameSession.getGame());
     }
 
+
     public Tile[][] getTiles() { return _gameModel.getTiles(); }
 
     public int getCurrentTurn() { return _gameModel.turn(); }

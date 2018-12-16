@@ -629,4 +629,3 @@ public class GameModel {
         return Integer.toString(_playerScore2);
     }
 }
-
