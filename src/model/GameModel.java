@@ -465,7 +465,7 @@ public class GameModel {
             }
 
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error(e);
         }
         //db.insert(new InsertedKeys())
         _board.clearPlacedCoords();
