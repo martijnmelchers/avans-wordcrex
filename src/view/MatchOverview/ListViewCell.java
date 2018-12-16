@@ -1,10 +1,7 @@
 package view.MatchOverview;
-import controller.App;
 import controller.MatchOverviewController;
-import javafx.application.Application;
 import javafx.scene.control.ListCell;
 import model.GameSession;
-import model.matchfixer.Matchfixer;
 import model.tables.Game;
 
 public final class ListViewCell extends ListCell<Game> {

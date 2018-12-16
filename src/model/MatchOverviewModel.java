@@ -61,7 +61,7 @@ public class MatchOverviewModel {
             for(var game : games){
                 if(currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)){
                     // Opponent turn
-                    this.currentTurns.put(game, (GameSession.getUsername().equals(game.player1.getUsername())));
+                    this.currentTurns.put(game, (GameSession.getUsername().equals(game.getPlayer1().getUsername())));
                 }
             }
 
@@ -84,7 +84,7 @@ public class MatchOverviewModel {
         Integer latestTurn = GetLatestTurnOfGame(game);
 
         var clauses = new ArrayList<Clause>();
-        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "username_player1", CompareMethod.EQUAL, game.player1.getUsername(), LinkMethod.AND));
+        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "username_player1", CompareMethod.EQUAL, game.getPlayer1().getUsername(), LinkMethod.AND));
         clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, latestTurn));
 
         try {
@@ -104,7 +104,7 @@ public class MatchOverviewModel {
         Integer latestTurn = GetLatestTurnOfGame(game);
 
         var clauses = new ArrayList<Clause>();
-        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "username_player2", CompareMethod.EQUAL, game.player2.getUsername(), LinkMethod.AND));
+        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "username_player2", CompareMethod.EQUAL, game.getPlayer2().getUsername(), LinkMethod.AND));
         clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, latestTurn ));
 
         try {
@@ -154,7 +154,7 @@ public class MatchOverviewModel {
 
             for (Game game : _db.select(Game.class, clauses))
             {
-                if(!game.gameState.isPlaying())
+                if (!game.getGameState().isPlaying())
 //                    continue;
 
                 games.add(game);
@@ -182,7 +182,7 @@ public class MatchOverviewModel {
 
             for (Game game : _db.select(Game.class, clauses))
             {
-                if(game.gameState.isRequest())
+                if (game.getGameState().isRequest())
                     continue;
 
                 if(map.containsKey(game.getGameID()))
@@ -232,7 +232,7 @@ public class MatchOverviewModel {
 
             for (AccountInfo acc : _db.select(AccountInfo.class, clauses))
             {
-                accountRoles.add(acc.role.getRole());
+                accountRoles.add(acc.getRole().getRole());
             }
 
             return accountRoles;

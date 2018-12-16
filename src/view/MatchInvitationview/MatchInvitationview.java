@@ -11,45 +11,53 @@ import view.View;
 
 import java.util.ArrayList;
 
-public class MatchInvitationview extends View{
+public class MatchInvitationview extends View {
 
     @FXML
-    private ListView PlayerListView;
+    private ListView playerListView;
     @FXML
-    private TextField SearchBar;
-    private ObservableList<String> playerView;
-
-    public void Initialize(){
-        playerView = FXCollections.observableList(new ArrayList<String>());
-        PlayerListView.setItems(playerView);
-    }
+    private TextField searchBar;
+    private ObservableList<String> _filteredPlayers;
+    private MatchFixerController _controller;
 
     @FXML
-    private void Search(){
-        playerView.clear();
+    private void Search() {
+        _filteredPlayers.clear();
         try {
-            playerView.addAll(this.getController(MatchFixerController.class).SearchPlayers(SearchBar.getText()));
+            _filteredPlayers.addAll(this.getController(MatchFixerController.class).SearchPlayers(searchBar.getText()));
         } catch (Exception e) {
             Log.error(e);
         }
     }
+
     @FXML
-    private void RequestGame(){
+    private void RequestGame() {
         try {
-            this.getController(MatchFixerController.class).RequestGame(PlayerListView.getSelectionModel().getSelectedItem().toString());
+            this._controller.RequestGame(playerListView.getSelectionModel().getSelectedItem().toString());
+
+            try {
+                this.getController(MatchFixerController.class).navigate("MatchOverview", 620, 769);
+            } catch (Exception e) {
+                Log.error(e);
+            }
         } catch (Exception e) {
-            Log.error(e);
+            Log.error(new Exception("Er is een fout opgetreden tijdens het maken van het spel!", e), true);
         }
-        try {
-            this.getController(MatchFixerController.class).navigate("MatchOverview",620,769);
-        } catch (Exception e) {
-            Log.error(e);
-        }
+
     }
 
     @Override
     protected void loadFinished() {
-        Initialize();
+        try {
+            this._controller = this.getController(MatchFixerController.class);
+        } catch (Exception e) {
+            Log.error(e, true);
+        }
+        _filteredPlayers = FXCollections.observableList(new ArrayList<>());
+        playerListView.setItems(_filteredPlayers);
+
+        /* Show all players as base */
+        _filteredPlayers.addAll(this._controller.SearchPlayers(""));
     }
 
 }

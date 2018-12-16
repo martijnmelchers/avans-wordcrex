@@ -9,7 +9,7 @@ public class EnvironmentVariables
      * 3 = Errors, Warnings, Info
      */
     public static final Integer DEBUG_LEVEL = 3;
-    public static final Boolean LOG_QUERIES = false;
+    public static final Boolean LOG_QUERIES = true;
     public static final Boolean USE_COLOR = true;
     public static final String MAIN_VIEW = "LoginView";
     public static final String CONN_USERNAME = "fjmelche";
