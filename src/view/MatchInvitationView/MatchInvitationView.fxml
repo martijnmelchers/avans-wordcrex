@@ -4,7 +4,8 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane prefHeight="459.0" prefWidth="378.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchInvitationview.MatchInvitationview">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="459.0" prefWidth="378.0" stylesheets="@../css/Main.css"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="view.MatchInvitationView.MatchInvitationView">
    <children>
        <TextField fx:id="searchBar" layoutX="217.0" layoutY="14.0" onKeyReleased="#Search" promptText="Zoek speler"/>
        <ListView fx:id="playerListView" layoutX="14.0" layoutY="35.0" prefHeight="369.0" prefWidth="347.0"/>

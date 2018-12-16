@@ -1,4 +1,4 @@
-package view.MatchInvitationview;
+package view.MatchInvitationView;
 
 import controller.MatchFixerController;
 import javafx.collections.FXCollections;
@@ -11,7 +11,7 @@ import view.View;
 
 import java.util.ArrayList;
 
-public class MatchInvitationview extends View {
+public class MatchInvitationView extends View {
 
     @FXML
     private ListView playerListView;

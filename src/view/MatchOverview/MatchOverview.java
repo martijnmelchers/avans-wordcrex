@@ -171,7 +171,7 @@ public class MatchOverview extends View {
     private void invitationView(){
 
         try{
-            this._controller.navigate("MatchInvitationview");
+            this._controller.navigate("MatchInvitationView");
         }
         catch(Exception e){
 

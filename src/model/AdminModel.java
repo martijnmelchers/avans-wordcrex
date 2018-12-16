@@ -29,6 +29,7 @@ public class AdminModel {
     public List<AccountInfo> getUsers() {
         var clauses = new ArrayList<Clause>();
         List<AccountInfo> accounts = new ArrayList<>();
+
         try {
             accounts = this._db.select(AccountInfo.class, clauses);
         } catch (Exception e) {
@@ -39,22 +40,26 @@ public class AdminModel {
 
     public void setRole(AccountInfo info) throws Exception {
         var clauses = new ArrayList<Clause>();
+
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
         clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
-        if (this._db.select(AccountInfo.class, clauses).size() == 0) {
+
+        if (this._db.select(AccountInfo.class, clauses).size() == 0)
             this._db.insert(info);
-        }
+
     }
 
     public void removeRole(AccountInfo info) throws Exception {
         var clauses = new ArrayList<Clause>();
+
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
         clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
 
         List<AccountInfo> roles = this._db.select(AccountInfo.class, clauses);
-        if (roles.size() > 0) {
+
+        if (roles.size() > 0)
             this._db.delete(roles);
-        }
+
     }
 
 
