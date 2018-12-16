@@ -22,7 +22,7 @@ public class GameModel {
 
     private Database _db;
 
-    private Timer timer;
+    private Timer _timer;
 
     private Dock dock;
 
