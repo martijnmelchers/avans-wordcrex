@@ -22,22 +22,6 @@ public class Main extends Application {
         launch(EnvironmentVariables.MAIN_VIEW);
     }
 
-    private static void askPlayer1Or2() // [Testmethod] account need to be set by Authentication feature
-    {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setContentText("Klik op OK om player 1 te zijn. \n\nKlik op cancel om player 2 te zijn.");
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                GameSession.setSession(new Account("jagermeester","rrr"));
-                GameSession.setRole(new Role("player"));
-            }
-            else
-            {
-                GameSession.setSession(new Account("Lidewij","mmm"));
-                GameSession.setRole(new Role("player"));
-            }
-        });
-    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -47,8 +31,6 @@ public class Main extends Application {
     private void initializeApp(Stage primaryStage) {
         var tryAgainButton = new ButtonType("Probeer opnieuw");
         var closeAppButton = new ButtonType("Afsluiten");
-
-        askPlayer1Or2();
 
         /* Initialize the database */
         Log.info("Initializing database...");
