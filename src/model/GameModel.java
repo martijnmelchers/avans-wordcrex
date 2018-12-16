@@ -579,7 +579,7 @@ public class GameModel {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
         }
         return false;
     }
