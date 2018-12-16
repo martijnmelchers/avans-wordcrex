@@ -61,7 +61,7 @@ public class MatchOverviewModel {
             for(var game : games){
                 if(currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)){
                     // Opponent turn
-                    this.currentTurns.put(game, (GameSession.getUsername().equals(game.player1.getUsername())));
+                    this.currentTurns.put(game, (GameSession.getUsername().equals(game.getPlayer1().getUsername())));
                 }
             }
 
@@ -84,7 +84,7 @@ public class MatchOverviewModel {
         Integer latestTurn = GetLatestTurnOfGame(game);
 
         var clauses = new ArrayList<Clause>();
-        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "username_player1", CompareMethod.EQUAL, game.player1.getUsername(), LinkMethod.AND));
+        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "username_player1", CompareMethod.EQUAL, game.getPlayer1().getUsername(), LinkMethod.AND));
         clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, latestTurn));
 
         try {
@@ -104,7 +104,7 @@ public class MatchOverviewModel {
         Integer latestTurn = GetLatestTurnOfGame(game);
 
         var clauses = new ArrayList<Clause>();
-        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "username_player2", CompareMethod.EQUAL, game.player2.getUsername(), LinkMethod.AND));
+        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "username_player2", CompareMethod.EQUAL, game.getPlayer2().getUsername(), LinkMethod.AND));
         clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, latestTurn ));
 
         try {
@@ -126,12 +126,12 @@ public class MatchOverviewModel {
         int latestTurn = 0;
 
         var turnClauses = new ArrayList<Clause>();
-        turnClauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
+        turnClauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, game.getGameID()));
 
         try
         {
             for (Turn turn : _db.select(Turn.class, turnClauses)) {
-                Integer id = turn.getTurnId();
+                Integer id = turn.getTurnID();
                 if(id > latestTurn)
                 {
                     latestTurn = id;
@@ -154,7 +154,7 @@ public class MatchOverviewModel {
 
             for (Game game : _db.select(Game.class, clauses))
             {
-                if(!game.gameState.isPlaying())
+                if (!game.getGameState().isPlaying())
 //                    continue;
 
                 games.add(game);
@@ -182,13 +182,13 @@ public class MatchOverviewModel {
 
             for (Game game : _db.select(Game.class, clauses))
             {
-                if(game.gameState.isRequest())
+                if (game.getGameState().isRequest())
                     continue;
 
-                if(map.containsKey(game.getGameId()))
+                if(map.containsKey(game.getGameID()))
                     continue;
 
-                map.put(game.getGameId(), game);
+                map.put(game.getGameID(), game);
             }
 
             return new ArrayList<Game>(map.values());
@@ -232,7 +232,7 @@ public class MatchOverviewModel {
 
             for (AccountInfo acc : _db.select(AccountInfo.class, clauses))
             {
-                accountRoles.add(acc.role.getRole());
+                accountRoles.add(acc.getRole().getRole());
             }
 
             return accountRoles;
@@ -252,10 +252,10 @@ public class MatchOverviewModel {
         ArrayList<Integer> player2 = new ArrayList<>();
 
         var clauses1 = new ArrayList<Clause>();
-        clauses1.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
+        clauses1.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, game.getGameID()));
 
         var clauses2 = new ArrayList<Clause>();
-        clauses2.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
+        clauses2.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, game.getGameID()));
 
         try {
             for (TurnPlayer1 turn1 : _db.select(TurnPlayer1.class, clauses1))

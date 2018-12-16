@@ -1,27 +1,15 @@
 package view.MatchOverview;
 
-import controller.Controller;
 import controller.MatchOverviewController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import model.GameSession;
 import model.MatchOverviewModel;
-import model.database.DocumentSession;
-import model.database.classes.Clause;
-import model.database.classes.TableAlias;
-import model.database.services.Database;
 import model.tables.Game;
-import model.tables.Turn;
-import view.View;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MatchView {
     @FXML
@@ -62,11 +50,11 @@ public class MatchView {
             boolean isMyTurn = mod.isMyTurn(match);
 
             String player = GameSession.getUsername();
-            String player1 =  match.player1.getUsername();
-            String player2 =  match.player2.getUsername();
+            String player1 = match.getPlayer1().getUsername();
+            String player2 = match.getPlayer2().getUsername();
             String enemy  = player1.equals(player) ?  player2 : player1;
 
-            if(match.gameState.isRequest()){
+            if (match.getGameState().isRequest()) {
 
 
                 infoPane.getChildren().clear();
@@ -78,7 +66,7 @@ public class MatchView {
                     //Uitnodiging van ons
                     inviteTxt.setText("Uitnodiging naar: " + player2);
                     String antwoord = "reactie: ";
-                    switch(match.answer.get_type()){
+                    switch (match.getAnswer().get_type()) {
 
                         case "accepted": {
                             inviteStatusTxt.setText(antwoord+"Geaccepteerd");

@@ -23,74 +23,34 @@ public class AccountModel {
         }
     }
 
-    public String registerAccount(String username, String password) {
-        if (username.length() < 5 || username.length() > 25) {
-            return "Gebruikersnaam lengte moet tussen (5 - 25)";
-        }
+    public void register(String username, String password) throws Exception {
+        if (username.length() < 5 || username.length() > 25)
+            throw new Exception("Gebruikersnaam lengte moet tussen (5 - 25)");
 
-        if (password.length() < 5 || password.length() > 25) {
-            return "Wachtwoord lengte moet tussen (5 - 25)";
-        }
+
+        if (password.length() < 5 || password.length() > 25)
+            throw new Exception("Wachtwoord lengte moet tussen (5 - 25)");
 
         String lowerUsername = username.toLowerCase();
-        String lowerPassword = password.toLowerCase();
 
-        try {
-            this._db.insert(new Account(lowerUsername, lowerPassword));
-            this._db.insert(new AccountInfo("player", lowerUsername));
-            return "";
-        } catch (Exception e) {
-            Log.error(e, true);
-            return e.getMessage();
-        }
+        this._db.insert(new Account(lowerUsername, password));
+        this._db.insert(new AccountInfo("player", lowerUsername));
     }
 
-    public Account getAccount(String username, String password) {
+    public AccountInfo login(String username, String password) throws Exception {
         var clauses = new ArrayList<Clause>();
 
-        clauses.add(new Clause(new TableAlias("account", -1), "username", CompareMethod.EQUAL, username));
-        clauses.add(new Clause(new TableAlias("account", -1), "password", CompareMethod.EQUAL, password));
+        clauses.add(new Clause(new TableAlias("account", 1), "username", CompareMethod.EQUAL, username));
+        clauses.add(new Clause(new TableAlias("account", 1), "password", CompareMethod.EQUAL, password));
 
-        try {
-            return this._db.select(Account.class, clauses).get(0);
-        } catch (Exception e) {
-            return null;
-        }
+        return this._db.select(AccountInfo.class, clauses).get(0);
     }
 
-    public String changePassword(String username, String password)
-    {
+    public void changePassword(String username, String password) throws Exception {
         if (password.length() < 5 || password.length() > 25)
-        {
-            return "Wachtwoord lengte moet tussen (5 - 25)";
-        }
+            throw new Exception("Wachtwoord lengte moet tussen (5 - 25)");
 
-        String lowerPassword = password.toLowerCase();
-
-        try
-        {
-            this._db.update(new Account(username, lowerPassword));
-            return "";
-        }
-        catch (Exception e)
-        {
-            Log.error(e);
-            return e.getMessage();
-        }
+        this._db.update(new Account(username, password));
     }
 
-    public String getRole()
-    {
-        var clauses = new ArrayList<Clause>();
-
-        clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, GameSession.getUsername()));
-
-        try {
-            GameSession.setRole(this._db.select(AccountInfo.class, clauses).get(0).role);
-            return GameSession.getRole().getRole();
-        } catch (Exception e) {
-            Log.error(e);
-            return null;
-        }
-    }
 }

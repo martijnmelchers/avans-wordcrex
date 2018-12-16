@@ -53,7 +53,7 @@ public class GameModel {
             Log.error(e);
         }
 
-        _gameId = game.getGameId();
+        _gameId = game.getGameID();
         _board = new Board();
 
         try{
@@ -61,11 +61,11 @@ public class GameModel {
             clauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, _gameId));
 
             for (Turn turn : _db.select(Turn.class, clauses)) {
-                if(_turnId < turn.getTurnId()) _turnId = turn.getTurnId();
+                if(_turnId < turn.getTurnID()) _turnId = turn.getTurnID();
             }
 
-            _playerName1 = game.getUsernamePlayer1();
-            _playerName2 = game.getUsernamePlayer2();
+            _playerName1 = game.getPlayer1Username();
+            _playerName2 = game.getPlayer2Username();
 
             if(isPlayerOne())
             {
@@ -627,53 +627,47 @@ public class GameModel {
 
     private void checkGameFinished()
     {
-        if (!getNotUsedTiles(_turnId).equals("0"))
-        {
+
+        Game game = GameSession.getGame();
+        game.setGameState("finished");
+
+        if (!getNotUsedTiles(_turnId).equals("0")) {
             return;
         }
 
-        if (_playerScore1 > _playerScore2)
-        {
-            try {
-                _db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
-            } catch (Exception e) {
-                Log.error(e);
-            }
+        if (_playerScore1 > _playerScore2) {
+            game.setWinner(_playerName1);
         }
-        else if (_playerScore1 < _playerScore2)
-        {
-            try {
-                _db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName2));
-            } catch (Exception e) {
-                Log.error(e);
-            }
+        else if (_playerScore1 < _playerScore2) {
+            game.setWinner(_playerName2);
         }
         else {
-            try {
-                _db.update(new Game(_gameId, "finished", "NL", _playerName1, _playerName2, "accepted", _playerName1));
-            } catch (Exception e) {
-                Log.error(e);
-            }
+            game.setWinner(_playerName1);
+        }
+
+        try {
+            _db.update(game);
+        } catch (Exception e) {
+            Log.error(e);
         }
     }
 
     public void surrender()
     {
-        if (isPlayerOne())
-        {
-            try {
-                _db.update(new Game(_gameId, "resigned", "NL", _playerName1, _playerName2, "accepted", _playerName2));
-            } catch (Exception e) {
-                Log.error(e);
-            }
+        Game game = GameSession.getGame();
+        game.setGameState("resigned");
+
+        if (isPlayerOne()) {
+            game.setWinner(_playerName2);
         }
-        else
-        {
-            try {
-                _db.update(new Game(_gameId, "resigned", "NL", _playerName1, _playerName2, "accepted", _playerName1));
-            } catch (Exception e) {
-                Log.error(e);
-            }
+        else {
+            game.setWinner(_playerName1);
+        }
+
+        try {
+            _db.update(game);
+        } catch (Exception e) {
+            Log.error(e);
         }
     }
 
@@ -683,7 +677,7 @@ public class GameModel {
         clauses.add(new Clause( new TableAlias("Game",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
         try {
             Game game = _db.select(Game.class, clauses).get(0);
-            if (game.gameState.getState().equals("finished") || game.gameState.getState().equals("resigned"))
+            if (game.getGameState().getState().equals("finished") || game.getGameState().getState().equals("resigned"))
             {
                 return true;
             }
@@ -699,7 +693,7 @@ public class GameModel {
         List<Clause> clauses = new ArrayList<>();
         clauses.add(new Clause( new TableAlias("Game",-1) ,"game_id",CompareMethod.EQUAL ,_gameId ));
         try {
-            return _db.select(Game.class, clauses).get(0).winner.getUsername();
+            return _db.select(Game.class, clauses).get(0).getWinner().getUsername();
         } catch (Exception e) {
             Log.error(e);
         }

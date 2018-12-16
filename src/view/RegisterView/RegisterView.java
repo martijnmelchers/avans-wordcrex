@@ -10,18 +10,20 @@ import view.View;
 
 import java.io.IOException;
 
-public class RegisterView extends View
-{
+public class RegisterView extends View {
     private AccountController _accountController;
 
-    @FXML private Label labelError;
-    @FXML private PasswordField passwordFieldPassword;
-    @FXML private PasswordField passwordFieldConfirmationPassword;
-    @FXML private TextField textFieldUsername;
+    @FXML
+    private Label labelError;
+    @FXML
+    private PasswordField passwordFieldPassword;
+    @FXML
+    private PasswordField passwordFieldConfirmationPassword;
+    @FXML
+    private TextField textFieldUsername;
 
     @Override
-    protected void loadFinished()
-    {
+    protected void loadFinished() {
         try {
             this._accountController = this.getController(AccountController.class);
         } catch (Exception e) {
@@ -29,8 +31,7 @@ public class RegisterView extends View
         }
     }
 
-    public void backClicked()
-    {
+    public void backClicked() {
         try {
             this._accountController.navigate("LoginView", 350, 550);
         } catch (IOException e) {
@@ -38,14 +39,20 @@ public class RegisterView extends View
         }
     }
 
-    public void registerClicked()
-    {
-        this._accountController.registerUser(textFieldUsername.getText(), passwordFieldPassword.getText(),passwordFieldConfirmationPassword.getText());
+    public void registerClicked() {
+        this._accountController.registerUser(textFieldUsername.getText(), passwordFieldPassword.getText(), passwordFieldConfirmationPassword.getText());
     }
 
-    public void showError(String error)
-    {
+    public void showError(String error) {
         labelError.setText(error);
         labelError.setVisible(true);
+    }
+
+    public void registerSuccess() {
+        try {
+            this._accountController.navigate("MatchOverview", 620, 769);
+        } catch (Exception e) {
+            Log.error(e, true);
+        }
     }
 }

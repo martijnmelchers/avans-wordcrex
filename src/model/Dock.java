@@ -7,9 +7,9 @@ import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.helper.Log;
 import model.tables.HandLetter;
+import model.tables.Letter;
 import model.tables.Turn;
 import model.tables.TurnBoardLetter;
-import model.tables.Letter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -109,7 +109,7 @@ public class Dock
         // Database returns double results of one table so this function filters doubles
         for(HandLetter h : handLetters)
         {
-            if(!filtered.stream().anyMatch(a->a.letter.getLetterId() == h.letter.getLetterId()&& a.letter.game.getGameId() == gameId))
+            if(!filtered.stream().anyMatch(a->a.letter.getLetterId() == h.letter.getLetterId()&& a.letter.game.getGameID() == gameId))
             {
                 filtered.add(h);
             }

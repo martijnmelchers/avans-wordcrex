@@ -6,7 +6,7 @@ public enum CompareMethod {
     GREATER(">"),
     GREATER_EQUAL(">="),
     LESS("<"),
-    LESS_EQUAL("<="),
+    LESS_EQUAL("=<"),
     LIKE("LIKE");
 
     private String method;
