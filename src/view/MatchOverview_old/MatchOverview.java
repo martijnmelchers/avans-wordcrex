@@ -15,6 +15,7 @@ import view.View;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 // TODO:
@@ -199,7 +200,7 @@ public class MatchOverview extends View {
         var yourTurns = new ArrayList<Game>();
         var theirTurns = new ArrayList<Game>();
 
-        ArrayList<Game> games = foundGames != null ? foundGames : controller.getGames();
+        List<Game> games = foundGames != null ? foundGames : controller.getGames();
         for (Game game : games) {
             if (game.gameState.isRequest()) {
                 invitations.add(game);
@@ -237,13 +238,9 @@ public class MatchOverview extends View {
 
     private void ChangeToObserverMode(ArrayList<Game> foundGames) {
         _viewModeButton.setText("Speel Mode");
-
         _headerObserver = new Header("Spellen");
-
         _headerObserver.addObserverButton(controller, this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), " replace this");
-
         _vBox.getChildren().addAll(_headerObserver.getContent());
-
         _matchScrollPane.setContent(_vBox);
     }
 
