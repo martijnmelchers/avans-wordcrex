@@ -43,6 +43,13 @@ public class Game {
     public Answer answer;
     public Account winner;
 
+    public String getPlayer1Username(){
+        return this._usernamePlayer1;
+    }
+
+    public String getPlayer2Username(){
+        return this._usernamePlayer1;
+    }
 
     public Game(){}
 

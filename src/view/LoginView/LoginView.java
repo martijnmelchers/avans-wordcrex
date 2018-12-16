@@ -45,7 +45,7 @@ public class LoginView extends View {
 
     public void loginSucces() {
         try {
-            this.getController(AccountController.class).navigate("MatchOverview", 1600, 1200);
+            this.getController(AccountController.class).navigate("MatchOverview", 620, 769);
         } catch (Exception e) {
             Log.error(e, true);
         }

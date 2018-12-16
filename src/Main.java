@@ -4,8 +4,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import model.EnvironmentVariables;
+import model.GameSession;
 import model.database.DocumentSession;
 import model.helper.Log;
+import model.tables.Account;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -40,6 +42,7 @@ public class Main extends Application {
         }
 
         /* Start the main app */
+        GameSession.setSession(new Account("jagermeester","rrr"));
         Log.info("Starting views...");
         try {
             var app = new App(primaryStage);
