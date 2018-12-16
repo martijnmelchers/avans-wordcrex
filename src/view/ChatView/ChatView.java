@@ -7,10 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.layout.*;
 import model.GameSession;
 import model.helper.Log;
 import model.tables.Account;
@@ -25,13 +22,9 @@ import java.util.Date;
 public class ChatView extends View {
 
     private ChatController _controller;
-    private GameSession _session;
 
     @FXML
-    private Pane messagesVboxLeft;
-
-    @FXML
-    private Pane messagesVboxRight;
+    private GridPane messagesGridpane;
 
     @FXML
     private ScrollPane MessagesScrollpane;
@@ -59,8 +52,7 @@ public class ChatView extends View {
     }
 
     private void displayMessages() {
-        messagesVboxLeft.getChildren().clear();
-        messagesVboxRight.getChildren().clear();
+        messagesGridpane.getChildren().clear();
 
         ArrayList<Chatline> chatlines = _controller.getChatlines(502);
 
@@ -72,6 +64,32 @@ public class ChatView extends View {
 
         // set the scroll to the bottom
         MessagesScrollpane.setVvalue(1.0);
+    }
+
+    private void displayMessage(Chatline chatline) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("MessageView.fxml"));
+
+            AnchorPane messagePane = loader.load();
+
+            MessageView messageViewController = loader.getController();
+
+            messageViewController.setMessageLabel(chatline.getMessage());
+            messageViewController.setMomentLabel(chatline.getMoment().toString());
+
+            if(chatline.account.getUsername().equals("bookowner")) {
+                messageViewController.setMessageAlignment(1);
+                messagesGridpane.add(messagePane, 1, messagesGridpane.getRowCount() + 1);
+            } else {
+                messageViewController.setMessageAlignment(0);
+                messagesGridpane.add(messagePane, 0, messagesGridpane.getRowCount() + 1);
+            }
+
+
+
+        } catch (IOException e) {
+            Log.error(e);
+        }
     }
 
     private void checkForMessages() {
@@ -89,35 +107,6 @@ public class ChatView extends View {
         timer.schedule(task, 0, 1000);
     }
 
-    private void displayMessage(Chatline chatline) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MessageView.fxml"));
-
-            AnchorPane messagePane = loader.load();
-
-            MessageView messageViewController = loader.getController();
-
-            messageViewController.setMessageLabel(chatline.getMessage());
-            messageViewController.setMomentLabel(chatline.getMoment().toString());
-
-
-            if(chatline.account.getUsername().equals("bookowner")) {
-                messagesVboxRight.getChildren().add(messagePane);
-                messagesVboxLeft.getChildren().add(createEmptyPane(messagePane, chatline));
-            } else {
-                messagesVboxLeft.getChildren().add(messagePane);
-                messagesVboxRight.getChildren().add(createEmptyPane(messagePane, chatline));
-            }
-
-
-
-        } catch (IOException e) {
-            Log.error(e);
-        }
-
-
-    }
-
     public void sendMessage() {
         String message = messageField.getText();
 
@@ -131,24 +120,6 @@ public class ChatView extends View {
             messageField.clear();
             displayMessages();
         }
-    }
-
-    private Pane createEmptyPane(Pane messagePane, Chatline chatline) {
-        Pane emptyPane = new Pane();
-
-        emptyPane.setPrefSize(messagePane.getPrefWidth(), messagePane.getPrefHeight());
-        emptyPane.setMinSize(messagePane.getMinWidth(),messagePane.getMaxHeight());
-        emptyPane.setMaxSize(messagePane.getMaxWidth(), messagePane.getMaxHeight());
-
-        // TEST
-        emptyPane.setStyle("-fx-background-color: RED");
-
-        String test2 = chatline.getMessage().replaceAll(".", " ");
-
-        Text test = new Text(test2);
-
-        emptyPane.getChildren().add(test);
-        return emptyPane;
     }
 
     public void onEnter() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -16,17 +17,17 @@
                      </padding></Label>
                </children>
             </FlowPane>
-              <ScrollPane fx:id="MessagesScrollpane" fitToHeight="true" fitToWidth="true" minHeight="100.0" minWidth="100.0" VBox.vgrow="ALWAYS">
+              <ScrollPane fx:id="MessagesScrollpane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                <padding>
                   <Insets left="5.0" right="5.0" />
                </padding>
                <content>
-                  <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="200.0">
-                     <children>
-                            <VBox fx:id="messagesVboxLeft" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="800.0" HBox.hgrow="ALWAYS" />
-                        <VBox fx:id="messagesVboxRight" alignment="TOP_RIGHT" fillWidth="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="788.0" HBox.hgrow="ALWAYS" />
-                     </children>
-                  </HBox>
+                  <GridPane fx:id="messagesGridpane">
+                    <columnConstraints>
+                      <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" />
+                      <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" />
+                    </columnConstraints>
+                  </GridPane>
                </content>
               </ScrollPane>
             <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="1588.0">
