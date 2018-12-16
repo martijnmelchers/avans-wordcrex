@@ -76,6 +76,8 @@ public class AccountController extends Controller
         }
 
         GameSession.setSession(account);
+        // Set role
+        _model.getRole();
 
         loginView.loginSucces();
     }
