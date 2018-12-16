@@ -20,6 +20,11 @@ Button {
     -fx-background-radius: 0;
 
 }
+Text{
+    -fx-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-family: "Tahoma", "Comic Sans MS";
+}
 
 VBox {
 
@@ -46,6 +51,10 @@ ListView :odd {
 
 }
 
+Pane {
+    -fx-background-color: #207BCF;
+}
+
 ScrollPane {
 
 }
@@ -61,6 +70,7 @@ FlowPane {
 AnchorPane {
 
 }
+
 
 TextField {
     -fx-border-color: #2c3e50;
