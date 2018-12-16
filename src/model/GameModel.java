@@ -20,7 +20,7 @@ public class GameModel {
 
     private ArrayList<String> _allowedWords = new ArrayList<>();
 
-    Database db;
+    private Database _db;
 
     private Timer timer;
 
