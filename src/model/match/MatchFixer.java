@@ -31,8 +31,7 @@ public class MatchFixer {
         }
 
         /* Cache the games & accounts when the view is created, this is so we don't keep sending queries to the database */
-        this.cacheAccounts();
-        this.cacheGames();
+
     }
 
     public void invitePlayer(String Player) {
@@ -46,6 +45,10 @@ public class MatchFixer {
     }
 
     public List<AccountInfo> searchPlayers(String name) {
+        if(this.cachedAccounts == null){
+            this.cacheAccounts();
+            this.cacheGames();
+        }
         return this.filteredPlayers(name);
     }
 
