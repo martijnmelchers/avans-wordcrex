@@ -53,5 +53,17 @@ public class Game {
 
     public Game(){}
 
+    public void setWinner(String username){
+        this._usernameWinner = username;
+    }
+
     public Integer getGameID() { return _gameId; }
+
+    public void setState(String state){
+        this._gameState = state;
+    }
+
+    public void setAnswer(String answer){
+        this._answerPlayer2 = answer;
+    }
 }

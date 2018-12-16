@@ -54,12 +54,18 @@ public class MatchView {
         this.match = match;
         try
         {
-
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
-            fxmlLoader.load();
 
-            boolean isMyTurn = mod.isMyTurn(match);
+            fxmlLoader.load();
+            boolean isMyTurn;
+
+            try {
+                 isMyTurn = MatchOverviewModel.isMyTurn(match);
+            }
+            catch (NullPointerException e){
+                isMyTurn = true;
+            }
 
             String player = GameSession.getUsername();
             String player1 =  match.player1.getUsername();

@@ -19,7 +19,6 @@ public class MatchOverviewController extends Controller
 
     public List<Game> getGames()
     {
-        System.out.println(GameSession.getUsername());
         return model.getCurrentPlayerGames(GameSession.getUsername());
     }
 
@@ -48,12 +47,29 @@ public class MatchOverviewController extends Controller
         return model.searchForGamesAsPlayer(currentGamesToSearch);
     }
 
-
-    public boolean isMyTurn(Game game){
-        return this.model.isMyTurn(game);
+    public boolean isMyTurn(Game game) throws NullPointerException {
+        return MatchOverviewModel.isMyTurn(game);
     }
+
     public MatchOverviewModel.GameScore getPlayerScores(Game game)
     {
         return model.getPlayerScores(game);
+    }
+
+    public void surrender(Game game){
+        this.model.surrenderGame(game);
+    }
+
+    public void acceptInvite(Game game){
+        this.model.acceptInvite(game);
+    }
+
+    public void declineInvite(Game game){
+        this.model.declineInvite(game);
+    }
+
+
+    public void endSession(){
+        GameSession.endSession();
     }
 }

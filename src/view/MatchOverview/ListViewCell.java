@@ -22,22 +22,36 @@ public final class ListViewCell extends ListCell<Game> {
             MatchView view = new MatchView(game);
             setGraphic(view.getAnchor());
 
-
-
-
+            if(game.gameState.isRequest() && !game.answer.get_type().equals("accepted")) {
+                if(!game.getPlayer1Username().equals(GameSession.getUsername())){
+                    view.getMatchSurrenderButton().setDisable(false);
+                    view.getMatchPlayButton().setDisable(false);
+                }
+                view.getMatchPlayButton().setText("Accepteren");
+                view.getMatchSurrenderButton().setText("Weigeren");
+            }
             view.getMatchPlayButton().setOnAction((e) -> {
                 GameSession.setGame(game);
-                try{
-                    this._controller.navigate("BoardView");
+
+                if(game.gameState.isRequest() && !game.answer.get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())){
+                    this._controller.acceptInvite(game);
+                    System.out.println("Invite accepted");
+
                 }
-                catch (Exception ex){
-                    ex.printStackTrace();
+                else {
+                    try{
+                        this._controller.navigate("BoardView");
+                    }
+                    catch (Exception ex){
+                        ex.printStackTrace();
+                    }
                 }
             });
 
             view.getMatchSurrenderButton().setOnAction((e) -> {
-                System.out.println(game.getGameID());
+                this._controller.surrender(game);
             });
+
         }
     }
 

@@ -6,6 +6,7 @@ import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.enumerators.LinkMethod;
 import model.database.services.Database;
+import model.helper.Log;
 import model.tables.*;
 
 import java.util.ArrayList;
@@ -21,10 +22,9 @@ import java.util.Map;
 public class MatchOverviewModel {
     private Database _db;
 
-    // TODO: Fill the username automatically in using the authentication feature.
-    private String _username = "jagermeester";
+    private String _username = GameSession.getUsername();
 
-    private HashMap<Game, Boolean> currentTurns = new HashMap<>();
+    private static HashMap<Game, Boolean> currentTurns = new HashMap<>();
 
     public List<Game> getCurrentPlayerGames(String username) {
         return findCurrentPlayerGame(username);
@@ -38,12 +38,12 @@ public class MatchOverviewModel {
         }
     }
 
-    public boolean isMyTurn(Game game){
-        if(this.currentTurns.containsKey(game)){
-            return this.currentTurns.get(game);
+    public static boolean isMyTurn(Game game) throws NullPointerException{
+        if(MatchOverviewModel.currentTurns.containsKey(game)){
+            return MatchOverviewModel.currentTurns.get(game);
         }
         else {
-            return false;
+            throw new NullPointerException();
         }
     }
 
@@ -59,9 +59,28 @@ public class MatchOverviewModel {
             games = _db.select(Game.class, clauses);
 
             for(var game : games){
-                if(currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)){
-                    // Opponent turn
-                    this.currentTurns.put(game, (GameSession.getUsername().equals(game.player1.getUsername())));
+
+                String player = GameSession.getUsername();
+                String player1 =  game.player1.getUsername();
+                String player2 =  game.player2.getUsername();
+
+                boolean isPlayer1 = player.equals(player1);
+
+                if(isPlayer1){
+                    if(currentTurnHasAction(game) == false && currentTurnPlayer2HasAction(game) == false){
+                        MatchOverviewModel.currentTurns.put(game,true);
+                    }
+                    else{
+                        MatchOverviewModel.currentTurns.put(game,currentTurnHasAction(game));
+                    }
+                }
+                else {
+                    if(currentTurnHasAction(game) == false && currentTurnPlayer2HasAction(game) == false){
+                        MatchOverviewModel.currentTurns.put(game,true);
+                    }
+                    else {
+                        MatchOverviewModel.currentTurns.put(game, currentTurnPlayer2HasAction(game));
+                    }
                 }
             }
 
@@ -245,6 +264,43 @@ public class MatchOverviewModel {
         return null;
     }
 
+    public void surrenderGame(Game game){
+        String player = GameSession.getUsername();
+        String player1 =  game.player1.getUsername();
+        String player2 =  game.player2.getUsername();
+        String enemy  = player1.equals(player) ?  player2 : player1;
+        game.setState("resigned");
+        game.setWinner(enemy);
+
+        try{
+            this._db.update(game);
+        }
+        catch (Exception e){
+            Log.error(e);
+        }
+    }
+
+    public void acceptInvite(Game game){
+        game.setState("playing");
+        game.setAnswer("accepted");
+        try{
+            this._db.update(game);
+        }
+        catch (Exception e){
+            Log.error(e);
+        }
+    }
+
+    public void declineInvite(Game game){
+        game.setAnswer("rejected");
+        try{
+            this._db.update(game);
+        }
+        catch (Exception e){
+            Log.error(e);
+        }
+    }
+
     public GameScore getPlayerScores(Game game) {
         GameScore score = new GameScore();
 
@@ -271,10 +327,8 @@ public class MatchOverviewModel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return score;
     }
-
 
     public void updateGameState(GameState state){
         try{
@@ -290,4 +344,5 @@ public class MatchOverviewModel {
         public int player1;
         public int player2;
     }
+
 }

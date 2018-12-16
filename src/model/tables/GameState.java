@@ -19,4 +19,6 @@ public class GameState {
     public boolean isResigned() { return _state.equals("resigned"); }
 
     public String getState(){return _state;}
+
+
 }
