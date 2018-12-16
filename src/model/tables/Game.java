@@ -43,6 +43,13 @@ public class Game {
     public Answer answer;
     public Account winner;
 
+    public String getPlayer1Username(){
+        return this._usernamePlayer1;
+    }
+
+    public String getPlayer2Username(){
+        return this._usernamePlayer1;
+    }
 
     public Game(Integer gameId, String gameState, String letterSetCode, String usernamePlayer1, String usernamePlayer2, String answerPlayer2, String usernameWinner){
         _gameId = gameId;
