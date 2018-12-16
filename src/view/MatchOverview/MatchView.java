@@ -79,24 +79,23 @@ public class MatchView {
                     inviteTxt.setText("Uitnodiging naar: " + player2);
                     String antwoord = "reactie: ";
                     switch(match.answer.get_type()){
-
                         case "accepted": {
                             inviteStatusTxt.setText(antwoord+"Geaccepteerd");
                             matchPlayButton.setDisable(false);
+                            matchSurrenderButton.setDisable(false);
                             break;
                         }
-
                         case "declined": {
                             inviteStatusTxt.setText(antwoord+"Geweigerd");
                             break;
                         }
-
                         case "unknown": {
                             inviteStatusTxt.setText(antwoord+"Nog geen antwoord gegeven.");
                             break;
                         }
                     }
                 }
+
                 else {
                     //Uitnodiging van tegenstander
                     inviteTxt.setText("Uitnodiging van: " + player1);
@@ -120,24 +119,14 @@ public class MatchView {
         }
     }
 
-    public void loadFinished(){
+    public void loadFinished() { }
 
-    }
+    public HBox getAnchor(){ return  this.rootHbox; }
 
-    public HBox getAnchor(){
-        return  this.rootHbox;
-    }
+    public Button getMatchPlayButton(){ return this.matchPlayButton; }
 
-    public Button getMatchPlayButton(){
-        return this.matchPlayButton;
-    }
-
-    public Button getMatchSurrenderButton(){
-        return this.matchSurrenderButton;
-    }
+    public Button getMatchSurrenderButton(){ return this.matchSurrenderButton; }
 
     @FXML
-    private void onMatchPlay() {
-        System.out.println(match.getGameID());
-    }
+    private void onMatchPlay() { System.out.println(match.getGameID()); }
 }
