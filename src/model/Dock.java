@@ -258,7 +258,7 @@ public class Dock
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
         }
 
         List<Integer> ids = usedLetters.stream().map(a->a.letter.get_letterId()).collect(Collectors.toList());
