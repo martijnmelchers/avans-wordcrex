@@ -3,8 +3,7 @@ package model.tables;
 import model.database.annotations.*;
 
 @Table("turnplayer1")
-public class TurnPlayer1
-{
+public class TurnPlayer1 {
 
     @PrimaryKey
     @Column("game_id")
@@ -34,9 +33,20 @@ public class TurnPlayer1
 
     public TurnPlayer1() {}
 
-    public String getTurnActionType(){ return _turnactionType; }
+    public Integer getGameId() { return _gameId; }
+    public Integer getturnId() { return _turnId; }
+    public String getUsernamePlayer1() { return _usernamePlayer1; }
+    public Integer getBonus() { return _bonus; }
+    public Integer getScore() { return  _score; }
+    public String getTurnAction() { return _turnactionType; }
 
-    public Integer getScore() {return _score;}
+    public TurnPlayer1(Integer gameId, Integer turnId, String usernamePlayer1, Integer score, Integer bonus, String turnactionType ) {
+        _gameId = gameId;
+        _turnId = turnId;
+        _usernamePlayer1 = usernamePlayer1;
+        _score = score;
+        _bonus = bonus;
+        _turnactionType = turnactionType;
+    }
 
-    public Integer getBonus() {return _bonus;}
 }

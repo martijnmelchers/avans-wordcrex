@@ -42,7 +42,7 @@ public class Main extends Application {
         }
 
         /* Start the main app */
-        GameSession.setSession(new Account("jagermeester","rrr"));
+        GameSession.setSession(new Account("jagermeester", "rrr"));
         Log.info("Starting views...");
         try {
             var app = new App(primaryStage);

@@ -1,5 +1,6 @@
 package model.tables;
 
+import model.Board;
 import model.database.annotations.Column;
 import model.database.annotations.ForeignKey;
 import model.database.annotations.PrimaryKey;
@@ -42,4 +43,14 @@ public class BoardPlayer1 {
     public Tile tile;
 
     public BoardPlayer1() {}
+
+    public BoardPlayer1(Integer gameId, String username, Integer turnId, Integer letterId, Integer x, Integer y){
+        _gameId = gameId;
+        _username = username;
+        _turnId = turnId;
+        _letterId = letterId;
+        _tileX = x;
+        _tileY = y;
+    }
+
 }
