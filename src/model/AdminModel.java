@@ -18,23 +18,21 @@ public class AdminModel {
     /**
      * Load the database connection
      */
-    public AdminModel(){
-        try{
+    public AdminModel() {
+        try {
             this._db = DocumentSession.getDatabase();
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Log.error(e, true);
         }
     }
 
-    public List<AccountInfo> getUsers(){
-        var clauses = new ArrayList <Clause>();
+    public List<AccountInfo> getUsers() {
+        var clauses = new ArrayList<Clause>();
         List<AccountInfo> accounts = new ArrayList<>();
-        try{
-            accounts = this._db.select(AccountInfo.class,clauses);
-        }
 
-        catch(Exception e){
+        try {
+            accounts = this._db.select(AccountInfo.class, clauses);
+        } catch (Exception e) {
             Log.error(e);
         }
         return accounts;
@@ -42,47 +40,48 @@ public class AdminModel {
 
     public void setRole(AccountInfo info) throws Exception {
         var clauses = new ArrayList<Clause>();
+
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
         clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
-        if(this._db.select(AccountInfo.class, clauses).size()  == 0){
+
+        if (this._db.select(AccountInfo.class, clauses).size() == 0)
             this._db.insert(info);
-        }
+
     }
 
     public void removeRole(AccountInfo info) throws Exception {
         var clauses = new ArrayList<Clause>();
+
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
         clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
 
-        List<AccountInfo> roles  = this._db.select(AccountInfo.class, clauses);
-        if(roles.size()  > 0){
+        List<AccountInfo> roles = this._db.select(AccountInfo.class, clauses);
+
+        if (roles.size() > 0)
             this._db.delete(roles);
-        }
+
     }
 
 
-    public List<Role> getAllRoles(){
+    public List<Role> getAllRoles() {
         List<Role> roles = new ArrayList<>();
 
-        try{
+        try {
             roles = this._db.select(Role.class);
-        }
-
-        catch(Exception e ){
+        } catch (Exception e) {
             Log.error(e);
         }
 
         return roles;
     }
-    public List<AccountInfo> getRoles(String username){
+
+    public List<AccountInfo> getRoles(String username) {
         List<AccountInfo> roles = new ArrayList<>();
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, username));
-        try{
-           roles = this._db.select(AccountInfo.class,clauses);
-        }
-
-        catch (Exception e){
+        try {
+            roles = this._db.select(AccountInfo.class, clauses);
+        } catch (Exception e) {
             Log.error(e);
         }
         return roles;

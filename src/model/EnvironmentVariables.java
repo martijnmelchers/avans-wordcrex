@@ -8,7 +8,7 @@ public class EnvironmentVariables
      * 2 = Errors, Warnings
      * 3 = Errors, Warnings, Info
      */
-    public static final Integer DEBUG_LEVEL = 2;
+    public static final Integer DEBUG_LEVEL = 3;
     public static final Boolean LOG_QUERIES = true;
     public static final Boolean USE_COLOR = true;
     public static final String MAIN_VIEW = "LoginView";

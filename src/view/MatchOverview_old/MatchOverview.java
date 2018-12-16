@@ -1,17 +1,21 @@
-package view.MatchOverview;
+package view.MatchOverview_old;
 
+import controller.App;
 import controller.MatchOverviewController;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import model.tables.Game;
 import view.View;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 
 // TODO:
@@ -70,28 +74,6 @@ public class MatchOverview extends View {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        renderGames();
-    }
-
-    private void renderGames(){
-        gameObservableList = FXCollections.observableArrayList();
-        gameObservableList1 = FXCollections.observableArrayList();
-        gameObservableList2 = FXCollections.observableArrayList();
-        gameListview.setItems(gameObservableList);
-        gameListview1.setItems(gameObservableList1);
-        gameListview2.setItems(gameObservableList2);
-        gameObservableList.clear();
-        gameObservableList1.clear();
-        gameObservableList2.clear();
-
-        List<Game> games = this._controller.getGames();
-
-        for (var game : games) {
-            switch (game.getGameState().getState()) {
-                case "request": {
-                    gameObservableList.add(game);
-                    break;
-                }
 
         _filterGameView = new FilterGameView(this, _searchBar);
 
@@ -141,26 +123,59 @@ public class MatchOverview extends View {
 
     private void initiateInvitationHeader(ArrayList<Game> games) {
         for (Game game : games) {
-            String opponentName = game.player2.getUsername();
+            String opponentName = game.getPlayer2().getUsername();
             _headerInvitations.addPlayButton(controller, this::onInvitationClick, game, "Uitdaging naar " + opponentName + " gestuurd");
         }
-        else{
-            filteredGames.setPredicate(s -> {
-                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
-            });
+    }
+
+    private void initiateYourTurnHeader(ArrayList<Game> games) {
+        for (Game game : games) {
+            _headerYourTurn.addPlayButton(controller, this::onYourTurnClick, game, "Speel je beurt");
         }
     }
 
     private void initiateTheirTurnHeader(ArrayList<Game> games) {
         for (Game game : games) {
-            String opponentName = game.player2.getUsername();
+            String opponentName = game.getPlayer2().getUsername();
 
             _headerTheirTurn.addPlayButton(controller, this::onTheirTurnClick, game, opponentName + " moet zijn beurt nog spelen.");
         }
-        else{
-            filteredGames1.setPredicate(s -> {
-                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
-            });
+    }
+
+    private void onInvitationClick(Game game)
+    {
+        System.out.println(game.getGameID());
+    }
+
+    private void onYourTurnClick(Game game)
+    {
+        System.out.println(game.getGameID());
+    }
+
+    private void onTheirTurnClick(Game game)
+    {
+        System.out.println(game.getGameID());
+    }
+
+    private void onObserverGameClick(Game game)
+    {
+        System.out.println(game.getGameID());
+    }
+
+    protected void filterObserverGames(String currentGamesToSearch) {
+        DestroyViewList();
+
+        if(currentGamesToSearch.length() == 0) //Reset the view if nothing is searched.
+        {
+            if(_viewMode == ViewMode.Observer)
+            {
+                ChangeToObserverMode(null);
+            }
+            else
+            {
+                ChangeToPlayMode(null);
+            }
+            return;
         }
 
         if(_viewMode == ViewMode.Observer)
@@ -172,10 +187,32 @@ public class MatchOverview extends View {
             // Make model search for games of current player.
             ChangeToPlayMode(controller.searchForAllGamesAsPlayer(currentGamesToSearch));
         }
-        else{
-            filteredGames2.setPredicate(s -> {
-                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
-            });
+    }
+
+    private void ChangeToPlayMode(ArrayList<Game> foundGames) {
+        _viewModeButton.setText("Observer Mode");
+
+        _headerInvitations = new Header("Uitnodigingen");
+        _headerYourTurn = new Header("Jouw Beurt");
+        _headerTheirTurn = new Header("Hun Beurt");
+
+        var invitations = new ArrayList<Game>();
+        var yourTurns = new ArrayList<Game>();
+        var theirTurns = new ArrayList<Game>();
+
+        List<Game> games = foundGames != null ? foundGames : controller.getGames();
+        for (Game game : games) {
+            if (game.getGameState().isRequest()) {
+                invitations.add(game);
+            } else if (game.getGameState().isPlaying()) {
+                // Differ in your turns
+                if (currentTurnHasAction(game) && !player2TurnHasAction(game)) {
+                    theirTurns.add(game);
+                } else // Their turn played(and not yours)
+                {
+                    yourTurns.add(game);
+                }
+            }
         }
         // Invitation
         initiateInvitationHeader(invitations);
@@ -201,21 +238,22 @@ public class MatchOverview extends View {
 
     private void ChangeToObserverMode(ArrayList<Game> foundGames) {
         _viewModeButton.setText("Speel Mode");
-
         _headerObserver = new Header("Spellen");
-
         _headerObserver.addObserverButton(controller, this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), " replace this");
-
         _vBox.getChildren().addAll(_headerObserver.getContent());
-
         _matchScrollPane.setContent(_vBox);
     }
 
     @FXML
-    private void invitationView(){
+    private void switchViewMode() {
+        DestroyViewList();
 
-        try{
-            this._controller.navigate("MatchInvitationView");
+        if (_viewMode == ViewMode.Play) {
+            _viewMode = ViewMode.Observer;
+            ChangeToObserverMode(null);
+        } else if (_viewMode == ViewMode.Observer) {
+            _viewMode = ViewMode.Play;
+            ChangeToPlayMode(null);
         }
     }
 
