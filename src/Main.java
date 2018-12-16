@@ -11,7 +11,6 @@ import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.helper.Log;
 import model.tables.Account;
-
 import model.tables.AccountInfo;
 import model.tables.Role;
 
@@ -51,7 +50,6 @@ public class Main extends Application {
         }
 
         /* Start the main app */
-        GameSession.setSession(new Account("jagermeester","rrr"));
         Log.info("Starting views...");
         try {
             var app = new App(primaryStage);

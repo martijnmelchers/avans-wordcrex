@@ -37,8 +37,7 @@ public class AccountModel {
 
         try {
             this._db.insert(new Account(lowerUsername, lowerPassword));
-            this._db.insert(new AccountInfo("player", lowerUsername));
-            return "";
+            return null;
         } catch (Exception e) {
             Log.error(e, true);
             return e.getMessage();
@@ -70,7 +69,7 @@ public class AccountModel {
         try
         {
             this._db.update(new Account(username, lowerPassword));
-            return "";
+            return null;
         }
         catch (Exception e)
         {

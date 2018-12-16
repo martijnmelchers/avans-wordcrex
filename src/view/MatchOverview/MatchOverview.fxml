@@ -1,82 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxWidth="620.0" prefHeight="790.0" prefWidth="620.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchOverview.MatchOverview">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints maxHeight="77.0" minHeight="0.0" prefHeight="50.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="673.0" minHeight="10.0" prefHeight="649.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="128.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchOverview.MatchOverview">
    <children>
-      <AnchorPane style="-fx-background-color: #212048;">
+      <VBox fx:id="_content" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
          <children>
-            <TextField fx:id="_searchBar" focusTraversable="false" layoutX="342.0" layoutY="17.0" onKeyTyped="#filter" promptText="Spelers zoeken" />
-            <Button layoutX="497.0" layoutY="18.0" mnemonicParsing="false" onAction="#invitationView" text="Speler uitnodigen" />
-         </children>
-      </AnchorPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="70.0" prefWidth="620.0" style="-fx-background-color: #212048;" GridPane.rowIndex="2">
-         <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Uitloggen">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-            <Button fx:id="_viewModeButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" scaleShape="false" text="Observeer Mode">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-               <FlowPane.margin>
+            <FlowPane fx:id="_toolBar" alignment="CENTER_RIGHT" columnHalignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="47.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;" VBox.vgrow="NEVER">
+               <children>
+                  <TextField fx:id="_searchBar" focusTraversable="false" promptText="Spelers zoeken">
+                     <FlowPane.margin>
+                        <Insets right="20.0" />
+                     </FlowPane.margin>
+                  </TextField>
+               </children>
+               <opaqueInsets>
                   <Insets />
-               </FlowPane.margin>
-            </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Account Gegevens">
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </Button>
-         </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <padding>
-            <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
-         </padding>
-         <styleClass>
-            <String fx:value="-fx-focus-color: transparent;" />
-            <String fx:value="-fx-faint-focus-color: transparent;" />
-            <String fx:value="-fx-background-insets: 0;" />
-         </styleClass>
-      </FlowPane>
-      <VBox prefHeight="615.0" prefWidth="620.0" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
-         <children>
-            <Pane fx:id="requestPane" prefHeight="32.0" prefWidth="620.0" style="-fx-background-color: #2c3e50;">
+               </opaqueInsets>
+            </FlowPane>
+            <ScrollPane fx:id="_matchScrollPane" fitToHeight="true" fitToWidth="true" minHeight="100.0" minWidth="100.0" VBox.vgrow="ALWAYS">
+               <styleClass>
+                  <String fx:value="-fx-focus-color: transparent;" />
+                  <String fx:value="-fx-faint-focus-color: transparent;" />
+                  <String fx:value="-fx-background-insets: 0;" />
+               </styleClass>
+            </ScrollPane>
+            <FlowPane alignment="CENTER" columnHalignment="CENTER" hgap="100.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="43.0" prefWidth="800.0" style="-fx-background-color: #2c3e50;">
                <children>
-                  <Text layoutX="274.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Uitnodigingen" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Uitloggen">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="_viewModeButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#switchViewMode" prefWidth="150.0" scaleShape="false" text="Observeer Mode">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <FlowPane.margin>
+                        <Insets />
+                     </FlowPane.margin>
+                  </Button>
+                  <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Account Gegevens">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
                </children>
-            </Pane>
-            <ListView fx:id="gameListview" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="620.0" />
-            <Pane fx:id="yourTurnPane" layoutX="10.0" layoutY="10.0" prefHeight="32.0" prefWidth="620.0" style="-fx-background-color: #2c3e50;">
-               <children>
-                  <Text layoutX="281.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jouw beurt" />
-               </children>
-            </Pane>
-            <ListView fx:id="gameListview1" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="245.0" prefWidth="620.0" />
-            <Pane fx:id="theirTurnPane" layoutX="10.0" layoutY="187.0" prefHeight="32.0" prefWidth="620.0" style="-fx-background-color: #2c3e50;">
-               <children>
-                  <Text layoutX="270.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zijn/Haar beurt" />
-               </children>
-            </Pane>
-            <ListView fx:id="gameListview2" layoutX="10.0" layoutY="194.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="184.0" prefWidth="620.0" />
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />
+               </padding>
+               <styleClass>
+                  <String fx:value="-fx-focus-color: transparent;" />
+                  <String fx:value="-fx-faint-focus-color: transparent;" />
+                  <String fx:value="-fx-background-insets: 0;" />
+               </styleClass>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </FlowPane>
          </children>
       </VBox>
    </children>
-</GridPane>
+</AnchorPane>

@@ -1,15 +1,12 @@
 package controller;
 
-import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MatchOverviewController extends Controller
 {
-
     private MatchOverviewModel model;
 
     public MatchOverviewController()
@@ -17,10 +14,9 @@ public class MatchOverviewController extends Controller
         model = new MatchOverviewModel();
     }
 
-    public List<Game> getGames()
+    public ArrayList<Game> getGames()
     {
-        System.out.println(GameSession.getUsername());
-        return model.getCurrentPlayerGames(GameSession.getUsername());
+        return model.getCurrentPlayerGames();
     }
 
     public ArrayList<Game> getAllGames()
@@ -48,10 +44,6 @@ public class MatchOverviewController extends Controller
         return model.searchForGamesAsPlayer(currentGamesToSearch);
     }
 
-
-    public boolean isMyTurn(Game game){
-        return this.model.isMyTurn(game);
-    }
     public MatchOverviewModel.GameScore getPlayerScores(Game game)
     {
         return model.getPlayerScores(game);

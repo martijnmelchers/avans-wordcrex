@@ -90,7 +90,6 @@ public class Database {
         /* Store the keys to insert and values separately */
         ArrayList<String> columns = new ArrayList<>();
         ArrayList<Object> values = new ArrayList<>();
-        ArrayList<String> expectedKeys = new ArrayList<>();
         ArrayList<InsertedKeys> keys = new ArrayList<>();
         boolean hasGeneratedId = false;
 
@@ -104,13 +103,9 @@ public class Database {
             /* If the field is auto increment, we don't have to insert a value */
             if (field.isAnnotationPresent(AutoIncrement.class) && field.get(item) == null) {
                 hasGeneratedId = true;
-                expectedKeys.add(this.getColumnName(field));
                 continue;
             }
 
-
-            if (field.isAnnotationPresent(Nullable.class) && field.get(item) == null)
-                continue;
 
 
             /* If the field is a foreign key to another table we have to create that first. */
@@ -178,10 +173,11 @@ public class Database {
 
         if (hasGeneratedId) {
             var generatedKeys = statement.getGeneratedKeys();
+            var metadata = statement.getMetaData();
             int size = 0;
             while (generatedKeys.next()) {
-                keys.add(new InsertedKeys(table, expectedKeys.get(size), generatedKeys.getInt(size + 1)));
                 size++;
+                keys.add(new InsertedKeys(metadata.getTableName(size + 1), metadata.getColumnName(size + 1), generatedKeys.getInt(size + 1)));
             }
 
             if (size == 0)
@@ -320,14 +316,8 @@ public class Database {
 
                 String value = data.getString(combinedName);
 
-
                 try {
                     var customParser = ObjectHelper.SQLToObject(field, data, combinedName);
-
-                    if (!field.isAnnotationPresent(Nullable.class) && value == null)
-                        throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)");
-                    else if (field.isAnnotationPresent(Nullable.class) && value == null)
-                        continue;
 
                     if (customParser == null)
                         field.set(dto, field.getType().getConstructor(String.class).newInstance(value));
@@ -335,15 +325,15 @@ public class Database {
                         field.set(dto, customParser);
                 } catch (Exception e) {
                     Log.error(e);
-                    if (field.isAnnotationPresent(Nullable.class))
-                        continue;
-
                     throw new Exception("Could not parse field " + combinedName + " to type " + field.getType() + ". This could be caused because the type is primitive, has no constructor or has no custom parser.");
                 }
 
 
             } catch (Exception e) {
                 Log.error(e);
+
+                if (!field.isAnnotationPresent(Nullable.class))
+                    throw new Exception("An error occurred! Field " + combinedName + " was null! (Add @nullable if a field can be null)", e);
             }
 
         }
