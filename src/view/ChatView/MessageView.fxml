@@ -6,22 +6,26 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefWidth="202.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView.MessageView">
+<AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="202.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView.MessageView">
    <children>
-      <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="68.0" prefWidth="200.0" style="-fx-background-color: purple; -fx-background-radius: 5px;">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="65.0" prefWidth="202.0" style="-fx-background-color: purple;">
          <children>
-            <Label fx:id="MessageLabel" layoutX="8.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="24.0" prefWidth="183.0" style="-fx-background-color: transparent;" text="Message">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label fx:id="MomentLabel" layoutX="8.0" layoutY="39.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="183.0" style="-fx-background-color: transparent;" text="Moment">
-               <font>
-                  <Font size="11.0" />
-               </font>
-            </Label>
+            <TextFlow maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="202.0" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label fx:id="MessageLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="188.0" style="-fx-background-color: transparent;" text="Message">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="MomentLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="183.0" style="-fx-background-color: transparent;" text="Moment">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+            </TextFlow>
          </children>
-      </Pane>
+      </VBox>
    </children>
    <padding>
       <Insets bottom="5.0" top="5.0" />

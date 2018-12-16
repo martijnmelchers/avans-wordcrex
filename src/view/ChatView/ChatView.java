@@ -45,15 +45,17 @@ public class ChatView extends View {
     @FXML
     private VBox _parent;
 
+    private int messageCount;
+
     public ChatView() {
         _controller = new ChatController();
-        _session = new GameSession();
     }
 
     public void initialize() {
-        _session.setSession(new Account("lidewij", "no"));
+        GameSession.setSession(new Account("lidewij", "no"));
         displayOpponentsName();
         displayMessages();
+        checkForMessages();
     }
 
     private void displayMessages() {
@@ -62,12 +64,29 @@ public class ChatView extends View {
 
         ArrayList<Chatline> chatlines = _controller.getChatlines(502);
 
+        this.messageCount = chatlines.size();
+
         for (Chatline chatline : chatlines) {
             displayMessage(chatline);
         }
 
         // set the scroll to the bottom
         MessagesScrollpane.setVvalue(1.0);
+    }
+
+    private void checkForMessages() {
+        java.util.TimerTask task = new java.util.TimerTask() {
+            @Override
+            public void run() {
+                int chatlinesCount = _controller.getChatlines(502).size();
+
+                if (chatlinesCount > messageCount) {
+                    displayMessages();
+                }
+            }
+        };
+        java.util.Timer timer = new java.util.Timer(true);
+        timer.schedule(task, 0, 1000);
     }
 
     private void displayMessage(Chatline chatline) {
@@ -84,10 +103,10 @@ public class ChatView extends View {
 
             if(chatline.account.getUsername().equals("bookowner")) {
                 messagesVboxRight.getChildren().add(messagePane);
-                messagesVboxLeft.getChildren().add(createEmptyPane(messagePane));
+                messagesVboxLeft.getChildren().add(createEmptyPane(messagePane, chatline));
             } else {
                 messagesVboxLeft.getChildren().add(messagePane);
-                messagesVboxRight.getChildren().add(createEmptyPane(messagePane));
+                messagesVboxRight.getChildren().add(createEmptyPane(messagePane, chatline));
             }
 
 
@@ -106,7 +125,7 @@ public class ChatView extends View {
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
             // TODO: insert gameid dynamically
-            Chatline chatline = new Chatline(_session.getUsername(), 502, timestamp, message);
+            Chatline chatline = new Chatline(GameSession.getUsername(), 502, timestamp, message);
             _controller.sendChatline(chatline);
 
             messageField.clear();
@@ -114,17 +133,19 @@ public class ChatView extends View {
         }
     }
 
-    public Pane createEmptyPane(Pane messagePane) {
+    private Pane createEmptyPane(Pane messagePane, Chatline chatline) {
         Pane emptyPane = new Pane();
 
         emptyPane.setPrefSize(messagePane.getPrefWidth(), messagePane.getPrefHeight());
-        emptyPane.setMinSize(200,400);
+        emptyPane.setMinSize(messagePane.getMinWidth(),messagePane.getMaxHeight());
         emptyPane.setMaxSize(messagePane.getMaxWidth(), messagePane.getMaxHeight());
 
         // TEST
         emptyPane.setStyle("-fx-background-color: RED");
 
-        Text test = new Text(" ");
+        String test2 = chatline.getMessage().replaceAll(".", " ");
+
+        Text test = new Text(test2);
 
         emptyPane.getChildren().add(test);
         return emptyPane;
