@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class Dock
 {
     private HandLetter[] letters;
-    private Database db;
+    private Database _db;
 
 
     public Dock(boolean createNewHand,int gameId,int turnId)
