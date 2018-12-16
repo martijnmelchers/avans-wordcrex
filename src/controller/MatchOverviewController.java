@@ -1,26 +1,35 @@
 package controller;
 
+import model.GameSession;
 import model.MatchOverviewModel;
+import model.helper.Log;
 import model.tables.Game;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MatchOverviewController extends Controller
-{
+public class MatchOverviewController extends Controller {
+
     private MatchOverviewModel model;
 
-    public MatchOverviewController()
-    {
+    public MatchOverviewController() {
         model = new MatchOverviewModel();
     }
 
-    public ArrayList<Game> getGames()
-    {
-        return model.getCurrentPlayerGames();
+    public List<Game> getGames() {
+        System.out.println(GameSession.getUsername());
+        return model.getCurrentPlayerGames(GameSession.getUsername());
     }
 
-    public ArrayList<Game> getAllGames()
-    {
+    public void start() {
+        try {
+            this.getController(GameController.class).startGame(GameSession.getGame());
+        } catch (Exception e) {
+            Log.error(e);
+        }
+    }
+
+    public ArrayList<Game> getAllGames() {
         return model.getAllGames();
     }
 
@@ -44,8 +53,12 @@ public class MatchOverviewController extends Controller
         return model.searchForGamesAsPlayer(currentGamesToSearch);
     }
 
-    public MatchOverviewModel.GameScore getPlayerScores(Game game)
-    {
+
+    public boolean isMyTurn(Game game) {
+        return this.model.isMyTurn(game);
+    }
+
+    public MatchOverviewModel.GameScore getPlayerScores(Game game) {
         return model.getPlayerScores(game);
     }
 }

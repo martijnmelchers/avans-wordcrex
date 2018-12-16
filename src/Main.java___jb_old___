@@ -6,14 +6,22 @@ import javafx.stage.Stage;
 import model.EnvironmentVariables;
 import model.GameSession;
 import model.database.DocumentSession;
+import model.database.classes.Clause;
+import model.database.classes.TableAlias;
+import model.database.enumerators.CompareMethod;
 import model.helper.Log;
 import model.tables.Account;
+import model.tables.AccountInfo;
+import model.tables.Role;
+
+import java.util.ArrayList;
 
 public class Main extends Application {
     public static void main(String[] args) {
         Log.info("Launching application...");
         launch(EnvironmentVariables.MAIN_VIEW);
     }
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -42,7 +50,6 @@ public class Main extends Application {
         }
 
         /* Start the main app */
-        GameSession.setSession(new Account("jagermeester", "rrr"));
         Log.info("Starting views...");
         try {
             var app = new App(primaryStage);

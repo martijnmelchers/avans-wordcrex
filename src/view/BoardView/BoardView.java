@@ -57,7 +57,25 @@ public class BoardView extends View {
         init();
         updateScore();
         updateTilesLeft();
+        checkRole();
         checkIfTurnPlayed();
+    }
+
+    private void checkRole()
+    {
+        if (GameSession.getRole().getRole().equals("observer"))
+        {
+            _controller.getOldDock(_controller.getCurrentTurn());
+            dockController.updateDock();
+            GridPane block = new GridPane();
+            block.setId("block");
+            _gridPane.add(block, 0, 0, 15, 17);
+            _submit.setVisible(false);
+            _pass.setVisible(false);
+            _reset.setVisible(false);
+            _shuffle.setVisible(false);
+            _surrender.setVisible(false);
+        }
     }
 
     public void update(boolean updateDock)
@@ -216,6 +234,17 @@ public class BoardView extends View {
             tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
             tile.setOnMouseReleased(event-> Event.fireEvent(sp,event ));
         }
+    }
+
+    public void gameDone()
+    {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("De game is klaar \n\n " + _controller.getGameWinner() + " is gewonnen met " + _controller.getGameWinnerScore() + " punten");
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                // TODO navigate to matchoverview
+            }
+        });
     }
 
     @FXML

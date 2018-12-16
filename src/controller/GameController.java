@@ -14,11 +14,19 @@ import java.util.ArrayList;
 
 public class GameController extends Controller{
 
-    private BoardView boardView;
+    private BoardView _boardView;
     private GameModel _gameModel;
 
     public GameController() {
-        _gameModel = new GameModel(new Game(504, "playing", "NL", "jagermeester", "Lidewij", "accepted", null)); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
+    }
+
+    public void startGame(Game game)
+    {
+        _gameModel = new GameModel(game); //TODO: The game will be created by the match overview so gameId parameter is for testing. Remove after branch merged
+    }
+
+    public void startGame(){
+        startGame(GameSession.getGame());
     }
 
 
@@ -34,8 +42,8 @@ public class GameController extends Controller{
 
     public void placeTile(int x,int y, String letter, int letterId) {
         _gameModel.placeTile(new Vector2(x, y), letter, letterId);
-        boardView = getViewCasted();
-        boardView.update(false);
+        _boardView = getViewCasted();
+        _boardView.update(false);
     }
 
     public void resetTile(int x, int y)
@@ -65,7 +73,11 @@ public class GameController extends Controller{
                     @Override
                     public void run()
                     {
-                        boardView.stopLoadingScreen();
+                        _boardView.stopLoadingScreen();
+                        if (_gameModel.checkGameDone())
+                        {
+                            _boardView.gameDone();
+                        }
                     }
                 });
 
@@ -97,20 +109,20 @@ public class GameController extends Controller{
             info = new CheckInfo(new Points(0, 0), null, null);
         }
 
-        boardView.startLoadingScreen("Wachten op andere speler.");
+        _boardView.startLoadingScreen("Wachten op andere speler.");
         _gameModel.submitTurn(info, nextTurn());
 
     }
 
     public void passTurn()
     {
-        boardView = getViewCasted();
+        _boardView = getViewCasted();
         submitTurn(true);
     }
 
     public void showTurn(int turn){
         _gameModel.setTurn(turn);
-        boardView = getViewCasted();
+        _boardView = getViewCasted();
         updateView(true);
         _gameModel.updateScore(turn);
     }
@@ -124,25 +136,25 @@ public class GameController extends Controller{
        CheckInfo info = _gameModel.checkBoard();
        String total = (info == null) ? "0p" : info.getPoints().total() + "p";
 
-       boardView.updateLocalScore(total);
+        _boardView.updateLocalScore(total);
     }
 
     public void checkIfTurnPlayed()
     {
        if( _gameModel.checkIfTurnPlayed())
        {
-           boardView = getViewCasted();
-           boardView.startLoadingScreen("Wachten op andere speler.");
+           _boardView = getViewCasted();
+           _boardView.startLoadingScreen("Wachten op andere speler.");
            _gameModel.alreadyPlayed(nextTurn());
        }
     }
 
     private void updateView(boolean updateDock)
     {
-        boardView.update(updateDock);
+        _boardView.update(updateDock);
         _gameModel.updateScore();
-        boardView.updateScore();
-        boardView.updateTilesLeft();
+        _boardView.updateScore();
+        _boardView.updateTilesLeft();
         checkScore();
     }
 
@@ -160,6 +172,16 @@ public class GameController extends Controller{
     public void getOldDock(int turn)
     {
         _gameModel.getOldDock(turn);
+    }
+
+    public String getGameWinner()
+    {
+        return _gameModel.getGameWinner();
+    }
+
+    public String getGameWinnerScore()
+    {
+        return _gameModel.getGameWinnerScore();
     }
 
 }

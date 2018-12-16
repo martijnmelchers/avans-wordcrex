@@ -9,7 +9,9 @@ public final class GameSession {
     private static Role role;
     private static Game game;
 
-    public static void setSession(Account user) { GameSession.account = user; }
+    public static void setSession(Account user) {
+        GameSession.account = user;
+    }
 
     public static void endSession() {
         GameSession.account = null;
@@ -27,7 +29,7 @@ public final class GameSession {
         return GameSession.game != null;
     }
 
-    public static  Game getGame() {
+    public static Game getGame() {
         return GameSession.game;
     }
 
@@ -39,7 +41,11 @@ public final class GameSession {
         GameSession.game = null;
     }
 
-    public static void setRole(Role role) { GameSession.role = role; }
+    public static Role getRole() {
+        return GameSession.role;
+    }
 
-    public static Role getRole() { return GameSession.role; }
+    public static void setRole(Role role) {
+        GameSession.role = role;
+    }
 }

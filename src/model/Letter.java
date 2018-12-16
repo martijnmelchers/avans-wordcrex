@@ -17,16 +17,20 @@ public class Letter {
         return _letter;
     }
 
-    public void setPoints(int points){
-        _points = points;
-    }
-
     public void setLetter(String letter) {
         _letter = letter;
     }
 
-    public void setId(int letterId) { _letterId = letterId; }
+    public void setPoints(int points) {
+        _points = points;
+    }
 
-    public int getid() { return _letterId; }
+    public void setId(int letterId) {
+        _letterId = letterId;
+    }
+
+    public int getid() {
+        return _letterId;
+    }
 
 }

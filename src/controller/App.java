@@ -61,7 +61,6 @@ public class App {
                 }
 
                 Controller controllerInstance = (Controller) controllerClass.getConstructor().newInstance();
-
                 controllers.add(controllerInstance);
             } catch (Exception e) {
                 Log.warn("Could not create controller: " + e.getMessage());
@@ -74,6 +73,8 @@ public class App {
         for (Controller c : controllers) {
             if (c.getClass().isAssignableFrom(cType)) {
                 c.setApp(this);
+
+
                 return cType.cast(c);
             }
         }
@@ -105,7 +106,6 @@ public class App {
         } else {
             _scene.setRoot(root);
         }
-
         view = fxmlLoader.getController();
         view.setApp(this);
         primaryStage.setScene(_scene);

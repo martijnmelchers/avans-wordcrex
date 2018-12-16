@@ -3,114 +3,80 @@ package controller;
 import model.AccountModel;
 import model.GameSession;
 import model.helper.Log;
-import model.tables.Account;
+import view.AccountInformation.AccountInformation;
 import view.LoginView.LoginView;
 import view.RegisterView.RegisterView;
-import view.AccountInformation.AccountInformation;
 
-import java.io.IOException;
-
-public class AccountController extends Controller
-{
+public class AccountController extends Controller {
 
     private AccountModel _model;
 
-    public AccountController()
-    {
+    public AccountController() {
         this._model = new AccountModel();
     }
 
-    private boolean checkPasswords(String password, String confirmationPassword)
-    {
-        return  password.equals(confirmationPassword);
+    private boolean passwordsMatch(String password, String confirmationPassword) {
+        return password.equals(confirmationPassword);
     }
 
-    public void registerUser(String username, String password, String confirmationPassword)
-    {
-        RegisterView registerView = getViewCasted();
-        if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
-        {
-            registerView.showError("Vul alle velden in");
-            return;
-        }
-
-        if(!checkPasswords(password,confirmationPassword ))
-        {
-            registerView.showError("De wachtwoorden komen niet overeen");
-            return;
-        }
-
-        String error = this._model.registerAccount(username, password);
-
-        if(!error.equals(""))
-        {
-            registerView.showError(error);
-            return;
-        }
+    public void registerUser(String username, String password, String confirmationPassword) {
+        RegisterView registerView = this.getViewCasted();
 
         try {
-            navigate("loginView", 350, 550);
-        } catch (IOException e) {
-            Log.error(e, true);
-        }
+            if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
+                throw new Exception("Vul alle velden in.");
 
-        LoginView loginView = getViewCasted();
-        loginView.setCredentials(username,password);
-    }
+            if (!this.passwordsMatch(password, confirmationPassword))
+                throw new Exception("Wachtwoorden komen niet overeen.");
 
-    public void checkUserCredentials(String username, String password)
-    {
-        LoginView loginView = getViewCasted();
-        if (username.isEmpty() || password.isEmpty())
-        {
-            loginView.showError("Vul alle velden in");
-            return;
-        }
+            this._model.register(username, password);
 
-        Account account = this._model.getAccount(username, password);
+            var account = this._model.login(username, password);
 
-        if(account == null)
-        {
-            loginView.showError("Inloggegevens onjuist");
-            return;
-        }
+            GameSession.setSession(account.getAccount());
+            GameSession.setRole(account.getRole());
 
-        GameSession.setSession(account);
-
-        loginView.loginSucces();
-    }
-
-    public void changePassword(String username, String password, String confirmationPassword)
-    {
-        AccountInformation accountInformation = getViewCasted();
-        if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
-        {
-            accountInformation.showError("Vul alle velden in");
-            return;
-        }
-
-        if(!checkPasswords(password,confirmationPassword ))
-        {
-            accountInformation.showError("De wachtwoorden komen niet overeen");
-            return;
-        }
-
-        String error = this._model.changePassword(username, password);
-
-        if(!error.equals(""))
-        {
-            accountInformation.showError(error);
-            return;
+            registerView.registerSuccess();
+        } catch (Exception e) {
+            Log.error(e);
+            registerView.showError(e.getMessage());
         }
     }
 
-    public String getUsername()
-    {
-        return GameSession.getUsername();
+    public void loginUser(String username, String password) {
+        LoginView loginView = this.getViewCasted();
+
+        try {
+            if (username.isEmpty() || password.isEmpty())
+                throw new Exception("Vul alle velden in");
+
+            var account = this._model.login(username, password);
+
+            GameSession.setSession(account.getAccount());
+            GameSession.setRole(account.getRole());
+
+            loginView.loginSuccess();
+        } catch (Exception e) {
+            Log.error(e);
+            loginView.showError("Wachtwoord of gebruikersnaam kloppen niet!");
+        }
     }
 
-    public String getRole()
-    {
-        return this._model.getRole();
+    public void changePassword(String username, String password, String confirmationPassword) {
+        AccountInformation accountInformation = this.getViewCasted();
+
+
+        try {
+            if (username.isEmpty() || password.isEmpty() || confirmationPassword.isEmpty())
+                throw new Exception("Vul alle velden in");
+
+            if (!this.passwordsMatch(password, confirmationPassword))
+                throw new Exception("De wachtwoorden komen niet overeen");
+
+            this._model.changePassword(username, password);
+        } catch (Exception e) {
+            Log.error(e);
+            accountInformation.showError(e.getMessage());
+        }
     }
 }

@@ -5,27 +5,22 @@ import view.View;
 
 import java.io.IOException;
 
-public abstract class Controller
-{
+public abstract class Controller {
     private App application;
 
-    protected void setApp(App app)
-    {
+    protected void setApp(App app) {
         application = app;
     }
 
-    protected <T> T getViewCasted()
-    {
+    protected <T> T getViewCasted() {
         return application.getViewCasted();
     }
 
-    protected View getView()
-    {
+    protected View getView() {
         return application.getView();
     }
 
-    public App getApplication()
-    {
+    public App getApplication() {
         return application;
     }
 
@@ -33,15 +28,16 @@ public abstract class Controller
         application.navigate(fxmlFileName, width, height);
     }
 
-    public void navigate(String fxmlFileName)
-    {
-        try
-        {
+    public void navigate(String fxmlFileName) {
+        try {
             application.navigate(fxmlFileName);
-        }
-        catch (Exception e)
-        {
-            Log.error(e,false );
+        } catch (Exception e) {
+            Log.error(e, false);
         }
     }
+
+    public  <T extends Controller> T getController(Class<T> cType) throws Exception {
+        return application.getController(cType);
+    }
+
 }

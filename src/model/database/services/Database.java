@@ -242,11 +242,13 @@ public class Database {
 
             String name = this.getColumnName(field);
 
-            if (field.isAnnotationPresent(PrimaryKey.class))
+            if (field.isAnnotationPresent(PrimaryKey.class)) {
                 clauses.add(new Clause(new TableAlias(table, -1), name, CompareMethod.EQUAL, field.get(item)));
-
-            if (field.isAnnotationPresent(PrimaryKey.class) || field.isAnnotationPresent(ForeignKey.class))
                 continue;
+            }
+
+
+
 
             var v = field.get(item);
 
@@ -259,8 +261,10 @@ public class Database {
 
         }
 
-        if (updated.size() == 0)
+        if (updated.size() == 0) {
+            Log.info("No fields that can be updated are found!");
             return;
+        }
 
         var query = QueryBuilder.buildUpdate(table, updated, clauses);
         Log.info("Successfully built update query for class " + item.getClass());

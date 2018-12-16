@@ -12,11 +12,14 @@ public class LoginView extends View {
 
     private AccountController _accountController;
 
-    @FXML private Label labelError;
+    @FXML
+    private Label labelError;
 
-    @FXML private TextField textFieldUsername;
+    @FXML
+    private TextField textFieldUsername;
 
-    @FXML private PasswordField passwordFieldPassword;
+    @FXML
+    private PasswordField passwordFieldPassword;
 
     protected void loadFinished() {
         try {
@@ -27,12 +30,12 @@ public class LoginView extends View {
     }
 
     public void loginClicked() {
-        this._accountController.checkUserCredentials(textFieldUsername.getText(), passwordFieldPassword.getText());
+        this._accountController.loginUser(textFieldUsername.getText(), passwordFieldPassword.getText());
     }
 
     public void registerClicked() {
         try {
-            this.getController(AccountController.class).navigate("RegisterView", 350, 550);
+            this._accountController.navigate("RegisterView", 350, 550);
         } catch (Exception e) {
             Log.error(e, true);
         }
@@ -43,16 +46,11 @@ public class LoginView extends View {
         labelError.setVisible(true);
     }
 
-    public void loginSucces() {
+    public void loginSuccess() {
         try {
-            this.getController(AccountController.class).navigate("MatchOverview", 1600, 1200);
+            this._accountController.navigate("MatchOverview", 620, 769);
         } catch (Exception e) {
             Log.error(e, true);
         }
-    }
-
-    public void setCredentials(String username, String password) {
-        textFieldUsername.setText(username);
-        passwordFieldPassword.setText(password);
     }
 }
