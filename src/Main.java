@@ -42,12 +42,11 @@ public class Main extends Application {
         }
 
         /* Start the main app */
-        GameSession.setSession(new Account("jagermeester", "rrr"));
         Log.info("Starting views...");
         try {
             var app = new App(primaryStage);
 
-            app.navigate("ObserverView", 350, 550);
+            app.navigate(EnvironmentVariables.MAIN_VIEW, 350, 550);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
             alert.showAndWait();
