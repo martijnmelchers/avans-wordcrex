@@ -47,7 +47,7 @@ public class Letter {
         return _symbol;
     }
 
-    public Integer get_letterId()
+    public Integer getLetterId()
     {
         return _letterId;
     }
