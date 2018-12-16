@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class GameController extends Controller{
 
-    private BoardView boardView;
+    private BoardView _boardView;
     private GameModel _gameModel;
 
     public GameController() {

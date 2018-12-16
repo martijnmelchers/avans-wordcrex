@@ -42,12 +42,12 @@ public class Letter {
 
     public Letter(){}
 
-    public String get_symbol()
+    public String getSymbol()
     {
         return _symbol;
     }
 
-    public Integer get_letterId()
+    public Integer getLetterId()
     {
         return _letterId;
     }

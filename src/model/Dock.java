@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class Dock
 {
     private HandLetter[] letters;
-    private Database db;
+    private Database _db;
 
 
     public Dock(boolean createNewHand,int gameId,int turnId)
@@ -28,7 +28,7 @@ public class Dock
         try {
             db = DocumentSession.getDatabase();
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error(e);
         }
         letters = new HandLetter[7];
         if(createNewHand)
@@ -98,7 +98,7 @@ public class Dock
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
             return;
         }
 
@@ -258,7 +258,7 @@ public class Dock
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
         }
 
         List<Integer> ids = usedLetters.stream().map(a->a.letter.get_letterId()).collect(Collectors.toList());

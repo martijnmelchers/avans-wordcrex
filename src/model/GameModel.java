@@ -20,11 +20,11 @@ public class GameModel {
 
     private ArrayList<String> _allowedWords = new ArrayList<>();
 
-    Database db;
+    private Database _db;
 
-    private Timer timer;
+    private Timer _timer;
 
-    private Dock dock;
+    private Dock _dock;
 
     private Board _board;
 
@@ -316,7 +316,7 @@ public class GameModel {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
         }
     }
 
@@ -465,7 +465,7 @@ public class GameModel {
             }
 
         }catch (Exception e){
-            e.printStackTrace();
+            Log.error(e);
         }
         //db.insert(new InsertedKeys())
         _board.clearPlacedCoords();
@@ -564,7 +564,7 @@ public class GameModel {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
         }
     }
 
@@ -579,7 +579,7 @@ public class GameModel {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
         }
         return false;
     }
@@ -607,7 +607,7 @@ public class GameModel {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Log.error(e);
         }
         return false;
 

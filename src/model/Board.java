@@ -43,7 +43,7 @@ public class Board {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Handle.error(e);
         }
     }
 
