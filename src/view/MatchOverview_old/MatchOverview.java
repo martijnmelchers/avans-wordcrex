@@ -123,7 +123,7 @@ public class MatchOverview extends View {
 
     private void initiateInvitationHeader(ArrayList<Game> games) {
         for (Game game : games) {
-            String opponentName = game.player2.getUsername();
+            String opponentName = game.getPlayer2().getUsername();
             _headerInvitations.addPlayButton(controller, this::onInvitationClick, game, "Uitdaging naar " + opponentName + " gestuurd");
         }
     }
@@ -136,7 +136,7 @@ public class MatchOverview extends View {
 
     private void initiateTheirTurnHeader(ArrayList<Game> games) {
         for (Game game : games) {
-            String opponentName = game.player2.getUsername();
+            String opponentName = game.getPlayer2().getUsername();
 
             _headerTheirTurn.addPlayButton(controller, this::onTheirTurnClick, game, opponentName + " moet zijn beurt nog spelen.");
         }
@@ -202,9 +202,9 @@ public class MatchOverview extends View {
 
         List<Game> games = foundGames != null ? foundGames : controller.getGames();
         for (Game game : games) {
-            if (game.gameState.isRequest()) {
+            if (game.getGameState().isRequest()) {
                 invitations.add(game);
-            } else if (game.gameState.isPlaying()) {
+            } else if (game.getGameState().isPlaying()) {
                 // Differ in your turns
                 if (currentTurnHasAction(game) && !player2TurnHasAction(game)) {
                     theirTurns.add(game);

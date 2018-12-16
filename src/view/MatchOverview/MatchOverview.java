@@ -1,13 +1,11 @@
 package view.MatchOverview;
 
-import controller.BoardController;
 import controller.MatchOverviewController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -89,7 +87,7 @@ public class MatchOverview extends View {
 
 
         for (var game : games) {
-            switch (game.gameState.getState()) {
+            switch (game.getGameState().getState()) {
                 case "request": {
                     gameObservableList.add(game);
                     break;
@@ -159,7 +157,7 @@ public class MatchOverview extends View {
         }
         else{
             filteredGames.setPredicate(s -> {
-                return (s.player1.getUsername().contains(filter) || s.player2.getUsername().contains(filter));
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
             });
         }
 
@@ -168,7 +166,7 @@ public class MatchOverview extends View {
         }
         else{
             filteredGames1.setPredicate(s -> {
-                return (s.player1.getUsername().contains(filter) || s.player2.getUsername().contains(filter));
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
             });
         }
 
@@ -177,7 +175,7 @@ public class MatchOverview extends View {
         }
         else{
             filteredGames2.setPredicate(s -> {
-                return (s.player1.getUsername().contains(filter) || s.player2.getUsername().contains(filter));
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
             });
         }
 
@@ -212,7 +210,7 @@ public class MatchOverview extends View {
     private void invitationView(){
 
         try{
-            this._controller.navigate("MatchInvitationview");
+            this._controller.navigate("MatchInvitationView");
         }
         catch(Exception e){
 

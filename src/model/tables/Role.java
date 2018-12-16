@@ -11,7 +11,10 @@ public class Role {
     @PrimaryKey
     private String role;
 
-    public Role(){}
+    public Role() {
+    }
 
-    public String getRole(){return role;}
+    public String getRole() {
+        return role;
+    }
 }
