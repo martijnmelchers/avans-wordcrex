@@ -25,6 +25,7 @@ public class ObserverController extends Controller{
         try {
             GameSession.setGame(DocumentSession.getDatabase().select(Game.class,
                     Arrays.asList( new Clause(new TableAlias("game", -1), "game_id", CompareMethod.EQUAL, gameID))).get(0));
+            getController(GameController.class).startGame();
         } catch (Exception e) {
             Log.error(e);
         }
