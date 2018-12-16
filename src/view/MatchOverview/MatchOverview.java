@@ -67,7 +67,7 @@ public class MatchOverview extends View {
         try {
             this._controller = this.getController(MatchOverviewController.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
         renderGames();
     }

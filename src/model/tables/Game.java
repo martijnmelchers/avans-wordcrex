@@ -80,12 +80,16 @@ public class Game {
         return answer;
     }
 
+    public void setAnswer(String answer) {
+        this._answerPlayer2 = answer;
+    }
+
     public Account getWinner() {
         return winner;
     }
 
-    public void setWinner(String winner) {
-        this._usernameWinner = winner;
+    public void setWinner(String username) {
+        this._usernameWinner = username;
     }
 
     public String getPlayer1Username() {
@@ -101,18 +105,14 @@ public class Game {
         return (isActive() && (this._usernamePlayer1.equals(name) || this._usernamePlayer1.equals(name)));
     }
 
-    public void setWinner(String username){
-        this._usernameWinner = username;
+    public Integer getGameId() {
+        return _gameId;
     }
 
-    public Integer getGameID() { return _gameId; }
-
-    public void setState(String state){
+    public void setState(String state) {
         this._gameState = state;
     }
-    public void setAnswer(String answer){
-        this._answerPlayer2 = answer;
-    }
+
     private boolean isActive() {
         return (this._gameState.equals("playing") || this._answerPlayer2.equals("unknown") || (this._gameState.equals("request") && this._answerPlayer2.equals("accepted")));
     }

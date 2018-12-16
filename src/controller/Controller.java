@@ -25,18 +25,18 @@ public abstract class Controller {
     }
 
     public void navigate(String fxmlFileName, int width, int height) throws IOException {
-        application.navigate(fxmlFileName, width, height);
+        this.application.navigate(fxmlFileName, width, height);
     }
 
     public void navigate(String fxmlFileName) {
         try {
-            application.navigate(fxmlFileName);
+            this.application.navigate(fxmlFileName);
         } catch (Exception e) {
             Log.error(e, false);
         }
     }
 
-    public  <T extends Controller> T getController(Class<T> cType) throws Exception {
+    public <T extends Controller> T getController(Class<T> cType) throws Exception {
         return application.getController(cType);
     }
 

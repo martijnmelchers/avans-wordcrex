@@ -44,65 +44,74 @@ public class GameModel {
             Log.error(e);
         }
 
-        _gameId = game.getGameID();
+        if (this._db == null)
+            return;
+
+        _gameId = game.getGameId();
         _board = new Board();
 
         try {
             var clauses = new ArrayList<Clause>();
             clauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, _gameId));
 
-            for (Turn turn : _db.select(Turn.class, clauses)) {
+            for (Turn turn : this._db.select(Turn.class, clauses)) {
                 if (_turnId < turn.getTurnID()) _turnId = turn.getTurnID();
             }
 
-            _playerName1 = game.getPlayer1Username();
-            _playerName2 = game.getPlayer2Username();
+            this._playerName1 = game.getPlayer1Username();
+            this._playerName2 = game.getPlayer2Username();
 
             if (isPlayerOne()) {
-                if (_turnId == 0) {
-                    createNewTurn();
-                    _dock = new Dock(true, _gameId, _turnId);
+                if (this._turnId == 0) {
+                    this.createNewTurn();
+                    this._dock = new Dock(true, this._gameId, this._turnId);
                 } else {
-                    _dock = new Dock(false, _gameId, _turnId);
+                    this._dock = new Dock(false, this._gameId, this._turnId);
                 }
 
             } else {
-                _dock = new Dock(false, _gameId, _turnId);
+                this._dock = new Dock(false, _gameId, _turnId);
             }
 
-            _board.getBoardFromDatabase(_gameId, _turnId);
+            this._board.getBoardFromDatabase(this._gameId, this._turnId);
 
             clauses.clear();
 
-            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, _gameId));
-            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.LESS_EQUAL, _turnId));
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, this._gameId));
+            clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.LESS_EQUAL, this._turnId));
+
             try {
-                int score = 0;
-                List<TurnPlayer1> turnPlayer1s = _db.select(TurnPlayer1.class, clauses);
-                for (TurnPlayer1 turnPlayer1 : turnPlayer1s) {
+                var score = 0;
+
+                for (TurnPlayer1 turnPlayer1 : _db.select(TurnPlayer1.class, clauses))
                     score += (turnPlayer1.getScore() + turnPlayer1.getBonus());
-                }
+
+
                 this._playerScore1 = score;
+
             } catch (Exception e) {
-                Log.error(e, false);
+                Log.error(e);
             }
 
             clauses.clear();
 
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, _gameId));
             clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.LESS_EQUAL, _turnId));
+
             try {
-                int score = 0;
-                List<TurnPlayer2> turnPlayer2s = _db.select(TurnPlayer2.class, clauses);
-                for (TurnPlayer2 turnPlayer2 : turnPlayer2s) {
+                var score = 0;
+
+                for (TurnPlayer2 turnPlayer2 : _db.select(TurnPlayer2.class, clauses))
                     score += (turnPlayer2.getScore() + turnPlayer2.getBonus());
-                }
+
                 this._playerScore2 = score;
+
             } catch (Exception e) {
-                Log.error(e, false);
+                Log.error(e);
             }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
 
     }

@@ -72,7 +72,7 @@ public class MatchView {
                     //Uitnodiging van ons
                     inviteTxt.setText("Uitnodiging naar: " + player2);
                     String antwoord = "reactie: ";
-                    switch(match.answer.get_type()){
+                    switch(match.getAnswer().get_type()){
                         case "accepted": {
                             inviteStatusTxt.setText(antwoord+"Geaccepteerd");
                             matchPlayButton.setDisable(false);
@@ -122,5 +122,5 @@ public class MatchView {
     public Button getMatchSurrenderButton(){ return this.matchSurrenderButton; }
 
     @FXML
-    private void onMatchPlay() { System.out.println(match.getGameID()); }
+    private void onMatchPlay() { System.out.println(match.getGameId()); }
 }

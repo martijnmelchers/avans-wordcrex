@@ -6,12 +6,10 @@ import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
-import model.database.enumerators.LinkMethod;
 import model.helper.Log;
 import model.tables.Game;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class ObserverController extends Controller{
 
@@ -31,7 +29,7 @@ public class ObserverController extends Controller{
         }
     }
     public String[] getGames(String name){
-        return model.searchPlayers(name).stream().map(x -> x.getGameID() + " " +
+        return model.searchPlayers(name).stream().map(x -> x.getGameId() + " " +
                 x.getPlayer1().getUsername() + " VS " +
                 x.getPlayer2().getUsername() ).toArray(String[]::new);
     }

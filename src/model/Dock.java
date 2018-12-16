@@ -91,7 +91,7 @@ public class Dock {
 
         // Database returns double results of one table so this function filters doubles
         for (HandLetter h : handLetters) {
-            if (!filtered.stream().anyMatch(a -> a.letter.getLetterId() == h.letter.getLetterId() && a.letter.game.getGameID() == gameId)) {
+            if (!filtered.stream().anyMatch(a -> a.letter.getLetterId() == h.letter.getLetterId() && a.letter.game.getGameId() == gameId)) {
                 filtered.add(h);
             }
         }

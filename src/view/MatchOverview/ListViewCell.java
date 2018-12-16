@@ -1,4 +1,5 @@
 package view.MatchOverview;
+
 import controller.MatchOverviewController;
 import javafx.scene.control.ListCell;
 import model.GameSession;
@@ -7,20 +8,19 @@ import model.tables.Game;
 public final class ListViewCell extends ListCell<Game> {
 
     private MatchOverviewController _controller;
+
     @Override
-    public void updateItem(Game game, boolean empty)
-    {
-        super.updateItem(game,empty);
-        if(empty){
+    public void updateItem(Game game, boolean empty) {
+        super.updateItem(game, empty);
+        if (empty) {
             //TODO: headers can be implemented this way.
             setGraphic(null);
-        }
-        else{
+        } else {
             MatchView view = new MatchView(game);
             setGraphic(view.getAnchor());
 
-            if(game.gameState.isRequest() && !game.answer.get_type().equals("accepted")) {
-                if(!game.getPlayer1Username().equals(GameSession.getUsername())){
+            if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted")) {
+                if (!game.getPlayer1Username().equals(GameSession.getUsername())) {
                     view.getMatchSurrenderButton().setDisable(false);
                     view.getMatchPlayButton().setDisable(false);
                 }
@@ -30,15 +30,14 @@ public final class ListViewCell extends ListCell<Game> {
             view.getMatchPlayButton().setOnAction((e) -> {
                 GameSession.setGame(game);
 
-                if(game.gameState.isRequest() && !game.answer.get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())){
+                if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())) {
                     this._controller.acceptInvite(game);
                     System.out.println("Invite accepted");
-                }
-                else {
-                    try{
+                } else {
+                    try {
+                        this._controller.start();
                         this._controller.navigate("BoardView");
-                    }
-                    catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
@@ -52,7 +51,7 @@ public final class ListViewCell extends ListCell<Game> {
     }
 
 
-    public void setController(MatchOverviewController controller){
+    public void setController(MatchOverviewController controller) {
         _controller = controller;
     }
 }
