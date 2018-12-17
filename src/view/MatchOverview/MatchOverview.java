@@ -130,7 +130,7 @@ public class MatchOverview extends View {
                 }
 
                 case "finished": {
-                    //TODO: show finished games
+                    this._gameObservableList2.add(game);
                     break;
                 }
 
@@ -261,7 +261,7 @@ public class MatchOverview extends View {
     private void invitationView() {
 
         try {
-            this._controller.navigate("MatchInvitationView");
+            this._controller.navigate("MatchInvitationView", 350, 550);
         } catch (Exception e) {
             Log.error(e);
         }
