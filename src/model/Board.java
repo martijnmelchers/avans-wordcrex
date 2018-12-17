@@ -134,7 +134,7 @@ public class Board {
         ArrayList<Tile> tilesX = new ArrayList<>();
         ArrayList<Tile> tilesY = new ArrayList<>();
 
-        if (!newTilesConnected())
+        if (_placedCoords.size() == 0 || !newTilesConnected())
         {
             return null;
         }
