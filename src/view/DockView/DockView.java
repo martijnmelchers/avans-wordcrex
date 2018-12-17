@@ -35,7 +35,6 @@ public class DockView
     public void setParent(BoardView board)
     {
         this.board = board;
-
         try
         {
             controller = board.getController(GameController.class);
@@ -43,8 +42,6 @@ public class DockView
         {
             Log.error(e);
         }
-
-
         updateDock();
     }
 

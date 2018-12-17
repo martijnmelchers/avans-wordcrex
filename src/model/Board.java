@@ -207,7 +207,7 @@ public class Board {
         List<Vector2> secondaryWordsHorizontal = new ArrayList<Vector2>();
         List<Vector2> secondaryWordsVertical = new ArrayList<Vector2>();
         List<Tile> mainWord = new ArrayList<Tile>();
-        String word;
+        String word = "";
         if (isHorizontal) {
             word = "";
             mainWord = new ArrayList<Tile>();
@@ -247,13 +247,14 @@ public class Board {
                 }
             }
         }
-
+        if (word == "")
+            return null;
         Points points = this.checkSubWordsVert(secondaryWordsVertical);
         points.add(this.checkSubWordsHorz(secondaryWordsHorizontal));
-        points.add(calculatePoints(mainWord.toArray(new Tile[0])));
+        if (wordChecker.check(word))
+            points.add(calculatePoints(mainWord.toArray(new Tile[0])));
 
         //return new CheckInfo(0,)
-
 
 
         Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
