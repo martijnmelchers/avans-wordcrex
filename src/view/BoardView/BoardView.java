@@ -316,12 +316,14 @@ public class BoardView extends View {
 
     public void displayChat() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
-            AnchorPane chatView = loader.load();
+            if(!GameSession.hasRole("observer")) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
+                AnchorPane chatView = loader.load();
 
-            _chatViewController = loader.getController();
+                _chatViewController = loader.getController();
 
-            chatViewContainer.getChildren().add(chatView);
+                chatViewContainer.getChildren().add(chatView);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

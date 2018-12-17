@@ -19,7 +19,6 @@ import model.tables.Chatline;
 import view.View;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
