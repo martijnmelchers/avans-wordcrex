@@ -39,7 +39,7 @@ public class JoinResult {
     }
 
     public void addAliases(ArrayList<TableAlias> newAliases) {
-        for(TableAlias newAlias : newAliases) {
+        for (TableAlias newAlias : newAliases) {
             boolean match = false;
             for (TableAlias alias : this.aliases) {
                 if (alias.getTable().equals(newAlias.getTable()) && alias.getIdentifier().equals(newAlias.getIdentifier()))
@@ -68,7 +68,7 @@ public class JoinResult {
     }
 
     public ArrayList<TableAlias> getAliases() {
-        return aliases;
+        return this.aliases;
     }
 
     public ArrayList<Select> getSelects() {

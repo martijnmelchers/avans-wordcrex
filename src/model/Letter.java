@@ -10,27 +10,28 @@ public class Letter {
     private int _letterId;
 
     public Letter(String letter) {
-        _letter = letter;
+        this._letter = letter;
     }
 
     public String getLetter() {
-        return _letter;
+        return this._letter;
     }
+    public int getPoints() { return _points; }
 
     public void setLetter(String letter) {
-        _letter = letter;
+        this._letter = letter;
     }
 
     public void setPoints(int points) {
-        _points = points;
+        this._points = points;
     }
 
     public void setId(int letterId) {
-        _letterId = letterId;
+        this._letterId = letterId;
     }
 
     public int getid() {
-        return _letterId;
+        return this._letterId;
     }
 
 }

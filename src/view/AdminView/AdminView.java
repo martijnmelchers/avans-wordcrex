@@ -26,7 +26,6 @@ public class AdminView extends View {
     @FXML
     private ListView<String> roleList;
     private ObservableList<String> listViewItems;
-    private ObservableList<String> roleViewItems;
     private FilteredList<String> filteredNames;
 
     @FXML
@@ -43,24 +42,24 @@ public class AdminView extends View {
 
     @FXML
     public void filter() {
-        String filter = searchField.getText();
-        this.filteredNames = new FilteredList<>(listViewItems, s -> true);
+        String filter = this.searchField.getText();
+        this.filteredNames = new FilteredList<>(this.listViewItems, s -> true);
         if (filter == null || filter.length() == 0) {
-            filteredNames.setPredicate(s -> true);
+            this.filteredNames.setPredicate(s -> true);
         } else {
-            filteredNames.setPredicate(s -> s.contains(filter));
+            this.filteredNames.setPredicate(s -> s.contains(filter));
         }
-        userList.setItems(filteredNames);
+        this.userList.setItems(this.filteredNames);
     }
 
     public void initialize() {
-        userList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        roleList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.userList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this.roleList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        userList.setOnMouseClicked((EventHandler<Event>) event -> {
-            ObservableList<String> items = userList.getSelectionModel().getSelectedItems();
+        this.userList.setOnMouseClicked((EventHandler<Event>) event -> {
+            ObservableList<String> items = this.userList.getSelectionModel().getSelectedItems();
             if (items.size() == 1) {
-                showRoles(items.get(0));
+                this.showRoles(items.get(0));
             }
         });
 
@@ -69,7 +68,7 @@ public class AdminView extends View {
 
     @Override
     protected void loadFinished() {
-        showInfo();
+        this.showInfo();
     }
 
 
@@ -80,30 +79,30 @@ public class AdminView extends View {
         }
 
         this.listViewItems = this.userList.getItems();
-        this.roleViewItems = this.roleList.getItems();
+        ObservableList<String> roleViewItems = this.roleList.getItems();
 
 
         if (this.filteredNames == null) {
             this.listViewItems.clear();
         }
-        this.roleViewItems.clear();
+        roleViewItems.clear();
 
         var userList = this.controller.getUserList();
         var roleList = this.controller.getRoles();
 
         for (Role role : roleList)
-            this.roleViewItems.add(role.getRole());
+            roleViewItems.add(role.getRole());
 
         for (AccountInfo user : userList) {
-            if (!listViewItems.contains(user.getAccount().getUsername())) {
-                listViewItems.add(user.getAccount().getUsername());
+            if (!this.listViewItems.contains(user.getAccount().getUsername())) {
+                this.listViewItems.add(user.getAccount().getUsername());
             }
         }
     }
 
     @FXML
     private void assignRoles() {
-        ObservableList<String> selectedUsers = userList.getSelectionModel().getSelectedItems();
+        ObservableList<String> selectedUsers = this.userList.getSelectionModel().getSelectedItems();
 
         for (String user : selectedUsers) {
 
@@ -122,11 +121,11 @@ public class AdminView extends View {
 
     private void showRoles(String username) {
         List<AccountInfo> roles = this.controller.getRoles(username);
-        roleList.getSelectionModel().clearSelection();
-        for (String role : roleList.getItems()) {
+        this.roleList.getSelectionModel().clearSelection();
+        for (String role : this.roleList.getItems()) {
             for (AccountInfo userRole : roles) {
                 if (role.equals(userRole.getRole().getRole())) {
-                    roleList.getSelectionModel().select(role);
+                    this.roleList.getSelectionModel().select(role);
                 }
             }
         }

@@ -28,20 +28,19 @@ public class GameWord {
     }
 
 
-
     public String getWord() {
-        return word;
+        return this.word;
     }
 
     public String getLetterset_code() {
-        return letterset_code;
+        return this.letterset_code;
     }
 
     public String getState() {
-        return state;
+        return this.state;
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 }

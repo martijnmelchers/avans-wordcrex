@@ -72,9 +72,9 @@ class QueryBuilder {
     private static String buildSelectFields(List<Select> selects) {
         var builder = new StringBuilder();
 
-        for(Select select : selects) {
+        for (Select select : selects) {
             builder.append(select.build());
-            if(selects.indexOf(select) != selects.size() - 1)
+            if (selects.indexOf(select) != selects.size() - 1)
                 builder.append(", ");
         }
 
@@ -86,7 +86,7 @@ class QueryBuilder {
     public static String buildJoin(List<Join> joins) throws Exception {
         var builder = new StringBuilder();
 
-        for(Join join : joins) {
+        for (Join join : joins) {
             builder.append(join.build()).append("\n");
         }
 

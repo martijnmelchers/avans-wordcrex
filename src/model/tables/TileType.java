@@ -11,5 +11,6 @@ public class TileType {
     @PrimaryKey
     private String _tileType;
 
-    public TileType() {}
+    public TileType() {
+    }
 }

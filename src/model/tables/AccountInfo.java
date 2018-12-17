@@ -30,10 +30,6 @@ public class AccountInfo {
         this.roleId = role;
     }
 
-    public void setRoleId(String role) {
-        this.roleId = role;
-    }
-
     public String getUsername() {
         return this.account.getUsername();
     }
@@ -42,11 +38,15 @@ public class AccountInfo {
         return this.roleId;
     }
 
+    public void setRoleId(String role) {
+        this.roleId = role;
+    }
+
     public Role getRole() {
         return this.role;
     }
 
     public Account getAccount() {
-        return account;
+        return this.account;
     }
 }

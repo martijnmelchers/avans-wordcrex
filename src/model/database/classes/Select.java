@@ -10,6 +10,6 @@ public class Select {
     }
 
     public String build() {
-        return String.format("`%s`.`%s` AS '%s.%s'", table.build(), column, table.build(), column);
+        return String.format("`%s`.`%s` AS '%s.%s'", this.table.build(), this.column, this.table.build(), this.column);
     }
 }

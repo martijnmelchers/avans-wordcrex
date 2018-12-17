@@ -107,6 +107,14 @@ public class Dock {
         return letters;
     }
 
+    public model.Letter getLetterType(HandLetter letter, int points) {
+        var letterType = new model.Letter(letter.letter.getSymbol());
+        letterType.setId(letter.getLetterId());
+        letterType.setPoints(points);
+        return letterType;
+
+    }
+
     private void clearAll() {
         for (int i = 0; i < letters.length; i++) {
             letters[i] = null;
@@ -144,9 +152,22 @@ public class Dock {
             }
         }
 
+        if(notUsed.size()==0)
+        {
+            return;
+        }
+
         for (int i = 0; i < letters.length; i++) {
             if (letters[i] == null) {
-                int randomIndex = new Random().nextInt(notUsed.size() - 1) + 1;
+                int randomIndex;
+                if(notUsed.size() == 1)
+                {
+                    randomIndex = 0;
+                }
+                else
+                {
+                    randomIndex = new Random().nextInt(notUsed.size() - 1) + 1;
+                }
                 Letter l = notUsed.get(randomIndex);
                 Turn t = new Turn(gameId, turnId);
                 letters[i] = new HandLetter(l.getLetterId(), turnId, gameId, l, t);
@@ -222,7 +243,7 @@ public class Dock {
         String s = "";
         String s1 = "";
         for (HandLetter l : letters) {
-            s += l.get_letterId() + " ";
+            s += l.getLetterId() + " ";
             s1 += l.letter.getSymbol();
         }
         System.out.println(s);

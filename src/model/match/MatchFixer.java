@@ -1,20 +1,22 @@
-        package model.match;
+package model.match;
 
-        import model.GameSession;
-        import model.database.DocumentSession;
-        import model.database.classes.Clause;
-        import model.database.classes.TableAlias;
-        import model.database.enumerators.CompareMethod;
-        import model.database.enumerators.LinkMethod;
-        import model.database.services.Database;
-        import model.helper.Log;
-        import model.tables.AccountInfo;
-        import model.tables.Game;
+import model.GameModel;
+import model.GameSession;
+import model.database.DocumentSession;
+import model.database.classes.Clause;
+import model.database.classes.TableAlias;
+import model.database.enumerators.CompareMethod;
+import model.database.enumerators.LinkMethod;
+import model.database.services.Database;
+import model.helper.Log;
+import model.tables.AccountInfo;
+import model.tables.Game;
 
-        import java.sql.SQLException;
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.Optional;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 
 public class MatchFixer {
 
@@ -25,30 +27,32 @@ public class MatchFixer {
 
     public MatchFixer() {
         try {
-            _db = DocumentSession.getDatabase();
+            this._db = DocumentSession.getDatabase();
         } catch (SQLException e) {
             Log.error(e);
         }
-
-        /* Cache the games & accounts when the view is created, this is so we don't keep sending queries to the database */
-
     }
 
     public void invitePlayer(String Player) {
         try {
             var game = new Game("request", "NL", GameSession.getUsername(), Player, "unknown");
-
             this._db.insert(game);
+
+
+            var clauses = new ArrayList<Clause>();
+
+            clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.EQUAL, GameSession.getUsername()));
+            clauses.add(new Clause(new TableAlias("game", -1), "username_player2", CompareMethod.EQUAL, Player));
+
+            var createdGame = this._db.select(Game.class, clauses).get(0);
+            var gameModel = new GameModel(createdGame);
         } catch (Exception e) {
             Log.error(e);
         }
+
     }
 
     public List<AccountInfo> searchPlayers(String name) {
-        if(this.cachedAccounts == null){
-            this.cacheAccounts();
-            this.cacheGames();
-        }
         return this.filteredPlayers(name);
     }
 
@@ -58,7 +62,7 @@ public class MatchFixer {
         clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, "player"));
 
         try {
-            this.cachedAccounts = _db.select(AccountInfo.class, clauses);
+            this.cachedAccounts = this._db.select(AccountInfo.class, clauses);
         } catch (Exception e) {
             Log.error(e, true);
         }
@@ -96,4 +100,10 @@ public class MatchFixer {
         }
     }
 
+    public void refreshCache() {
+        Log.info("Fetching accounts and games for invitation view...");
+        this.cacheAccounts();
+        this.cacheGames();
+        Log.info("Fetch complete!");
+    }
 }

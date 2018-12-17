@@ -15,12 +15,12 @@ public class CheckInfo {
     }
 
     public Points getPoints() {
-        return _score;
+        return this._score;
     }
 
 
 
     public Vector2[] getCoordinates() {
-        return _coordinates;
+        return this._coordinates;
     }
 }

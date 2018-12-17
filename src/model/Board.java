@@ -52,6 +52,10 @@ public class Board {
         this.createDefaultBoard();
     }
 
+    public int getLetterPoint(String letter) {
+        return  _letterValues.get(letter.toUpperCase());
+    }
+
     public void getBoardFromDatabase(int gameId, Integer turn_id) // with turn_id you can return state of board that moment (For history mode)
     {
         this.createDefaultBoard();

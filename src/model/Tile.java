@@ -16,59 +16,59 @@ public class Tile {
 
     //Laden van de tiles
     public Tile(TileType tileType, Color color) {
-        _tileState = TileState.LOCKED;
-        _tileType = tileType;
-        _tileColor = color;
-        _letter = new Letter("");
+        this._tileState = TileState.LOCKED;
+        this._tileType = tileType;
+        this._tileColor = color;
+        this._letter = new Letter("");
     }
 
     //Laden van de letters
     public Tile(String letter) {
-        _tileState = TileState.UNLOCKED;
-        _tileType = TileType.STANDARD;
-        _tileColor = Color.WHITE;
-        _letter = new Letter(letter);
+        this._tileState = TileState.UNLOCKED;
+        this._tileType = TileType.STANDARD;
+        this._tileColor = Color.WHITE;
+        this._letter = new Letter(letter);
     }
 
     public TileType getType() {
-        return _tileType;
+        return this._tileType;
     }
 
     public TileState getState() {
-        return _tileState;
+        return this._tileState;
     }
 
     public void setState(TileState tileState) {
-        _tileState = tileState;
+        this._tileState = tileState;
     }
 
     public Color getColor() {
-        return _tileColor;
+        return this._tileColor;
     }
 
     public void setColor(Color color) {
-        _tileColor = color;
+        this._tileColor = color;
     }
 
     public Letter getLetterType() {
-        return _letter;
+        return this._letter;
     }
 
     public boolean isEmpty() {
-        System.out.println(_letter.getLetter());
-        return _letter.getLetter().equals("");
+        System.out.println(this._letter.getLetter());
+        return this._letter.getLetter().equals("");
     }
 
     public void replace(String letter, int points, int letterId) {
-        _letter.setLetter(letter);
-        _letter.setPoints(points);
-        _letter.setId(letterId);
+        this._letter.setLetter(letter);
+        this._letter.setPoints(points);
+        this._letter.setId(letterId);
     }
 
     public void replace(String letter, int points, int letterId, Color color) {
-        _letter.setLetter(letter);
-        _letter.setPoints(points);
-        _letter.setId(letterId);
-        _tileColor = color;
+        this._letter.setLetter(letter);
+        this._letter.setPoints(points);
+        this._letter.setId(letterId);
+        this._tileColor = color;
     }
 }

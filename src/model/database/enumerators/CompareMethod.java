@@ -17,6 +17,6 @@ public enum CompareMethod {
     }
 
     public String getMethod() {
-        return method;
+        return this.method;
     }
 }
