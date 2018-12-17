@@ -61,15 +61,15 @@ public class MatchOverviewModel {
 
                 if (isPlayer1) {
                     if (!currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
-                        MatchOverviewModel.currentTurns.put(game, true);
+//                        MatchOverviewModel.currentTurns.put(game, true);
                     } else {
-                        MatchOverviewModel.currentTurns.put(game, currentTurnHasAction(game));
+                        MatchOverviewModel.currentTurns.put(game, !currentTurnHasAction(game));
                     }
                 } else {
                     if (!currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
                         MatchOverviewModel.currentTurns.put(game, true);
                     } else {
-                        MatchOverviewModel.currentTurns.put(game, currentTurnPlayer2HasAction(game));
+                        MatchOverviewModel.currentTurns.put(game, !currentTurnPlayer2HasAction(game));
                     }
                 }
             }
@@ -142,24 +142,17 @@ public class MatchOverviewModel {
         return latestTurn;
     }
 
-    public ArrayList<Game> getAllGames() {
+    public List<Game> getAllGames() {
         try {
-            ArrayList<Game> games = new ArrayList<>();
 
             var clauses = new ArrayList<Clause>();
 
-            for (Game game : _db.select(Game.class, clauses)) {
-                if (!game.getGameState().isPlaying())
-//                    continue;
-
-                    games.add(game);
-            }
+            var games = _db.select(Game.class);
 
             return games;
         } catch (Exception e) {
             Log.error(e);
         }
-
         return null;
     }
 

@@ -33,7 +33,7 @@ public class AccountInformation extends View {
     }
 
     private void getAccountInformation() {
-        this.role.setText(GameSession.getRole().getRole());
+        this.role.setText(GameSession.getRoles().get(0).getRole());
         this.username.setText(GameSession.getUsername());
     }
 
