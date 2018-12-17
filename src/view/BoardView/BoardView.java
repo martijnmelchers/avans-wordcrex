@@ -3,6 +3,7 @@ package view.BoardView;
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -11,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.GameSession;
+import model.Letter;
 import model.Tile;
 import model.TileState;
 import model.helper.Log;
@@ -18,6 +20,8 @@ import view.DockView.DockView;
 import view.View;
 
 import java.util.stream.Collectors;
+
+import static javafx.scene.paint.Color.rgb;
 
 
 public class BoardView extends View {
@@ -154,13 +158,22 @@ public class BoardView extends View {
                 Text text = new Text();
                 text.setMouseTransparent(true);
 
+                Text p = new Text();
+                p.setMouseTransparent(true);
+                p.setText(Integer.toString(tiles[y][x].getLetterType().getPoints()));
+                p.setFill(rgb(130, 130, 130));
+                StackPane.setAlignment(p, Pos.CENTER_LEFT);
+                p.setTranslateY(-10);
+                p.setTranslateX(2);
+
                 var letter = tiles[y][x].getLetterType().getLetter();
                 text.setText(letter.equals("") ? tiles[y][x].getType().toString() : tiles[y][x].getLetterType().getLetter());
 
                 GridPane.setRowIndex(stackPane, y);
                 GridPane.setColumnIndex(stackPane, x);
 
-                stackPane.getChildren().addAll(rect, text);
+                if(!tiles[y][x].isEmpty()) { stackPane.getChildren().addAll(rect, text, p); }
+                else { stackPane.getChildren().addAll(rect, text); }
                 _gridPane.getChildren().add(stackPane);
             }
         }
@@ -198,7 +211,7 @@ public class BoardView extends View {
        for (Tile tile : _controller.resetTiles())
        {
            int letterid = tile.getLetterType().getid();
-           dockController.addCharacter(tile.getLetterType().getLetter(), tile.getLetterType().getid());
+           dockController.addCharacter(tile.getLetterType().getLetter(), tile.getLetterType());
        }
        update(false);
        updateLocalScore("0p");
@@ -230,10 +243,10 @@ public class BoardView extends View {
         if(tiles[row][col].getState() == TileState.UNLOCKED)
         {
             String character = ((Text)tile.getChildren().get(1)).getText();
-            int letterid = tiles[row][col].getLetterType().getid();
+            Letter letter = tiles[row][col].getLetterType();
             _controller.resetTile(col,row);
             update(false);
-            StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY(),letterid);
+            StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY(), letter);
 
             tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
             tile.setOnMouseReleased(event-> Event.fireEvent(sp,event ));

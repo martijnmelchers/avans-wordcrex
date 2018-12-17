@@ -46,6 +46,11 @@ public class Board {
         put("Y", 9);
         put("Z", 6);
     }};
+
+    public int getLetterPoint(String letter){
+        return _letterValues.get(letter.toUpperCase());
+    }
+
     private Tile[][] _tiles = new Tile[15][15];
 
     public Board() {
@@ -198,7 +203,7 @@ public class Board {
 
         Points points = calculatePoints(words.toArray(new Tile[0]));
 */
-        return null//new CheckInfo(points, tileArr, coordinatesArr);
+        return null; //new CheckInfo(points, tileArr, coordinatesArr);
     }
 
     private boolean newTilesConnected()

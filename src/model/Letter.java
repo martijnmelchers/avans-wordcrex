@@ -16,6 +16,7 @@ public class Letter {
     public String getLetter() {
         return _letter;
     }
+    public int getPoints() { return _points; }
 
     public void setLetter(String letter) {
         _letter = letter;
