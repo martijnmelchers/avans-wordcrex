@@ -4,7 +4,6 @@ import controller.ChatController;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -27,10 +26,7 @@ public class ChatView extends View {
     private GridPane messagesGridpane;
 
     @FXML
-    private ScrollPane MessagesScrollpane;
-
-    @FXML
-    private Label NameLabel;
+    private ScrollPane messagesScrollpane;
 
     @FXML
     private TextField messageField;
@@ -63,13 +59,12 @@ public class ChatView extends View {
         }
 
         // set the scroll to the bottom
-        MessagesScrollpane.setVvalue(1.0);
+        messagesScrollpane.setVvalue(1.0);
     }
 
     private void displayMessage(Chatline chatline) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("MessageView.fxml"));
-
             AnchorPane messagePane = loader.load();
 
             MessageView messageViewController = loader.getController();
@@ -131,14 +126,6 @@ public class ChatView extends View {
 
     public void onEnter() {
         sendMessage();
-    }
-
-    private void displayOpponentsName() {
-        if(GameSession.getUsername().equals(GameSession.getGame().getPlayer1Username())) {
-            NameLabel.setText(GameSession.getGame().getPlayer2Username());
-        } else {
-            NameLabel.setText(GameSession.getGame().getPlayer1Username());
-        }
     }
 
     @Override
