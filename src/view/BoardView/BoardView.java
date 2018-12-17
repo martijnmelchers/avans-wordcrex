@@ -38,6 +38,7 @@ public class BoardView extends View {
     @FXML private Button _reset;
     @FXML private Button _shuffle;
     @FXML private Button _surrender;
+    @FXML private Button _home;
 
     @FXML private Label labelLoadingScreen;
 
@@ -166,12 +167,15 @@ public class BoardView extends View {
             }
         }
         _slider.setMin(1);
-        _slider.setMax(_controller.getCurrentTurn() - 1);
-        _slider.setValue(_controller.getCurrentTurn() -1);
+        _slider.setMax(_controller.getCurrentTurn());
+        _slider.setValue(_controller.getCurrentTurn());
 
         _slider.setShowTickLabels(true);
         _slider.setShowTickMarks(true);
-        _slider.setBlockIncrement(1);
+
+        _slider.setMinorTickCount(_controller.getCurrentTurn() - 1);
+
+       // _slider.setBlockIncrement(5);
     }
 
     @FXML
@@ -245,15 +249,21 @@ public class BoardView extends View {
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 // TODO navigate to matchoverview
+                home();
             }
         });
+    }
+
+    @FXML
+    private void home(){
+        _controller.navigate("MatchOverview");
     }
 
     @FXML
     public void showTurnOnBoard(){
         //TODO update score erbij
         //TODO lock dock
-        var snap = Math.round(_slider.getValue());
+        var snap = _slider.getValue();
         _controller.showTurn((int)snap);
         _slider.setValue(snap);
         updateScore();
