@@ -1,34 +1,38 @@
 package model.moderator;
 
+import model.database.DocumentSession;
 import model.database.classes.Clause;
 import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
-import model.tables.Game;
+import model.helper.Log;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ModeratorDictionary {
     private List<GameWord> words;
-    private Database dB;
+    private Database _db;
     private List<Clause> pending;
     private List<Clause> accepted;
     private List<Clause> declined;
 
 
-    public ModeratorDictionary(Database dB) {
+    public ModeratorDictionary() {
 
-        pending = new ArrayList<Clause>();
-        accepted = new ArrayList<Clause>();
-        declined = new ArrayList<Clause>();
-        pending.add(new Clause(new TableAlias("dictionary",-1), "state", CompareMethod.EQUAL, "pending"));
-        accepted.add(new Clause(new TableAlias("dictionary",-1), "state", CompareMethod.EQUAL, "accepted"));
-        declined.add(new Clause(new TableAlias("dictionary",-1), "state", CompareMethod.EQUAL, "denied"));
+        this.pending = new ArrayList<>();
+        this.accepted = new ArrayList<>();
+        this.declined = new ArrayList<>();
+        this.pending.add(new Clause(new TableAlias("dictionary", -1), "state", CompareMethod.EQUAL, "pending"));
+        this.accepted.add(new Clause(new TableAlias("dictionary", -1), "state", CompareMethod.EQUAL, "accepted"));
+        this.declined.add(new Clause(new TableAlias("dictionary", -1), "state", CompareMethod.EQUAL, "denied"));
 
-        this.dB = dB;
+        try {
+            this._db = DocumentSession.getDatabase();
+        } catch (Exception e) {
+            Log.error(e);
+        }
 
 
     }
@@ -36,67 +40,61 @@ public class ModeratorDictionary {
     public void refreshPending() {
 
         try {
-            words  =  dB.select(GameWord.class, pending);
+            this.words = this._db.select(GameWord.class, this.pending);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
     }
+
     public void refreshAccepted() {
 
         try {
-            words = dB.select(GameWord.class, accepted);
+            this.words = this._db.select(GameWord.class, this.accepted);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
     }
+
     public void refreshDeclined() {
 
         try {
-            words = dB.select(GameWord.class, declined);
+            this.words = this._db.select(GameWord.class, this.declined);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
     }
 
-    public void acceptWords(String[] words, String userName, String letterset) {
-        setWords(words,userName,letterset,"accepted");
+    public void acceptWords(String[] words, String userName, String letterSet) {
+        this.setWords(words, userName, letterSet, "accepted");
 
 
     }
 
-    public void setWords(String[] words, String userName, String letterSet,String state) {
-        List<GameWord> acceptedWords = new ArrayList<GameWord>();
+    private void setWords(String[] words, String userName, String letterSet, String state) {
+        List<GameWord> acceptedWords = new ArrayList<>();
 
         for (String temp : words) {
-            acceptedWords.add(
-                    new GameWord(temp, letterSet, state, userName)
-            );
+            acceptedWords.add(new GameWord(temp, letterSet, state, userName));
         }
 
         try {
-            dB.update(acceptedWords);
+            this._db.update(acceptedWords);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
 
 
     }
 
-    public void declineWords(String[] words, String userName, String letterSet){
-        setWords(words,userName,letterSet,"denied");
+    public void declineWords(String[] words, String userName, String letterSet) {
+        this.setWords(words, userName, letterSet, "denied");
     }
 
     public List<GameWord> getWords() {
-        return words;
+        return this.words;
     }
-    public void close(){
-        try {
-            dB.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+
     public int getSize() {
-        return words.size();
+        return this.words.size();
     }
 }

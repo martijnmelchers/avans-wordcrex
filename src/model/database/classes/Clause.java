@@ -30,6 +30,6 @@ public class Clause {
     }
 
     public String build(boolean needsLink) throws Exception {
-        return "`" + this.table.build() + "`.`" + this.field + "` " + this.method.getMethod() + " " + ObjectHelper.objectToSQL(this.value) +  " " + (needsLink ? linkMethod.getMethod() : "");
+        return "`" + this.table.build() + "`.`" + this.field + "` " + this.method.getMethod() + " " + ObjectHelper.objectToSQL(this.value) + " " + (needsLink ? this.linkMethod.getMethod() : "");
     }
 }

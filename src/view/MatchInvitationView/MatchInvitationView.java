@@ -14,34 +14,43 @@ import java.util.ArrayList;
 public class MatchInvitationView extends View {
 
     @FXML
-    private ListView PlayerListView;
+    private ListView _playerListView;
     @FXML
-    private TextField SearchBar;
-    private ObservableList<String> playerView;
+    private TextField _searchBar;
+    private ObservableList<String> _playerView;
 
-    public void Initialize(){
-        playerView = FXCollections.observableList(new ArrayList<String>());
-        PlayerListView.setItems(playerView);
+    private MatchFixerController _controller;
+
+    private void initialize() {
+        try {
+            this._controller = this.getController(MatchFixerController.class);
+        } catch (Exception e) {
+            Log.error(e);
+        }
+        this._playerView = FXCollections.observableList(new ArrayList<>());
+        this._playerListView.setItems(this._playerView);
+        this._controller.fetchCache();
+        this.search();
     }
 
     @FXML
-    private void Search(){
-        playerView.clear();
+    private void search() {
+        this._playerView.clear();
         try {
-            playerView.addAll(this.getController(MatchFixerController.class).SearchPlayers(SearchBar.getText()));
+            this._playerView.addAll(this._controller.searchPlayers(this._searchBar.getText()));
         } catch (Exception e) {
             Log.error(e);
         }
     }
     @FXML
-    private void RequestGame(){
+    private void requestGame() {
         try {
-            this.getController(MatchFixerController.class).RequestGame(PlayerListView.getSelectionModel().getSelectedItem().toString());
+            this._controller.RequestGame(this._playerListView.getSelectionModel().getSelectedItem().toString());
         } catch (Exception e) {
             Log.error(e);
         }
         try {
-            this.getController(MatchFixerController.class).navigate("MatchOverview",620,769);
+            this._controller.navigate("MatchOverview", 620, 769);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -49,7 +58,7 @@ public class MatchInvitationView extends View {
 
     @Override
     protected void loadFinished() {
-        Initialize();
+        this.initialize();
     }
 
 }

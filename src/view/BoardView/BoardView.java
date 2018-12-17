@@ -3,11 +3,10 @@ package view.BoardView;
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.GameSession;
@@ -17,6 +16,7 @@ import model.helper.Log;
 import view.DockView.DockView;
 import view.View;
 
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 
@@ -43,6 +43,7 @@ public class BoardView extends View {
     @FXML private Label labelLoadingScreen;
 
     @FXML private VBox vboxLoadingScreen;
+    @FXML private VBox chatViewContainer;
 
     private GameController _controller;
 
@@ -60,6 +61,7 @@ public class BoardView extends View {
         updateTilesLeft();
         checkRole();
         checkIfTurnPlayed();
+        displayChat();
     }
 
     private void checkRole()
@@ -306,5 +308,17 @@ public class BoardView extends View {
             _shuffle.setVisible(true);
             _surrender.setVisible(true);
         }
+    }
+
+    public void displayChat() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
+            AnchorPane chatView = loader.load();
+
+            chatViewContainer.getChildren().add(chatView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

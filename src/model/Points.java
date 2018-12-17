@@ -6,20 +6,20 @@ public class Points {
     private int _bonus;
 
     public Points(int score, int bonus) {
-        _score = score;
-        _bonus = bonus;
+        this._score = score;
+        this._bonus = bonus;
 
     }
 
     public int score() {
-        return _score;
+        return this._score;
     }
 
     public int bonus() {
-        return _bonus;
+        return this._bonus;
     }
 
     public int total() {
-        return _score + _bonus;
+        return this._score + this._bonus;
     }
 }
