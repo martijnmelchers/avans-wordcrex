@@ -70,21 +70,24 @@ public class ModeratorDictionary {
 
     }
 
-    private void setWords(String[] words, String userName, String letterSet, String state) {
+    public void setWords(String[] words, String userName, String letterSet, String state) {
         List<GameWord> acceptedWords = new ArrayList<>();
 
         for (String temp : words) {
+            if(temp.length() > 15)
+                continue;
+
             acceptedWords.add(new GameWord(temp, letterSet, state, userName));
         }
 
         try {
-            this._db.update(acceptedWords);
+            this._db.insert(acceptedWords);
         } catch (Exception e) {
             Log.error(e);
         }
-
-
     }
+
+
 
     public void declineWords(String[] words, String userName, String letterSet) {
         this.setWords(words, userName, letterSet, "denied");
