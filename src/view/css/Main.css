@@ -52,7 +52,7 @@ ListView :odd {
 }
 
 Pane {
-    -fx-background-color: #207BCF;
+    /*-fx-background-color: #207BCF;*/
 }
 
 ScrollPane {
@@ -69,13 +69,6 @@ FlowPane {
 
 AnchorPane {
 
-}
-
-
-TextField {
-    -fx-border-color: #2c3e50;
-    -fx-border-width: 0 0 2 0;
-    -fx-background-color: transparent;
 }
 
 TextField:focused {
@@ -108,4 +101,18 @@ TextField:focused {
 
 #username, #role {
     -fx-font-size: 20;
+}
+
+HBox {
+    -fx-background-color: transparent;
+}
+
+TextField {
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-color: transparent;
+}
+
+TextField * {
+    -fx-background-color: transparent;
 }
