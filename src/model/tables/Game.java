@@ -97,7 +97,7 @@ public class Game {
     }
 
     public String getPlayer2Username() {
-        return this._usernamePlayer1;
+        return this._usernamePlayer2;
     }
 
     public boolean isParticipating(String name) {
