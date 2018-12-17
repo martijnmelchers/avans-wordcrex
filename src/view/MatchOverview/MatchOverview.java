@@ -57,7 +57,7 @@ public class MatchOverview extends View {
             Log.error(e);
         }
         this.renderGames();
-//        this.ScaleScreen(_gridParent);
+        this.ScaleScreen(_gridParent);
 
         this.disableNotAllowed();
     }
