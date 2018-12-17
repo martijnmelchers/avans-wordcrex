@@ -257,7 +257,7 @@ public class BoardView extends View {
     @FXML
     private void home(){
         try{
-            if(_submit.isVisible() == false){
+            if(_shuffle.isVisible() == false){
                 _controller.navigate("ObserverOverview",620,770);
             }
             else{

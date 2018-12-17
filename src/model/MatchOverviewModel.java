@@ -59,19 +59,8 @@ public class MatchOverviewModel {
 
                 boolean isPlayer1 = player.equals(player1);
 
-                if (isPlayer1) {
-                    if (!currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
-//                        MatchOverviewModel.currentTurns.put(game, true);
-                    } else {
-                        MatchOverviewModel.currentTurns.put(game, !currentTurnHasAction(game));
-                    }
-                } else {
-                    if (!currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
-                        MatchOverviewModel.currentTurns.put(game, true);
-                    } else {
-                        MatchOverviewModel.currentTurns.put(game, !currentTurnPlayer2HasAction(game));
-                    }
-                }
+                var gameMod = new GameModel(game);
+                MatchOverviewModel.currentTurns.put(game, !gameMod.checkIfTurnPlayed());
             }
 
             return games;
@@ -242,7 +231,6 @@ public class MatchOverviewModel {
 
     public void declineInvite(Game game) {
         game.setAnswer("rejected");
-
         try {
             this._db.update(game);
         } catch (Exception e) {
