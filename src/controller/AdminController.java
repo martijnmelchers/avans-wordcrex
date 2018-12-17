@@ -10,8 +10,10 @@ import java.util.List;
 public class AdminController extends Controller {
     private AdminModel adminModel;
 
+
+
     public AdminController() {
-        this.adminModel = this.getViewCasted();
+        this.adminModel = new AdminModel();
     }
 
     public List<AccountInfo> getUserList() {
