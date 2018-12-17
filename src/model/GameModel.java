@@ -251,10 +251,11 @@ public class GameModel {
 
             _board.getBoardFromDatabase(_gameId, _turnId);
 
-            onEndTurn.run();
-
             checkGameFinished();
-        } else // other player not finished
+
+            onEndTurn.run();
+        }
+        else
         {
             alreadyPlayed(onEndTurn);
         }
@@ -317,8 +318,6 @@ public class GameModel {
                 _dock.update(_gameId, _turnId);// update hand
                 _board.getBoardFromDatabase(_gameId, _turnId);
                 Platform.runLater(onEndTurn);
-
-                checkGameFinished();
                 return null;
             }
         });
@@ -609,6 +608,12 @@ public class GameModel {
 
         if (!checkBothPassed())
         {
+            String notUsed = getNotUsedTiles(_turnId);
+            if(Integer.valueOf(notUsed)>7)
+            {
+                _dock.replaceLettersDock(_gameId,_turnId );
+            }
+
             if (!getNotUsedTiles(_turnId).equals("0")) {
                 return;
             }
