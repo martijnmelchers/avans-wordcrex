@@ -345,7 +345,7 @@ public class Board {
             }
             if (boardHasOldTiles) {
                 connectedToOldTiles.add(connectedToOld.contains(true));
-            }
+            }else return true;
         }
         if(!connectedToOldTiles.contains(true)) return false;
 
