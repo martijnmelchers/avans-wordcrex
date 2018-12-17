@@ -260,6 +260,47 @@ public class GameModel {
         }
     }
 
+    private boolean checkBothPassed()
+    {
+        List<Clause> clauses = new ArrayList<>();
+
+        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, this._gameId));
+        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, this._turnId - 1));
+
+        try {
+            var results = this._db.select(TurnPlayer1.class, clauses).get(0);
+            if ((results.getScore() + results.getBonus()) != 0)
+            {
+                return false;
+            }
+        } catch (Exception e) {
+            Log.error(e);
+        }
+
+        clauses.clear();
+
+        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, this._gameId));
+        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, this._turnId - 1));
+
+        try {
+            var results = this._db.select(TurnPlayer2.class, clauses).get(0);
+            if ((results.getScore() + results.getBonus()) != 0)
+            {
+                return false;
+            }
+        } catch (Exception e) {
+            Log.error(e);
+        }
+
+        if (!(Integer.parseInt(_dock.getNotUsedTiles(_gameId, (_turnId - 1))) < 7))
+        {
+            _dock.replaceLettersDock(_gameId, _turnId);
+            return false;
+        }
+
+        return true;
+    }
+
     public void alreadyPlayed(Task onEndTurn) {
         waitForPlayer(new Task() {
             @Override
@@ -566,8 +607,11 @@ public class GameModel {
 
     private void checkGameFinished() {
 
-        if (!getNotUsedTiles(_turnId).equals("0")) {
-            return;
+        if (!checkBothPassed())
+        {
+            if (!getNotUsedTiles(_turnId).equals("0")) {
+                return;
+            }
         }
 
         Game game = GameSession.getGame();
@@ -611,7 +655,7 @@ public class GameModel {
         clauses.add(new Clause(new TableAlias("Game", -1), "game_id", CompareMethod.EQUAL, _gameId));
         try {
             Game game = _db.select(Game.class, clauses).get(0);
-            if (game.getGameState().getState().equals("finished") || game.getGameState().getState().equals("resigned")) {
+            if (game.getGameState().isFinished() || game.getGameState().isResigned()) {
                 return true;
             }
 
