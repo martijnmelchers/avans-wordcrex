@@ -21,8 +21,24 @@ public class Tile {
     private String _tileType;
 
 
+    public Integer getX()
+    {
+        return  _xPosition;
+    }
+
+    public Integer getY()
+    {
+        return  _yPosition;
+    }
+
     public TileType tileType;
 
     public Tile() {}
+
+    public Tile(Integer x, Integer y, model.TileType tileType){
+        _xPosition = x;
+        _yPosition = y;
+        _tileType = tileType.toString();
+    }
 
 }

@@ -21,8 +21,14 @@ public class Turn {
 
     public Turn() {}
 
+    public Turn(int gameId, int turnId){
+        this._gameId = gameId;
+        this._turnId = turnId;
+    }
+
     public Integer getTurnID()
     {
         return _turnId;
     }
+
 }

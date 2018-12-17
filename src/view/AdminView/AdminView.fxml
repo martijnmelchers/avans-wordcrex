@@ -4,7 +4,6 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-
 <AnchorPane prefHeight="571.0" prefWidth="693.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AdminView.AdminView">
     <ListView fx:id="userList" layoutX="14.0" layoutY="79.0" prefHeight="475.0" prefWidth="303.0" />
    <ListView fx:id="roleList" layoutX="338.0" layoutY="79.0" prefHeight="209.0" prefWidth="341.0" />
