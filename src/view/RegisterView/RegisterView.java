@@ -40,12 +40,12 @@ public class RegisterView extends View {
     }
 
     public void registerClicked() {
-        this._accountController.registerUser(textFieldUsername.getText(), passwordFieldPassword.getText(), passwordFieldConfirmationPassword.getText());
+        this._accountController.registerUser(this.textFieldUsername.getText(), this.passwordFieldPassword.getText(), this.passwordFieldConfirmationPassword.getText());
     }
 
     public void showError(String error) {
-        labelError.setText(error);
-        labelError.setVisible(true);
+        this.labelError.setText(error);
+        this.labelError.setVisible(true);
     }
 
     public void registerSuccess() {

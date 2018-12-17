@@ -1,53 +1,41 @@
 package controller;
 
 
-
-import controller.Controller;
-
 import model.GameSession;
-import model.database.DocumentSession;
-
-import model.helper.Log;
+import model.moderator.GameWord;
 import model.moderator.ModeratorDictionary;
-
-
-import java.sql.SQLException;
 
 public class ModeratorController extends Controller {
 
     private ModeratorDictionary moderatorDictionary;
     private String username;
-    private String letterset = "NL";
-    public ModeratorController(){
-        try {
-            this.moderatorDictionary = new ModeratorDictionary(DocumentSession.getDatabase());
-        } catch (SQLException e) {
-             Log.error(e);
+    private String letterSet = "NL";
 
-        }
-        username = GameSession.getUsername();
-
+    public ModeratorController() {
+        this.moderatorDictionary = new ModeratorDictionary();
+        this.username = GameSession.getUsername();
     }
 
-    public String[] getSuggestedWords(){
-        moderatorDictionary.refreshPending();
-        return moderatorDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
+    public String[] getSuggestedWords() {
+        this.moderatorDictionary.refreshPending();
+        return this.moderatorDictionary.getWords().stream().map(GameWord::getWord).toArray(String[]::new);
     }
-    public String[] getDeclinedWords(){
-        moderatorDictionary.refreshDeclined();
-        return moderatorDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
+
+    public String[] getDeclinedWords() {
+        this.moderatorDictionary.refreshDeclined();
+        return this.moderatorDictionary.getWords().stream().map(GameWord::getWord).toArray(String[]::new);
     }
-    public String[] getAcceptedWords(){
-        moderatorDictionary.refreshAccepted();
-        return moderatorDictionary.getWords().stream().map(s -> s.getWord()).toArray(String[]::new);
+
+    public String[] getAcceptedWords() {
+        this.moderatorDictionary.refreshAccepted();
+        return this.moderatorDictionary.getWords().stream().map(GameWord::getWord).toArray(String[]::new);
     }
-    public void rejectSuggestedWords(String[] words){
-        moderatorDictionary.declineWords(words,username,letterset);
+
+    public void rejectSuggestedWords(String[] words) {
+        this.moderatorDictionary.declineWords(words, this.username, this.letterSet);
     }
-    public void acceptSuggestedWords(String[] words){
-        moderatorDictionary.acceptWords(words,username,letterset);
-    }
-    public void close(){
-        moderatorDictionary.close();
+
+    public void acceptSuggestedWords(String[] words) {
+        this.moderatorDictionary.acceptWords(words, this.username, this.letterSet);
     }
 }

@@ -12,12 +12,10 @@ public class HandLetter {
     @PrimaryKey
     @ForeignKey(type = Letter.class, field = "game_id", output = "letter")
     private Integer _gameId;
-
     @Column("turn_id")
     @PrimaryKey
     @ForeignKey(type = Turn.class, field = "turn_id", output = "turn")
     private Integer _turnId;
-
     @Column("letter_id")
     @PrimaryKey
     @ForeignKey(type = Letter.class, field = "letter_id", output = "letter")
@@ -33,8 +31,7 @@ public class HandLetter {
 
     public HandLetter() {}
 
-    public HandLetter(Integer _letterId, Integer _turnId, Integer _gameId, Letter letter, Turn turn)
-    {
+    public HandLetter(Integer _letterId, Integer _turnId, Integer _gameId, Letter letter, Turn turn) {
         this._gameId = _gameId;
         this.letter = letter;
         this.turn = turn;

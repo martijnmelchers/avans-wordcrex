@@ -14,7 +14,10 @@ public class LetterSet {
     @Column("description")
     private String _description;
 
-    public LetterSet(){}
+    public LetterSet() {
+    }
 
-    public String getDescription(){return _description;}
+    public String getDescription() {
+        return this._description;
+    }
 }

@@ -12,14 +12,14 @@ public class InsertedKeys {
     }
 
     public String getTable() {
-        return table;
+        return this.table;
     }
 
     public String getColumn() {
-        return column;
+        return this.column;
     }
 
     public Object getValue() {
-        return value;
+        return this.value;
     }
 }

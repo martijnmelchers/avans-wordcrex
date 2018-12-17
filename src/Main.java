@@ -4,10 +4,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import model.EnvironmentVariables;
-import model.GameSession;
 import model.database.DocumentSession;
 import model.helper.Log;
-import model.tables.Account;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -17,7 +15,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        initializeApp(primaryStage);
+        this.initializeApp(primaryStage);
     }
 
     private void initializeApp(Stage primaryStage) {
@@ -36,7 +34,7 @@ public class Main extends Application {
             Log.error(e);
 
             if (alert.getResult() == tryAgainButton)
-                initializeApp(primaryStage);
+                this.initializeApp(primaryStage);
             else
                 System.exit(1);
         }

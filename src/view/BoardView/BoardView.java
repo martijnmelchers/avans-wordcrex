@@ -4,11 +4,10 @@ import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.GameSession;
@@ -19,6 +18,7 @@ import model.helper.Log;
 import view.DockView.DockView;
 import view.View;
 
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 import static javafx.scene.paint.Color.rgb;
@@ -47,6 +47,7 @@ public class BoardView extends View {
     @FXML private Label labelLoadingScreen;
 
     @FXML private VBox vboxLoadingScreen;
+    @FXML private VBox chatViewContainer;
 
     private GameController _controller;
 
@@ -65,11 +66,12 @@ public class BoardView extends View {
         checkRole();
         checkIfTurnPlayed();
         _slider.setDisable(_controller.getCurrentTurn() == 1);
+        displayChat();
     }
 
     private void checkRole()
     {
-        if (GameSession.getRole().getRole().equals("observer"))
+        if (GameSession.hasRole("observer"))
         {
             _controller.getOldDock(_controller.getCurrentTurn());
             dockController.updateDock();
@@ -271,7 +273,18 @@ public class BoardView extends View {
 
     @FXML
     private void home(){
-        _controller.navigate("MatchOverview");
+        try{
+            if(_submit.isVisible() == false){
+                _controller.navigate("ObserverOverview",620,770);
+            }
+            else{
+                _controller.navigate("MatchOverview", 620,770);
+            }
+        }
+        catch(Exception e){
+            Log.error(e);
+        }
+
     }
 
     @FXML
@@ -287,7 +300,7 @@ public class BoardView extends View {
         updateScore();
         updateTilesLeft((int)snap);
 
-        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.getRole().getRole().equals("observer"))
+        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.hasRole("observer"))
         {
             _controller.getOldDock((int)snap);
             dockController.updateDock();
@@ -315,5 +328,17 @@ public class BoardView extends View {
             _shuffle.setVisible(true);
             _surrender.setVisible(true);
         }
+    }
+
+    public void displayChat() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
+            AnchorPane chatView = loader.load();
+
+            chatViewContainer.getChildren().add(chatView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -57,7 +57,7 @@ public class Game {
     }
 
     public GameState getGameState() {
-        return gameState;
+        return this.gameState;
     }
 
     public void setGameState(String _gameState) {
@@ -65,19 +65,19 @@ public class Game {
     }
 
     public LetterSet getLetterSet() {
-        return letterSet;
+        return this.letterSet;
     }
 
     public Account getPlayer1() {
-        return player1;
+        return this.player1;
     }
 
     public Account getPlayer2() {
-        return player2;
+        return this.player2;
     }
 
     public Answer getAnswer() {
-        return answer;
+        return this.answer;
     }
 
     public void setAnswer(String answer) {
@@ -85,7 +85,7 @@ public class Game {
     }
 
     public Account getWinner() {
-        return winner;
+        return this.winner;
     }
 
     public void setWinner(String username) {
@@ -102,11 +102,11 @@ public class Game {
 
     public boolean isParticipating(String name) {
 
-        return (isActive() && (this._usernamePlayer1.equals(name) || this._usernamePlayer1.equals(name)));
+        return (this.isActive() && (this._usernamePlayer1.equals(name) || this._usernamePlayer2.equals(name)));
     }
 
     public Integer getGameId() {
-        return _gameId;
+        return this._gameId;
     }
 
     public void setState(String state) {

@@ -16,7 +16,7 @@ public class Log {
     private static String WARNING = "(WARN)";
     private static String QUERY_COLOR = "\u001B[35m(QUERY)\u001B[0m";
     private static String QUERY = "(QUERY)";
-
+    private static String DEFAULT_ALERT_TEXT = "Er is een fatale fout opgetreden!\n\n";
 
     public static void info(String content) {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
@@ -37,6 +37,10 @@ public class Log {
     }
 
     public static void error(Exception exception, boolean visual) {
+        Log.error(exception, visual, Log.DEFAULT_ALERT_TEXT);
+    }
+
+    public static void error(Exception exception, boolean visual, String alertText) {
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         if (EnvironmentVariables.DEBUG_LEVEL >= 1) {
@@ -48,7 +52,7 @@ public class Log {
         if (visual) {
             var closeAppButton = new ButtonType("Oké");
 
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden!\n\n" + exception.getMessage(), closeAppButton);
+            Alert alert = new Alert(Alert.AlertType.ERROR, alertText + exception.getMessage(), closeAppButton);
             alert.showAndWait();
         }
     }

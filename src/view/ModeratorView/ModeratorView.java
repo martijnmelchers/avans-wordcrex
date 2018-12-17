@@ -1,11 +1,10 @@
 package view.ModeratorView;
 
 import controller.ModeratorController;
-import javafx.scene.control.Button;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
@@ -15,6 +14,7 @@ import view.View;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 
 ///size 350x by 660Y zet de grootte als je deze maakt
@@ -22,98 +22,96 @@ import java.util.Arrays;
 public class ModeratorView extends View {
 
 
-    public ModeratorView(){
-        WordList = FXCollections.observableList(new ArrayList<String>());
+    @FXML
+    private AnchorPane MainPane;
+    @FXML
+    private ListView _wordView;
+    @FXML
+    private Button DenyButton;
+    @FXML
+    private Button AddButton;
 
+    private ObservableList<String> _wordList;
+    private ModeratorController _controller;
 
-
-    }
-    public void initialize(){
-        WordView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        WordView.setItems(WordList);
-
-
-    }
-
-    @FXML private AnchorPane MainPane;
-    @FXML private ListView WordView;
-    @FXML private Button DenyButton;
-    @FXML private Button AddButton;
-
-
-    private ObservableList<String> WordList;
-    private ModeratorController moderatorController;
     private String mode = "pending";
 
+    public ModeratorView() {
+        this._wordList = FXCollections.observableList(new ArrayList<>());
 
 
-    @FXML
-    public void refreshAccepted(){
-        mode = "accepted";
-        if(WordList.size() < 1) Refresh();
     }
-    @FXML
-    public void refreshPending(){
-        mode = "pending";
-        Refresh();
-    }
-    @FXML
-    public void refreshDeclined(){
-        mode = "declined";
-        Refresh();
+
+    public void initialize() {
+        this._wordView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        this._wordView.setItems(this._wordList);
     }
 
     @FXML
-    private void Refresh(){
-        WordList.clear();
+    public void refreshAccepted() {
+        this.mode = "accepted";
+        if (this._wordList.size() < 1) this.refresh();
+    }
 
-        if(mode == "pending") {
-             for (String temp : moderatorController.getSuggestedWords()) {
-                WordList.add(temp);
-            }
+    @FXML
+    public void refreshPending() {
+        this.mode = "pending";
+        this.refresh();
+    }
+
+    @FXML
+    public void refreshDeclined() {
+        this.mode = "declined";
+        this.refresh();
+    }
+
+    @FXML
+    private void refresh() {
+        this._wordList.clear();
+
+        switch (this.mode) {
+            case "pending":
+                Collections.addAll(this._wordList, this._controller.getSuggestedWords());
+                break;
+            case "declined":
+                Collections.addAll(this._wordList, this._controller.getDeclinedWords());
+                break;
+            case "accepted":
+                this._wordList.addAll(Arrays.asList(this._controller.getAcceptedWords()));
+                break;
         }
-        else if(mode == "declined"){
-            for (String temp : moderatorController.getDeclinedWords()) {
-                WordList.add(temp);
-            }
-        }
-        else if (mode == "accepted"){
-            for (String temp : moderatorController.getAcceptedWords()) {
-                WordList.add(temp);
-            }
-        }
-        if (WordList.size() == 0) WordList.add("There are no words pending at the moment") ;
+        if (this._wordList.size() == 0) this._wordList.add("There are no words pending at the moment");
 
 
     }
+
     @FXML
-    private void AddWord(){
-        if (WordView.getSelectionModel().getSelectedItems().size() == 0) return;
-        moderatorController.acceptSuggestedWords(Arrays.copyOf(WordView.getSelectionModel().getSelectedItems().toArray(),
-                WordView.getSelectionModel().getSelectedItems().size(),
+    private void AddWord() {
+        if (this._wordView.getSelectionModel().getSelectedItems().size() == 0) return;
+        this._controller.acceptSuggestedWords(Arrays.copyOf(this._wordView.getSelectionModel().getSelectedItems().toArray(),
+                this._wordView.getSelectionModel().getSelectedItems().size(),
                 String[].class));
-        Refresh();
-    }
-    @FXML
-    private void IgnoreWord(){
-        if (WordView.getSelectionModel().getSelectedItems().size() == 0) return;
-        moderatorController.rejectSuggestedWords(Arrays.copyOf(WordView.getSelectionModel().getSelectedItems().toArray(),
-                WordView.getSelectionModel().getSelectedItems().size(),
-                String[].class));
-        Refresh();
+        this.refresh();
     }
 
-    public void Dispose(){
-        Stage Temp = (Stage)WordView.getScene().getWindow();
-        moderatorController.close();
-        Temp.close();
+    @FXML
+    private void ignoreWord() {
+        if (this._wordView.getSelectionModel().getSelectedItems().size() == 0) return;
+        this._controller.rejectSuggestedWords(Arrays.copyOf(this._wordView.getSelectionModel().getSelectedItems().toArray(),
+                this._wordView.getSelectionModel().getSelectedItems().size(),
+                String[].class));
+        this.refresh();
+    }
+
+    public void dispose() {
+        var temp = (Stage) this._wordView.getScene().getWindow();
+        temp.close();
     }
 
     @Override
     protected void loadFinished() {
         try {
-            this.moderatorController = this.getController(ModeratorController.class);
+            this._controller = this.getController(ModeratorController.class);
         } catch (Exception e) {
             Log.error(e);
         }

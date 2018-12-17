@@ -17,6 +17,6 @@ public class Role {
     }
 
     public String getRole() {
-        return role;
+        return this.role;
     }
 }
