@@ -17,6 +17,9 @@ public class AccountInformation extends View {
     private Label role;
     @FXML
     private Label error;
+
+    @FXML
+    private Label passwordShow;
     @FXML
     private TextField password;
     @FXML
@@ -38,6 +41,8 @@ public class AccountInformation extends View {
             this.role.setText(this.role.getText() + "\n" + roleObj.getRole());
         }
         this.username.setText(GameSession.getUsername());
+
+        this.passwordShow.setText(GameSession.getAccount().getPassword());
     }
 
     public void changePassword() {

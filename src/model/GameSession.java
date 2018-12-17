@@ -56,6 +56,10 @@ public final class GameSession {
         return false;
     }
 
+
+    public static Account getAccount(){
+        return GameSession.account;
+    }
     public static void setRoles(ArrayList<Role> roles) {
         GameSession.roles = roles;
     }

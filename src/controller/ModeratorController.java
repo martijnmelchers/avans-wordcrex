@@ -8,12 +8,12 @@ import model.moderator.ModeratorDictionary;
 public class ModeratorController extends Controller {
 
     private ModeratorDictionary moderatorDictionary;
-    private String username;
+
     private String letterSet = "NL";
 
     public ModeratorController() {
         this.moderatorDictionary = new ModeratorDictionary();
-        this.username = GameSession.getUsername();
+
     }
 
     public String[] getSuggestedWords() {
@@ -32,10 +32,10 @@ public class ModeratorController extends Controller {
     }
 
     public void rejectSuggestedWords(String[] words) {
-        this.moderatorDictionary.declineWords(words, this.username, this.letterSet);
+        this.moderatorDictionary.declineWords(words, GameSession.getUsername(), this.letterSet);
     }
 
     public void acceptSuggestedWords(String[] words) {
-        this.moderatorDictionary.acceptWords(words, this.username, this.letterSet);
+        this.moderatorDictionary.acceptWords(words, GameSession.getUsername(), this.letterSet);
     }
 }

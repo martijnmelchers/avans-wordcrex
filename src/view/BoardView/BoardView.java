@@ -268,12 +268,14 @@ public class BoardView extends View {
     @FXML
     private void home(){
         try{
-            _chatViewController.closeMessageChecker();
-            if(_submit.isVisible() == false){
-                _controller.navigate("ObserverOverview",620,770);
-            }
-            else{
-                _controller.navigate("MatchOverview", 620,770);
+            if(_chatViewController != null){
+                _chatViewController.closeMessageChecker();
+                if(_submit.isVisible() == false){
+                    _controller.navigate("ObserverOverview",861,920);
+                }
+                else{
+                    _controller.navigate("MatchOverview", 861,920);
+                }
             }
         }
         catch(Exception e){
