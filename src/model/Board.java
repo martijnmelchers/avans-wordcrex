@@ -188,7 +188,7 @@ public class Board {
     public CheckInfo check() {
 
 
-        if (_placedCoords.size() < 1 || !this.newTilesConnected() || !this.isConnectedToOldTile())
+        if (_placedCoords.size() <1 || !this.newTilesConnected() || !this.isConnectedToOldTile())
             return null;
 
 
@@ -262,9 +262,6 @@ public class Board {
     }
 
     private boolean newTilesConnected() {
-        if (this._placedCoords.size() == 1) {
-            return true;
-        }
 
         if(this._tiles[7][7].isEmpty()) return false;
 
@@ -342,6 +339,8 @@ public class Board {
                 connectedToOldTiles.add(connectedToOld.contains(true));
             }
         }
+        if(!connectedToOldTiles.contains(true)) return false;
+
         return isConnectedToOld;
     }
 
