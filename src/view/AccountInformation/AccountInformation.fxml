@@ -24,7 +24,7 @@
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
     </Label>
-    <Label id="role" fx:id="role" text="Role" textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+    <Label id="role" fx:id="role" text="Roles: " textAlignment="CENTER" GridPane.halignment="CENTER" GridPane.rowIndex="2">
         <GridPane.margin>
             <Insets left="25" right="25" top="30" />
         </GridPane.margin>
