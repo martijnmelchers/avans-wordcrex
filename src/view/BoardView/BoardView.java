@@ -144,10 +144,10 @@ public class BoardView extends View {
     public void stopLoadingScreen()
     {
         vboxLoadingScreen.setVisible(false);
-        _submit.setDisable(true);
-        _pass.setDisable(true);
-        _reset.setDisable(true);
-        _shuffle.setDisable(true);
+        _submit.setDisable(false);
+        _pass.setDisable(false);
+        _reset.setDisable(false);
+        _shuffle.setDisable(false);
     }
 
     public void init()
