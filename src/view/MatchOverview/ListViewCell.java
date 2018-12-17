@@ -58,14 +58,19 @@ public final class ListViewCell extends ListCell<Game> {
             });
 
             view.getMatchSurrenderButton().setOnAction((e) -> {
+                if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())) {
+                    this._controller.declineInvite(game);
+                }
 
-                var alert = new Alert(Alert.AlertType.CONFIRMATION, "Weet je het zeker?");
+                else{
+                    var alert = new Alert(Alert.AlertType.CONFIRMATION, "Weet je het zeker?");
 
-                alert.setHeaderText("Spel met "+ enemy + " opgeven: ");
-                Optional<ButtonType> result = alert.showAndWait();
+                    alert.setHeaderText("Spel met "+ enemy + " opgeven: ");
+                    Optional<ButtonType> result = alert.showAndWait();
 
-                if(result.get() == ButtonType.OK){
-                    this._controller.surrender(game);
+                    if(result.get() == ButtonType.OK){
+                        this._controller.surrender(game);
+                    }
                 }
 
                 this._matchOverview.renderGames();

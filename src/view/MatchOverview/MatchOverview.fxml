@@ -43,7 +43,7 @@
                   <Insets />
                </FlowPane.margin>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Account Gegevens">
+            <Button alignment="CENTER" onAction="#accountInfo" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Account Gegevens">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

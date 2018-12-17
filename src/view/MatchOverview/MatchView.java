@@ -45,8 +45,8 @@ public class MatchView {
         {
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
-
-            var gameMod = new GameModel(match);
+            
+            //TODO: cache shizzle
             fxmlLoader.load();
             boolean isMyTurn;
 
@@ -107,7 +107,7 @@ public class MatchView {
             else {
                 matchEnemy.setText(enemy);
                 matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
-                matchTurn.setText(!gameMod.checkIfTurnPlayed() ? GameSession.getUsername() : enemy);
+                matchTurn.setText(MatchOverviewModel.isMyTurn(match) ? GameSession.getUsername() : enemy);
             }
         }
         catch (Exception e) {

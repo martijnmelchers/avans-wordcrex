@@ -51,19 +51,6 @@ public class MatchOverview extends View {
     private TextField _searchBar;
 
 
-
-    private ObservableList<Game> gameList;
-    private ObservableList<Game> gameList1;
-    private ObservableList<Game> gameList2;
-
-
-    @FXML
-    private Pane requestPane;
-    @FXML
-    private Pane yourTurnPane;
-    @FXML
-    private Pane theirTurnPane;
-
     public MatchOverview(){
 
     }
@@ -74,7 +61,7 @@ public class MatchOverview extends View {
         } catch (Exception e) {
             Log.error(e);
         }
-        renderGames();
+        this.renderGames();
 //        this.ScaleScreen(_gridParent);
 
         this.disableNotAllowed();
@@ -84,25 +71,25 @@ public class MatchOverview extends View {
     private void disableNotAllowed(){
 
         var roles = GameSession.getRoles();
-        if(GameSession.hasRole("observer")){
-
+        if(!GameSession.hasRole("observer")){
+            this._observerModeButton.setDisable(true);
         }
 
-        if(GameSession.hasRole("administrator")){
+        if(!GameSession.hasRole("administrator")){
 
         }
     }
 
     public void renderGames(){
-        gameObservableList = FXCollections.observableArrayList();
-        gameObservableList1 = FXCollections.observableArrayList();
-        gameObservableList2 = FXCollections.observableArrayList();
-        gameListview.setItems(gameObservableList);
-        gameListview1.setItems(gameObservableList1);
-        gameListview2.setItems(gameObservableList2);
-        gameObservableList.clear();
-        gameObservableList1.clear();
-        gameObservableList2.clear();
+        this.gameObservableList = FXCollections.observableArrayList();
+        this.gameObservableList1 = FXCollections.observableArrayList();
+        this.gameObservableList2 = FXCollections.observableArrayList();
+        this.gameListview.setItems(this.gameObservableList);
+        this.gameListview1.setItems(this.gameObservableList1);
+        this.gameListview2.setItems(this.gameObservableList2);
+        this.gameObservableList.clear();
+        this.gameObservableList1.clear();
+        this.gameObservableList2.clear();
 
         List<Game> games = this._controller.getGames();
 
@@ -110,7 +97,9 @@ public class MatchOverview extends View {
         for (var game : games) {
             switch (game.getGameState().getState()) {
                 case "request": {
-                    gameObservableList.add(game);
+                    if(game.getAnswer().get_type().equals("unknown")){
+                        this.gameObservableList.add(game);
+                    }
                     break;
                 }
 
@@ -124,13 +113,10 @@ public class MatchOverview extends View {
                         isMyTurn = true;
                     }
 
-
-                    GameModel test = new GameModel(game);
-
-                    if (!test.checkIfTurnPlayed()) {
-                        gameObservableList1.add(game);
+                    if (isMyTurn) {
+                        this.gameObservableList1.add(game);
                     } else {
-                        gameObservableList2.add(game);
+                        this.gameObservableList2.add(game);
                     }
                     break;
                 }
@@ -146,7 +132,7 @@ public class MatchOverview extends View {
                 }
             }
 
-            gameListview.setCellFactory(studentListView -> {
+            this.gameListview.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
                 listViewCell.setMatchOverview(this);
@@ -154,14 +140,14 @@ public class MatchOverview extends View {
             });
 
 
-            gameListview1.setCellFactory(studentListView -> {
+            this.gameListview1.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
                 listViewCell.setMatchOverview(this);
                 return listViewCell;
             });
 
-            gameListview2.setCellFactory(studentListView -> {
+            this.gameListview2.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
                 listViewCell.setMatchOverview(this);
@@ -173,10 +159,10 @@ public class MatchOverview extends View {
 
     @FXML
     public void filter(){
-        String filter = _searchBar.getText();
-        FilteredList<Game> filteredGames = new FilteredList<>(gameObservableList, s -> true);
-        FilteredList<Game> filteredGames1 = new FilteredList<>(gameObservableList1, s -> true);
-        FilteredList<Game> filteredGames2 = new FilteredList<>(gameObservableList2, s -> true);
+        String filter = this._searchBar.getText();
+        FilteredList<Game> filteredGames = new FilteredList<>(this.gameObservableList, s -> true);
+        FilteredList<Game> filteredGames1 = new FilteredList<>(this.gameObservableList1, s -> true);
+        FilteredList<Game> filteredGames2 = new FilteredList<>(this.gameObservableList2, s -> true);
         if(filter == null || filter.length() == 0){
             filteredGames.setPredicate(s -> true);
         }
@@ -204,9 +190,9 @@ public class MatchOverview extends View {
             });
         }
 
-        gameListview.setItems(filteredGames);
-        gameListview1.setItems(filteredGames1);
-        gameListview2.setItems(filteredGames2);
+        this.gameListview.setItems(filteredGames);
+        this.gameListview1.setItems(filteredGames1);
+        this.gameListview2.setItems(filteredGames2);
     }
     // Shows all buttons whe have access to.
     private void showAccessibleButtons(){
@@ -231,6 +217,16 @@ public class MatchOverview extends View {
             this._controller.navigate("ObserverOverview",620,770);
         }
         catch(Exception e){
+            Log.error(e);
+        }
+    }
+
+    @FXML
+    private void accountInfo() {
+        try{
+            this._controller.navigate("AccountInformation");
+        }
+        catch (Exception e){
             Log.error(e);
         }
     }
