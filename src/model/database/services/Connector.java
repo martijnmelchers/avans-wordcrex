@@ -9,11 +9,11 @@ public class Connector {
     private static final int MySQLDefaultConnectionPort = 3306;
 
 
-
     public Connection connect(String url, Integer port, String username, String password, String scheme) throws SQLException {
         return this.establishConnection(String.format("%s%s:%s/%s", MySQLDefaultConnectionString, url, port, scheme), username, password);
 
     }
+
     public Connection connect(String url, String username, String password, String scheme) throws SQLException {
         return this.establishConnection(String.format("%s%s:%s/%s", MySQLDefaultConnectionString, url, MySQLDefaultConnectionPort, scheme), username, password);
     }

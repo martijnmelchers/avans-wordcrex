@@ -12,6 +12,6 @@ public enum JoinMethod {
     }
 
     public String getMethod() {
-        return method;
+        return this.method;
     }
 }

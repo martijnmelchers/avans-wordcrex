@@ -15,7 +15,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        initializeApp(primaryStage);
+        this.initializeApp(primaryStage);
     }
 
     private void initializeApp(Stage primaryStage) {
@@ -34,7 +34,7 @@ public class Main extends Application {
             Log.error(e);
 
             if (alert.getResult() == tryAgainButton)
-                initializeApp(primaryStage);
+                this.initializeApp(primaryStage);
             else
                 System.exit(1);
         }
@@ -44,7 +44,7 @@ public class Main extends Application {
         try {
             var app = new App(primaryStage);
 
-            app.navigate(EnvironmentVariables.MAIN_VIEW);
+            app.navigate(EnvironmentVariables.MAIN_VIEW, 350, 550);
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
             alert.showAndWait();

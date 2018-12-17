@@ -11,5 +11,6 @@ public class WordState {
     @Column("state")
     private String _state;
 
-    public WordState(){}
+    public WordState() {
+    }
 }

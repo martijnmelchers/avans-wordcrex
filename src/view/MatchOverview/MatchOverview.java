@@ -1,284 +1,219 @@
 package view.MatchOverview;
 
-import controller.App;
 import controller.MatchOverviewController;
-import javafx.animation.AnimationTimer;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.transform.Scale;
+import javafx.scene.layout.Pane;
+import javafx.util.Callback;
+import model.Board;
+import model.GameSession;
+import model.MatchOverviewModel;
+import model.helper.Log;
 import model.tables.Game;
 import view.View;
 
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.List;
 
-
-// TODO:
-// Show everything as observer.
-//      Both player names should be shown.
-//      Both score should be shown.
-//          If there is a winner, the winner's score should be shown.
-// Show score on the games.
-//
 public class MatchOverview extends View {
-    private enum ViewMode {
-        Play,
-        Observer
-    }
-
-    private MatchOverviewController controller;
 
     @FXML
-    private VBox _content;
+    private ListView gameListview;
 
     @FXML
-    private FlowPane _toolBar;
+    private ListView gameListview1;
 
     @FXML
-    private TextField _searchBar;
-    private FilterGameView _filterGameView;
+    private ListView gameListview2;
 
-    @FXML
-    private ScrollPane _matchScrollPane;
+
+    private ObservableList<Game> gameObservableList;
+
+    private ObservableList<Game> gameObservableList1;
+
+    private ObservableList<Game> gameObservableList2;
+
+    private MatchOverviewController _controller;
 
     @FXML
     private Button _viewModeButton;
 
-    private VBox _vBox;
-
-    private Header _headerInvite;
-    private Header _headerInvitations;
-    private Header _headerYourTurn;
-    private Header _headerTheirTurn;
-    private Header _headerObserver;
-
-    private ViewMode _viewMode = ViewMode.Play;
+    @FXML
+    private TextField _searchBar;
 
 
-    public MatchOverview() {
-        InputStream isBold = App.class.getResourceAsStream("/Fonts/Trueno/TruenoBd.otf");
-        FONT_BOLD = Font.loadFont(isBold, 12.0);
-        InputStream is = App.class.getResourceAsStream("/Fonts/Trueno/TruenoLt.otf");
-        FONT = Font.loadFont(is, 12.0);
+
+    private ObservableList<Game> gameList;
+    private ObservableList<Game> gameList1;
+    private ObservableList<Game> gameList2;
+
+
+    @FXML
+    private Pane requestPane;
+    @FXML
+    private Pane yourTurnPane;
+    @FXML
+    private Pane theirTurnPane;
+
+    public MatchOverview(){
+
     }
 
-    @Override
-    protected void loadFinished() {
+    public void loadFinished(){
         try {
-            controller = this.getController(MatchOverviewController.class);
+            this._controller = this.getController(MatchOverviewController.class);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.error(e);
         }
-
-        _filterGameView = new FilterGameView(this, _searchBar);
-
-        // Check the role of the player.
-        if(!checkObserverRoll(controller.getPlayerRoles()))
-        {
-            _viewModeButton.setVisible(false);
-        }
-
-        _vBox = new VBox();
-
-        FillBackground(_vBox, LABEL_COLOR);
-        FillBackground(_matchScrollPane, LABEL_COLOR);
-
-        ChangeToPlayMode(null);
-
-        // Add to application.
-        new AnimationTimer() {
-            private long lastUpdate = 0;
-            @Override
-            public void handle(long now) {
-
-                ScaleScreen(_content);
-                _filterGameView.updateTimer(now - lastUpdate);
-                lastUpdate = now;
-            }
-        }.start();
+        renderGames();
     }
 
-    private boolean checkObserverRoll(ArrayList<String> playerRoles) {
-        for(String string : playerRoles)
-        {
-            if(string.equals("observer"))
-                return true;
-        }
+    private void renderGames(){
+        gameObservableList = FXCollections.observableArrayList();
+        gameObservableList1 = FXCollections.observableArrayList();
+        gameObservableList2 = FXCollections.observableArrayList();
+        gameListview.setItems(gameObservableList);
+        gameListview1.setItems(gameObservableList1);
+        gameListview2.setItems(gameObservableList2);
+        gameObservableList.clear();
+        gameObservableList1.clear();
+        gameObservableList2.clear();
 
-        return false;
-    }
+        List<Game> games = this._controller.getGames();
 
-    private boolean player2TurnHasAction(Game game) {
-        return controller.currentTurnPlayer2HasAction(game);
-    }
 
-    private boolean currentTurnHasAction(Game game) {
-        return controller.currentTurnHasAction(game);
-    }
+        for (var game : games) {
+            switch (game.getGameState().getState()) {
+                case "request": {
+                    gameObservableList.add(game);
+                    break;
+                }
 
-    private void initiateInvitationHeader(ArrayList<Game> games) {
-        for (Game game : games) {
-            String opponentName = game.player2.getUsername();
-            _headerInvitations.addPlayButton(controller, this::onInvitationClick, game, "Uitdaging naar " + opponentName + " gestuurd");
-        }
-    }
+                case "playing": {
+                    boolean isMyTurn;
 
-    private void initiateYourTurnHeader(ArrayList<Game> games) {
-        for (Game game : games) {
-            _headerYourTurn.addPlayButton(controller, this::onYourTurnClick, game, "Speel je beurt");
-        }
-    }
+                    try {
+                        isMyTurn = MatchOverviewModel.isMyTurn(game);
+                    }
+                    catch (NullPointerException e){
+                        isMyTurn = true;
+                    }
 
-    private void initiateTheirTurnHeader(ArrayList<Game> games) {
-        for (Game game : games) {
-            String opponentName = game.player2.getUsername();
+                    if (isMyTurn) {
+                        gameObservableList1.add(game);
+                    } else {
+                        gameObservableList2.add(game);
+                    }
 
-            _headerTheirTurn.addPlayButton(controller, this::onTheirTurnClick, game, opponentName + " moet zijn beurt nog spelen.");
-        }
-    }
 
-    private void onInvitationClick(Game game)
-    {
-        System.out.println(game.getGameID());
-    }
+                    break;
+                }
 
-    private void onYourTurnClick(Game game)
-    {
-        System.out.println(game.getGameID());
-    }
+                case "finished": {
+                    //TODO: show finished games
+                    break;
+                }
 
-    private void onTheirTurnClick(Game game)
-    {
-        System.out.println(game.getGameID());
-    }
-
-    private void onObserverGameClick(Game game)
-    {
-        System.out.println(game.getGameID());
-    }
-
-    protected void filterObserverGames(String currentGamesToSearch) {
-        DestroyViewList();
-
-        if(currentGamesToSearch.length() == 0) //Reset the view if nothing is searched.
-        {
-            if(_viewMode == ViewMode.Observer)
-            {
-                ChangeToObserverMode(null);
-            }
-            else
-            {
-                ChangeToPlayMode(null);
-            }
-            return;
-        }
-
-        if(_viewMode == ViewMode.Observer)
-        {
-            ChangeToObserverMode(controller.searchForAllGamesAsObserver(currentGamesToSearch));
-        }
-        else
-        {
-            // Make model search for games of current player.
-            ChangeToPlayMode(controller.searchForAllGamesAsPlayer(currentGamesToSearch));
-        }
-    }
-
-    private void ChangeToPlayMode(ArrayList<Game> foundGames) {
-        _viewModeButton.setText("Observer Mode");
-
-        _headerInvitations = new Header("Uitnodigingen");
-        _headerYourTurn = new Header("Jouw Beurt");
-        _headerTheirTurn = new Header("Hun Beurt");
-
-        var invitations = new ArrayList<Game>();
-        var yourTurns = new ArrayList<Game>();
-        var theirTurns = new ArrayList<Game>();
-
-        ArrayList<Game> games = foundGames != null ? foundGames : controller.getGames();
-        for (Game game : games) {
-            if (game.gameState.isRequest()) {
-                invitations.add(game);
-            } else if (game.gameState.isPlaying()) {
-                // Differ in your turns
-                if (currentTurnHasAction(game) && !player2TurnHasAction(game)) {
-                    theirTurns.add(game);
-                } else // Their turn played(and not yours)
-                {
-                    yourTurns.add(game);
+                case "resigned": {
+                    //TODO: show resigned games??
+                    break;
                 }
             }
+
+            gameListview.setCellFactory(studentListView -> {
+                var listViewCell = new ListViewCell();
+                listViewCell.setController(this._controller);
+                return listViewCell;
+            });
+
+
+            gameListview1.setCellFactory(studentListView -> {
+                var listViewCell = new ListViewCell();
+                listViewCell.setController(this._controller);
+                return listViewCell;
+            });
+
+            gameListview2.setCellFactory(studentListView -> {
+                var listViewCell = new ListViewCell();
+                listViewCell.setController(this._controller);
+                return listViewCell;
+            });
+
         }
-        // Invitation
-        initiateInvitationHeader(invitations);
-
-        // Our Turn
-        initiateYourTurnHeader(yourTurns);
-
-        // Their Turn
-        initiateTheirTurnHeader(theirTurns);
-
-        if (invitations.size() != 0)
-            _vBox.getChildren().addAll(_headerInvitations.getContent());
-
-        if (yourTurns.size() != 0)
-            _vBox.getChildren().addAll(_headerYourTurn.getContent());
-
-        if (theirTurns.size() != 0)
-            _vBox.getChildren().addAll(_headerTheirTurn.getContent());
-
-        _matchScrollPane.setContent(_vBox);
-        //
-    }
-
-    private void ChangeToObserverMode(ArrayList<Game> foundGames) {
-        _viewModeButton.setText("Speel Mode");
-
-        _headerObserver = new Header("Spellen");
-
-        _headerObserver.addObserverButton(controller, this::onObserverGameClick, foundGames != null ? foundGames : controller.getAllGames(), " replace this");
-
-        _vBox.getChildren().addAll(_headerObserver.getContent());
-
-        _matchScrollPane.setContent(_vBox);
     }
 
     @FXML
-    private void switchViewMode() {
-        DestroyViewList();
+    public void filter(){
+        String filter = _searchBar.getText();
+        FilteredList<Game> filteredGames = new FilteredList<>(gameObservableList, s -> true);
+        FilteredList<Game> filteredGames1 = new FilteredList<>(gameObservableList1, s -> true);
+        FilteredList<Game> filteredGames2 = new FilteredList<>(gameObservableList2, s -> true);
+        if(filter == null || filter.length() == 0){
+            filteredGames.setPredicate(s -> true);
+        }
+        else{
+            filteredGames.setPredicate(s -> {
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
+            });
+        }
 
-        if (_viewMode == ViewMode.Play) {
-            _viewMode = ViewMode.Observer;
-            ChangeToObserverMode(null);
-        } else if (_viewMode == ViewMode.Observer) {
-            _viewMode = ViewMode.Play;
-            ChangeToPlayMode(null);
+        if(filter == null || filter.length() == 0){
+            filteredGames1.setPredicate(s -> true);
+        }
+        else{
+            filteredGames1.setPredicate(s -> {
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
+            });
+        }
+
+        if(filter == null || filter.length() == 0){
+            filteredGames2.setPredicate(s -> true);
+        }
+        else{
+            filteredGames2.setPredicate(s -> {
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
+            });
+        }
+
+        gameListview.setItems(filteredGames);
+        gameListview1.setItems(filteredGames1);
+        gameListview2.setItems(filteredGames2);
+    }
+    // Shows all buttons whe have access to.
+    private void showAccessibleButtons(){
+
+    }
+
+
+    @FXML
+    private void logOut(){
+        this._controller.endSession();
+        try{
+            this._controller.navigate("LoginView", 350,550);
+        }
+        catch (Exception e){
+            Log.error(e);
         }
     }
 
-    private void DestroyViewList() {
-        _headerInvite = null;
-        _headerInvitations = null;
-        _headerYourTurn = null;
-        _headerTheirTurn = null;
-        _headerObserver = null;
 
-        _vBox.getChildren().clear();
+    @FXML
+    public void refresh(){
+        this.renderGames();
     }
 
-    protected static Color TEXT_COLOR = Color.web("#ecf0f1");
-    protected static Color LABEL_COLOR = Color.web("#2980b9");
-    protected static Color BUTTON_COLOR = Color.web("#3498db");
+    @FXML
+    private void invitationView(){
 
-    protected static Font FONT;
-    protected static Font FONT_BOLD;
+        try{
+            this._controller.navigate("MatchInvitationView");
+        }
+        catch(Exception e){
 
-    protected static void FillBackground(Region node, Color color) {
-        node.setBackground(new Background(new BackgroundFill(color, null, null)));
+        }
     }
 }

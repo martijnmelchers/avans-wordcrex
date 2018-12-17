@@ -2,6 +2,16 @@
     -fx-text-fill: #ecf0f1;
     -fx-font-family: "Tahoma", "Comic Sans MS";
     -fx-background-color: #34495e;
+
+}
+* .scroll-bar{
+    -fx-background-color: #34495e;
+
+}
+* .scroll-bar:horizontal .track,
+* .scroll-bar:vertical .track{
+    -fx-background-color: #2c3e50;
+
 }
 
 Button {
@@ -10,6 +20,11 @@ Button {
     -fx-background-radius: 0;
 
 }
+Text{
+    -fx-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-family: "Tahoma", "Comic Sans MS";
+}
 
 VBox {
 
@@ -17,6 +32,13 @@ VBox {
 
 ListView {
     -fx-border-color: #2c3e50;
+
+}
+
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected {
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
+    -fx-text-fill: white;
 }
 
 ListView :even {
@@ -29,8 +51,12 @@ ListView :odd {
 
 }
 
-ScrollPane {
+Pane {
+    -fx-background-color: #207BCF;
+}
 
+ScrollPane {
+    -fx-background-color: transparent;
 }
 
 Label {
@@ -45,6 +71,7 @@ AnchorPane {
 
 }
 
+
 TextField {
     -fx-border-color: #2c3e50;
     -fx-border-width: 0 0 2 0;
@@ -55,42 +82,30 @@ TextField:focused {
     -fx-border-color: purple;
 }
 
-.Chat-Name-Pane {
-    -fx-background-color: #2c3e50;
+*:even:selected {
+    -fx-background-color: #9b59b6;
+    -fx-text-fill: #130F0E;
+
+}
+*:odd:selected {
+    -fx-background-color: #8e44ad;
+    -fx-text-fill: #130F0E;
+
 }
 
-.Chat-Name-Label {
+.chatLabel {
+    -fx-font-size: 18px;
+}
+
+.momentLabel {
+    -fx-font-size: 12px;
+}
+
+#btBack {
     -fx-background-color: transparent;
-    -fx-font-size: 16;
+    -fx-font-size: 24;
 }
 
-.Chat-MessagesVBox {
-
-}
-
-.Chat-Message-Container {
-    -fx-background-color: purple;
-    -fx-start-margin: 45;
-    -fx-end-margin: 45;
-    -fx-padding:  3 0 3 0;
-    -fx-border-radius: 5px;
-    -fx-pref-width: 200px;
-    -fx-min-width: 200px;
-    -fx-max-width: 90%;
-}
-
-.Chat-Message-Container-Left {
-    -fx-text-alignment: left;
-}
-
-.Chat-Message-Container-Right {
-    -fx-text-alignment: right;
-}
-
-.Chat-Message {
-    -fx-font-size: 14;
-}
-
-.Chat-Moment {
-    -fx-font-size: 10;
+#username, #role {
+    -fx-font-size: 20;
 }

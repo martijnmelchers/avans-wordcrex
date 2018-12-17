@@ -11,5 +11,10 @@ public class Answer {
     @Column("type")
     private String _type;
 
-    public Answer() {}
+    public Answer() {
+    }
+
+    public String get_type() {
+        return this._type;
+    }
 }
