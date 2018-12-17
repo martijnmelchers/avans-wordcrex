@@ -37,9 +37,6 @@ public class ObserverOverview extends View {
     private MatchOverviewController _controller;
 
     @FXML
-    private Button _playModeButton;
-
-    @FXML
     private TextField _searchBar;
 
 
