@@ -11,6 +11,7 @@ import model.tables.AccountInfo;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AccountModel {
     private Database _db;
@@ -44,6 +45,23 @@ public class AccountModel {
         clauses.add(new Clause(new TableAlias("account", 1), "password", CompareMethod.EQUAL, password));
 
         return this._db.select(AccountInfo.class, clauses).get(0);
+    }
+
+
+    public List<AccountInfo> getRoles(AccountInfo info){
+
+        List<AccountInfo> infos = new ArrayList<>();
+        try{
+            var clauses = new ArrayList<Clause>();
+            clauses.add(new Clause(new TableAlias("account", 1), "username", CompareMethod.EQUAL, info.getUsername()));
+            infos = this._db.select(AccountInfo.class, clauses);
+        }
+
+        catch(Exception e) {
+            Log.error(e);
+        }
+
+        return infos;
     }
 
     public void changePassword(String username, String password) throws Exception {

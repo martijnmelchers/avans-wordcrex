@@ -76,6 +76,21 @@ public class MatchOverview extends View {
         }
         renderGames();
 //        this.ScaleScreen(_gridParent);
+
+        this.disableNotAllowed();
+    }
+
+
+    private void disableNotAllowed(){
+
+        var roles = GameSession.getRoles();
+        if(GameSession.hasRole("observer")){
+
+        }
+
+        if(GameSession.hasRole("administrator")){
+
+        }
     }
 
     public void renderGames(){

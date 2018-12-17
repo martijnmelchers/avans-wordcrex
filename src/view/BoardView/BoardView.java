@@ -66,7 +66,7 @@ public class BoardView extends View {
 
     private void checkRole()
     {
-        if (GameSession.getRole().getRole().equals("observer"))
+        if (GameSession.hasRole("observer"))
         {
             _controller.getOldDock(_controller.getCurrentTurn());
             dockController.updateDock();
@@ -280,7 +280,7 @@ public class BoardView extends View {
         updateScore();
         updateTilesLeft((int)snap);
 
-        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.getRole().getRole().equals("observer"))
+        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.hasRole("observer"))
         {
             _controller.getOldDock((int)snap);
             dockController.updateDock();
