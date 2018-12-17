@@ -153,7 +153,7 @@ public class ObserverOverview extends View {
     @FXML
     private void playMode(){
         try{
-            this._controller.navigate("MatchOverview",620,770);
+            this._controller.navigate("MatchOverview",861,920);
         }
         catch (Exception e){
             Log.error(e);

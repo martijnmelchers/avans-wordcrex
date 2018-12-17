@@ -93,9 +93,15 @@ public class ObserveView {
                 inviteStatusTxt.setY(35);
             }
             else {
-                matchEnemy.setText(enemy);
+                matchEnemy.setText(match.getPlayer1Username() + ", " + match.getPlayer2Username());
                 matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
-                matchTurn.setText(MatchOverviewModel.whoTurn(match));
+
+                var turnName = MatchOverviewModel.whoTurn(match);
+
+                if(turnName == null){
+                    turnName = "beide";
+                }
+                matchTurn.setText(turnName);
             }
 
 

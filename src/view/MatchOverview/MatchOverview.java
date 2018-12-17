@@ -219,7 +219,7 @@ public class MatchOverview extends View {
     @FXML
     private void navigateObserver() {
         try {
-            this._controller.navigate("ObserverOverview", 620, 770);
+            this._controller.navigate("ObserverOverview", 861, 920);
         } catch (Exception e) {
             Log.error(e);
         }
