@@ -399,7 +399,7 @@ public class GameModel {
 
             var uploadedLast = results.size() > 0;
 
-            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null && checkInfo.getTiles() == null)
+            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null )
                 this._db.insert(new TurnPlayer2(this._gameId, this._turnId, this._playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
             else
                 this._db.insert(new TurnPlayer2(this._gameId, this._turnId, this._playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
