@@ -13,6 +13,7 @@ import model.GameSession;
 import model.Tile;
 import model.TileState;
 import model.helper.Log;
+import view.ChatView.ChatView;
 import view.DockView.DockView;
 import view.View;
 
@@ -46,6 +47,8 @@ public class BoardView extends View {
     @FXML private VBox chatViewContainer;
 
     private GameController _controller;
+
+    private ChatView _chatViewController;
 
     @Override
     protected void loadFinished() {
@@ -257,7 +260,8 @@ public class BoardView extends View {
     @FXML
     private void home(){
         try{
-            if(_shuffle.isVisible() == false){
+            _chatViewController.closeMessageChecker();
+            if(_submit.isVisible() == false){
                 _controller.navigate("ObserverOverview",620,770);
             }
             else{
@@ -314,6 +318,8 @@ public class BoardView extends View {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
             AnchorPane chatView = loader.load();
+
+            _chatViewController = loader.getController();
 
             chatViewContainer.getChildren().add(chatView);
         } catch (IOException e) {

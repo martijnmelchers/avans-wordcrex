@@ -19,6 +19,7 @@ import model.tables.Chatline;
 import view.View;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,6 +43,8 @@ public class ChatView extends View {
 
     private int messageCount;
 
+    private Timeline messageChecker;
+
     public ChatView() {
         this._controller = new ChatController();
     }
@@ -63,7 +66,6 @@ public class ChatView extends View {
         for (Chatline chatline : chatlines) {
             this.displayMessage(chatline);
         }
-
 
         // set the scroll to the bottom
         _messagesScrollPane.applyCss();
@@ -94,15 +96,15 @@ public class ChatView extends View {
     }
 
     private void checkForMessages() {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        this.messageChecker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             int chatlinesCount = _controller.getChatlines(GameSession.getGame().getGameId()).size();
 
             if (chatlinesCount > messageCount) {
                 displayMessages();
             }
         }));
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        this.messageChecker.setCycleCount(Animation.INDEFINITE);
+        this.messageChecker.play();
     }
 
     public void sendMessage() {
@@ -142,5 +144,9 @@ public class ChatView extends View {
                 ChatView.this.ScaleScreen(ChatView.this._parent);
             }
         }.start();
+    }
+
+    public void closeMessageChecker() {
+        this.messageChecker.stop();
     }
 }
