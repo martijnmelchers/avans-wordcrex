@@ -326,15 +326,8 @@ public class GameModel {
             }
 
             //insert alle tiles in tile en boardplayer1
-
+            Vector2[] c = checkInfo.getCoordinates();
             //TODO in database tileType moet je kijke wat -- en * zijn (default?)
-<<<<<<< HEAD
-            for (Vector2 coordinate : checkInfo.getCoordinates()) {
-
-                var letterId = this._board.getTiles()[coordinate.getY()][coordinate.getX()].getLetterType().getid();
-
-                this._db.insert(new BoardPlayer1(this._gameId, this._playerName1, this._turnId, letterId, (coordinate.getX() + 1), (coordinate.getY() + 1))); // Insert in Boardplayer 1
-=======
             if (c != null)
             {
                 for (int i = 0; i < c.length; i++) {
@@ -343,7 +336,6 @@ public class GameModel {
 
                     _db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId, (c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 1
                 }
->>>>>>> 61f01a470060c9b418aaddb4143c5237d2784fa9
             }
 
         } catch (Exception e) {
@@ -427,13 +419,8 @@ public class GameModel {
             }
 
             //insert alle tiles in tile en boardplayer1
-
+            Vector2[] c = checkInfo.getCoordinates();
             //TODO in database tileType moet je kijke nwat -- en * zijn (default?)
-<<<<<<< HEAD
-            for (Vector2 coordinate : checkInfo.getCoordinates()) {
-                var letterId = _board.getTiles()[coordinate.getY()][coordinate.getX()].getLetterType().getid();
-                this._db.insert(new BoardPlayer2(this._gameId, this._playerName2, this._turnId, letterId, (coordinate.getX() + 1), (coordinate.getY() + 1))); // Insert in Boardplayer 2
-=======
             if (c != null)
             {
                 for (int i = 0; i < c.length; i++) {
@@ -441,7 +428,6 @@ public class GameModel {
                     int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
                     _db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId, (c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 2
                 }
->>>>>>> 61f01a470060c9b418aaddb4143c5237d2784fa9
             }
 
         } catch (Exception e) {
