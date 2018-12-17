@@ -14,7 +14,7 @@
             <Label fx:id="MomentLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" styleClass="momentLabel" text="Moment" VBox.vgrow="ALWAYS" />
          </children>
          <padding>
-            <Insets bottom="3.0" left="5.0" right="5.0" top="10.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="10.0" />
          </padding>
       </VBox>
    </children>

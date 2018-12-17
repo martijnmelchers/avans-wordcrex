@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 public class ChatView extends View {
@@ -62,9 +61,6 @@ public class ChatView extends View {
         for (Chatline chatline : chatlines) {
             displayMessage(chatline);
         }
-
-        // set the scroll to the bottom
-        messagesScrollpane.setVvalue(1.0);
     }
 
     private void displayMessage(Chatline chatline) {
@@ -84,6 +80,12 @@ public class ChatView extends View {
                 messageViewController.setMessageAlignment(0);
                 messagesGridpane.add(messagePane, 0, messagesGridpane.getRowCount() + 1);
             }
+
+
+            // set the scroll to the bottom
+            messagesScrollpane.applyCss();
+            messagesScrollpane.layout();
+            messagesScrollpane.setVvalue(1.0);
         } catch (IOException e) {
             Log.error(e);
         }

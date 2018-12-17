@@ -22,14 +22,14 @@
                   </GridPane>
                </content>
               </ScrollPane>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="400.0" style="-fx-background-color: transparent;" VBox.vgrow="SOMETIMES">
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="730.0" style="-fx-background-color: transparent;" VBox.vgrow="SOMETIMES">
                <children>
-                    <TextField fx:id="messageField" maxHeight="-Infinity" minHeight="-Infinity" onAction="#onEnter" prefHeight="48.0" prefWidth="218.0" promptText="Typ hier uw bericht" HBox.hgrow="ALWAYS">
+                    <TextField fx:id="messageField" maxHeight="-Infinity" minHeight="-Infinity" onAction="#onEnter" prefHeight="45.0" prefWidth="218.0" promptText="Typ hier uw bericht" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets left="3.0" right="3.0" />
                      </HBox.margin>
                   </TextField>
-                    <Button maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#sendMessage" prefHeight="48.0" prefWidth="150.0" text="Verstuur" HBox.hgrow="ALWAYS">
+                    <Button maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#sendMessage" prefHeight="45.0" prefWidth="150.0" text="Verstuur" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets left="3.0" right="3.0" />
                      </HBox.margin>
