@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import model.GameSession;
 import model.helper.Log;
-import model.tables.Account;
 import model.tables.Chatline;
 import view.View;
 
@@ -46,16 +45,16 @@ public class ChatView extends View {
     }
 
     public void initialize() {
-        GameSession.setSession(new Account("lidewij", "no"));
-        displayOpponentsName();
-        displayMessages();
-        checkForMessages();
+        if(GameSession.getGame() != null) {
+            displayMessages();
+            checkForMessages();
+        }
     }
 
     private void displayMessages() {
         messagesGridpane.getChildren().clear();
 
-        ArrayList<Chatline> chatlines = _controller.getChatlines(502);
+        ArrayList<Chatline> chatlines = _controller.getChatlines(GameSession.getGame().getGameId());
 
         this.messageCount = chatlines.size();
 
@@ -78,7 +77,7 @@ public class ChatView extends View {
             messageViewController.setMessageLabel(chatline.getMessage());
             messageViewController.setMomentLabel(chatline.getMoment().toString());
 
-            if(chatline.account.getUsername().equals("bookowner")) {
+            if(chatline.account.getUsername().equals(GameSession.getUsername())) {
                 messageViewController.setMessageAlignment(1);
                 messagesGridpane.add(messagePane, 1, messagesGridpane.getRowCount() + 1);
             } else {
@@ -94,7 +93,7 @@ public class ChatView extends View {
         java.util.TimerTask task = new java.util.TimerTask() {
             @Override
             public void run() {
-                int chatlinesCount = _controller.getChatlines(502).size();
+                int chatlinesCount = _controller.getChatlines(GameSession.getGame().getGameId()).size();
 
                 if (chatlinesCount > messageCount) {
                     displayMessages();
@@ -106,13 +105,17 @@ public class ChatView extends View {
     }
 
     public void sendMessage() {
+        if(GameSession.getGame().getGameId() == null) {
+            return;
+        }
+
+
         String message = messageField.getText();
 
         if (!message.isEmpty()) {
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
-            // TODO: insert gameid dynamically
-            Chatline chatline = new Chatline(GameSession.getUsername(), 502, timestamp, message);
+            Chatline chatline = new Chatline(GameSession.getUsername(), GameSession.getGame().getGameId(), timestamp, message);
             _controller.sendChatline(chatline);
 
             messageField.clear();
@@ -126,17 +129,16 @@ public class ChatView extends View {
         }
     }
 
-    public void waitOneSecond() {
-
-    }
-
     public void onEnter() {
         sendMessage();
     }
 
     private void displayOpponentsName() {
-        // TODO: get opponents name from db and display it
-        NameLabel.setText("John Doe");
+        if(GameSession.getUsername().equals(GameSession.getGame().getPlayer1Username())) {
+            NameLabel.setText(GameSession.getGame().getPlayer2Username());
+        } else {
+            NameLabel.setText(GameSession.getGame().getPlayer1Username());
+        }
     }
 
     @Override

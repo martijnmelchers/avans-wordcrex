@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1600.0" styleClass="Chat-Textfield" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView.ChatView">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="755.0" prefWidth="730.0" style="-fx-background-color: rgb(28, 20, 58);" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView.ChatView">
     <children>
-      <VBox fx:id="_parent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="_parent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1200.0" prefWidth="1600.0" style="-fx-background-color: rgb(28, 20, 58);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <FlowPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="800.0" styleClass="Chat-Name-Pane" VBox.vgrow="NEVER">
-               <children>
-                  <Label fx:id="NameLabel" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="208.0" styleClass="Chat-Name-Label">
-                     <padding>
-                        <Insets left="10.0" top="4.0" />
-                     </padding></Label>
-               </children>
-            </FlowPane>
-              <ScrollPane fx:id="MessagesScrollpane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+              <ScrollPane fx:id="MessagesScrollpane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" style="-fx-background-color: rgb(28, 20, 58);" VBox.vgrow="ALWAYS">
                <padding>
                   <Insets left="5.0" right="5.0" />
                </padding>
                <content>
-                  <GridPane fx:id="messagesGridpane" vgap="5.0">
+                  <GridPane fx:id="messagesGridpane" style="-fx-background-color: rgb(28, 20, 58);" vgap="5.0">
                     <columnConstraints>
                       <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" />
                       <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="100.0" />
@@ -29,9 +22,9 @@
                   </GridPane>
                </content>
               </ScrollPane>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="54.0" prefWidth="1588.0" VBox.vgrow="ALWAYS">
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="48.0" prefWidth="400.0" style="-fx-background-color: transparent;" VBox.vgrow="SOMETIMES">
                <children>
-                    <TextField fx:id="messageField" maxHeight="-Infinity" minHeight="-Infinity" onAction="#onEnter" prefHeight="50.0" prefWidth="1415.0" promptText="Typ hier uw bericht" HBox.hgrow="ALWAYS">
+                    <TextField fx:id="messageField" maxHeight="-Infinity" minHeight="-Infinity" onAction="#onEnter" prefHeight="48.0" prefWidth="218.0" promptText="Typ hier uw bericht" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets left="3.0" right="3.0" />
                      </HBox.margin>
@@ -49,4 +42,7 @@
          </children>
       </VBox>
     </children>
+   <padding>
+      <Insets bottom="5.0" />
+   </padding>
 </AnchorPane>

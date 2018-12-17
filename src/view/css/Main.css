@@ -56,7 +56,7 @@ Pane {
 }
 
 ScrollPane {
-
+    -fx-background-color: transparent;
 }
 
 Label {
@@ -82,14 +82,6 @@ TextField:focused {
     -fx-border-color: purple;
 }
 
-.Chat-Name-Pane {
-    -fx-background-color: #2c3e50;
-}
-
-.Chat-Name-Label {
-    -fx-background-color: transparent;
-    -fx-font-size: 16;
-}
 *:even:selected {
     -fx-background-color: #9b59b6;
     -fx-text-fill: #130F0E;
@@ -101,20 +93,12 @@ TextField:focused {
 
 }
 
-.Chat-MessagesVBox {
-
+.chatLabel {
+    -fx-font-size: 18px;
 }
 
-.Chat-Message-Container {
-    -fx-background-color: purple;
-}
-
-.Chat-Message {
-    -fx-font-size: 14;
-}
-
-.Chat-Moment {
-    -fx-font-size: 10;
+.momentLabel {
+    -fx-font-size: 12px;
 }
 
 #btBack {

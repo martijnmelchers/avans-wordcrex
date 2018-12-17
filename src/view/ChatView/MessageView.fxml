@@ -10,16 +10,8 @@
    <children>
       <VBox fx:id="MessageVbox" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: purple;">
          <children>
-            <Label fx:id="MessageLabel" maxHeight="1.7976931348623157E308" maxWidth="800.0" style="-fx-background-color: transparent;" text="Message" wrapText="true" VBox.vgrow="ALWAYS">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label fx:id="MomentLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" text="Moment" VBox.vgrow="ALWAYS">
-               <font>
-                  <Font size="11.0" />
-               </font>
-            </Label>
+            <Label fx:id="MessageLabel" maxHeight="1.7976931348623157E308" maxWidth="300.0" style="-fx-background-color: transparent;" styleClass="messageLabel" text="Message" wrapText="true" VBox.vgrow="ALWAYS" />
+            <Label fx:id="MomentLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" styleClass="momentLabel" text="Moment" VBox.vgrow="ALWAYS" />
          </children>
          <padding>
             <Insets bottom="3.0" left="5.0" right="5.0" top="10.0" />
