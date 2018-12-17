@@ -315,7 +315,7 @@ public class GameModel {
 
             boolean uploadedLast = results.size() > 0;
 
-            if (checkInfo.getPoints().total() == 0 && checkInfo.getTiles() == null && checkInfo.getCoordinates() == null) {
+            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null) {
                 _db.insert(new TurnPlayer1(_gameId, _turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
             } else {
                 _db.insert(new TurnPlayer1(_gameId, _turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
@@ -401,7 +401,7 @@ public class GameModel {
 
             boolean uploadedLast = results.size() > 0;
 
-            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null && checkInfo.getTiles() == null) {
+            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null) {
                 _db.insert(new TurnPlayer2(_gameId, _turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
             } else {
                 _db.insert(new TurnPlayer2(_gameId, _turnId, _playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
@@ -422,9 +422,7 @@ public class GameModel {
             }
 
             Vector2[] c = checkInfo.getCoordinates();
-            Tile[] tiles = checkInfo.getTiles();
             //insert alle tiles in tile en boardplayer1
-
             //TODO in database tileType moet je kijke nwat -- en * zijn (default?)
             for (int i = 0; i < c.length; i++) {
 

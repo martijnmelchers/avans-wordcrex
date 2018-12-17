@@ -102,7 +102,7 @@ public class GameController extends Controller{
         }
 
         if (info == null && pass) {
-            info = new CheckInfo(new Points(0, 0), null, null);
+            info = new CheckInfo(new Points(0, 0),  null);
         }
 
         _boardView.startLoadingScreen("Wachten op andere speler.");

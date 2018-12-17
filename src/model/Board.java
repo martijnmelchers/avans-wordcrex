@@ -16,52 +16,52 @@ import java.util.stream.Collectors;
 
 public class Board {
 
+    WordChecker wordChecker = new WordChecker();
     private ArrayList<Vector2> _placedCoords = new ArrayList<>();
-
     private HashMap<String, Integer> _letterValues = new HashMap<>() {{
-        put("A", 2);
-        put("B", 3);
-        put("C", 6);
-        put("D", 2);
-        put("E", 1);
-        put("F", 6);
-        put("G", 4);
-        put("H", 5);
-        put("I", 2);
-        put("J", 5);
-        put("K", 4);
-        put("L", 4);
-        put("M", 3);
-        put("N", 1);
-        put("O", 2);
-        put("P", 5);
-        put("Q", 20);
-        put("R", 2);
-        put("S", 3);
-        put("T", 2);
-        put("U", 3);
-        put("V", 5);
-        put("W", 6);
-        put("X", 8);
-        put("Y", 9);
-        put("Z", 6);
+        this.put("A", 2);
+        this.put("B", 3);
+        this.put("C", 6);
+        this.put("D", 2);
+        this.put("E", 1);
+        this.put("F", 6);
+        this.put("G", 4);
+        this.put("H", 5);
+        this.put("I", 2);
+        this.put("J", 5);
+        this.put("K", 4);
+        this.put("L", 4);
+        this.put("M", 3);
+        this.put("N", 1);
+        this.put("O", 2);
+        this.put("P", 5);
+        this.put("Q", 20);
+        this.put("R", 2);
+        this.put("S", 3);
+        this.put("T", 2);
+        this.put("U", 3);
+        this.put("V", 5);
+        this.put("W", 6);
+        this.put("X", 8);
+        this.put("Y", 9);
+        this.put("Z", 6);
     }};
     private Tile[][] _tiles = new Tile[15][15];
 
     public Board() {
-        createDefaultBoard();
+        this.createDefaultBoard();
     }
 
     public void getBoardFromDatabase(int gameId, Integer turn_id) // with turn_id you can return state of board that moment (For history mode)
     {
-        createDefaultBoard();
+        this.createDefaultBoard();
         ArrayList<Clause> clauses = new ArrayList<>();
         clauses.add(new Clause(new TableAlias("turnboardletter", -1), "game_id", CompareMethod.EQUAL, gameId));
         clauses.add(new Clause(new TableAlias("turnboardletter", -1), "turn_id", CompareMethod.LESS_EQUAL, turn_id));
         try {
             List<TurnBoardLetter> grid = DocumentSession.getDatabase().select(TurnBoardLetter.class, clauses);
             for (TurnBoardLetter letter : grid) {
-                _tiles[(letter.getY() - 1)][(letter.getX() - 1)].replace(letter.letter.getSymbol() + "", letter.letter.symbol.get_value(), letter.letter.getLetterId(), Color.rgb(247, 235, 160));
+                this._tiles[(letter.getY() - 1)][(letter.getX() - 1)].replace(letter.letter.getSymbol() + "", letter.letter.symbol.get_value(), letter.letter.getLetterId(), Color.rgb(247, 235, 160));
             }
         } catch (Exception e) {
             Log.error(e);
@@ -69,218 +69,222 @@ public class Board {
     }
 
     public ArrayList<Vector2> getPlacedCoords() {
-        return _placedCoords;
+        return this._placedCoords;
     }
 
     public void clearPlacedCoords() {
-        _placedCoords.clear();
+        this._placedCoords.clear();
     }
 
     private void createDefaultBoard() {
-        for (int x = 0; x < _tiles.length; x++) {
-            for (int y = 0; y < _tiles[x].length; y++) {
-                _tiles[y][x] = decideTileType(new Vector2(x, y));
+        for (int x = 0; x < this._tiles.length; x++) {
+            for (int y = 0; y < this._tiles[x].length; y++) {
+                this._tiles[y][x] = this.decideTileType(new Vector2(x, y));
             }
         }
     }
 
     public Tile[][] getTiles() {
-        return _tiles;
+        return this._tiles;
     }
 
     public boolean isEmpty(Vector2 vector2) {
-        return (_tiles[vector2.getY()][vector2.getX()].isEmpty());
+        return (this._tiles[vector2.getY()][vector2.getX()].isEmpty());
     }
 
     public void place(Vector2 vector2, String letter, int letterId) {
-        Tile tile = _tiles[vector2.getY()][vector2.getX()];// omgedraaid
+        Tile tile = this._tiles[vector2.getY()][vector2.getX()];// omgedraaid
 
-        tile.replace(letter, _letterValues.get(letter.toUpperCase()), letterId);
+        tile.replace(letter, this._letterValues.get(letter.toUpperCase()), letterId);
         tile.setColor(Color.WHITE);
         tile.setState(TileState.UNLOCKED);
 
-        _placedCoords.add(vector2);
+        this._placedCoords.add(vector2);
     }
 
     //Remove a piece
     public Tile remove(Vector2 vector2) {
-        Tile prevTile = _tiles[vector2.getY()][vector2.getX()];
-        _tiles[vector2.getY()][vector2.getX()] = decideTileType(vector2);
-        _tiles[vector2.getY()][vector2.getX()].setState(TileState.LOCKED);
-        _placedCoords.remove(_placedCoords.stream().filter(a -> a.getY() == vector2.getY() && a.getX() == vector2.getX()).collect(Collectors.toList()).get(0));
+        Tile prevTile = this._tiles[vector2.getY()][vector2.getX()];
+        this._tiles[vector2.getY()][vector2.getX()] = this.decideTileType(vector2);
+        this._tiles[vector2.getY()][vector2.getX()].setState(TileState.LOCKED);
+        this._placedCoords.remove(this._placedCoords.stream().filter(a -> a.getY() == vector2.getY() && a.getX() == vector2.getX()).collect(Collectors.toList()).get(0));
         return prevTile;
     }
 
     public ArrayList<Tile> removeTiles() {
         ArrayList<Tile> tiles = new ArrayList<>();
-        for (Vector2 vector2 : _placedCoords) {
-            Tile prevTile = _tiles[vector2.getY()][vector2.getX()];
-            _tiles[vector2.getY()][vector2.getX()] = decideTileType(vector2);
-            _tiles[vector2.getY()][vector2.getX()].setState(TileState.LOCKED);
+        for (Vector2 vector2 : this._placedCoords) {
+            Tile prevTile = this._tiles[vector2.getY()][vector2.getX()];
+            this._tiles[vector2.getY()][vector2.getX()] = this.decideTileType(vector2);
+            this._tiles[vector2.getY()][vector2.getX()].setState(TileState.LOCKED);
             tiles.add(prevTile);
         }
-        _placedCoords.clear();
+        this._placedCoords.clear();
         return tiles;
     }
 
-    private CheckInfo checkSubWordsVert(List<Vector2> locations){
-        CheckInfo temp;
-        List<Vector2> tempWordLocations = new ArrayList<Vector2>();
-        for(Vector2 starting)
+    private Points checkSubWordsVert(List<Vector2> locations) {
+        Points temp = new Points(0,0);
 
-        for (int x = xMin; x < 14 && !_tiles[yMin][x].isEmpty(); x++) {
-            word += _tiles[yMin][x].getLetterType().getLetter();
+        List<Points> temps = new ArrayList<Points>();
+        //List<CheckInfo>
+        List<Vector2> tempWordLocations = new ArrayList<Vector2>();
+
+        for (Vector2 starting : locations) {
+            String Word = "";
+            for (int y = starting.getY(); y > -1 && !this._tiles[y][starting.getX()].isEmpty(); y--) {
+                starting = new Vector2(starting.getX(), y);
+
+
+            }
+            for (int y = starting.getY(); y < 14 && !this._tiles[y][starting.getX()].isEmpty(); y++) {
+                tempWordLocations.add(new Vector2(starting.getX(), y));
+                Word += _tiles[y][starting.getX()].getLetterType().getLetter();
+            }
+            if (wordChecker.check(Word))
+                temps.add(this.calculatePoints(tempWordLocations.stream().map(x -> this._tiles[x.getY()][x.getX()]).toArray(Tile[]::new)));
 
         }
-
-        return temp;
+        for(Points point: temps){
+            temp.add(point);
+        }
+        return temp;//temp;
     }
-    private CheckInfo checkSubWordsHorz(List<Vector2> locations){
-        CheckInfo temp;
+
+    private Points checkSubWordsHorz(List<Vector2> locations) {
+        Points temp = new Points(0,0);
+
+        List<Points> temps = new ArrayList<Points>();
+        //List<CheckInfo>
+        List<Vector2> tempWordLocations = new ArrayList<Vector2>();
+
+        for (Vector2 starting : locations) {
+            String Word = "";
+            for (int x = starting.getX(); x > -1 && !this._tiles[starting.getY()][x].isEmpty(); x--) {
+                starting = new Vector2(x, starting.getY());
 
 
-        return temp;
+            }
+            for (int x = starting.getX(); x < 14 && !this._tiles[starting.getY()][x].isEmpty(); x++) {
+                tempWordLocations.add(new Vector2(x, starting.getY()));
+                Word += _tiles[starting.getY()][x].getLetterType().getLetter();
+            }
+            if (wordChecker.check(Word))
+                temps.add(this.calculatePoints(tempWordLocations.stream().map(x -> this._tiles[x.getY()][x.getX()]).toArray(Tile[]::new)));
+
+        }
+        for(Points point: temps){
+            temp.add(point);
+        }
+        return temp;//temp;
     }
 
 
     //Returned de punten die het woord geeft
     public CheckInfo check() {
 
-        if (!moveIsLegit()) { return null; }
+
+        if (!this.moveIsLegit() || this.newTilesConnected()) {
+            return null;
+        }
 
 
-
-        int xMin = _placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
-        int yMin = _placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
+        int xMin = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
+        int yMin = this._placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
 
         final int tempx = xMin;
         final int tempy = yMin;
-        boolean isHorizontal = _placedCoords.stream().anyMatch(x -> x.getX() != tempx);
-        boolean isVertical = _placedCoords.stream().anyMatch(x -> x.getY() != tempy);
-        if(isHorizontal == isVertical){
+        boolean isHorizontal = this._placedCoords.stream().anyMatch(x -> x.getX() != tempx);
+        boolean isVertical = this._placedCoords.stream().anyMatch(x -> x.getY() != tempy);
+        if (isHorizontal == isVertical) {
             isHorizontal = true;
             isVertical = true;
         }
 
         List<Vector2> secondaryWordsHorizontal = new ArrayList<Vector2>();
         List<Vector2> secondaryWordsVertical = new ArrayList<Vector2>();
-
+        List<Tile> mainWord = new ArrayList<Tile>();
         String word;
-        if(isHorizontal) {
+        if (isHorizontal) {
             word = "";
-            for (int x = xMin; x > -1 && !_tiles[yMin][x].isEmpty(); x--) {
+            mainWord = new ArrayList<Tile>();
+            for (int x = xMin; x > -1 && !this._tiles[yMin][x].isEmpty(); x--) {
                 xMin = x;
             }
 
-            for (int x = xMin; x < 14 && !_tiles[yMin][x].isEmpty(); x++) {
-                word += _tiles[yMin][x].getLetterType().getLetter();
-                if(_tiles[yMin ][x].getState() == TileState.UNLOCKED) {
-                    if (yMin < 14 && !_tiles[yMin + 1][x].isEmpty()) {
+            for (int x = xMin; x < 14 && !this._tiles[yMin][x].isEmpty(); x++) {
+                word += this._tiles[yMin][x].getLetterType().getLetter();
+                mainWord.add(_tiles[yMin][x]);
+                if (this._tiles[yMin][x].getState() == TileState.UNLOCKED) {
+                    if (yMin < 14 && !this._tiles[yMin + 1][x].isEmpty()) {
                         secondaryWordsVertical.add(new Vector2(x, yMin + 1));
-                    } else if (yMin > 0 && !_tiles[yMin - 1][x].isEmpty()) {
+                    } else if (yMin > 0 && !this._tiles[yMin - 1][x].isEmpty()) {
                         secondaryWordsVertical.add(new Vector2(x, yMin - 1));
                     }
                 }
             }
         }
-        if(isVertical) {
+        if (isVertical) {
             word = "";
-            for (int y = yMin; y > -1 && !_tiles[y][xMin].isEmpty(); y--) {
+            mainWord = new ArrayList<Tile>();
+            for (int y = yMin; y > -1 && !this._tiles[y][xMin].isEmpty(); y--) {
                 yMin = y;
             }
 
 
-            for (int y = yMin; y < 14 && !_tiles[y][xMin].isEmpty(); y++) {
-                word += _tiles[y][xMin].getLetterType().getLetter();
-
-                if (_tiles[y][xMin].getState() == TileState.UNLOCKED) {
-                    if (xMin < 14 && !_tiles[y][xMin + 1].isEmpty()) {
+            for (int y = yMin; y < 14 && !this._tiles[y][xMin].isEmpty(); y++) {
+                word += this._tiles[y][xMin].getLetterType().getLetter();
+                mainWord.add(_tiles[y][xMin]);
+                if (this._tiles[y][xMin].getState() == TileState.UNLOCKED) {
+                    if (xMin < 14 && !this._tiles[y][xMin + 1].isEmpty()) {
                         secondaryWordsHorizontal.add(new Vector2(xMin + 1, y));
-                    } else if (xMin < 14 && !_tiles[y][xMin - 1].isEmpty()) {
+                    } else if (xMin < 14 && !this._tiles[y][xMin - 1].isEmpty()) {
                         secondaryWordsHorizontal.add(new Vector2(xMin - 1, y));
                     }
                 }
             }
         }
-        return new CheckInfo(0,)
+
+        Points points = this.checkSubWordsVert(secondaryWordsVertical);
+        points.add(this.checkSubWordsHorz(secondaryWordsHorizontal));
+        points.add(calculatePoints(mainWord.toArray(new Tile[0])));
+
+        //return new CheckInfo(0,)
 
 
 
-
-
-
-
-
-        ArrayList<Tile> words = new ArrayList<>();
-
-        ArrayList<String> tileIds = new ArrayList<>();
-
-
-        ArrayList<Tile> tilesX = new ArrayList<>();
-        ArrayList<Tile> tilesY = new ArrayList<>();
-
-        if (!newTilesConnected())
-        {
-            return null;
-        }
-
-
-        /*System.out.println("Woord X: " + woordX + " Woord Y:" + woordY);
-        WordChecker checker = new WordChecker();
-        boolean bothSidesCorrect = checker.check(woordX.toString()) && checker.check(woordY.toString());
-
-        if (bothSidesCorrect) {
-            tileIds.add(tileId.toString());
-            if (tilesX.size() > 1) words.addAll(tilesX);
-            if (tilesY.size() > 1) words.addAll(tilesY);
-        }
-
-
-        Tile[] tileArr = words.toArray(new Tile[0]);
         Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
-
-        Points points = calculatePoints(words.toArray(new Tile[0]));
-*/
-        return null;//new CheckInfo(points, tileArr, coordinatesArr);
+        return new CheckInfo(points, coordinatesArr);
     }
 
-    private boolean newTilesConnected()
-    {
-        if (_placedCoords.size() == 1)
-        {
+    private boolean newTilesConnected() {
+        if (this._placedCoords.size() == 1) {
             return true;
         }
 
-        int xMin = _placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
-        int yMin = _placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
+        int xMin = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
+        int yMin = this._placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
 
-        boolean isHorizontal = _placedCoords.stream().anyMatch(x -> x.getX() != xMin);
-        boolean isVertical = _placedCoords.stream().anyMatch(x -> x.getY() != yMin);
+        boolean isHorizontal = this._placedCoords.stream().anyMatch(x -> x.getX() != xMin);
+        boolean isVertical = this._placedCoords.stream().anyMatch(x -> x.getY() != yMin);
 
         if (!isHorizontal && !isVertical) {
             return false;
         }
 
-        if (isHorizontal)
-        {
-            int xMax = _placedCoords.stream().mapToInt(x -> x.getX()).max().orElseThrow();
-            for (int i = xMin; i < xMax; i++)
-            {
-                Tile prevTile = _tiles[yMin][i];
-                if (prevTile.isEmpty())
-                {
+        if (isHorizontal) {
+            int xMax = this._placedCoords.stream().mapToInt(x -> x.getX()).max().orElseThrow();
+            for (int i = xMin; i < xMax; i++) {
+                Tile prevTile = this._tiles[yMin][i];
+                if (prevTile.isEmpty()) {
                     return false;
                 }
             }
-        }
-        else
-        {
-            int yMax = _placedCoords.stream().mapToInt(x -> x.getY()).max().orElseThrow();
-            for (int i = yMin; i < yMax; i++)
-            {
-                Tile prevTile = _tiles[i][xMin];
-                if (prevTile.isEmpty())
-                {
+        } else {
+            int yMax = this._placedCoords.stream().mapToInt(x -> x.getY()).max().orElseThrow();
+            for (int i = yMin; i < yMax; i++) {
+                Tile prevTile = this._tiles[i][xMin];
+                if (prevTile.isEmpty()) {
                     return false;
                 }
             }
@@ -293,15 +297,17 @@ public class Board {
         ArrayList<Boolean> tilesConnected = new ArrayList<>();
         ArrayList<Boolean> connectedToOldTiles = new ArrayList<>();
 
-        boolean usedStartingTile = !_tiles[7][7].isEmpty();
-        boolean isStraight = _placedCoords.stream().allMatch(x -> x.getX() == _placedCoords.get(0).getX()) || _placedCoords.stream().allMatch(x -> x.getY() == _placedCoords.get(0).getY());
+        boolean usedStartingTile = !this._tiles[7][7].isEmpty();
+        boolean isStraight = this._placedCoords.stream().allMatch(x -> x.getX() == this._placedCoords.get(0).getX()) || this._placedCoords.stream().allMatch(x -> x.getY() == this._placedCoords.get(0).getY());
 
-        if (_placedCoords.size() < 1) { return false; }
+        if (this._placedCoords.size() < 1) {
+            return false;
+        }
 
-        boolean boardHasOldTiles = Arrays.stream(_tiles).anyMatch(c -> Arrays.stream(c).anyMatch(o -> o.getState() == TileState.LOCKED && !o.getLetterType().getLetter().equals("")));
+        boolean boardHasOldTiles = Arrays.stream(this._tiles).anyMatch(c -> Arrays.stream(c).anyMatch(o -> o.getState() == TileState.LOCKED && !o.getLetterType().getLetter().equals("")));
         boolean isConnectedToOld = true;
 
-        for (var c : _placedCoords) {
+        for (var c : this._placedCoords) {
 
             ArrayList<Boolean> isEmpty = new ArrayList<>();
             ArrayList<Boolean> connectedToOld = new ArrayList<>();
@@ -309,21 +315,21 @@ public class Board {
             //TODO refactor dit nog wel een keer want mn ogen doen pijn
 
             if (c.getX() - 1 > -1) {
-                isEmpty.add(_tiles[c.getY()][c.getX() - 1].isEmpty());// Check of hij leeg is
-                connectedToOld.add(_tiles[c.getY()][c.getX() - 1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() - 1].getLetterType().getLetter().equals("")); // Check of hij aan een oud block gevoegd is
+                isEmpty.add(this._tiles[c.getY()][c.getX() - 1].isEmpty());// Check of hij leeg is
+                connectedToOld.add(this._tiles[c.getY()][c.getX() - 1].getState() == TileState.LOCKED && !this._tiles[c.getY()][c.getX() - 1].getLetterType().getLetter().equals("")); // Check of hij aan een oud block gevoegd is
             }
             if (c.getX() + 1 < 15) {
-                isEmpty.add(_tiles[c.getY()][c.getX() + 1].isEmpty());
-                connectedToOld.add(_tiles[c.getY()][c.getX() + 1].getState() == TileState.LOCKED && !_tiles[c.getY()][c.getX() + 1].getLetterType().getLetter().equals(""));
+                isEmpty.add(this._tiles[c.getY()][c.getX() + 1].isEmpty());
+                connectedToOld.add(this._tiles[c.getY()][c.getX() + 1].getState() == TileState.LOCKED && !this._tiles[c.getY()][c.getX() + 1].getLetterType().getLetter().equals(""));
             }
 
             if (c.getY() - 1 > -1) {
-                isEmpty.add(_tiles[c.getY() - 1][c.getX()].isEmpty());
-                connectedToOld.add(_tiles[c.getY() - 1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY() - 1][c.getX()].getLetterType().getLetter().equals(""));
+                isEmpty.add(this._tiles[c.getY() - 1][c.getX()].isEmpty());
+                connectedToOld.add(this._tiles[c.getY() - 1][c.getX()].getState() == TileState.LOCKED && !this._tiles[c.getY() - 1][c.getX()].getLetterType().getLetter().equals(""));
             }
             if (c.getY() + 1 < 15) {
-                isEmpty.add(_tiles[c.getY() + 1][c.getX()].isEmpty());
-                connectedToOld.add(_tiles[c.getY() + 1][c.getX()].getState() == TileState.LOCKED && !_tiles[c.getY() + 1][c.getX()].getLetterType().getLetter().equals(""));
+                isEmpty.add(this._tiles[c.getY() + 1][c.getX()].isEmpty());
+                connectedToOld.add(this._tiles[c.getY() + 1][c.getX()].getState() == TileState.LOCKED && !this._tiles[c.getY() + 1][c.getX()].getLetterType().getLetter().equals(""));
             }
 
             if (isEmpty.contains(false)) {
@@ -334,19 +340,15 @@ public class Board {
             }
         }
 
-        boolean isConnected = _placedCoords.size() == tilesConnected.size();
+        boolean isConnected = this._placedCoords.size() == tilesConnected.size();
         if (boardHasOldTiles) {
             isConnectedToOld = connectedToOldTiles.contains(true);
         }
 
-        if (!usedStartingTile || !isStraight || !isConnected || !isConnectedToOld) return false;
-
-        return true;
+        return usedStartingTile && isStraight && isConnected && isConnectedToOld;
     }
 
     private Points calculatePoints(Tile[] tiles) {
-
-
 
         int score = 0;
         int bonus = 0;
@@ -357,7 +359,7 @@ public class Board {
         for (Tile tile : tiles) {
             TileType tileType = tile.getType();
             System.out.println("Letter: " + tile.getLetterType().getLetter());
-            int letterValue = _letterValues.get(tile.getLetterType().getLetter());
+            int letterValue = this._letterValues.get(tile.getLetterType().getLetter());
 
             switch (tileType) {
                 case LETTER_TIMES_TWO:
@@ -396,7 +398,7 @@ public class Board {
         for (int i = 0; i < 14; i++) {
             String line = "";
             for (int k = 0; k < 14; k++) {
-                String s = _tiles[k][i].getLetterType().getLetter();
+                String s = this._tiles[k][i].getLetterType().getLetter();
                 line += s == "" ? "." : s;
             }
             System.out.println(line);
