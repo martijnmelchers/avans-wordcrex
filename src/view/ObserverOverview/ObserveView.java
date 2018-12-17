@@ -1,4 +1,4 @@
-package view.MatchOverview;
+package view.ObserverOverview;
 
 import controller.MatchOverviewController;
 import javafx.fxml.FXML;
@@ -7,12 +7,11 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import model.GameModel;
 import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
 
-public class MatchView {
+public class ObserveView {
     @FXML
     private HBox rootHbox;
 
@@ -26,17 +25,17 @@ public class MatchView {
     private Text matchTurn;
 
     @FXML
-    private Button matchPlayButton;
+    private Text turnLabel;
 
     @FXML
-    private Button matchSurrenderButton;
+    private Button matchPlayButton;
 
 
     @FXML
     private Pane infoPane;
 
     private Game match;
-    public MatchView(Game match){
+    public ObserveView(Game match){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./PlayerGame.fxml"));
         fxmlLoader.setController(this);
         MatchOverviewController controller = new MatchOverviewController();
@@ -46,7 +45,6 @@ public class MatchView {
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
 
-            var gameMod = new GameModel(match);
             fxmlLoader.load();
             boolean isMyTurn;
 
@@ -69,7 +67,6 @@ public class MatchView {
                 Text inviteTxt = new Text();
                 Text inviteStatusTxt = new Text();
                 matchPlayButton.setDisable(true);
-                matchSurrenderButton.setDisable(true);
                 if(GameSession.getUsername().equals(player1)){
                     //Uitnodiging van ons
                     inviteTxt.setText("Uitnodiging naar: " + player2);
@@ -78,7 +75,6 @@ public class MatchView {
                         case "accepted": {
                             inviteStatusTxt.setText(antwoord+"Geaccepteerd");
                             matchPlayButton.setDisable(false);
-                            matchSurrenderButton.setDisable(false);
                             break;
                         }
                         case "declined": {
@@ -107,7 +103,16 @@ public class MatchView {
             else {
                 matchEnemy.setText(enemy);
                 matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
-                matchTurn.setText(!gameMod.checkIfTurnPlayed() ? GameSession.getUsername() : enemy);
+                matchTurn.setText(isMyTurn ? GameSession.getUsername() : enemy);
+            }
+
+
+
+
+
+            if(match.getGameState().isFinished()){
+                turnLabel.setText("Winnaar: ");
+                matchTurn.setText(match.getWinner().getUsername());
             }
         }
         catch (Exception e) {
@@ -121,7 +126,6 @@ public class MatchView {
 
     public Button getMatchPlayButton(){ return this.matchPlayButton; }
 
-    public Button getMatchSurrenderButton(){ return this.matchSurrenderButton; }
 
     @FXML
     private void onMatchPlay() { System.out.println(match.getGameId()); }

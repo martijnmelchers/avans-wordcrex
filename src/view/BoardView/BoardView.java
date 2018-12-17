@@ -66,7 +66,7 @@ public class BoardView extends View {
 
     private void checkRole()
     {
-        if (GameSession.getRole().getRole().equals("observer"))
+        if (GameSession.hasRole("observer"))
         {
             _controller.getOldDock(_controller.getCurrentTurn());
             dockController.updateDock();
@@ -256,7 +256,18 @@ public class BoardView extends View {
 
     @FXML
     private void home(){
-        _controller.navigate("MatchOverview");
+        try{
+            if(_submit.isVisible() == false){
+                _controller.navigate("ObserverOverview",620,770);
+            }
+            else{
+                _controller.navigate("MatchOverview", 620,770);
+            }
+        }
+        catch(Exception e){
+            Log.error(e);
+        }
+
     }
 
     @FXML
@@ -269,7 +280,7 @@ public class BoardView extends View {
         updateScore();
         updateTilesLeft((int)snap);
 
-        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.getRole().getRole().equals("observer"))
+        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.hasRole("observer"))
         {
             _controller.getOldDock((int)snap);
             dockController.updateDock();

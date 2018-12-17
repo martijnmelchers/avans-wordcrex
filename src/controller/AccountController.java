@@ -3,9 +3,13 @@ package controller;
 import model.AccountModel;
 import model.GameSession;
 import model.helper.Log;
+import model.tables.AccountInfo;
+import model.tables.Role;
 import view.AccountInformation.AccountInformation;
 import view.LoginView.LoginView;
 import view.RegisterView.RegisterView;
+
+import java.util.ArrayList;
 
 public class AccountController extends Controller {
 
@@ -34,13 +38,25 @@ public class AccountController extends Controller {
             var account = this._model.login(username, password);
 
             GameSession.setSession(account.getAccount());
-            GameSession.setRole(account.getRole());
 
+
+            GameSession.setRoles(getAccountRoles(account));
             registerView.registerSuccess();
         } catch (Exception e) {
             Log.error(e);
             registerView.showError(e.getMessage());
         }
+    }
+
+
+    private ArrayList<Role> getAccountRoles(AccountInfo account){
+
+        var accountInfos = this._model.getRoles(account);
+        var roleList = new ArrayList<Role>();
+        for (var role : accountInfos){
+            roleList.add(role.getRole());
+        }
+        return roleList;
     }
 
     public void loginUser(String username, String password) {
@@ -53,7 +69,7 @@ public class AccountController extends Controller {
             var account = this._model.login(username, password);
 
             GameSession.setSession(account.getAccount());
-            GameSession.setRole(account.getRole());
+            GameSession.setRoles(getAccountRoles(account));
 
             loginView.loginSuccess();
         } catch (Exception e) {
