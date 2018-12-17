@@ -130,6 +130,10 @@ public class Board {
 
         ArrayList<String> tileIds = new ArrayList<>();
 
+        if (!newTilesConnected())
+        {
+            return null;
+        }
 
         for (Vector2 placedCoords : _placedCoords) {
 
@@ -203,6 +207,51 @@ public class Board {
         Points points = calculatePoints(words.toArray(new Tile[0]));
 
         return new CheckInfo(points, tileArr, coordinatesArr);
+    }
+
+    private boolean newTilesConnected()
+    {
+        if (_placedCoords.size() == 1)
+        {
+            return true;
+        }
+
+        int xMin = _placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
+        int yMin = _placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
+
+        boolean isHorizontal = _placedCoords.stream().anyMatch(x -> x.getX() != xMin);
+        boolean isVertical = _placedCoords.stream().anyMatch(x -> x.getY() != yMin);
+
+        if (!isHorizontal && !isVertical) {
+            return false;
+        }
+
+        if (isHorizontal)
+        {
+            int xMax = _placedCoords.stream().mapToInt(x -> x.getX()).max().orElseThrow();
+            for (int i = xMin; i < xMax; i++)
+            {
+                Tile prevTile = _tiles[yMin][i];
+                if (prevTile.isEmpty())
+                {
+                    return false;
+                }
+            }
+        }
+        else
+        {
+            int yMax = _placedCoords.stream().mapToInt(x -> x.getY()).max().orElseThrow();
+            for (int i = yMin; i < yMax; i++)
+            {
+                Tile prevTile = _tiles[i][xMin];
+                if (prevTile.isEmpty())
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private boolean moveIsLegit() {
