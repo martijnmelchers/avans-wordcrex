@@ -8,9 +8,9 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatView.MessageView">
    <children>
-      <VBox fx:id="MessageVbox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: purple;">
+      <VBox fx:id="MessageVbox" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: purple;">
          <children>
-            <Label fx:id="MessageLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" text="Message" VBox.vgrow="ALWAYS">
+            <Label fx:id="MessageLabel" maxHeight="1.7976931348623157E308" maxWidth="800.0" style="-fx-background-color: transparent;" text="Message" wrapText="true" VBox.vgrow="ALWAYS">
                <font>
                   <Font size="16.0" />
                </font>
@@ -22,7 +22,7 @@
             </Label>
          </children>
          <padding>
-            <Insets bottom="3.0" left="5.0" top="10.0" />
+            <Insets bottom="3.0" left="5.0" right="5.0" top="10.0" />
          </padding>
       </VBox>
    </children>

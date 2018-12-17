@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class ChatView extends View {
 
@@ -116,7 +117,17 @@ public class ChatView extends View {
 
             messageField.clear();
             displayMessages();
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    public void waitOneSecond() {
+
     }
 
     public void onEnter() {

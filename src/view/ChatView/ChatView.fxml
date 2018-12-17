@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -30,9 +29,9 @@
                   </GridPane>
                </content>
               </ScrollPane>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="54.0" prefWidth="1588.0">
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="54.0" prefWidth="1588.0" VBox.vgrow="ALWAYS">
                <children>
-                    <TextField fx:id="messageField" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onEnter" prefHeight="50.0" prefWidth="1415.0" promptText="Typ hier uw bericht" HBox.hgrow="ALWAYS">
+                    <TextField fx:id="messageField" maxHeight="-Infinity" minHeight="-Infinity" onAction="#onEnter" prefHeight="50.0" prefWidth="1415.0" promptText="Typ hier uw bericht" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets left="3.0" right="3.0" />
                      </HBox.margin>
