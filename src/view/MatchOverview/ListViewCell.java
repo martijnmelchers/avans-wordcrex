@@ -1,10 +1,14 @@
 package view.MatchOverview;
 
 import controller.MatchOverviewController;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import model.GameSession;
 import model.helper.Log;
 import model.tables.Game;
+
+import java.util.Optional;
 
 public final class ListViewCell extends ListCell<Game> {
 
@@ -19,6 +23,11 @@ public final class ListViewCell extends ListCell<Game> {
             //TODO: headers can be implemented this way.
             setGraphic(null);
         } else {
+
+            String player = GameSession.getUsername();
+            String player1 = game.getPlayer1().getUsername();
+            String player2 = game.getPlayer2().getUsername();
+            String enemy  = player1.equals(player) ?  player2 : player1;
             MatchView view = new MatchView(game);
             setGraphic(view.getAnchor());
 
@@ -49,7 +58,17 @@ public final class ListViewCell extends ListCell<Game> {
             });
 
             view.getMatchSurrenderButton().setOnAction((e) -> {
-                this._controller.surrender(game);
+
+                var alert = new Alert(Alert.AlertType.CONFIRMATION, "Weet je het zeker?");
+
+                alert.setHeaderText("Spel met "+ enemy + " opgeven: ");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if(result.get() == ButtonType.OK){
+                    this._controller.surrender(game);
+                }
+
+                this._matchOverview.renderGames();
             });
 
         }

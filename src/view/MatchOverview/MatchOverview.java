@@ -142,12 +142,14 @@ public class MatchOverview extends View {
             gameListview1.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
+                listViewCell.setMatchOverview(this);
                 return listViewCell;
             });
 
             gameListview2.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
+                listViewCell.setMatchOverview(this);
                 return listViewCell;
             });
 

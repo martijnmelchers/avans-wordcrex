@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import model.GameModel;
 import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
@@ -45,6 +46,7 @@ public class MatchView {
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
 
+            var gameMod = new GameModel(match);
             fxmlLoader.load();
             boolean isMyTurn;
 
@@ -105,7 +107,9 @@ public class MatchView {
             else {
                 matchEnemy.setText(enemy);
                 matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
-                matchTurn.setText(isMyTurn ? GameSession.getUsername() : enemy);
+
+
+                matchTurn.setText(!gameMod.checkIfTurnPlayed() ? GameSession.getUsername() : enemy);
             }
         }
         catch (Exception e) {
