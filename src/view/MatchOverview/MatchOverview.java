@@ -63,7 +63,6 @@ public class MatchOverview extends View {
             Log.error(e);
         }
 
-
         this.renderGames();
 
         this.disableNotAllowed();

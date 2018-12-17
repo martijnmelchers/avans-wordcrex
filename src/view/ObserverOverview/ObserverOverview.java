@@ -21,11 +21,11 @@ import java.util.List;
 public class ObserverOverview extends View {
 
     @FXML
-    private ListView gameListview;
+    private ListView _gameListView;
 
 
     @FXML
-    private ListView gameListview2;
+    private ListView _gameListView2;
 
     @FXML
     private GridPane _gridParent;
@@ -50,17 +50,17 @@ public class ObserverOverview extends View {
         } catch (Exception e) {
             Log.error(e);
         }
-        renderGames();
-//        this.ScaleScreen(_gridParent);
+        this.renderGames();
+        this.ScaleScreen(this._gridParent);
     }
 
     private void renderGames(){
-        gameObservableList = FXCollections.observableArrayList();
-        gameObservableList2 = FXCollections.observableArrayList();
-        gameListview.setItems(gameObservableList);
-        gameListview2.setItems(gameObservableList2);
-        gameObservableList.clear();
-        gameObservableList2.clear();
+        this.gameObservableList = FXCollections.observableArrayList();
+        this.gameObservableList2 = FXCollections.observableArrayList();
+        this._gameListView.setItems(this.gameObservableList);
+        this._gameListView2.setItems(this.gameObservableList2);
+        this.gameObservableList.clear();
+        this.gameObservableList2.clear();
 
         List<Game> games = this._controller.getAllGames();
 
@@ -72,13 +72,13 @@ public class ObserverOverview extends View {
                 }
 
                 case "playing": {
-                    gameObservableList.add(game);
+                    this.gameObservableList.add(game);
                     break;
                 }
 
                 case "finished": {
                     //TODO: show finished games
-                    gameObservableList2.add(game);
+                    this.gameObservableList2.add(game);
                     break;
                 }
 
@@ -88,15 +88,14 @@ public class ObserverOverview extends View {
                 }
             }
 
-            gameListview.setCellFactory(studentListView -> {
+            this._gameListView.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
                 return listViewCell;
             });
 
 
-
-            gameListview2.setCellFactory(studentListView -> {
+            this._gameListView2.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
                 return listViewCell;
@@ -107,9 +106,9 @@ public class ObserverOverview extends View {
 
     @FXML
     public void filter(){
-        String filter = _searchBar.getText();
-        FilteredList<Game> filteredGames = new FilteredList<>(gameObservableList, s -> true);
-        FilteredList<Game> filteredGames2 = new FilteredList<>(gameObservableList2, s -> true);
+        String filter = this._searchBar.getText();
+        FilteredList<Game> filteredGames = new FilteredList<>(this.gameObservableList, s -> true);
+        FilteredList<Game> filteredGames2 = new FilteredList<>(this.gameObservableList2, s -> true);
         if(filter == null || filter.length() == 0){
             filteredGames.setPredicate(s -> true);
         }
@@ -129,8 +128,8 @@ public class ObserverOverview extends View {
             });
         }
 
-        gameListview.setItems(filteredGames);
-        gameListview2.setItems(filteredGames2);
+        this._gameListView.setItems(filteredGames);
+        this._gameListView2.setItems(filteredGames2);
     }
     // Shows all buttons whe have access to.
     private void showAccessibleButtons(){
@@ -166,14 +165,4 @@ public class ObserverOverview extends View {
         this.renderGames();
     }
 
-    @FXML
-    private void invitationView(){
-
-        try{
-            this._controller.navigate("MatchInvitationView");
-        }
-        catch(Exception e){
-
-        }
-    }
 }

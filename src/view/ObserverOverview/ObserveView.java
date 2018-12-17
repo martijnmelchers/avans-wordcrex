@@ -46,14 +46,6 @@ public class ObserveView {
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
 
             fxmlLoader.load();
-            boolean isMyTurn;
-
-            try {
-                 isMyTurn = MatchOverviewModel.isMyTurn(match);
-            }
-            catch (NullPointerException e){
-                isMyTurn = true;
-            }
 
             String player = GameSession.getUsername();
             String player1 = match.getPlayer1().getUsername();
@@ -103,7 +95,7 @@ public class ObserveView {
             else {
                 matchEnemy.setText(enemy);
                 matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
-                matchTurn.setText(isMyTurn ? GameSession.getUsername() : enemy);
+                matchTurn.setText(MatchOverviewModel.whoTurn(match));
             }
 
 
