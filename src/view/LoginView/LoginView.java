@@ -2,15 +2,21 @@ package view.LoginView;
 
 import controller.AccountController;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import model.helper.Log;
 import view.View;
 
 public class LoginView extends View {
 
     private AccountController _accountController;
+
+    @FXML
+    private Button buttonLogin;
 
     @FXML
     private Label labelError;
@@ -20,6 +26,31 @@ public class LoginView extends View {
 
     @FXML
     private PasswordField passwordFieldPassword;
+
+    @FXML
+    private void keyPressed(KeyEvent e)
+    {
+        if(e.getCode() == KeyCode.TAB)
+        {
+            passwordFieldPassword.requestFocus();
+        }
+        else if(e.getCode() == KeyCode.ENTER)
+        {
+            loginClicked();
+        }
+    }
+
+    @FXML private void passwordFieldKeyPressed(KeyEvent e)
+    {
+        if(e.getCode() == KeyCode.TAB)
+        {
+            textFieldUsername.requestFocus();
+        }
+        else if(e.getCode() == KeyCode.ENTER)
+        {
+            loginClicked();
+        }
+    }
 
     protected void loadFinished() {
         try {

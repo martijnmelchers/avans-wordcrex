@@ -33,12 +33,12 @@
                 <RowConstraints />
             <RowConstraints />
             </rowConstraints>
-            <TextField fx:id="textFieldUsername" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Gebruikersnaam" GridPane.rowIndex="0">
+            <TextField fx:id="textFieldUsername" onKeyPressed="#keyPressed" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Gebruikersnaam" GridPane.rowIndex="0">
                 <GridPane.margin>
                     <Insets left="25" right="25" top="30" />
                 </GridPane.margin>
             </TextField>
-            <PasswordField fx:id="passwordFieldPassword" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Wachtwoord" GridPane.rowIndex="1">
+            <PasswordField fx:id="passwordFieldPassword" onKeyPressed="#passwordFieldKeyPressed" focusTraversable="false" prefHeight="40" prefWidth="50" promptText="Wachtwoord" GridPane.rowIndex="1">
                 <GridPane.margin>
                     <Insets left="25" right="25" top="10" />
                 </GridPane.margin>
