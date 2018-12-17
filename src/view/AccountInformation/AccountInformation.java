@@ -10,7 +10,7 @@ import view.View;
 
 public class AccountInformation extends View {
 
-    private AccountController _accountController;
+    private AccountController _controller;
     @FXML
     private Label username;
     @FXML
@@ -25,21 +25,21 @@ public class AccountInformation extends View {
     @Override
     protected void loadFinished() {
         try {
-            this._accountController = this.getController(AccountController.class);
+            this._controller = this.getController(AccountController.class);
         } catch (Exception e) {
             Log.error(e, true);
         }
-        getAccountInformation();
+        this.getAccountInformation();
     }
 
     private void getAccountInformation() {
-        role.setText(GameSession.getRole().getRole());
-        username.setText(GameSession.getUsername());
+        this.role.setText(GameSession.getRole().getRole());
+        this.username.setText(GameSession.getUsername());
     }
 
     public void changePassword() {
         try {
-            this._accountController.changePassword(username.getText(), password.getText(), confirmationPassword.getText());
+            this._controller.changePassword(this.username.getText(), this.password.getText(), this.confirmationPassword.getText());
         } catch (Exception e) {
             Log.error(e, true);
         }
@@ -54,7 +54,7 @@ public class AccountInformation extends View {
     }
 
     public void showError(String errorMessage) {
-        error.setText(errorMessage);
-        error.setVisible(true);
+        this.error.setText(errorMessage);
+        this.error.setVisible(true);
     }
 }
