@@ -128,68 +128,61 @@ public class Board {
 
         if (!moveIsLegit()) { return null; }
 
+
+
+        int xMin = _placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
+        int yMin = _placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
+
+        final int tempx = xMin;
+        final int tempy = yMin;
+        boolean isHorizontal = _placedCoords.stream().anyMatch(x -> x.getX() != tempx);
+        boolean isVertical = _placedCoords.stream().anyMatch(x -> x.getY() != tempy);
+
+        String word = "";
+
+        if(isHorizontal) {
+            for (int x = xMin; x > -1 && !_tiles[yMin][x].isEmpty(); x--) {
+                xMin = x;
+            }
+
+            for (int x = yMin; x < 14 && !_tiles[yMin][x].isEmpty(); x++) {
+                word+=_tiles[yMin][x].getLetterType().getLetter();
+            }
+        }
+        if(isVertical) {
+            for (int y = yMin; y > -1 && !_tiles[y][xMin].isEmpty(); y--) {
+                yMin = xMin;
+            }
+
+
+            for (int y = yMin; y < 14 && !_tiles[y][xMin].isEmpty(); y++) {
+                word+=_tiles[y][xMin].getLetterType().getLetter();
+            }
+        }
+
+
+
+
+
+
+
+
+
         ArrayList<Tile> words = new ArrayList<>();
 
         ArrayList<String> tileIds = new ArrayList<>();
 
-<<<<<<< HEAD
+
         ArrayList<Tile> tilesX = new ArrayList<>();
         ArrayList<Tile> tilesY = new ArrayList<>();
-=======
+
         if (!newTilesConnected())
         {
             return null;
         }
->>>>>>> 5d97e3df3fe5467b8fc1d6038acb83a8f06ba110
-
-        StringBuilder woordX = new StringBuilder();
-        StringBuilder woordY = new StringBuilder();
-
-        StringBuilder tileId = new StringBuilder();
 
 
-        int x = 14;
-        int y = 14;
-        Vector2 smallesty = _placedCoords.get(0);
-
-        for ( int cursor = 0;cursor < _placedCoords.size();cursor++){
-            if(_placedCoords.get(cursor).getY() < smallesty.getY()){
-                smallesty =  _placedCoords.get(cursor);
-            }
-        }
-        Vector2 smallestx = smallesty;
-
-        for ( int cursor = 0;cursor < _placedCoords.size();cursor++){
-            if(_placedCoords.get(cursor).getX() < smallesty.getY()){
-                smallestx =  _placedCoords.get(cursor);
-            }
-        }
-        if()
-
-        for (; y > -1; y--) { if(_tiles[y][x].isEmpty()){ break; } }
-        for (; x > -1; x--) { if(_tiles[y][x].isEmpty()){ break; } }
-
-        woordX = new StringBuilder(ReverseString(woordX.toString()));
-
-        for (int j = 1; x + j <= 14; j++) { //Begint bij 1 want dan overlappen ze niet met elkaar
-            if (_tiles[y][x + j].isEmpty()) break;
-
-            tilesX.add(_tiles[y][x + j]);
-
-            woordX.append(_tiles[y][x + j].getLetterType().getLetter());
-        }
-
-        woordY = new StringBuilder(ReverseString(woordY.toString()));
-
-        for (int j = 1; y + j <= 14; j++) { //Begint bij 1 want dan overlappen ze niet met elkaar
-            if (_tiles[y + j][x].isEmpty()) break;
-
-            tilesY.add(_tiles[y + j][x]);
-            woordY.append(_tiles[y + j][x].getLetterType().getLetter());
-
-        }
-
-        System.out.println("Woord X: " + woordX + " Woord Y:" + woordY);
+        /*System.out.println("Woord X: " + woordX + " Woord Y:" + woordY);
         WordChecker checker = new WordChecker();
         boolean bothSidesCorrect = checker.check(woordX.toString()) && checker.check(woordY.toString());
 
@@ -204,8 +197,8 @@ public class Board {
         Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
 
         Points points = calculatePoints(words.toArray(new Tile[0]));
-
-        return new CheckInfo(points, tileArr, coordinatesArr);
+*/
+        return null//new CheckInfo(points, tileArr, coordinatesArr);
     }
 
     private boolean newTilesConnected()
