@@ -84,6 +84,7 @@ public class MatchOverview extends View {
 
         if(!GameSession.hasRole("moderator")){
             this.adminButton.setDisable(true);
+
         }
     }
 
