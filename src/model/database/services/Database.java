@@ -248,8 +248,6 @@ public class Database {
             }
 
 
-
-
             var v = field.get(item);
 
             if (!field.isAnnotationPresent(Nullable.class) && v == null)

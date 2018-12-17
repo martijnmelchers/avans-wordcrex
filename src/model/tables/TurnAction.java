@@ -11,6 +11,7 @@ public class TurnAction {
     @Column("type")
     private String _type;
 
-    public TurnAction(){}
+    public TurnAction() {
+    }
 
 }

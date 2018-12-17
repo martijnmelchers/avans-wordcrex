@@ -14,7 +14,7 @@ public class WordDictionary {
 
     @PrimaryKey
     @Column("letterset_code")
-    @ForeignKey(type = LetterSet.class, field =  "code", output = "_letterSet")
+    @ForeignKey(type = LetterSet.class, field = "code", output = "_letterSet")
     private String _letterSetCode;
 
     @Column("state")
@@ -24,11 +24,12 @@ public class WordDictionary {
     @Column("username")
     @ForeignKey(type = Account.class, field = "username", output = "_account")
     private String _username;
-
-    public String getWord() { return _word; }
-
     private LetterSet _letterSet;
     private Account _account;
     private WordState _wordState;
+
+    public String getWord() {
+        return this._word;
+    }
 
 }

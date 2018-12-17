@@ -9,8 +9,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-import javafx.util.Duration;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import model.GameSession;
 import model.helper.Log;
 import model.tables.Chatline;
@@ -27,10 +28,10 @@ public class ChatView extends View {
     private ChatController _controller;
 
     @FXML
-    private GridPane messagesGridpane;
+    private GridPane _messagesGridPane;
 
     @FXML
-    private ScrollPane messagesScrollpane;
+    private ScrollPane _messagesScrollPane;
 
     @FXML
     private TextField messageField;
@@ -41,31 +42,31 @@ public class ChatView extends View {
     private int messageCount;
 
     public ChatView() {
-        _controller = new ChatController();
+        this._controller = new ChatController();
     }
 
     public void initialize() {
-        if(GameSession.getGame() != null) {
-            displayMessages();
-            checkForMessages();
+        if (GameSession.getGame() != null) {
+            this.displayMessages();
+            this.checkForMessages();
         }
     }
 
     private void displayMessages() {
-        messagesGridpane.getChildren().clear();
+        this._messagesGridPane.getChildren().clear();
 
-        ArrayList<Chatline> chatlines = _controller.getChatlines(GameSession.getGame().getGameId());
+        ArrayList<Chatline> chatlines = this._controller.getChatlines(GameSession.getGame().getGameId());
 
         this.messageCount = chatlines.size();
 
         for (Chatline chatline : chatlines) {
-            displayMessage(chatline);
+            this.displayMessage(chatline);
         }
     }
 
     private void displayMessage(Chatline chatline) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("MessageView.fxml"));
+            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("MessageView.fxml"));
             AnchorPane messagePane = loader.load();
 
             MessageView messageViewController = loader.getController();
@@ -73,12 +74,12 @@ public class ChatView extends View {
             messageViewController.setMessageLabel(chatline.getMessage());
             messageViewController.setMomentLabel(chatline.getMoment().toString());
 
-            if(chatline.account.getUsername().equals(GameSession.getUsername())) {
+            if (chatline.account.getUsername().equals(GameSession.getUsername())) {
                 messageViewController.setMessageAlignment(1);
-                messagesGridpane.add(messagePane, 1, messagesGridpane.getRowCount() + 1);
+                this._messagesGridPane.add(messagePane, 1, this._messagesGridPane.getRowCount() + 1);
             } else {
                 messageViewController.setMessageAlignment(0);
-                messagesGridpane.add(messagePane, 0, messagesGridpane.getRowCount() + 1);
+                this._messagesGridPane.add(messagePane, 0, this._messagesGridPane.getRowCount() + 1);
             }
 
 
@@ -104,42 +105,40 @@ public class ChatView extends View {
     }
 
     public void sendMessage() {
-        if(GameSession.getGame().getGameId() == null) {
+        if (GameSession.getGame().getGameId() == null) {
             return;
         }
 
 
-        String message = messageField.getText();
+        String message = this.messageField.getText();
 
         if (!message.isEmpty()) {
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
             Chatline chatline = new Chatline(GameSession.getUsername(), GameSession.getGame().getGameId(), timestamp, message);
-            _controller.sendChatline(chatline);
+            this._controller.sendChatline(chatline);
 
-            messageField.clear();
-            displayMessages();
+            this.messageField.clear();
+            this.displayMessages();
 
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.error(e);
             }
         }
     }
 
     public void onEnter() {
-        sendMessage();
+        this.sendMessage();
     }
 
     @Override
     protected void loadFinished() {
-        new AnimationTimer()
-        {
+        new AnimationTimer() {
             @Override
-            public void handle(long now)
-            {
-                ScaleScreen(_parent);
+            public void handle(long now) {
+                ChatView.this.ScaleScreen(ChatView.this._parent);
             }
         }.start();
     }

@@ -8,32 +8,32 @@ import view.View;
 public class MessageView extends View {
 
     @FXML
-    private Label MessageLabel;
+    private Label _messageLabel;
 
     @FXML
-    private Label MomentLabel;
+    private Label _momentLabel;
 
     @FXML
-    private VBox MessageVbox;
+    private VBox _messageVBox;
 
     void setMessageLabel(String message) {
-        MessageLabel.setText(message);
+        this._messageLabel.setText(message);
     }
 
     void setMomentLabel(String moment) {
-        MomentLabel.setText(moment);
+        this._momentLabel.setText(moment);
     }
 
-    void setMessageAlignment (int alignment) {
+    void setMessageAlignment(int alignment) {
         if (alignment == 0) {
-            MessageVbox.setStyle("-fx-background-color: #207BCF");
+            this._messageVBox.setStyle("-fx-background-color: #207BCF");
         } else {
-            MessageVbox.setStyle("-fx-background-color: purple");
+            this._messageVBox.setStyle("-fx-background-color: purple");
         }
     }
 
     @Override
     protected void loadFinished() {
-        System.out.println("Load is finished!");
+
     }
 }

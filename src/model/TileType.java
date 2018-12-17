@@ -18,6 +18,6 @@ public enum TileType {
 
     @Override
     public String toString() {
-        return text;
+        return this.text;
     }
 }

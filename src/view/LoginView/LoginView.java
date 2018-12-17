@@ -28,27 +28,20 @@ public class LoginView extends View {
     private PasswordField passwordFieldPassword;
 
     @FXML
-    private void keyPressed(KeyEvent e)
-    {
-        if(e.getCode() == KeyCode.TAB)
-        {
-            passwordFieldPassword.requestFocus();
-        }
-        else if(e.getCode() == KeyCode.ENTER)
-        {
-            loginClicked();
+    private void keyPressed(KeyEvent e) {
+        if (e.getCode() == KeyCode.TAB) {
+            this.passwordFieldPassword.requestFocus();
+        } else if (e.getCode() == KeyCode.ENTER) {
+            this.loginClicked();
         }
     }
 
-    @FXML private void passwordFieldKeyPressed(KeyEvent e)
-    {
-        if(e.getCode() == KeyCode.TAB)
-        {
-            textFieldUsername.requestFocus();
-        }
-        else if(e.getCode() == KeyCode.ENTER)
-        {
-            loginClicked();
+    @FXML
+    private void passwordFieldKeyPressed(KeyEvent e) {
+        if (e.getCode() == KeyCode.TAB) {
+            this.textFieldUsername.requestFocus();
+        } else if (e.getCode() == KeyCode.ENTER) {
+            this.loginClicked();
         }
     }
 
@@ -61,7 +54,7 @@ public class LoginView extends View {
     }
 
     public void loginClicked() {
-        this._accountController.loginUser(textFieldUsername.getText(), passwordFieldPassword.getText());
+        this._accountController.loginUser(this.textFieldUsername.getText(), this.passwordFieldPassword.getText());
     }
 
     public void registerClicked() {
@@ -73,8 +66,8 @@ public class LoginView extends View {
     }
 
     public void showError(String error) {
-        labelError.setText(error);
-        labelError.setVisible(true);
+        this.labelError.setText(error);
+        this.labelError.setVisible(true);
     }
 
     public void loginSuccess() {

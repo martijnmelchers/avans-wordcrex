@@ -10,7 +10,6 @@ import model.tables.Chatline;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 public class ChatlineModel {
 
@@ -31,17 +30,15 @@ public class ChatlineModel {
         clauses.add(new Clause(new TableAlias("chatline", -1), "game_id", CompareMethod.EQUAL, gameId));
 
         try {
-            chatlines.addAll(_db.select(Chatline.class, clauses));
+            chatlines.addAll(this._db.select(Chatline.class, clauses));
         } catch (Exception e) {
             Log.error(e, true);
         }
 
-        chatlines.sort(new Comparator<Chatline>() {
-            public int compare(Chatline o1, Chatline o2) {
-                if (o1.getMoment() == null || o2.getMoment() == null)
-                    return 0;
-                return o1.getMoment().compareTo(o2.getMoment());
-            }
+        chatlines.sort((lineOne, lineTwo) -> {
+            if (lineOne.getMoment() == null || lineTwo.getMoment() == null)
+                return 0;
+            return lineOne.getMoment().compareTo(lineTwo.getMoment());
         });
 
         return chatlines;
@@ -49,7 +46,7 @@ public class ChatlineModel {
 
     public void sendChatline(Chatline chatline) {
         try {
-            _db.insert(chatline);
+            this._db.insert(chatline);
         } catch (Exception e) {
             Log.error(e, true);
         }
