@@ -1,5 +1,6 @@
         package model.match;
 
+        import model.GameModel;
         import model.GameSession;
         import model.database.DocumentSession;
         import model.database.classes.Clause;
@@ -37,11 +38,20 @@ public class MatchFixer {
     public void invitePlayer(String Player) {
         try {
             var game = new Game("request", "NL", GameSession.getUsername(), Player, "unknown");
-
             this._db.insert(game);
+
+
+            var clauses = new ArrayList<Clause>();
+
+            clauses.add(new Clause(new TableAlias("game", -1),"username_player1",CompareMethod.EQUAL,GameSession.getUsername()));
+            clauses.add(new Clause(new TableAlias("game", -1),"username_player2",CompareMethod.EQUAL,Player));
+
+            var createdGame = this._db.select(Game.class,clauses).get(0);
+            var gameModel = new GameModel(createdGame);
         } catch (Exception e) {
             Log.error(e);
         }
+
     }
 
     public List<AccountInfo> searchPlayers(String name) {
