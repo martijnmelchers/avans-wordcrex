@@ -130,83 +130,33 @@ public class Board {
 
         ArrayList<String> tileIds = new ArrayList<>();
 
-        if (_placedCoords.size() == 0 || !newTilesConnected())
+
+        ArrayList<Tile> tilesX = new ArrayList<>();
+        ArrayList<Tile> tilesY = new ArrayList<>();
+
+        if (!newTilesConnected())
         {
             return null;
         }
 
-        for (Vector2 placedCoords : _placedCoords) {
 
-            ArrayList<Tile> tilesX = new ArrayList<>();
-            ArrayList<Tile> tilesY = new ArrayList<>();
+        /*System.out.println("Woord X: " + woordX + " Woord Y:" + woordY);
+        WordChecker checker = new WordChecker();
+        boolean bothSidesCorrect = checker.check(woordX.toString()) && checker.check(woordY.toString());
 
-            int x = placedCoords.getX();
-            int y = placedCoords.getY();
-
-            String woordX = "";
-            String woordY = "";
-
-            String tileId = "";
-
-            for (int j = 0; j < 14; j++) { //Eerst links checken dan rechts
-                if (x - j == -1) break;
-                if (_tiles[y][x - j].isEmpty()) break;
-
-                tilesX.add(_tiles[y][x - j]);
-                woordX += _tiles[y][x - j].getLetterType().getLetter();
-            }
-
-            woordX = ReverseString(woordX);
-
-            for (int j = 1; x + j <= 14; j++) { //Begint bij 1 want dan overlappen ze niet met elkaar
-                if (_tiles[y][x + j].isEmpty()) break;
-
-                tilesX.add(_tiles[y][x + j]);
-
-                woordX += _tiles[y][x + j].getLetterType().getLetter();
-                tileId += y + (x + j);
-            }
-
-
-            for (int j = 0; j < 14; j++) { //Eerst links checken dan rechts
-                if (y - j == -1) break;
-                if (_tiles[y - j][x].isEmpty()) break;
-
-                tilesY.add(_tiles[y - j][x]);
-                woordY += _tiles[y - j][x].getLetterType().getLetter();
-            }
-
-            woordY = ReverseString(woordY);
-
-            for (int j = 1; y + j <= 14; j++) { //Begint bij 1 want dan overlappen ze niet met elkaar
-                if (_tiles[y + j][x].isEmpty()) break;
-
-                tilesY.add(_tiles[y + j][x]);
-                woordY += _tiles[y + j][x].getLetterType().getLetter();
-
-            }
-
-            System.out.println("Woord X: " + woordX + " Woord Y:" + woordY);
-            WordChecker checker = new WordChecker();
-            boolean bothSidesCorrect = checker.check(woordX) && checker.check(woordY);
-
-            if (bothSidesCorrect && !tileIds.contains(tileId)) {
-                tileIds.add(tileId);
-                if (tilesX.size() > 1) words.addAll(tilesX);
-                if (tilesY.size() > 1) words.addAll(tilesY);
-            }
+        if (bothSidesCorrect) {
+            tileIds.add(tileId.toString());
+            if (tilesX.size() > 1) words.addAll(tilesX);
+            if (tilesY.size() > 1) words.addAll(tilesY);
         }
 
-        if (tileIds.size() < 1 || !moveIsLegit()) {
-            return null;
-        }
 
         Tile[] tileArr = words.toArray(new Tile[0]);
         Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
 
         Points points = calculatePoints(words.toArray(new Tile[0]));
-
-        return new CheckInfo(points, tileArr, coordinatesArr);
+*/
+        return null; //new CheckInfo(points, tileArr, coordinatesArr);
     }
 
     private boolean newTilesConnected()
@@ -261,10 +211,7 @@ public class Board {
         boolean usedStartingTile = !_tiles[7][7].isEmpty();
         boolean isStraight = _placedCoords.stream().allMatch(x -> x.getX() == _placedCoords.get(0).getX()) || _placedCoords.stream().allMatch(x -> x.getY() == _placedCoords.get(0).getY());
 
-        if (_placedCoords.size() < 1) {
-            return false;
-        }
-
+        if (_placedCoords.size() < 1) { return false; }
 
         boolean boardHasOldTiles = Arrays.stream(_tiles).anyMatch(c -> Arrays.stream(c).anyMatch(o -> o.getState() == TileState.LOCKED && !o.getLetterType().getLetter().equals("")));
         boolean isConnectedToOld = true;
@@ -313,6 +260,8 @@ public class Board {
     }
 
     private Points calculatePoints(Tile[] tiles) {
+
+
 
         int score = 0;
         int bonus = 0;

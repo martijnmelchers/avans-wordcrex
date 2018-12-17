@@ -166,6 +166,11 @@ public class GameModel {
         return _dock.getLetters();
     }
 
+    public Letter getLetterType(HandLetter letter) {
+        int points = _board.getLetterPoint(letter.letter.getSymbol());
+        return _dock.getLetterType(letter, points);
+    }
+
     public Tile[][] getTiles() {
         return _board.getTiles();
     }
