@@ -123,6 +123,26 @@ public class Board {
         return tiles;
     }
 
+    private CheckInfo checkSubWordsVert(List<Vector2> locations){
+        CheckInfo temp;
+        List<Vector2> tempWordLocations = new ArrayList<Vector2>();
+        for(Vector2 starting)
+
+        for (int x = xMin; x < 14 && !_tiles[yMin][x].isEmpty(); x++) {
+            word += _tiles[yMin][x].getLetterType().getLetter();
+
+        }
+
+        return temp;
+    }
+    private CheckInfo checkSubWordsHorz(List<Vector2> locations){
+        CheckInfo temp;
+
+
+        return temp;
+    }
+
+
     //Returned de punten die het woord geeft
     public CheckInfo check() {
 
@@ -137,29 +157,52 @@ public class Board {
         final int tempy = yMin;
         boolean isHorizontal = _placedCoords.stream().anyMatch(x -> x.getX() != tempx);
         boolean isVertical = _placedCoords.stream().anyMatch(x -> x.getY() != tempy);
+        if(isHorizontal == isVertical){
+            isHorizontal = true;
+            isVertical = true;
+        }
 
-        String word = "";
+        List<Vector2> secondaryWordsHorizontal = new ArrayList<Vector2>();
+        List<Vector2> secondaryWordsVertical = new ArrayList<Vector2>();
 
+        String word;
         if(isHorizontal) {
+            word = "";
             for (int x = xMin; x > -1 && !_tiles[yMin][x].isEmpty(); x--) {
                 xMin = x;
             }
 
-            for (int x = yMin; x < 14 && !_tiles[yMin][x].isEmpty(); x++) {
-                word+=_tiles[yMin][x].getLetterType().getLetter();
+            for (int x = xMin; x < 14 && !_tiles[yMin][x].isEmpty(); x++) {
+                word += _tiles[yMin][x].getLetterType().getLetter();
+                if(_tiles[yMin ][x].getState() == TileState.UNLOCKED) {
+                    if (yMin < 14 && !_tiles[yMin + 1][x].isEmpty()) {
+                        secondaryWordsVertical.add(new Vector2(x, yMin + 1));
+                    } else if (yMin > 0 && !_tiles[yMin - 1][x].isEmpty()) {
+                        secondaryWordsVertical.add(new Vector2(x, yMin - 1));
+                    }
+                }
             }
         }
         if(isVertical) {
+            word = "";
             for (int y = yMin; y > -1 && !_tiles[y][xMin].isEmpty(); y--) {
-                yMin = xMin;
+                yMin = y;
             }
 
 
             for (int y = yMin; y < 14 && !_tiles[y][xMin].isEmpty(); y++) {
-                word+=_tiles[y][xMin].getLetterType().getLetter();
+                word += _tiles[y][xMin].getLetterType().getLetter();
+
+                if (_tiles[y][xMin].getState() == TileState.UNLOCKED) {
+                    if (xMin < 14 && !_tiles[y][xMin + 1].isEmpty()) {
+                        secondaryWordsHorizontal.add(new Vector2(xMin + 1, y));
+                    } else if (xMin < 14 && !_tiles[y][xMin - 1].isEmpty()) {
+                        secondaryWordsHorizontal.add(new Vector2(xMin - 1, y));
+                    }
+                }
             }
         }
-
+        return new CheckInfo(0,)
 
 
 
@@ -198,7 +241,7 @@ public class Board {
 
         Points points = calculatePoints(words.toArray(new Tile[0]));
 */
-        return null//new CheckInfo(points, tileArr, coordinatesArr);
+        return null;//new CheckInfo(points, tileArr, coordinatesArr);
     }
 
     private boolean newTilesConnected()
