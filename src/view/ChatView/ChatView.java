@@ -1,12 +1,16 @@
 package view.ChatView;
 
 import controller.ChatController;
+import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 import model.GameSession;
 import model.helper.Log;
 import model.tables.Chatline;
@@ -16,6 +20,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 public class ChatView extends View {
@@ -85,18 +90,15 @@ public class ChatView extends View {
     }
 
     private void checkForMessages() {
-        java.util.TimerTask task = new java.util.TimerTask() {
-            @Override
-            public void run() {
-                int chatlinesCount = _controller.getChatlines(GameSession.getGame().getGameId()).size();
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            int chatlinesCount = _controller.getChatlines(GameSession.getGame().getGameId()).size();
 
-                if (chatlinesCount > messageCount) {
-                    displayMessages();
-                }
+            if (chatlinesCount > messageCount) {
+                displayMessages();
             }
-        };
-        java.util.Timer timer = new java.util.Timer(true);
-        timer.schedule(task, 0, 1000);
+        }));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
     }
 
     public void sendMessage() {
