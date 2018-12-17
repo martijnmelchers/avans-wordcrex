@@ -564,12 +564,12 @@ public class GameModel {
 
     private void checkGameFinished() {
 
-        Game game = GameSession.getGame();
-        game.setGameState("finished");
-
         if (!getNotUsedTiles(_turnId).equals("0")) {
             return;
         }
+
+        Game game = GameSession.getGame();
+        game.setGameState("finished");
 
         if (_playerScore1 > _playerScore2) {
             game.setWinner(_playerName1);
@@ -587,6 +587,7 @@ public class GameModel {
     }
 
     public void surrender() {
+
         Game game = GameSession.getGame();
         game.setGameState("resigned");
 
