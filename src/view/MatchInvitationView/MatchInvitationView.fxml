@@ -4,12 +4,12 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-
-<AnchorPane prefHeight="514.0" prefWidth="378.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchInvitationView.MatchInvitationView">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="459.0" prefWidth="378.0" stylesheets="@../css/Main.css"
+            xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="view.MatchInvitationView.MatchInvitationView">
    <children>
-       <TextField fx:id="_searchBar" layoutX="217.0" layoutY="14.0" onKeyReleased="#search" promptText="Zoek speler" />
-       <ListView fx:id="_playerListView" layoutX="14.0" layoutY="35.0" prefHeight="369.0" prefWidth="347.0" />
-       <Button layoutX="13.0" layoutY="413.0" mnemonicParsing="false" onAction="#requestGame" prefHeight="34.0" prefWidth="347.0" text="Daag uit !" />
-      <Button layoutX="13.0" layoutY="459.0" mnemonicParsing="false" onAction="#home" prefHeight="34.0" prefWidth="347.0" text="Home" />
+       <TextField fx:id="_searchBar" layoutX="217.0" layoutY="14.0" onKeyReleased="#search" promptText="Zoek speler"/>
+       <ListView fx:id="_playerListView" layoutX="14.0" layoutY="35.0" prefHeight="369.0" prefWidth="347.0"/>
+       <Button layoutX="13.0" layoutY="413.0" mnemonicParsing="false" onAction="#requestGame" prefHeight="34.0"
+               prefWidth="347.0" text="Daag uit !"/>
    </children>
 </AnchorPane>

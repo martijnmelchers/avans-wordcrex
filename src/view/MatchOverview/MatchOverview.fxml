@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
-
 <GridPane fx:id="_anchorParent" maxWidth="873.0" prefHeight="790.0" prefWidth="873.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchOverview.MatchOverview">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />
@@ -43,7 +38,7 @@
                   <Insets />
                </FlowPane.margin>
             </Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Account Gegevens">
+            <Button alignment="CENTER" onAction="#accountInfo" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" text="Account Gegevens">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
@@ -68,19 +63,21 @@
                   <Text layoutX="274.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Uitnodigingen" />
                </children>
             </Pane>
-            <ListView fx:id="gameListview" maxHeight="-Infinity" prefHeight="178.0" prefWidth="725.0" />
+            <ListView fx:id="_gameListView" maxHeight="-Infinity" prefHeight="178.0" prefWidth="725.0"/>
             <Pane fx:id="yourTurnPane" layoutX="10.0" layoutY="10.0" prefHeight="32.0" prefWidth="620.0" style="-fx-background-color: #2c3e50;">
                <children>
                   <Text layoutX="281.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jouw beurt" />
                </children>
             </Pane>
-            <ListView fx:id="gameListview1" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" prefHeight="245.0" prefWidth="620.0" />
+            <ListView fx:id="_gameListView1" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" prefHeight="245.0"
+                      prefWidth="620.0"/>
             <Pane fx:id="theirTurnPane" layoutX="10.0" layoutY="187.0" prefHeight="32.0" prefWidth="620.0" style="-fx-background-color: #2c3e50;">
                <children>
                   <Text layoutX="270.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zijn/Haar beurt" />
                </children>
             </Pane>
-            <ListView fx:id="gameListview2" layoutX="10.0" layoutY="194.0" maxHeight="-Infinity" prefHeight="184.0" prefWidth="620.0" />
+            <ListView fx:id="_gameListView2" layoutX="10.0" layoutY="194.0" maxHeight="-Infinity" prefHeight="184.0"
+                      prefWidth="620.0"/>
          </children>
       </VBox>
    </children>

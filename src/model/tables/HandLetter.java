@@ -8,6 +8,8 @@ import model.database.annotations.Table;
 @Table("HandLetter")
 public class HandLetter {
 
+    public Letter letter;
+    public Turn turn;
     @Column("game_id")
     @PrimaryKey
     @ForeignKey(type = Letter.class, field = "game_id", output = "letter")

@@ -3,8 +3,9 @@ package view.BoardView;
 import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -15,6 +16,7 @@ import model.Letter;
 import model.Tile;
 import model.TileState;
 import model.helper.Log;
+import view.ChatView.ChatView;
 import view.DockView.DockView;
 import view.View;
 
@@ -51,6 +53,8 @@ public class BoardView extends View {
 
     private GameController _controller;
 
+    private ChatView _chatViewController;
+
     @Override
     protected void loadFinished() {
         try {
@@ -65,6 +69,7 @@ public class BoardView extends View {
         updateTilesLeft();
         checkRole();
         checkIfTurnPlayed();
+
         _slider.setDisable(_controller.getCurrentTurn() == 1);
         displayChat();
     }
@@ -274,6 +279,7 @@ public class BoardView extends View {
     @FXML
     private void home(){
         try{
+            _chatViewController.closeMessageChecker();
             if(_submit.isVisible() == false){
                 _controller.navigate("ObserverOverview",620,770);
             }
@@ -334,6 +340,8 @@ public class BoardView extends View {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
             AnchorPane chatView = loader.load();
+
+            _chatViewController = loader.getController();
 
             chatViewContainer.getChildren().add(chatView);
         } catch (IOException e) {

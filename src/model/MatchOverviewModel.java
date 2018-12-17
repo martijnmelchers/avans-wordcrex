@@ -40,7 +40,7 @@ public class MatchOverviewModel {
     }
 
     public List<Game> getCurrentPlayerGames(String username) {
-        return findCurrentPlayerGame(username);
+        return this.findCurrentPlayerGame(username);
     }
 
     private List<Game> findCurrentPlayerGame(String username) {
@@ -54,24 +54,8 @@ public class MatchOverviewModel {
             var games = this._db.select(Game.class, clauses);
 
             for (Game game : games) {
-                String player = GameSession.getUsername();
-                String player1 = game.getPlayer1().getUsername();
-
-                boolean isPlayer1 = player.equals(player1);
-
-                if (isPlayer1) {
-                    if (!currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
-//                        MatchOverviewModel.currentTurns.put(game, true);
-                    } else {
-                        MatchOverviewModel.currentTurns.put(game, !currentTurnHasAction(game));
-                    }
-                } else {
-                    if (!currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
-                        MatchOverviewModel.currentTurns.put(game, true);
-                    } else {
-                        MatchOverviewModel.currentTurns.put(game, !currentTurnPlayer2HasAction(game));
-                    }
-                }
+                var gameMod = new GameModel(game);
+                MatchOverviewModel.currentTurns.put(game, !gameMod.checkIfTurnPlayed());
             }
 
             return games;
@@ -103,14 +87,14 @@ public class MatchOverviewModel {
     }
 
     public boolean currentTurnPlayer2HasAction(Game game) {
-        Integer latestTurn = getLatestTurnOfGame(game);
+        Integer latestTurn = this.getLatestTurnOfGame(game);
 
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("turnplayer2", -1), "username_player2", CompareMethod.EQUAL, game.getPlayer2().getUsername(), LinkMethod.AND));
         clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, latestTurn));
 
         try {
-            var turnList = _db.select(TurnPlayer2.class, clauses);
+            var turnList = this._db.select(TurnPlayer2.class, clauses);
             if (turnList.size() > 0) {
                 return true;
             }
@@ -129,7 +113,7 @@ public class MatchOverviewModel {
         turnClauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
 
         try {
-            for (Turn turn : _db.select(Turn.class, turnClauses)) {
+            for (Turn turn : this._db.select(Turn.class, turnClauses)) {
                 Integer id = turn.getTurnID();
                 if (id > latestTurn) {
                     latestTurn = id;
@@ -144,15 +128,11 @@ public class MatchOverviewModel {
 
     public List<Game> getAllGames() {
         try {
-
-            var clauses = new ArrayList<Clause>();
-
-            var games = _db.select(Game.class);
-
-            return games;
+            return this._db.select(Game.class);
         } catch (Exception e) {
             Log.error(e);
         }
+
         return null;
     }
 
@@ -165,7 +145,7 @@ public class MatchOverviewModel {
         try {
             Map<Integer, Game> map = new HashMap<>();
 
-            for (Game game : _db.select(Game.class, clauses)) {
+            for (Game game : this._db.select(Game.class, clauses)) {
                 if (game.getGameState().isRequest())
                     continue;
 
@@ -189,7 +169,7 @@ public class MatchOverviewModel {
         clauses.add(new Clause(new TableAlias("game", -1), "username_player2", CompareMethod.LIKE, "%" + currentGamesToSearch + "%"));
 
         try {
-            return new ArrayList<>(_db.select(Game.class, clauses));
+            return new ArrayList<>(this._db.select(Game.class, clauses));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -204,7 +184,7 @@ public class MatchOverviewModel {
         try {
             ArrayList<String> accountRoles = new ArrayList<>();
 
-            for (AccountInfo acc : _db.select(AccountInfo.class, clauses)) {
+            for (AccountInfo acc : this._db.select(AccountInfo.class, clauses)) {
                 accountRoles.add(acc.getRole().getRole());
             }
 
@@ -242,7 +222,6 @@ public class MatchOverviewModel {
 
     public void declineInvite(Game game) {
         game.setAnswer("rejected");
-
         try {
             this._db.update(game);
         } catch (Exception e) {
@@ -260,11 +239,11 @@ public class MatchOverviewModel {
         clauses2.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
 
         try {
-            for (TurnPlayer1 turn1 : _db.select(TurnPlayer1.class, clauses1))
+            for (TurnPlayer1 turn1 : this._db.select(TurnPlayer1.class, clauses1))
                 score.player1 += turn1.getScore() + turn1.getBonus();
 
 
-            for (TurnPlayer2 turn2 : _db.select(TurnPlayer2.class, clauses2))
+            for (TurnPlayer2 turn2 : this._db.select(TurnPlayer2.class, clauses2))
                 score.player2 += turn2.getScore() + turn2.getBonus();
 
         } catch (Exception e) {
