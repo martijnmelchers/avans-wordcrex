@@ -56,6 +56,11 @@ public class MatchInvitationView extends View {
         }
     }
 
+    @FXML
+    private void home(){
+        _controller.navigate("MatchOverview");
+    }
+
     @Override
     protected void loadFinished() {
         this.initialize();

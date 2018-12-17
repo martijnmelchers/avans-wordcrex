@@ -184,8 +184,8 @@ public class BoardView extends View {
         _slider.setDisable(_controller.getCurrentTurn() == 1);
 
         _slider.setMin(0);
-        _slider.setMax(_controller.getCurrentTurn() - 1);
-        _slider.setValue(_controller.getCurrentTurn() - 1);
+        _slider.setMax(_controller.getCurrentTurn());
+        _slider.setValue(_controller.getCurrentTurn());
 
         _slider.setShowTickLabels(true);
         _slider.setShowTickMarks(true);
