@@ -56,6 +56,15 @@ public class MatchInvitationView extends View {
         }
     }
 
+    @FXML
+    private void goBack() {
+        try {
+            this._controller.navigate("MatchOverview", 869, 920);
+        } catch (Exception e) {
+            Log.error(e);
+        }
+    }
+
     @Override
     protected void loadFinished() {
         this.initialize();

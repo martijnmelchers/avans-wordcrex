@@ -81,7 +81,7 @@ public class MatchOverview extends View {
             this.adminButton.setDisable(true);
         }
 
-        if(!GameSession.hasRole("moderator")){
+        if (!GameSession.hasRole("moderator")) {
             this.adminButton.setDisable(true);
 
         }
@@ -235,21 +235,19 @@ public class MatchOverview extends View {
     }
 
     @FXML
-    private void administrator(){
-        try{
+    private void administrator() {
+        try {
             this._controller.navigate("AdminView");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Log.error(e);
         }
     }
 
     @FXML
-    private void moderator(){
-        try{
+    private void moderator() {
+        try {
             this._controller.navigate("ModeratorView");
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Log.error(e);
         }
     }
@@ -263,7 +261,7 @@ public class MatchOverview extends View {
     private void invitationView() {
 
         try {
-            this._controller.navigate("MatchInvitationView");
+            this._controller.navigate("MatchInvitationView", 350, 550);
         } catch (Exception e) {
             Log.error(e);
         }

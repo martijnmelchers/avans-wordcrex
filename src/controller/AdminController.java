@@ -11,7 +11,6 @@ public class AdminController extends Controller {
     private AdminModel adminModel;
 
 
-
     public AdminController() {
         this.adminModel = new AdminModel();
     }

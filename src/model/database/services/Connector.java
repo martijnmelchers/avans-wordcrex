@@ -15,7 +15,7 @@ public class Connector {
     }
 
     public Connection connect(String url, String username, String password, String scheme) throws SQLException {
-        return this.establishConnection(String.format("%s%s:%s/%s", MySQLDefaultConnectionString, url, MySQLDefaultConnectionPort, scheme), username, password);
+        return this.establishConnection(String.format("%s%s:%s/%s?allowMultiQueries=true", MySQLDefaultConnectionString, url, MySQLDefaultConnectionPort, scheme), username, password);
     }
 
     private Connection establishConnection(String url, String username, String password) throws SQLException {
