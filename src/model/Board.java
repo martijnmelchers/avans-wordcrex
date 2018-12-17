@@ -364,26 +364,30 @@ public class Board {
             TileType tileType = tile.getType();
             System.out.println("Letter: " + tile.getLetterType().getLetter());
             int letterValue = this._letterValues.get(tile.getLetterType().getLetter());
-
-            switch (tileType) {
-                case LETTER_TIMES_TWO:
-                    bonus += letterValue * 2;
-                    break;
-                case LETTER_TIMES_FOUR:
-                    bonus += letterValue * 4;
-                    break;
-                case LETTER_TIMES_SIX:
-                    bonus += letterValue * 6;
-                    break;
-                case WORD_TIMES_THREE:
-                    w3++;
-                    break;
-                case WORD_TIMES_FOUR:
-                    w4++;
-                    break;
-                default:
-                    score += letterValue;
-                    break;
+            if(tile.getState() == TileState.UNLOCKED) {
+                switch (tileType) {
+                    case LETTER_TIMES_TWO:
+                        bonus += letterValue * 2;
+                        break;
+                    case LETTER_TIMES_FOUR:
+                        bonus += letterValue * 4;
+                        break;
+                    case LETTER_TIMES_SIX:
+                        bonus += letterValue * 6;
+                        break;
+                    case WORD_TIMES_THREE:
+                        w3++;
+                        break;
+                    case WORD_TIMES_FOUR:
+                        w4++;
+                        break;
+                    default:
+                        score += letterValue;
+                        break;
+                }
+            }
+            else {
+                score += letterValue;
             }
         }
 
