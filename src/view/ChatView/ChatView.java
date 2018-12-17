@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import model.GameSession;
 import model.helper.Log;
 import model.tables.Chatline;
@@ -62,6 +63,12 @@ public class ChatView extends View {
         for (Chatline chatline : chatlines) {
             this.displayMessage(chatline);
         }
+
+
+        // set the scroll to the bottom
+        _messagesScrollPane.applyCss();
+        _messagesScrollPane.layout();
+        _messagesScrollPane.setVvalue(1.0);
     }
 
     private void displayMessage(Chatline chatline) {
@@ -81,12 +88,6 @@ public class ChatView extends View {
                 messageViewController.setMessageAlignment(0);
                 this._messagesGridPane.add(messagePane, 0, this._messagesGridPane.getRowCount() + 1);
             }
-
-
-            // set the scroll to the bottom
-            messagesScrollpane.applyCss();
-            messagesScrollpane.layout();
-            messagesScrollpane.setVvalue(1.0);
         } catch (IOException e) {
             Log.error(e);
         }
