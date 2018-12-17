@@ -34,7 +34,7 @@ public class GameModel {
     private String _playerName1;
     private String _playerName2;
 
-    public GameModel(Game game) {
+    public GameModel(Game game      ) {
         try {
             this._db = DocumentSession.getDatabase();
         } catch (Exception e) {

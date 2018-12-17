@@ -4,9 +4,11 @@ import model.tables.Account;
 import model.tables.Game;
 import model.tables.Role;
 
+import java.util.ArrayList;
+
 public final class GameSession {
     private static Account account;
-    private static Role role;
+    private static ArrayList<Role> roles;
     private static Game game;
 
     public static void setSession(Account user) {
@@ -41,11 +43,20 @@ public final class GameSession {
         GameSession.game = null;
     }
 
-    public static Role getRole() {
-        return GameSession.role;
+    public static ArrayList<Role> getRoles() {
+        return GameSession.roles;
     }
 
-    public static void setRole(Role role) {
-        GameSession.role = role;
+    public static boolean hasRole(String role){
+        for (var roleObj: GameSession.roles){
+            if(roleObj.getRole().equals(role)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void setRoles(ArrayList<Role> roles) {
+        GameSession.roles = roles;
     }
 }

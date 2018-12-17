@@ -29,7 +29,7 @@ public class MatchOverviewController extends Controller {
         }
     }
 
-    public ArrayList<Game> getAllGames() {
+    public List<Game> getAllGames() {
         return model.getAllGames();
     }
 
