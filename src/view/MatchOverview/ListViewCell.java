@@ -3,11 +3,14 @@ package view.MatchOverview;
 import controller.MatchOverviewController;
 import javafx.scene.control.ListCell;
 import model.GameSession;
+import model.helper.Log;
 import model.tables.Game;
 
 public final class ListViewCell extends ListCell<Game> {
 
     private MatchOverviewController _controller;
+
+    private MatchOverview _matchOverview;
 
     @Override
     public void updateItem(Game game, boolean empty) {
@@ -27,18 +30,20 @@ public final class ListViewCell extends ListCell<Game> {
                 view.getMatchPlayButton().setText("Accepteren");
                 view.getMatchSurrenderButton().setText("Weigeren");
             }
+
+
             view.getMatchPlayButton().setOnAction((e) -> {
                 GameSession.setGame(game);
 
                 if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())) {
                     this._controller.acceptInvite(game);
-                    System.out.println("Invite accepted");
+                    this._matchOverview.renderGames();
                 } else {
                     try {
                         this._controller.start();
                         this._controller.navigate("BoardView");
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        Log.error(ex);
                     }
                 }
             });
@@ -53,5 +58,9 @@ public final class ListViewCell extends ListCell<Game> {
 
     public void setController(MatchOverviewController controller) {
         _controller = controller;
+    }
+
+    public void setMatchOverview(MatchOverview overview){
+        this._matchOverview = overview;
     }
 }

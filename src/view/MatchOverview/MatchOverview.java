@@ -78,7 +78,7 @@ public class MatchOverview extends View {
 //        this.ScaleScreen(_gridParent);
     }
 
-    private void renderGames(){
+    public void renderGames(){
         gameObservableList = FXCollections.observableArrayList();
         gameObservableList1 = FXCollections.observableArrayList();
         gameObservableList2 = FXCollections.observableArrayList();
@@ -134,6 +134,7 @@ public class MatchOverview extends View {
             gameListview.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
+                listViewCell.setMatchOverview(this);
                 return listViewCell;
             });
 
