@@ -6,11 +6,11 @@ public enum LinkMethod {
 
     private String method;
 
-    LinkMethod(String method){
+    LinkMethod(String method) {
         this.method = method;
     }
 
     public String getMethod() {
-        return method;
+        return this.method;
     }
 }
