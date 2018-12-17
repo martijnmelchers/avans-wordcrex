@@ -130,7 +130,7 @@ public class MatchOverview extends View {
                 }
 
                 case "finished": {
-                    //TODO: show finished games
+                    this._gameObservableList2.add(game);
                     break;
                 }
 
