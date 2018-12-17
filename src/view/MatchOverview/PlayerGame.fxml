@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -20,7 +21,10 @@
             <Text fx:id="matchTurn" layoutX="6.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INSERT TURN PLAYER" wrappingWidth="139.0" />
          </children>
       </Pane>
-      <Button fx:id="matchPlayButton" layoutX="520.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="98.0" prefWidth="166.0" style="-fx-border-width: 5px;" text="Spelen" HBox.hgrow="ALWAYS" />
-      <Button fx:id="matchSurrenderButton" layoutX="439.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="99.0" prefWidth="166.0" text="Opgeven" HBox.hgrow="ALWAYS" />
+      <Button fx:id="matchPlayButton" layoutX="520.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="98.0" prefWidth="166.0" style="-fx-border-width: 5px; -fx-background-color: #FDC70C; -fx-text-fill: black;" text="Spelen" HBox.hgrow="ALWAYS">
+         <HBox.margin>
+            <Insets right="10.0" />
+         </HBox.margin></Button>
+      <Button fx:id="matchSurrenderButton" layoutX="439.0" layoutY="14.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="99.0" prefWidth="166.0" style="-fx-background-color: #FDC70C; -fx-text-fill: black;" text="Opgeven" HBox.hgrow="ALWAYS" />
    </children>
 </HBox>
