@@ -96,7 +96,7 @@
             <ListView fx:id="_gameListView1" layoutX="10.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS" />
             <StackPane prefHeight="32.0" style="-fx-background-color: rgb(28, 20, 58);">
                <children>
-                  <Text layoutX="376.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zijn/Haar beurt" />
+                  <Text layoutX="376.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Zijn/Haar beurt / Afgelopen spellen" />
                </children>
             </StackPane>
             <ListView fx:id="_gameListView2" layoutX="10.0" layoutY="194.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" VBox.vgrow="ALWAYS" />

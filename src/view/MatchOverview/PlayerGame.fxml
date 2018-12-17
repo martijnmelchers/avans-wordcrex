@@ -13,9 +13,9 @@
    <children>
       <Pane fx:id="infoPane" layoutX="101.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="97.0" prefWidth="350.0">
          <children>
-            <Text layoutX="3.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Scores:" />
+            <Text layoutX="3.0" layoutY="46.0" strokeType="OUTSIDE" fx:id="scoreLabel" strokeWidth="0.0" text="Scores:" />
           <Text layoutX="3.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tegenstander:" wrappingWidth="81.13671875" />
-            <Text layoutX="2.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beurt:" />
+            <Text layoutX="2.0" layoutY="74.0" strokeType="OUTSIDE" fx:id="turnLabel" strokeWidth="0.0" text="Beurt:" />
             <Text fx:id="matchEnemy" layoutX="6.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INSERT ENEMY NAME" wrappingWidth="139.0" />
             <Text fx:id="matchScore" layoutX="6.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INSERT SCORE1/SCORE2" wrappingWidth="139.0" />
             <Text fx:id="matchTurn" layoutX="6.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INSERT TURN PLAYER" wrappingWidth="139.0" />

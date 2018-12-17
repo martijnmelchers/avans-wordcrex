@@ -24,6 +24,13 @@ public class MatchView {
     private Text matchTurn;
 
     @FXML
+    private Text turnLabel;
+
+
+    @FXML
+    private Text scoreLabel;
+
+    @FXML
     private Button matchPlayButton;
 
     @FXML
@@ -99,9 +106,17 @@ public class MatchView {
                 inviteStatusTxt.setX(5);
                 inviteStatusTxt.setY(35);
             } else {
+
                 this.matchEnemy.setText(enemy);
                 this.matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
                 this.matchTurn.setText(MatchOverviewModel.isMyTurn(match) ? GameSession.getUsername() : enemy);
+
+                if(match.getGameState().isFinished()){
+
+                    this.scoreLabel.setText("Eindscore: ");
+                    this.turnLabel.setText("Winnaar: ");
+                    this.matchTurn.setText(match.getWinner().getUsername());
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
