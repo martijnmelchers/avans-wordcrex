@@ -72,7 +72,7 @@ public class LoginView extends View {
 
     public void loginSuccess() {
         try {
-            this._accountController.navigate("MatchOverview", 620, 769);
+            this._accountController.navigate("MatchOverview", 861, 920);
         } catch (Exception e) {
             Log.error(e, true);
         }

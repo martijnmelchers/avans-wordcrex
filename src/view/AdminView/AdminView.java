@@ -32,16 +32,13 @@ public class AdminView extends View {
     private TextField searchField;
 
     public AdminView() {
-        try {
-            this.controller = this.getController(AdminController.class);
-        } catch (Exception e) {
-            Log.error(e);
-        }
+
     }
 
 
     @FXML
     public void filter() {
+
         String filter = this.searchField.getText();
         this.filteredNames = new FilteredList<>(this.listViewItems, s -> true);
         if (filter == null || filter.length() == 0) {
@@ -52,7 +49,17 @@ public class AdminView extends View {
         this.userList.setItems(this.filteredNames);
     }
 
-    public void initialize() {
+
+    @Override
+    protected void loadFinished() {
+
+        try {
+            this.controller = this.getController(AdminController.class);
+        } catch (Exception e) {
+            Log.error(e);
+        }
+
+
         this.userList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.roleList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -63,11 +70,6 @@ public class AdminView extends View {
             }
         });
 
-
-    }
-
-    @Override
-    protected void loadFinished() {
         this.showInfo();
     }
 

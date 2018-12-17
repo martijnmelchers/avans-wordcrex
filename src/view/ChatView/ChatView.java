@@ -19,7 +19,6 @@ import model.tables.Chatline;
 import view.View;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,9 +67,9 @@ public class ChatView extends View {
         }
 
         // set the scroll to the bottom
-        _messagesScrollPane.applyCss();
-        _messagesScrollPane.layout();
-        _messagesScrollPane.setVvalue(1.0);
+        this._messagesScrollPane.applyCss();
+        this._messagesScrollPane.layout();
+        this._messagesScrollPane.setVvalue(1.0);
     }
 
     private void displayMessage(Chatline chatline) {
@@ -97,10 +96,10 @@ public class ChatView extends View {
 
     private void checkForMessages() {
         this.messageChecker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            int chatlinesCount = _controller.getChatlines(GameSession.getGame().getGameId()).size();
+            int chatlinesCount = this._controller.getChatlines(GameSession.getGame().getGameId()).size();
 
-            if (chatlinesCount > messageCount) {
-                displayMessages();
+            if (chatlinesCount > this.messageCount) {
+                this.displayMessages();
             }
         }));
         this.messageChecker.setCycleCount(Animation.INDEFINITE);

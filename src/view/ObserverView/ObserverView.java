@@ -12,7 +12,7 @@ import view.View;
 
 import java.util.ArrayList;
 
-public class ObserverView extends View{
+public class ObserverView extends View {
 
     @FXML
     private ListView PlayerListView;
@@ -20,24 +20,25 @@ public class ObserverView extends View{
     private TextField SearchBar;
     private ObservableList<String> gameview;
 
-    public void Initialize(){
-        gameview = FXCollections.observableList(new ArrayList<String>());
-        PlayerListView.setItems(gameview);
+    private void initialize() {
+        this.gameview = FXCollections.observableList(new ArrayList<String>());
+        this.PlayerListView.setItems(this.gameview);
     }
 
     @FXML
-    private void Search(){
-        gameview.clear();
+    private void search() {
+        this.gameview.clear();
         try {
-            gameview.addAll(this.getController(ObserverController.class).getGames(SearchBar.getText()));
+            this.gameview.addAll(this.getController(ObserverController.class).getGames(this.SearchBar.getText()));
         } catch (Exception e) {
             Log.error(e);
         }
     }
+
     @FXML
-    private void WatchGame(){
+    private void watchGame() {
         try {
-            this.getController(ObserverController.class).WatchGame( Integer.parseInt( PlayerListView.getSelectionModel().getSelectedItem().toString().split(" ")[0]));
+            this.getController(ObserverController.class).WatchGame(Integer.parseInt(this.PlayerListView.getSelectionModel().getSelectedItem().toString().split(" ")[0]));
         } catch (Exception e) {
             Log.error(e);
         }
@@ -50,8 +51,8 @@ public class ObserverView extends View{
 
     @Override
     protected void loadFinished() {
-        Initialize();
-        Search();
+        this.initialize();
+        this.search();
     }
 
 }

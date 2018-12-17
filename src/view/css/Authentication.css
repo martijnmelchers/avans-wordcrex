@@ -13,6 +13,6 @@
 
 .button
 {
-    -fx-background-color: #FDC70C;
+        -fx-background-color: #FDC70C;
     -fx-text-fill: white;
 }

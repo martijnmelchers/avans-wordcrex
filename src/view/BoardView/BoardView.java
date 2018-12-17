@@ -143,11 +143,19 @@ public class BoardView extends View {
     {
         vboxLoadingScreen.setVisible(true);
         labelLoadingScreen.setText(message);
+        _submit.setDisable(true);
+        _pass.setDisable(true);
+        _reset.setDisable(true);
+        _shuffle.setDisable(true);
     }
 
     public void stopLoadingScreen()
     {
         vboxLoadingScreen.setVisible(false);
+        _submit.setDisable(false);
+        _pass.setDisable(false);
+        _reset.setDisable(false);
+        _shuffle.setDisable(false);
     }
 
     public void init()
@@ -280,12 +288,14 @@ public class BoardView extends View {
     @FXML
     private void home(){
         try{
-            _chatViewController.closeMessageChecker();
-            if(_submit.isVisible() == false){
-                _controller.navigate("ObserverOverview",620,770);
-            }
-            else{
-                _controller.navigate("MatchOverview", 620,770);
+            if(_chatViewController != null){
+                _chatViewController.closeMessageChecker();
+                if(_submit.isVisible() == false){
+                    _controller.navigate("ObserverOverview",861,920);
+                }
+                else{
+                    _controller.navigate("MatchOverview", 861,920);
+                }
             }
         }
         catch(Exception e){
@@ -339,12 +349,14 @@ public class BoardView extends View {
 
     public void displayChat() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
-            AnchorPane chatView = loader.load();
+            if(!GameSession.hasRole("observer")) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
+                AnchorPane chatView = loader.load();
 
-            _chatViewController = loader.getController();
+                _chatViewController = loader.getController();
 
-            chatViewContainer.getChildren().add(chatView);
+                chatViewContainer.getChildren().add(chatView);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

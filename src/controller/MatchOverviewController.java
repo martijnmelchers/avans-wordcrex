@@ -13,12 +13,12 @@ public class MatchOverviewController extends Controller {
     private MatchOverviewModel model;
 
     public MatchOverviewController() {
-        model = new MatchOverviewModel();
+        this.model = new MatchOverviewModel();
     }
 
     public List<Game> getGames() {
 
-        return model.getCurrentPlayerGames(GameSession.getUsername());
+        return this.model.getCurrentPlayerGames(GameSession.getUsername());
     }
 
     public void start() {
@@ -30,27 +30,27 @@ public class MatchOverviewController extends Controller {
     }
 
     public List<Game> getAllGames() {
-        return model.getAllGames();
+        return this.model.getAllGames();
     }
 
     public boolean currentTurnHasAction(Game game) {
-        return model.currentTurnHasAction(game);
+        return this.model.currentTurnHasAction(game);
     }
 
     public boolean currentTurnPlayer2HasAction(Game game) {
-        return model.currentTurnPlayer2HasAction(game);
+        return this.model.currentTurnPlayer2HasAction(game);
     }
 
     public ArrayList<Game> searchForAllGamesAsObserver(String currentGamesToSearch) {
-        return model.searchForGamesAsObserver(currentGamesToSearch);
+        return this.model.searchForGamesAsObserver(currentGamesToSearch);
     }
 
     public ArrayList<String> getPlayerRoles() {
-        return model.getPlayerRoles();
+        return this.model.getPlayerRoles();
     }
 
     public ArrayList<Game> searchForAllGamesAsPlayer(String currentGamesToSearch) {
-        return model.searchForGamesAsPlayer(currentGamesToSearch);
+        return this.model.searchForGamesAsPlayer(currentGamesToSearch);
     }
 
     public boolean isMyTurn(Game game) throws NullPointerException {
@@ -58,7 +58,7 @@ public class MatchOverviewController extends Controller {
     }
 
     public MatchOverviewModel.GameScore getPlayerScores(Game game) {
-        return model.getPlayerScores(game);
+        return this.model.getPlayerScores(game);
     }
 
     public void surrender(Game game){

@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class MatchOverviewModel {
     private static HashMap<Game, Boolean> currentTurns = new HashMap<>();
+    private static HashMap<Game, String> observerTurns = new HashMap<>();
     private Database _db;
 
     public MatchOverviewModel() {
@@ -37,6 +38,11 @@ public class MatchOverviewModel {
         } else {
             throw new NullPointerException();
         }
+    }
+
+
+    public static String whoTurn(Game game) {
+        return MatchOverviewModel.observerTurns.get(game);
     }
 
     public List<Game> getCurrentPlayerGames(String username) {
@@ -128,7 +134,21 @@ public class MatchOverviewModel {
 
     public List<Game> getAllGames() {
         try {
-            return this._db.select(Game.class);
+            var games = this._db.select(Game.class);
+
+            for (var game : games) {
+                var gameMod = new GameModel(game);
+
+                if (!this.currentTurnHasAction(game)) {
+                    MatchOverviewModel.observerTurns.put(game, game.getPlayer1Username());
+                } else if (!this.currentTurnPlayer2HasAction(game)) {
+                    MatchOverviewModel.observerTurns.put(game, game.getPlayer2Username());
+                }
+            }
+
+
+            return games;
+
         } catch (Exception e) {
             Log.error(e);
         }

@@ -40,7 +40,7 @@ public class AccountController extends Controller {
             GameSession.setSession(account.getAccount());
 
 
-            GameSession.setRoles(getAccountRoles(account));
+            GameSession.setRoles(this.getAccountRoles(account));
             registerView.registerSuccess();
         } catch (Exception e) {
             Log.error(e);
@@ -49,11 +49,11 @@ public class AccountController extends Controller {
     }
 
 
-    private ArrayList<Role> getAccountRoles(AccountInfo account){
+    private ArrayList<Role> getAccountRoles(AccountInfo account) {
 
         var accountInfos = this._model.getRoles(account);
         var roleList = new ArrayList<Role>();
-        for (var role : accountInfos){
+        for (var role : accountInfos) {
             roleList.add(role.getRole());
         }
         return roleList;
@@ -69,7 +69,7 @@ public class AccountController extends Controller {
             var account = this._model.login(username, password);
 
             GameSession.setSession(account.getAccount());
-            GameSession.setRoles(getAccountRoles(account));
+            GameSession.setRoles(this.getAccountRoles(account));
 
             loginView.loginSuccess();
         } catch (Exception e) {

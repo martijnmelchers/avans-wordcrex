@@ -43,6 +43,12 @@ public class MatchOverview extends View {
     private Button _observerModeButton;
 
     @FXML
+    private Button moderatorButton;
+
+    @FXML
+    private Button adminButton;
+
+    @FXML
     private TextField _searchBar;
 
 
@@ -56,10 +62,13 @@ public class MatchOverview extends View {
         } catch (Exception e) {
             Log.error(e);
         }
+
         this.renderGames();
-//        this.ScaleScreen(_gridParent);
 
         this.disableNotAllowed();
+
+        this.ScaleScreen(this._gridParent);
+
     }
 
 
@@ -69,6 +78,11 @@ public class MatchOverview extends View {
         }
 
         if (!GameSession.hasRole("administrator")) {
+            this.adminButton.setDisable(true);
+        }
+
+        if (!GameSession.hasRole("moderator")) {
+            this.adminButton.setDisable(true);
 
         }
     }
@@ -118,7 +132,7 @@ public class MatchOverview extends View {
                 }
 
                 case "finished": {
-                    //TODO: show finished games
+                    this._gameObservableList2.add(game);
                     break;
                 }
 
@@ -207,7 +221,7 @@ public class MatchOverview extends View {
     @FXML
     private void navigateObserver() {
         try {
-            this._controller.navigate("ObserverOverview", 620, 770);
+            this._controller.navigate("ObserverOverview", 861, 920);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -222,6 +236,23 @@ public class MatchOverview extends View {
         }
     }
 
+    @FXML
+    private void administrator() {
+        try {
+            this._controller.navigate("AdminView");
+        } catch (Exception e) {
+            Log.error(e);
+        }
+    }
+
+    @FXML
+    private void moderator() {
+        try {
+            this._controller.navigate("ModeratorView");
+        } catch (Exception e) {
+            Log.error(e);
+        }
+    }
 
     @FXML
     public void refresh() {
@@ -232,7 +263,7 @@ public class MatchOverview extends View {
     private void invitationView() {
 
         try {
-            this._controller.navigate("MatchInvitationView");
+            this._controller.navigate("MatchInvitationView", 350, 550);
         } catch (Exception e) {
             Log.error(e);
         }
