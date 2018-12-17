@@ -34,7 +34,7 @@ public class AccountInformation extends View {
 
     private void getAccountInformation() {
 
-        for (var roleObj: GameSession.getRoles()){
+        for (var roleObj : GameSession.getRoles()) {
             this.role.setText(this.role.getText() + "\n" + roleObj.getRole());
         }
         this.username.setText(GameSession.getUsername());

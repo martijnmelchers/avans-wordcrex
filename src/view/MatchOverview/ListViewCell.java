@@ -8,8 +8,6 @@ import model.GameSession;
 import model.helper.Log;
 import model.tables.Game;
 
-import java.util.Optional;
-
 public final class ListViewCell extends ListCell<Game> {
 
     private MatchOverviewController _controller;
@@ -21,15 +19,15 @@ public final class ListViewCell extends ListCell<Game> {
         super.updateItem(game, empty);
         if (empty) {
             //TODO: headers can be implemented this way.
-            setGraphic(null);
+            this.setGraphic(null);
         } else {
 
             String player = GameSession.getUsername();
             String player1 = game.getPlayer1().getUsername();
             String player2 = game.getPlayer2().getUsername();
-            String enemy  = player1.equals(player) ?  player2 : player1;
+            String enemy = player1.equals(player) ? player2 : player1;
             MatchView view = new MatchView(game);
-            setGraphic(view.getAnchor());
+            this.setGraphic(view.getAnchor());
 
             if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted")) {
                 if (!game.getPlayer1Username().equals(GameSession.getUsername())) {
@@ -60,17 +58,15 @@ public final class ListViewCell extends ListCell<Game> {
             view.getMatchSurrenderButton().setOnAction((e) -> {
                 if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())) {
                     this._controller.declineInvite(game);
-                }
-
-                else{
+                } else {
                     var alert = new Alert(Alert.AlertType.CONFIRMATION, "Weet je het zeker?");
 
-                    alert.setHeaderText("Spel met "+ enemy + " opgeven: ");
-                    Optional<ButtonType> result = alert.showAndWait();
+                    alert.setHeaderText("Spel met " + enemy + " opgeven: ");
+                    alert.showAndWait();
 
-                    if(result.get() == ButtonType.OK){
+                    if (alert.getResult() == ButtonType.OK)
                         this._controller.surrender(game);
-                    }
+
                 }
 
                 this._matchOverview.renderGames();
@@ -81,10 +77,10 @@ public final class ListViewCell extends ListCell<Game> {
 
 
     public void setController(MatchOverviewController controller) {
-        _controller = controller;
+        this._controller = controller;
     }
 
-    public void setMatchOverview(MatchOverview overview){
+    public void setMatchOverview(MatchOverview overview) {
         this._matchOverview = overview;
     }
 }
