@@ -46,11 +46,6 @@ public class Board {
         put("Y", 9);
         put("Z", 6);
     }};
-
-    public int getLetterPoint(String letter){
-        return _letterValues.get(letter.toUpperCase());
-    }
-
     private Tile[][] _tiles = new Tile[15][15];
 
     public Board() {
@@ -131,48 +126,6 @@ public class Board {
     //Returned de punten die het woord geeft
     public CheckInfo check() {
 
-        if (!moveIsLegit()) { return null; }
-
-
-
-        int xMin = _placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
-        int yMin = _placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
-
-        final int tempx = xMin;
-        final int tempy = yMin;
-        boolean isHorizontal = _placedCoords.stream().anyMatch(x -> x.getX() != tempx);
-        boolean isVertical = _placedCoords.stream().anyMatch(x -> x.getY() != tempy);
-
-        String word = "";
-
-        if(isHorizontal) {
-            for (int x = xMin; x > -1 && !_tiles[yMin][x].isEmpty(); x--) {
-                xMin = x;
-            }
-
-            for (int x = yMin; x < 14 && !_tiles[yMin][x].isEmpty(); x++) {
-                word+=_tiles[yMin][x].getLetterType().getLetter();
-            }
-        }
-        if(isVertical) {
-            for (int y = yMin; y > -1 && !_tiles[y][xMin].isEmpty(); y--) {
-                yMin = xMin;
-            }
-
-
-            for (int y = yMin; y < 14 && !_tiles[y][xMin].isEmpty(); y++) {
-                word+=_tiles[y][xMin].getLetterType().getLetter();
-            }
-        }
-
-
-
-
-
-
-
-
-
         ArrayList<Tile> words = new ArrayList<>();
 
         ArrayList<String> tileIds = new ArrayList<>();
@@ -181,7 +134,7 @@ public class Board {
         ArrayList<Tile> tilesX = new ArrayList<>();
         ArrayList<Tile> tilesY = new ArrayList<>();
 
-        if (!newTilesConnected())
+        if (_placedCoords.size() == 0 || !newTilesConnected())
         {
             return null;
         }
@@ -318,7 +271,7 @@ public class Board {
 
         for (Tile tile : tiles) {
             TileType tileType = tile.getType();
-            System.out.println("Letter: " + tile.getLetterType().getLetter());
+
             int letterValue = _letterValues.get(tile.getLetterType().getLetter());
 
             switch (tileType) {

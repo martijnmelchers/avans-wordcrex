@@ -152,9 +152,22 @@ public class Dock {
             }
         }
 
+        if(notUsed.size()==0)
+        {
+            return;
+        }
+
         for (int i = 0; i < letters.length; i++) {
             if (letters[i] == null) {
-                int randomIndex = new Random().nextInt(notUsed.size() - 1) + 1;
+                int randomIndex;
+                if(notUsed.size() == 1)
+                {
+                    randomIndex = 0;
+                }
+                else
+                {
+                    randomIndex = new Random().nextInt(notUsed.size() - 1) + 1;
+                }
                 Letter l = notUsed.get(randomIndex);
                 Turn t = new Turn(gameId, turnId);
                 letters[i] = new HandLetter(l.getLetterId(), turnId, gameId, l, t);
