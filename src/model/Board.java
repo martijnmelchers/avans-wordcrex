@@ -188,7 +188,7 @@ public class Board {
     public CheckInfo check() {
 
 
-        if (!this.newTilesConnected())
+        if (_placedCoords.size() < 1 || !this.newTilesConnected() || !this.moveIsLegit())
             return null;
 
 
@@ -302,7 +302,6 @@ public class Board {
         ArrayList<Boolean> connectedToOldTiles = new ArrayList<>();
 
         boolean usedStartingTile = !this._tiles[7][7].isEmpty();
-        boolean isStraight = this._placedCoords.stream().allMatch(x -> x.getX() == this._placedCoords.get(0).getX()) || this._placedCoords.stream().allMatch(x -> x.getY() == this._placedCoords.get(0).getY());
 
         if (this._placedCoords.size() < 1) {
             return false;
@@ -343,13 +342,7 @@ public class Board {
                 connectedToOldTiles.add(connectedToOld.contains(true));
             }
         }
-
-        boolean isConnected = this._placedCoords.size() == tilesConnected.size();
-        if (boardHasOldTiles) {
-            isConnectedToOld = connectedToOldTiles.contains(true);
-        }
-
-        return usedStartingTile && isStraight && isConnected && isConnectedToOld;
+        return usedStartingTile && isConnectedToOld;
     }
 
     private Points calculatePoints(Tile[] tiles) {
