@@ -340,11 +340,14 @@ public class GameModel {
             //insert alle tiles in tile en boardplayer1
 
             //TODO in database tileType moet je kijke wat -- en * zijn (default?)
-            for (int i = 0; i < c.length; i++) {
+            if (c != null)
+            {
+                for (int i = 0; i < c.length; i++) {
 
-                int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
+                    int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
 
-                _db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId, (c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 1
+                    _db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId, (c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 1
+                }
             }
 
         } catch (Exception e) {
@@ -426,10 +429,13 @@ public class GameModel {
             //insert alle tiles in tile en boardplayer1
 
             //TODO in database tileType moet je kijke nwat -- en * zijn (default?)
-            for (int i = 0; i < c.length; i++) {
+            if (c != null)
+            {
+                for (int i = 0; i < c.length; i++) {
 
-                int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
-                _db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId, (c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 2
+                    int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
+                    _db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId, (c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 2
+                }
             }
 
         } catch (Exception e) {

@@ -130,7 +130,7 @@ public class Board {
 
         ArrayList<String> tileIds = new ArrayList<>();
 
-        if (!newTilesConnected())
+        if (_placedCoords.size() == 0 || !newTilesConnected())
         {
             return null;
         }
