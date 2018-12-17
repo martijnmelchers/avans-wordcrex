@@ -60,6 +60,7 @@ public class BoardView extends View {
         updateTilesLeft();
         checkRole();
         checkIfTurnPlayed();
+        _slider.setDisable(_controller.getCurrentTurn() == 1);
     }
 
     private void checkRole()
@@ -86,6 +87,7 @@ public class BoardView extends View {
         if (updateDock)
         {
             dockController.updateDock();
+            _slider.setDisable(_controller.getCurrentTurn() == 1);
         }
     }
 
@@ -164,7 +166,9 @@ public class BoardView extends View {
                 _gridPane.getChildren().add(stackPane);
             }
         }
-        _slider.setMin(1);
+        _slider.setDisable(_controller.getCurrentTurn() == 1);
+
+        _slider.setMin(0);
         _slider.setMax(_controller.getCurrentTurn() - 1);
         _slider.setValue(_controller.getCurrentTurn() - 1);
 
@@ -259,6 +263,9 @@ public class BoardView extends View {
 
     @FXML
     public void showTurnOnBoard(){
+        if(_controller.getCurrentTurn() == 1)// Return void if there is no history.
+            return;
+
         //TODO update score erbij
         //TODO lock dock
         var snap = Math.round(_slider.getValue());
