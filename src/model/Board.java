@@ -132,9 +132,10 @@ public class Board {
 
         List<Points> temps = new ArrayList<Points>();
         //List<CheckInfo>
-        List<Vector2> tempWordLocations = new ArrayList<Vector2>();
+
 
         for (Vector2 starting : locations) {
+            List<Vector2> tempWordLocations = new ArrayList<Vector2>();
             String Word = "";
             for (int y = starting.getY(); y > -1 && !this._tiles[y][starting.getX()].isEmpty(); y--) {
                 starting = new Vector2(starting.getX(), y);
@@ -147,7 +148,7 @@ public class Board {
             }
             if (wordChecker.check(Word))
                 temps.add(this.calculatePoints(tempWordLocations.stream().map(x -> this._tiles[x.getY()][x.getX()]).toArray(Tile[]::new)));
-
+            else return null;
         }
         for(Points point: temps){
             temp.add(point);
@@ -160,9 +161,10 @@ public class Board {
 
         List<Points> temps = new ArrayList<Points>();
         //List<CheckInfo>
-        List<Vector2> tempWordLocations = new ArrayList<Vector2>();
+
 
         for (Vector2 starting : locations) {
+            List<Vector2> tempWordLocations = new ArrayList<Vector2>();
             String Word = "";
             for (int x = starting.getX(); x > -1 && !this._tiles[starting.getY()][x].isEmpty(); x--) {
                 starting = new Vector2(x, starting.getY());
@@ -175,7 +177,7 @@ public class Board {
             }
             if (wordChecker.check(Word))
                 temps.add(this.calculatePoints(tempWordLocations.stream().map(x -> this._tiles[x.getY()][x.getX()]).toArray(Tile[]::new)));
-
+            else return null;
         }
         for(Points point: temps){
             temp.add(point);
@@ -249,10 +251,16 @@ public class Board {
         }
         if (word == "")
             return null;
-        Points points = this.checkSubWordsVert(secondaryWordsVertical);
-        points.add(this.checkSubWordsHorz(secondaryWordsHorizontal));
+        Points points = new Points(0,0);
         if (wordChecker.check(word) && !(isHorizontal == isVertical))
-            points.add(calculatePoints(mainWord.toArray(new Tile[0])));
+            points = (calculatePoints(mainWord.toArray(new Tile[0])));
+
+        Points temp = this.checkSubWordsVert(secondaryWordsVertical);
+        if(temp != null) points.add(temp);
+        else return null;
+        temp = this.checkSubWordsHorz(secondaryWordsHorizontal);
+        if(temp !=null) points.add(temp);
+        else return  null;
 
         //return new CheckInfo(0,)
 
@@ -356,16 +364,19 @@ public class Board {
             TileType tileType = tile.getType();
             System.out.println("Letter: " + tile.getLetterType().getLetter());
             int letterValue = this._letterValues.get(tile.getLetterType().getLetter());
-            if(tile.getState() == TileState.UNLOCKED) {
+            if (tile.getState() == TileState.UNLOCKED) {
                 switch (tileType) {
                     case LETTER_TIMES_TWO:
-                        bonus += letterValue * 2;
+                        score += letterValue;
+                        bonus += letterValue;
                         break;
                     case LETTER_TIMES_FOUR:
-                        bonus += letterValue * 4;
+                        score += letterValue;
+                        bonus += letterValue * 3;
                         break;
                     case LETTER_TIMES_SIX:
-                        bonus += letterValue * 6;
+                        score += letterValue;
+                        bonus += letterValue * 5;
                         break;
                     case WORD_TIMES_THREE:
                         w3++;
@@ -379,18 +390,15 @@ public class Board {
                         score += letterValue;
                         break;
                 }
-            }
-            else {
+            } else {
                 score += letterValue;
             }
         }
+        //if(w4 != 0|| w3 != 0)
+           // score *= (int) Math.pow(4, w4) * (int) Math.pow(3, w3) -score;
+        if(w4 != 0|| w3 != 0)
+            bonus = (score + bonus) * (int) Math.pow(4, w4) * (int) Math.pow(3, w3) - score;
 
-        for (int j = 0; j < w3; j++) {
-            bonus += (score+bonus)* 3;
-        }
-        for (int j = 0; j < w4; j++) {
-            bonus += (score+bonus)* 4;
-        }
 
         return new Points(score, bonus);
     }
