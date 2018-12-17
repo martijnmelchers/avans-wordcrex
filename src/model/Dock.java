@@ -115,6 +115,21 @@ public class Dock {
 
     }
 
+    public void replaceLettersDock(int gameId, int turnId)
+    {
+        for (HandLetter letter : letters)
+        {
+            try {
+                _db.delete(letter);
+            } catch (Exception e) {
+                Log.error(e);
+            }
+        }
+
+        clearAll();
+        refill(gameId, turnId);
+    }
+
     private void clearAll() {
         for (int i = 0; i < letters.length; i++) {
             letters[i] = null;
