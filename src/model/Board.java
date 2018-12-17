@@ -215,7 +215,7 @@ public class Board {
                 xMin = x;
             }
 
-            for (int x = xMin; x < 14 && !this._tiles[yMin][x].isEmpty(); x++) {
+            for (int x = xMin; x < 15 && !this._tiles[yMin][x].isEmpty(); x++) {
                 word += this._tiles[yMin][x].getLetterType().getLetter();
                 mainWord.add(_tiles[yMin][x]);
                 if (this._tiles[yMin][x].getState() == TileState.UNLOCKED) {
@@ -235,7 +235,7 @@ public class Board {
             }
 
 
-            for (int y = yMin; y < 14 && !this._tiles[y][xMin].isEmpty(); y++) {
+            for (int y = yMin; y < 15 && !this._tiles[y][xMin].isEmpty(); y++) {
                 word += this._tiles[y][xMin].getLetterType().getLetter();
                 mainWord.add(_tiles[y][xMin]);
                 if (this._tiles[y][xMin].getState() == TileState.UNLOCKED) {
@@ -251,7 +251,7 @@ public class Board {
             return null;
         Points points = this.checkSubWordsVert(secondaryWordsVertical);
         points.add(this.checkSubWordsHorz(secondaryWordsHorizontal));
-        if (wordChecker.check(word))
+        if (wordChecker.check(word) && !(isHorizontal == isVertical))
             points.add(calculatePoints(mainWord.toArray(new Tile[0])));
 
         //return new CheckInfo(0,)
@@ -370,9 +370,11 @@ public class Board {
                         break;
                     case WORD_TIMES_THREE:
                         w3++;
+                        score += letterValue;
                         break;
                     case WORD_TIMES_FOUR:
                         w4++;
+                        score += letterValue;
                         break;
                     default:
                         score += letterValue;
@@ -385,10 +387,10 @@ public class Board {
         }
 
         for (int j = 0; j < w3; j++) {
-            bonus *= 3;
+            bonus += (score+bonus)* 3;
         }
         for (int j = 0; j < w4; j++) {
-            bonus *= 4;
+            bonus += (score+bonus)* 4;
         }
 
         return new Points(score, bonus);
