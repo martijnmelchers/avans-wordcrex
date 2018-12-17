@@ -188,9 +188,8 @@ public class Board {
     public CheckInfo check() {
 
 
-        if (!this.moveIsLegit() || this.newTilesConnected()) {
+        if (!this.newTilesConnected())
             return null;
-        }
 
 
         int xMin = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
