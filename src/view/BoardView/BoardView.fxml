@@ -100,7 +100,8 @@
                <Button fx:id="_shuffle" layoutX="655.0" layoutY="263.0" onMouseClicked="#shuffleTiles" prefHeight="42.0" prefWidth="168.0" style="-fx-background-color: #f4d941;" text="Shuffle" textAlignment="CENTER" />
                <Button fx:id="_surrender" layoutX="655.0" layoutY="333.0" onMouseClicked="#surrender" prefHeight="42.0" prefWidth="168.0" style="-fx-background-color: #f4d941;" text="Surrender" textAlignment="CENTER" />
             <Slider fx:id="_slider" layoutX="22.0" layoutY="801.0" onMouseReleased="#showTurnOnBoard" prefHeight="27.0" prefWidth="621.0" />
-            <VBox fx:id="chatViewContainer" layoutX="851.0" layoutY="49.0" prefHeight="755.0" prefWidth="730.0" />
+               <Button fx:id="_home" layoutX="655.0" layoutY="750.0" onMouseClicked="#home" prefHeight="42.0" prefWidth="168.0" style="-fx-background-color: #f4d941;" text="Home" textAlignment="CENTER" />
+               <VBox fx:id="chatViewContainer" layoutX="851.0" layoutY="49.0" prefHeight="755.0" prefWidth="730.0" />
            </children>
        </AnchorPane>
        <VBox fx:id="vboxLoadingScreen" alignment="CENTER" prefHeight="639.0" prefWidth="955.0" style="-fx-background-color: rgba(255,255,255,0.65)" visible="false">
