@@ -83,7 +83,6 @@ public class GameModel {
                 for (TurnPlayer1 turnPlayer1 : _db.select(TurnPlayer1.class, clauses))
                     score += (turnPlayer1.getScore() + turnPlayer1.getBonus());
 
-
                 this._playerScore1 = score;
 
             } catch (Exception e) {
@@ -112,6 +111,7 @@ public class GameModel {
         }
 
     }
+
 
     public int getPlayerScore1() {
         return this._playerScore1;

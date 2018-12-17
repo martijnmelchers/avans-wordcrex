@@ -188,7 +188,7 @@ public class Board {
     public CheckInfo check() {
 
 
-        if (_placedCoords.size() < 1 || !this.newTilesConnected() || !this.moveIsLegit())
+        if (_placedCoords.size() < 1 || !this.newTilesConnected() || !this.isConnectedToOldTile())
             return null;
 
 
@@ -266,11 +266,13 @@ public class Board {
             return true;
         }
 
+        if(this._tiles[7][7].isEmpty()) return false;
+
         int xMin = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
         int yMin = this._placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
 
-        boolean isHorizontal = this._placedCoords.stream().anyMatch(x -> x.getX() != xMin);
-        boolean isVertical = this._placedCoords.stream().anyMatch(x -> x.getY() != yMin);
+        boolean isHorizontal = !this._placedCoords.stream().anyMatch(x -> x.getX() != xMin);
+        boolean isVertical = !this._placedCoords.stream().anyMatch(x -> x.getY() != yMin);
 
         if (!isHorizontal && !isVertical) {
             return false;
@@ -279,16 +281,16 @@ public class Board {
         if (isHorizontal) {
             int xMax = this._placedCoords.stream().mapToInt(x -> x.getX()).max().orElseThrow();
             for (int i = xMin; i < xMax; i++) {
-                Tile prevTile = this._tiles[yMin][i];
-                if (prevTile.isEmpty()) {
+                Tile curTile = this._tiles[yMin][i];
+                if (curTile.isEmpty()) {
                     return false;
                 }
             }
         } else {
             int yMax = this._placedCoords.stream().mapToInt(x -> x.getY()).max().orElseThrow();
             for (int i = yMin; i < yMax; i++) {
-                Tile prevTile = this._tiles[i][xMin];
-                if (prevTile.isEmpty()) {
+                Tile curTile = this._tiles[i][xMin];
+                if (curTile.isEmpty()) {
                     return false;
                 }
             }
@@ -297,11 +299,9 @@ public class Board {
         return true;
     }
 
-    private boolean moveIsLegit() {
+    private boolean isConnectedToOldTile() {
         ArrayList<Boolean> tilesConnected = new ArrayList<>();
         ArrayList<Boolean> connectedToOldTiles = new ArrayList<>();
-
-        boolean usedStartingTile = !this._tiles[7][7].isEmpty();
 
         if (this._placedCoords.size() < 1) {
             return false;
@@ -342,7 +342,7 @@ public class Board {
                 connectedToOldTiles.add(connectedToOld.contains(true));
             }
         }
-        return usedStartingTile && isConnectedToOld;
+        return isConnectedToOld;
     }
 
     private Points calculatePoints(Tile[] tiles) {
