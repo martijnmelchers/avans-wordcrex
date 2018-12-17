@@ -47,20 +47,20 @@ public final class GameSession {
         return GameSession.roles;
     }
 
-    public static boolean hasRole(String role){
-        for (var roleObj: GameSession.roles){
-            if(roleObj.getRole().equals(role)){
+    public static void setRoles(ArrayList<Role> roles) {
+        GameSession.roles = roles;
+    }
+
+    public static boolean hasRole(String role) {
+        for (var roleObj : GameSession.roles) {
+            if (roleObj.getRole().equals(role)) {
                 return true;
             }
         }
         return false;
     }
 
-
-    public static Account getAccount(){
+    public static Account getAccount() {
         return GameSession.account;
-    }
-    public static void setRoles(ArrayList<Role> roles) {
-        GameSession.roles = roles;
     }
 }

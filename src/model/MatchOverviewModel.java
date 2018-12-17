@@ -44,6 +44,7 @@ public class MatchOverviewModel {
     public static String whoTurn(Game game) {
         return MatchOverviewModel.observerTurns.get(game);
     }
+
     public List<Game> getCurrentPlayerGames(String username) {
         return this.findCurrentPlayerGame(username);
     }
@@ -133,15 +134,14 @@ public class MatchOverviewModel {
 
     public List<Game> getAllGames() {
         try {
-            var games =this._db.select(Game.class);
+            var games = this._db.select(Game.class);
 
-            for(var game : games) {
+            for (var game : games) {
                 var gameMod = new GameModel(game);
 
-                if(!this.currentTurnHasAction(game)){
+                if (!this.currentTurnHasAction(game)) {
                     MatchOverviewModel.observerTurns.put(game, game.getPlayer1Username());
-                }
-                else if(!this.currentTurnPlayer2HasAction(game)){
+                } else if (!this.currentTurnPlayer2HasAction(game)) {
                     MatchOverviewModel.observerTurns.put(game, game.getPlayer2Username());
                 }
             }
