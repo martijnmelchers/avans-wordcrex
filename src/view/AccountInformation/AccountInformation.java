@@ -18,7 +18,7 @@ public class AccountInformation extends View {
     @FXML
     private Label error;
 
-    @FXML   
+    @FXML
     private Label passwordShow;
     @FXML
     private TextField password;

@@ -43,6 +43,12 @@ public class MatchOverview extends View {
     private Button _observerModeButton;
 
     @FXML
+    private Button moderatorButton;
+
+    @FXML
+    private Button adminButton;
+
+    @FXML
     private TextField _searchBar;
 
 
@@ -73,7 +79,11 @@ public class MatchOverview extends View {
         }
 
         if (!GameSession.hasRole("administrator")) {
+            this.adminButton.setDisable(true);
+        }
 
+        if(!GameSession.hasRole("moderator")){
+            this.adminButton.setDisable(true);
         }
     }
 
@@ -224,6 +234,25 @@ public class MatchOverview extends View {
         }
     }
 
+    @FXML
+    private void administrator(){
+        try{
+            this._controller.navigate("AdminView");
+        }
+        catch(Exception e){
+            Log.error(e);
+        }
+    }
+
+    @FXML
+    private void moderator(){
+        try{
+            this._controller.navigate("ModeratorView");
+        }
+        catch(Exception e){
+            Log.error(e);
+        }
+    }
 
     @FXML
     public void refresh() {
