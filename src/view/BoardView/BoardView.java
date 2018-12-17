@@ -254,7 +254,18 @@ public class BoardView extends View {
 
     @FXML
     private void home(){
-        _controller.navigate("MatchOverview");
+        try{
+            if(_submit.isVisible() == false){
+                _controller.navigate("ObserverOverview",620,770);
+            }
+            else{
+                _controller.navigate("MatchOverview", 620,770);
+            }
+        }
+        catch(Exception e){
+            Log.error(e);
+        }
+
     }
 
     @FXML

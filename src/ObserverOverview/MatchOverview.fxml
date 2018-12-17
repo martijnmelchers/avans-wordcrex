@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
 <?import java.lang.String?>
-
 <GridPane fx:id="_anchorParent" maxWidth="873.0" prefHeight="790.0" prefWidth="873.0" stylesheets="@../css/Main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MatchOverview.MatchOverview">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" percentWidth="100.0" />
@@ -35,7 +30,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="_observerModeButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#navigateObserver" prefWidth="150.0" scaleShape="false" text="Observeer Mode">
+            <Button fx:id="_viewModeButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefWidth="150.0" scaleShape="false" text="Observeer Mode">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

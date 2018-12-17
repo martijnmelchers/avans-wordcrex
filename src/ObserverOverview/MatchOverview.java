@@ -1,4 +1,4 @@
-package view.MatchOverview;
+package ObserverOverview;
 
 import controller.MatchOverviewController;
 import javafx.collections.FXCollections;
@@ -8,13 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.util.Callback;
-import model.Board;
 import model.GameModel;
-import model.GameSession;
 import model.MatchOverviewModel;
 import model.helper.Log;
 import model.tables.Game;
@@ -45,7 +41,7 @@ public class MatchOverview extends View {
     private MatchOverviewController _controller;
 
     @FXML
-    private Button _observerModeButton;
+    private Button _viewModeButton;
 
     @FXML
     private TextField _searchBar;
@@ -203,16 +199,6 @@ public class MatchOverview extends View {
             this._controller.navigate("LoginView", 350,550);
         }
         catch (Exception e){
-            Log.error(e);
-        }
-    }
-
-    @FXML
-    private void navigateObserver(){
-        try{
-            this._controller.navigate("ObserverOverview",620,770);
-        }
-        catch(Exception e){
             Log.error(e);
         }
     }
