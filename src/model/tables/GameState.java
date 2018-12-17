@@ -11,14 +11,28 @@ public class GameState {
     @Column("state")
     private String _state;
 
-    public GameState() {}
+    public GameState() {
+    }
 
-    public boolean isRequest() { return _state.equals("request"); }
-    public boolean isPlaying() { return _state.equals("playing"); }
-    public boolean isFinished() { return _state.equals("finished"); }
-    public boolean isResigned() { return _state.equals("resigned"); }
+    public boolean isRequest() {
+        return this._state.equals("request");
+    }
 
-    public String getState(){return _state;}
+    public boolean isPlaying() {
+        return this._state.equals("playing");
+    }
+
+    public boolean isFinished() {
+        return this._state.equals("finished");
+    }
+
+    public boolean isResigned() {
+        return this._state.equals("resigned");
+    }
+
+    public String getState() {
+        return this._state;
+    }
 
 
 }

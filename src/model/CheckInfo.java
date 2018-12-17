@@ -9,20 +9,20 @@ public class CheckInfo {
     private Vector2[] _coordinates;
 
     public CheckInfo(Points score, Tile[] tiles, Vector2[] coordinates) {
-        _score = score;
-        _tiles = tiles;
-        _coordinates = coordinates;
+        this._score = score;
+        this._tiles = tiles;
+        this._coordinates = coordinates;
     }
 
     public Points getPoints() {
-        return _score;
+        return this._score;
     }
 
     public Tile[] getTiles() {
-        return _tiles;
+        return this._tiles;
     }
 
     public Vector2[] getCoordinates() {
-        return _coordinates;
+        return this._coordinates;
     }
 }
