@@ -27,10 +27,10 @@ public abstract class View {
         final double newWidth = this.scene.getWidth();
         final double newHeight = this.scene.getHeight();
 
-        final double ratio = 1.2;
+        final double ratio = 1;
 
         double scaleFactor =
-                newWidth / newHeight > ratio ? newHeight / 600 : newWidth / 800;
+                newWidth / newHeight > ratio ? newHeight / 1200 : newWidth / 1600 ;
 
         if (scaleFactor > 1) {
             Scale scale = new Scale(scaleFactor, scaleFactor);
@@ -41,8 +41,8 @@ public abstract class View {
             parent.setPrefWidth(newWidth / scaleFactor);
             parent.setPrefHeight(newHeight / scaleFactor);
         } else {
-            parent.setPrefWidth(Math.max(800, newWidth));
-            parent.setPrefHeight(Math.max(600, newHeight));
+            parent.setPrefWidth(Math.max(1600, newWidth));
+            parent.setPrefHeight(Math.max(1200, newHeight));
         }
     }
 }
