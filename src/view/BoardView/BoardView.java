@@ -231,6 +231,7 @@ public class BoardView extends View {
     @FXML
     public void shuffleTiles()
     {
+        resetTiles();
         dockController.shuffleDock();
     }
 
