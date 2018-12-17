@@ -97,11 +97,7 @@ public class GameController extends Controller{
         if(info == null &&!pass) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setContentText("Foute zet");
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    GameSession.setSession(new Account("jagermeester","rrr"));
-                }
-            });
+            alert.showAndWait();
             return;
         }
 
