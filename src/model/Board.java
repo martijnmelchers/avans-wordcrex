@@ -264,11 +264,14 @@ public class Board {
             if(wordChecker.check(word))
                 isHorizontal= false;
         }
+
         if (word == "")
             return null;
+        //if(isHorizontal)secondaryWordsVertical.clear();
+        //if(isVertical)secondaryWordsHorizontal.clear();
         Points points = new Points(0,0);
         System.out.println(word);
-        if (wordChecker.check(word) && isHorizontal != isVertical)
+        if (wordChecker.check(word) && _placedCoords.size() >1)
             points = (calculatePoints(mainWord.toArray(new Tile[0])));
         else if(!wordChecker.check(word) && isHorizontal != isVertical)
             return null;
