@@ -49,6 +49,12 @@ public class MatchOverviewModel {
         return this.findCurrentPlayerGame(username);
     }
 
+
+    /**
+     * Returns the games of the current user
+     * @param username
+     * @return
+     */
     private List<Game> findCurrentPlayerGame(String username) {
         try {
 
@@ -59,6 +65,8 @@ public class MatchOverviewModel {
 
             var games = this._db.select(Game.class, clauses);
 
+
+            // Caches the turns so we don't need to get the turns every time.
             for (Game game : games) {
                 MatchOverviewModel.currentTurns.put(game, !this.checkIfTurnPlayed(game));
             }
@@ -72,6 +80,11 @@ public class MatchOverviewModel {
     }
 
 
+    /**
+     * Check if the current user has played a turn.
+     * @param game
+     * @return
+     */
     public boolean checkIfTurnPlayed(Game game) {
 
         var lastTurn = this.getLatestTurnOfGame(game);
@@ -114,6 +127,11 @@ public class MatchOverviewModel {
     }
 
 
+    /**
+     * Checks if player1 has played his turn.
+     * @param game
+     * @return
+     */
     public boolean currentTurnHasAction(Game game) {
         var latestTurn = this.getLatestTurnOfGame(game);
 
@@ -123,7 +141,7 @@ public class MatchOverviewModel {
         clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, latestTurn));
 
         try {
-            var turnList = this._db.select(TurnPlayer1.class, clauses);
+            var turnList = this._db.select(TurnPlayer1.class, clauses, false);
             if (turnList.size() > 0)
                 return true;
 
@@ -134,6 +152,11 @@ public class MatchOverviewModel {
         return false;
     }
 
+    /**
+     * Checks if player2 has played his turn.
+     * @param game
+     * @return
+     */
     public boolean currentTurnPlayer2HasAction(Game game) {
         Integer latestTurn = this.getLatestTurnOfGame(game);
 
@@ -154,6 +177,11 @@ public class MatchOverviewModel {
     }
 
 
+    /**
+     * Returns the latest turn id of the game.
+     * @param game
+     * @return
+     */
     private int getLatestTurnOfGame(Game game) {
         int latestTurn = 0;
 
@@ -174,10 +202,16 @@ public class MatchOverviewModel {
         return latestTurn;
     }
 
+    /**
+     * Returns all games in the database
+     * @return
+     */
     public List<Game> getAllGames() {
         try {
             var games = this._db.select(Game.class);
 
+
+            // Caches who's turn it is so the observer is much faster.
             for (var game : games) {
                 if (!this.currentTurnHasAction(game)) {
                     MatchOverviewModel.observerTurns.put(game, game.getPlayer1Username());
@@ -196,7 +230,11 @@ public class MatchOverviewModel {
         return null;
     }
 
-
+    /**
+     * Old function
+     * @param gamesToSearch
+     * @return
+     */
     public ArrayList<Game> searchForGamesAsObserver(String gamesToSearch) {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.LIKE, "%" + gamesToSearch + "%", LinkMethod.OR));
@@ -237,6 +275,10 @@ public class MatchOverviewModel {
         return null;
     }
 
+    /**
+     * Returns all roles of the current user.
+     * @return
+     */
     public ArrayList<String> getPlayerRoles() {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, GameSession.getUsername()));
@@ -256,6 +298,11 @@ public class MatchOverviewModel {
         return null;
     }
 
+
+    /**
+     * Surrenders the current game.
+     * @param game
+     */
     public void surrenderGame(Game game) {
         String player = GameSession.getUsername();
 
@@ -269,6 +316,10 @@ public class MatchOverviewModel {
         }
     }
 
+    /**
+     * Accept an invite.
+     * @param game
+     */
     public void acceptInvite(Game game) {
         game.setState("playing");
         game.setAnswer("accepted");
@@ -280,6 +331,10 @@ public class MatchOverviewModel {
         }
     }
 
+    /**
+     * Decline an invite
+     * @param game
+     */
     public void declineInvite(Game game) {
         game.setAnswer("rejected");
         try {
@@ -289,6 +344,12 @@ public class MatchOverviewModel {
         }
     }
 
+
+    /**
+     * Returns the latest scores of the game.
+     * @param game
+     * @return
+     */
     public GameScore getPlayerScores(Game game) {
         GameScore score = new GameScore();
 

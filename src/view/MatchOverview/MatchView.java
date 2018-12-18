@@ -46,8 +46,6 @@ public class MatchView {
 
     public MatchView(Game match) {
 
-//todo maken een alternatief ALS JE DURFT
-
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("PlayerGame.fxml"));
             fxmlLoader.setController(this);
@@ -63,8 +61,12 @@ public class MatchView {
             var player1 = match.getPlayer1().getUsername();
             var player2 = match.getPlayer2().getUsername();
 
+
+            // Gets the enemy (opponents) username
             var enemy = player1.equals(player) ? player2 : player1;
 
+
+            // We change some text when this match entry is a request.
             if (match.getGameState().isRequest()) {
                 this.infoPane.getChildren().clear();
 
@@ -80,6 +82,8 @@ public class MatchView {
 
                     var answer = "reactie: ";
 
+
+                    // Show the answer from this invite.
                     switch (match.getAnswer().get_type()) {
                         case "accepted": {
                             inviteStatusTxt.setText(answer + "Geaccepteerd");
@@ -97,7 +101,7 @@ public class MatchView {
                         }
                     }
                 } else {
-                    //Uitnodiging van tegenstander
+                    // this is an invite from the opponent
                     inviteTxt.setText("Uitnodiging van: " + player1);
                 }
 
@@ -110,12 +114,15 @@ public class MatchView {
                 inviteStatusTxt.setX(5);
                 inviteStatusTxt.setY(35);
             } else {
+                // This runs when it is not an invite.
 
                 this.matchEnemy.setText(enemy);
                 this.matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
                 this.matchTurn.setText(MatchOverviewModel.isMyTurn(match) ? GameSession.getUsername() : enemy);
 
-                if(match.getGameState().isFinished()){
+
+                // If the match has ended
+                if(match.getGameState().isFinished() || match.getGameState().isResigned()){
 
                     this.scoreLabel.setText("Eindscore: ");
                     this.turnLabel.setText("Winnaar: ");
@@ -130,20 +137,18 @@ public class MatchView {
     public void loadFinished() {
     }
 
+
+    // Returns the upper element to be able to show it in a listviewcell
     public HBox getAnchor() {
         return this.rootHbox;
     }
 
+    // Returns the buttons to be able to have controller interaction in listviewcell
     public Button getMatchPlayButton() {
         return this.matchPlayButton;
     }
-
     public Button getMatchSurrenderButton() {
         return this.matchSurrenderButton;
     }
 
-    @FXML
-    private void onMatchPlay() {
-        System.out.println(this.match.getGameId());
-    }
 }

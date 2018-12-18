@@ -33,3 +33,4 @@ out/
 !libraries/**
 src/Main.java
 src/Main.java
+Resources/META-INF/MANIFEST.MF

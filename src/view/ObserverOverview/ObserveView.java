@@ -46,7 +46,6 @@ public class ObserveView {
             this.match = match;
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
-
             fxmlLoader.load();
 
             String player1 = match.getPlayer1().getUsername();
@@ -84,7 +83,7 @@ public class ObserveView {
                     //Uitnodiging van tegenstander
                     inviteTxt.setText("Uitnodiging van: " + player1);
                 }
-                
+
                 infoPane.getChildren().add(inviteTxt);
                 infoPane.getChildren().add(inviteStatusTxt);
                 inviteTxt.setX(5);

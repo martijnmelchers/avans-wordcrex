@@ -18,8 +18,8 @@ Button {
     -fx-font-family: "Comic Sans MS";
     -fx-background-color: #2c3e50;
     -fx-background-radius: 0;
-
 }
+
 Text{
     -fx-fill: #ecf0f1;
     -fx-text-fill: #ecf0f1;
@@ -115,4 +115,9 @@ TextField {
 
 TextField * {
     -fx-background-color: transparent;
+}
+
+.yellowButton {
+    -fx-background-color: #FDC70C;
+    -fx-text-fill: black;
 }
