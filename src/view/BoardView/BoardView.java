@@ -351,7 +351,7 @@ public class BoardView extends View {
     public void displayChat() {
         try {
             if(!GameSession.hasRole("observer")) {
-                FXMLLoader loader = new FXMLLoader(new URL("https://drive.google.com/uc?export=download&id=1UuFODz_qa1vnS4trTkFAFe9uaTIH4Sw_"));
+                FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/ChatView/ChatView.fxml"));
                 AnchorPane chatView = loader.load();
 
                 _chatViewController = loader.getController();

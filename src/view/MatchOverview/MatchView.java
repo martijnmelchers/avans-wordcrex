@@ -49,7 +49,7 @@ public class MatchView {
 //todo maken een alternatief ALS JE DURFT
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(new URL("https://drive.google.com/uc?export=download&id=1zpln38DZN7x9tyPTRprpVSTEsb9r-fyI"));
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("PlayerGame.fxml"));
             fxmlLoader.setController(this);
 
             this.match = match;
