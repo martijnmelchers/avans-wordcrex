@@ -100,6 +100,11 @@ public class ModeratorDictionary {
         try {
             this._db.insert(acceptedWords);
         } catch (Exception e) {
+            try {
+                this._db.update(acceptedWords);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             Log.error(e);
         }
     }
