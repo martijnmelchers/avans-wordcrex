@@ -226,6 +226,7 @@ public class MatchOverviewModel {
         } catch (Exception e) {
             Log.error(e);
         }
+
         return null;
     }
 

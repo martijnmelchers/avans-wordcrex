@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -32,6 +33,9 @@ public class ObserverOverview extends View {
     private ObservableList<Game> gameObservableList2;
 
     private MatchOverviewController _controller;
+
+    @FXML
+    private Button _playModeButton;
 
     @FXML
     private TextField _searchBar;
@@ -137,7 +141,7 @@ public class ObserverOverview extends View {
     private void logOut() {
         this._controller.endSession();
         try {
-            this._controller.navigate("LoginView", 350, 550);
+            this._controller.navigate("LoginView", 350, 550, false);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -148,7 +152,7 @@ public class ObserverOverview extends View {
     private void playMode() {
         try {
             GameSession.setInObserverMode(false);
-            this._controller.navigate("MatchOverview", 861, 920);
+            this._controller.navigate("MatchOverview", 861, 920, true);
         } catch (Exception e) {
             Log.error(e);
         }

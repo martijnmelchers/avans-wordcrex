@@ -33,7 +33,7 @@ public class RegisterView extends View {
 
     public void backClicked() {
         try {
-            this._accountController.navigate("LoginView", 350, 550);
+            this._accountController.navigate("LoginView", 350, 550, false);
         } catch (IOException e) {
             Log.error(e, true);
         }
@@ -50,7 +50,7 @@ public class RegisterView extends View {
 
     public void registerSuccess() {
         try {
-            this._accountController.navigate("MatchOverview", 620, 769);
+            this._accountController.navigate("MatchOverview", 861, 920, true);
         } catch (Exception e) {
             Log.error(e, true);
         }

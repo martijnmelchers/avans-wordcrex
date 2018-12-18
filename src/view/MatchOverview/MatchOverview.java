@@ -1,6 +1,7 @@
 package view.MatchOverview;
 
 import controller.MatchOverviewController;
+import javafx.animation.AnimationTimer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -137,6 +138,8 @@ public class MatchOverview extends View {
                     } else {
                         this._gameObservableList2.add(game);
                     }
+
+
                     break;
                 }
 
@@ -235,7 +238,7 @@ public class MatchOverview extends View {
     private void logOut() {
         this._controller.endSession();
         try {
-            this._controller.navigate("LoginView", 350, 550);
+            this._controller.navigate("LoginView", 350, 550, false);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -245,7 +248,7 @@ public class MatchOverview extends View {
     private void navigateObserver() {
         try {
             GameSession.setInObserverMode(true);
-            this._controller.navigate("ObserverOverview", 861, 920);
+            this._controller.navigate("ObserverOverview", 861, 920, true);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -254,7 +257,7 @@ public class MatchOverview extends View {
     @FXML
     private void accountInfo() {
         try {
-            this._controller.navigate("AccountInformation");
+            this._controller.navigate("AccountInformation", true);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -263,7 +266,7 @@ public class MatchOverview extends View {
     @FXML
     private void administrator() {
         try {
-            this._controller.navigate("AdminView");
+            this._controller.navigate("AdminView", true);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -272,7 +275,7 @@ public class MatchOverview extends View {
     @FXML
     private void moderator() {
         try {
-            this._controller.navigate("ModeratorView");
+            this._controller.navigate("ModeratorView", true);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -282,7 +285,7 @@ public class MatchOverview extends View {
     @FXML
     private void requestWord(){
         try {
-            this._controller.navigate("PlayerWordRequest");
+            this._controller.navigate("PlayerWordRequest",true);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -293,7 +296,7 @@ public class MatchOverview extends View {
     private void invitationView() {
 
         try {
-            this._controller.navigate("MatchInvitationView", 350, 550);
+            this._controller.navigate("MatchInvitationView", 350, 550, true);
         } catch (Exception e) {
             Log.error(e);
         }

@@ -10,6 +10,8 @@ import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
 
+import java.net.URL;
+
 public class MatchView {
     @FXML
     private HBox rootHbox;
@@ -44,13 +46,11 @@ public class MatchView {
 
     public MatchView(Game match) {
 
-        // Load view and set the view its controller to this class.
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("./PlayerGame.fxml"));
-        fxmlLoader.setController(this);
-
-        // Set the current match from the constructor.
-        this.match = match;
         try {
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("PlayerGame.fxml"));
+            fxmlLoader.setController(this);
+
+            this.match = match;
             var mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
 

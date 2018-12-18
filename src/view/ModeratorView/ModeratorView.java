@@ -104,7 +104,7 @@ public class ModeratorView extends View {
     }
 
     public void dispose() {
-        _controller.navigate("MatchOverview");
+        _controller.navigate("MatchOverview", true);
     }
 
     @Override
