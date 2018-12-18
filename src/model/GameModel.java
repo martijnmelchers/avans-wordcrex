@@ -620,17 +620,17 @@ public class GameModel {
 
     private void checkGameFinished() {
 
-        if (!checkBothPassed())
+        if (checkBothPassed())
         {
             String notUsed = getNotUsedTiles(_turnId);
             if(Integer.valueOf(notUsed)>7)
             {
                 _dock.replaceLettersDock(_gameId,_turnId );
             }
+        }
 
-            if (!getNotUsedTiles(_turnId).equals("0")) {
-                return;
-            }
+        if (!getNotUsedTiles(_turnId).equals("0")) {
+            return;
         }
 
         Game game = GameSession.getGame();
