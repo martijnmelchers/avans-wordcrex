@@ -18,7 +18,6 @@ public final class ListViewCell extends ListCell<Game> {
     public void updateItem(Game game, boolean empty) {
         super.updateItem(game, empty);
         if (empty) {
-            //TODO: headers can be implemented this way.
             this.setGraphic(null);
         } else {
 
@@ -29,6 +28,8 @@ public final class ListViewCell extends ListCell<Game> {
             MatchView view = new MatchView(game);
             this.setGraphic(view.getAnchor());
 
+
+            // We change the buttontext when the entry is a request
             if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted")) {
                 if (!game.getPlayer1Username().equals(GameSession.getUsername())) {
                     view.getMatchSurrenderButton().setDisable(false);
@@ -38,7 +39,8 @@ public final class ListViewCell extends ListCell<Game> {
                 view.getMatchSurrenderButton().setText("Weigeren");
             }
 
-            if(game.getGameState().isFinished() || game.getGameState().isResigned()){
+            // Disable the buttons when the game has ended
+            if (game.getGameState().isFinished() || game.getGameState().isResigned()) {
                 view.getMatchSurrenderButton().setDisable(true);
                 view.getMatchPlayButton().setDisable(true);
             }
@@ -47,10 +49,15 @@ public final class ListViewCell extends ListCell<Game> {
             view.getMatchPlayButton().setOnAction((e) -> {
                 GameSession.setGame(game);
 
+
+                // onAction handler for request
                 if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())) {
                     this._controller.acceptInvite(game);
                     this._matchOverview.renderGames();
-                } else {
+                }
+
+                // onAction handler for other entries
+                else {
                     try {
                         this._controller.start();
                         this._controller.navigate("BoardView");
@@ -61,9 +68,14 @@ public final class ListViewCell extends ListCell<Game> {
             });
 
             view.getMatchSurrenderButton().setOnAction((e) -> {
+
+                // onAction handler for request
                 if (game.getGameState().isRequest() && !game.getAnswer().get_type().equals("accepted") && !game.getPlayer1Username().equals(GameSession.getUsername())) {
                     this._controller.declineInvite(game);
-                } else {
+                }
+
+                // onAction handler for other entries
+                else {
                     var alert = new Alert(Alert.AlertType.CONFIRMATION, "Weet je het zeker?");
 
                     alert.setHeaderText("Spel met " + enemy + " opgeven: ");
@@ -85,6 +97,7 @@ public final class ListViewCell extends ListCell<Game> {
         this._controller = controller;
     }
 
+    // We need to do this to be able to refresh the list on the view.
     public void setMatchOverview(MatchOverview overview) {
         this._matchOverview = overview;
     }
