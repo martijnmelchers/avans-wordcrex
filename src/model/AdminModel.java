@@ -27,6 +27,11 @@ public class AdminModel {
         }
     }
 
+
+    /**
+     * Returns all users
+     * @return
+     */
     public List<AccountInfo> getUsers(){
         var clauses = new ArrayList <Clause>();
         List<AccountInfo> accounts = new ArrayList<>();
@@ -40,6 +45,12 @@ public class AdminModel {
         return accounts;
     }
 
+
+    /**
+     * Sets a role for a user.
+     * @param info
+     * @throws Exception
+     */
     public void setRole(AccountInfo info) throws Exception {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
@@ -49,6 +60,12 @@ public class AdminModel {
         }
     }
 
+
+    /**
+     * Removes a specified role from a user.
+     * @param info
+     * @throws Exception
+     */
     public void removeRole(AccountInfo info) throws Exception {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
@@ -61,6 +78,10 @@ public class AdminModel {
     }
 
 
+    /**
+     * Retreives all roles from the database
+     * @return
+     */
     public List<Role> getAllRoles(){
         List<Role> roles = new ArrayList<>();
 
@@ -74,6 +95,12 @@ public class AdminModel {
 
         return roles;
     }
+
+    /**
+     * Gets all roles of a specific user.
+     * @param username
+     * @return
+     */
     public List<AccountInfo> getRoles(String username){
         List<AccountInfo> roles = new ArrayList<>();
         var clauses = new ArrayList<Clause>();

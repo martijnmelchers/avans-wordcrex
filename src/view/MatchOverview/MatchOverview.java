@@ -56,7 +56,11 @@ public class MatchOverview extends View {
 
     }
 
+
     public void loadFinished() {
+
+
+        // Tries to get the controller
         try {
             this._controller = this.getController(MatchOverviewController.class);
         } catch (Exception e) {
@@ -64,14 +68,17 @@ public class MatchOverview extends View {
         }
 
         this.renderGames();
-
         this.disableNotAllowed();
 
+        // Scales the element to make it sort of responsive.
         this.ScaleScreen(this._gridParent);
 
     }
 
 
+    /**
+     * Disables buttons the current user doesn't have access to.
+     */
     private void disableNotAllowed() {
         if (!GameSession.hasRole("observer")) {
             this._observerModeButton.setDisable(true);
@@ -86,6 +93,10 @@ public class MatchOverview extends View {
         }
     }
 
+
+    /**
+     * Gets all games for the current user and renders them in its own list view, this is also used as a refresb
+     */
     public void renderGames() {
         this._gameObservableList = FXCollections.observableArrayList();
         this._gameObservableList1 = FXCollections.observableArrayList();
@@ -102,6 +113,8 @@ public class MatchOverview extends View {
         List<Game> games = this._controller.getGames();
 
 
+
+        // Loop through all games and put them in the lists based on turn and state.
         for (var game : games) {
             switch (game.getGameState().getState()) {
                 case "request": {
@@ -138,6 +151,10 @@ public class MatchOverview extends View {
                 }
             }
 
+
+            // Sets the lists to display game items.
+
+
             this._gameListView.setCellFactory(studentListView -> {
                 var listViewCell = new ListViewCell();
                 listViewCell.setController(this._controller);
@@ -163,6 +180,10 @@ public class MatchOverview extends View {
         }
     }
 
+
+    /**
+     * Filters all three listviews searching for the opponents username.
+     */
     @FXML
     public void filter() {
         String filter = this._searchBar.getText();
@@ -172,62 +193,44 @@ public class MatchOverview extends View {
 
 
 
-        if (filter == null || filter.length() == 0) {
-            filteredGames.setPredicate(s -> true);
-        } else {
-            filteredGames.setPredicate(s -> {
-                boolean isPlayer1 = GameSession.getUsername().equals(s.getPlayer1Username());
 
-                if(isPlayer1){
-                    return s.getPlayer2().getUsername().contains(filter);
-                }
-                else{
-                    return s.getPlayer1().getUsername().contains(filter);
-                }
-            });
-        }
-
-        if (filter == null || filter.length() == 0) {
-            filteredGames1.setPredicate(s -> true);
-        } else {
-            filteredGames1.setPredicate(s -> {
-                boolean isPlayer1 = GameSession.getUsername().equals(s.getPlayer1Username());
-
-                if(isPlayer1){
-                    return s.getPlayer2().getUsername().contains(filter);
-                }
-                else{
-                    return s.getPlayer1().getUsername().contains(filter);
-                }
-            });
-        }
-
-        if (filter == null || filter.length() == 0) {
-            filteredGames2.setPredicate(s -> true);
-        } else {
-            filteredGames2.setPredicate(s -> {
-                boolean isPlayer1 = GameSession.getUsername().equals(s.getPlayer1Username());
-
-                if(isPlayer1){
-                    return s.getPlayer2().getUsername().contains(filter);
-                }
-                else{
-                    return s.getPlayer1().getUsername().contains(filter);
-                }
-            });
-        }
-
-        this._gameListView.setItems(filteredGames);
-        this._gameListView1.setItems(filteredGames1);
-        this._gameListView2.setItems(filteredGames2);
-    }
-
-    // Shows all buttons whe have access to.
-    private void showAccessibleButtons() {
-
+        this._gameListView.setItems(this.filterList(filteredGames, filter));
+        this._gameListView1.setItems(this.filterList(filteredGames1, filter));
+        this._gameListView2.setItems(this.filterList(filteredGames2, filter));
     }
 
 
+    /**
+     *  Takes a filteredlist and filters it.
+     * @param filteredList
+     * @param filter
+     * @return
+     */
+    private FilteredList<Game> filterList(FilteredList<Game> filteredList, String filter){
+        if (filter == null || filter.length() == 0) {
+            filteredList.setPredicate(s -> true);
+        } else {
+            filteredList.setPredicate(s -> {
+                boolean isPlayer1 = GameSession.getUsername().equals(s.getPlayer1Username());
+
+                if(isPlayer1){
+                    return s.getPlayer2().getUsername().contains(filter);
+                }
+                else{
+                    return s.getPlayer1().getUsername().contains(filter);
+                }
+            });
+        }
+
+        return filteredList;
+    }
+
+
+    /**
+     *
+     *  Start navigation section
+     *
+     */
     @FXML
     private void logOut() {
         this._controller.endSession();
@@ -285,10 +288,6 @@ public class MatchOverview extends View {
         }
     }
 
-    @FXML
-    public void refresh() {
-        this.renderGames();
-    }
 
     @FXML
     private void invitationView() {
@@ -299,4 +298,17 @@ public class MatchOverview extends View {
             Log.error(e);
         }
     }
+
+    /**
+     *
+     *  End navigation section
+     *
+     */
+
+
+    @FXML
+    public void refresh() {
+        this.renderGames();
+    }
+
 }
