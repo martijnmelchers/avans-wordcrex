@@ -36,6 +36,8 @@ public class GameController extends Controller{
 
     public HandLetter[] getDock(){ return _gameModel.getDock(); }
 
+    public Letter getLetterType(HandLetter letter){ return _gameModel.getLetterType(letter); }
+
     public int[] getScore() { return new int[] {_gameModel.getPlayerScore1(), _gameModel.getPlayerScore2() }; }
 
     public String[] getPlayerNames() {return new String[] {_gameModel.getPlayerName1(), _gameModel.getPlayername2() }; }
@@ -97,20 +99,16 @@ public class GameController extends Controller{
         if(info == null &&!pass) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setContentText("Foute zet");
-            alert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    GameSession.setSession(new Account("jagermeester","rrr"));
-                }
-            });
+            alert.showAndWait();
             return;
         }
 
         if (info == null && pass) {
-            info = new CheckInfo(new Points(0, 0), null, null);
+            info = new CheckInfo(new Points(0, 0),  null);
         }
 
         _boardView.startLoadingScreen("Wachten op andere speler.");
-        _gameModel.submitTurn(info, nextTurn());
+        _gameModel.submitTurn(info, nextTurn(),onSurrender());
 
     }
 
@@ -129,7 +127,9 @@ public class GameController extends Controller{
 
     public void surrender()
     {
+        _boardView = getViewCasted();
         _gameModel.surrender();
+        _boardView.gameDone();
     }
 
     public void checkScore(){
@@ -141,12 +141,23 @@ public class GameController extends Controller{
 
     public void checkIfTurnPlayed()
     {
-       if( _gameModel.checkIfTurnPlayed())
+       if(!GameSession.isInObserverMode() && _gameModel.checkIfTurnPlayed())
        {
            _boardView = getViewCasted();
            _boardView.startLoadingScreen("Wachten op andere speler.");
-           _gameModel.alreadyPlayed(nextTurn());
+           _gameModel.alreadyPlayed(nextTurn(), onSurrender() );
        }
+    }
+
+    private Task onSurrender()
+    {
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                _boardView.gameDone();
+                return null;
+            }
+        };
     }
 
     private void updateView(boolean updateDock)

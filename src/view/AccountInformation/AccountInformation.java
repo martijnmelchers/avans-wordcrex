@@ -55,7 +55,7 @@ public class AccountInformation extends View {
 
     public void backMain() {
         try {
-            this.getController(AccountController.class).navigate("MatchOverview");
+            this.getController(AccountController.class).navigate("MatchOverview", true);
         } catch (Exception e) {
             Log.error(e, true);
         }

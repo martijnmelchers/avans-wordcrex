@@ -22,4 +22,9 @@ public class Points {
     public int total() {
         return this._score + this._bonus;
     }
+
+    public  void add(Points point){
+        _score += point.score();
+        _bonus +=point.bonus();
+    }
 }

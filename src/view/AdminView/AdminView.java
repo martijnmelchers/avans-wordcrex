@@ -74,6 +74,9 @@ public class AdminView extends View {
     }
 
 
+    /**
+     * Shows all data on the screen,
+     */
     private void showInfo() {
         if (this.filteredNames != null) {
             this.filteredNames.setPredicate(s -> true);
@@ -102,6 +105,9 @@ public class AdminView extends View {
         }
     }
 
+    /**
+     * Assigns all selected roles to the selected user.
+     */
     @FXML
     private void assignRoles() {
         ObservableList<String> selectedUsers = this.userList.getSelectionModel().getSelectedItems();
@@ -121,6 +127,11 @@ public class AdminView extends View {
         new Alert(Alert.AlertType.CONFIRMATION, "Success").show();
     }
 
+
+    /**
+     * Shows the selected user its rows.
+     * @param username
+     */
     private void showRoles(String username) {
         List<AccountInfo> roles = this.controller.getRoles(username);
         this.roleList.getSelectionModel().clearSelection();

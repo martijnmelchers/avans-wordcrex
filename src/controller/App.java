@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class App {
-    private final boolean _isMaximized = false;
-
     private ArrayList<Controller> controllers;
     private Stage primaryStage;
     private View view;
@@ -31,42 +29,21 @@ public class App {
         primaryStage.show();
 
         loadControllers();
-
-        if(_isMaximized)
-        {
-            Screen screen = Screen.getPrimary();
-            Rectangle2D bounds = screen.getVisualBounds();
-
-            primaryStage.setX(bounds.getMinX());
-            primaryStage.setY(bounds.getMinY());
-            primaryStage.setWidth(bounds.getWidth());
-            primaryStage.setHeight(bounds.getHeight());
-        }
     }
 
     private void loadControllers() throws Exception {
         controllers = new ArrayList<>();
-        File[] files;
-        files = new File(App.class.getResource("/controller").toURI().getPath()).listFiles();
+        controllers.add(new AccountController());
+        controllers.add(new AdminController());
+        controllers.add(new ChatController());
+        controllers.add(new GameController());
+        controllers.add(new MainController());
+        controllers.add(new MatchFixerController());
+        controllers.add(new MatchOverviewController());
+        controllers.add(new ModeratorController());
+        controllers.add(new ObserverController());
+        controllers.add(new PlayerWordRequestController());
 
-
-        if (files == null)
-            throw new Exception("No files were found!");
-
-        for (File file : files) {
-            try {
-                Class<?> controllerClass = ClassLoader.getSystemClassLoader().loadClass("controller." + file.getName().replace(".class", ""));
-                if (controllerClass.isAssignableFrom(Controller.class)) {
-                    continue;
-                }
-
-                Controller controllerInstance = (Controller) controllerClass.getConstructor().newInstance();
-                controllers.add(controllerInstance);
-            } catch (Exception e) {
-                Log.warn("Could not create controller: " + e.getMessage());
-            }
-
-        }
     }
 
     public <T extends Controller> T getController(Class<T> cType) throws Exception {
@@ -93,11 +70,11 @@ public class App {
         return view;
     }
 
-    public void navigate(String fxmlFileName) throws IOException {
-        navigate(fxmlFileName, 1600, 1200 );
+    public void navigate(String fxmlFileName, boolean maximized) throws IOException {
+        navigate(fxmlFileName, 800, 600, maximized);
     }
 
-    public void navigate(String fxmlFileName, int width, int height) throws IOException {
+    public void navigate(String fxmlFileName, int width, int height, boolean maximized) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fxmlFileName + "/" + fxmlFileName + ".fxml"));
         Parent root = fxmlLoader.load();
 
@@ -111,6 +88,18 @@ public class App {
         primaryStage.setScene(_scene);
         primaryStage.setHeight(height);
         primaryStage.setWidth(width);
+
+
+        if(maximized)
+        {
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getVisualBounds();
+
+            primaryStage.setX(bounds.getMinX());
+            primaryStage.setY(bounds.getMinY());
+            primaryStage.setWidth(bounds.getWidth());
+            primaryStage.setHeight(bounds.getHeight());
+        }
     }
 
     public Scene getScene()

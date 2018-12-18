@@ -83,7 +83,6 @@ public class GameModel {
                 for (TurnPlayer1 turnPlayer1 : _db.select(TurnPlayer1.class, clauses))
                     score += (turnPlayer1.getScore() + turnPlayer1.getBonus());
 
-
                 this._playerScore1 = score;
 
             } catch (Exception e) {
@@ -113,6 +112,7 @@ public class GameModel {
 
     }
 
+
     public int getPlayerScore1() {
         return this._playerScore1;
     }
@@ -137,10 +137,18 @@ public class GameModel {
         return _playerName1.equals(GameSession.getUsername());
     }
 
-    private void waitForPlayer(Task finished) {
+    private void waitForPlayer(Task finished,Task onSurrender
+                               ) {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+                if(onSurrender!=null)
+                {
+                    if(checkGameDone())
+                    {
+                        Platform.runLater(onSurrender);
+                    }
+                }
                 if (isNewTurn()) {
                     _turnId++;
                     finished.run();
@@ -157,6 +165,11 @@ public class GameModel {
 
     public HandLetter[] getDock() {
         return this._dock.getLetters();
+    }
+
+    public Letter getLetterType(HandLetter letter) {
+        int points = _board.getLetterPoint(letter.letter.getSymbol());
+        return _dock.getLetterType(letter, points);
     }
 
     public Tile[][] getTiles() {
@@ -221,7 +234,7 @@ public class GameModel {
         }
     }
 
-    public void submitTurn(CheckInfo checkInfo, Task onEndTurn) {
+    public void submitTurn(CheckInfo checkInfo, Task onEndTurn, Task onSurrender) {
         // submit turn to database tables: boardplayer1, turnplayer1 OR boardplayer2,
 
         if (isPlayerOne()) {
@@ -246,23 +259,71 @@ public class GameModel {
 
             _board.getBoardFromDatabase(_gameId, _turnId);
 
-            onEndTurn.run();
-
             checkGameFinished();
-        } else // other player not finished
+
+            if(checkGameDone())
+            {
+                onSurrender.run();
+                return;
+            }
+
+            onEndTurn.run();
+        }
+        else
         {
-            alreadyPlayed(onEndTurn);
+            alreadyPlayed(onEndTurn,onSurrender);
         }
     }
 
-    public void alreadyPlayed(Task onEndTurn) {
+    private boolean checkBothPassed()
+    {
+        List<Clause> clauses = new ArrayList<>();
+
+        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "game_id", CompareMethod.EQUAL, this._gameId));
+        clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, this._turnId - 1));
+
+        try {
+            var results = this._db.select(TurnPlayer1.class, clauses).get(0);
+            if ((results.getScore() + results.getBonus()) != 0)
+            {
+                return false;
+            }
+        } catch (Exception e) {
+            Log.error(e);
+        }
+
+        clauses.clear();
+
+        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, this._gameId));
+        clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, this._turnId - 1));
+
+        try {
+            var results = this._db.select(TurnPlayer2.class, clauses).get(0);
+            if ((results.getScore() + results.getBonus()) != 0)
+            {
+                return false;
+            }
+        } catch (Exception e) {
+            Log.error(e);
+        }
+
+        if (!(Integer.parseInt(_dock.getNotUsedTiles(_gameId, (_turnId - 1))) < 7))
+        {
+            _dock.replaceLettersDock(_gameId, _turnId);
+            return false;
+        }
+
+        return true;
+    }
+
+    public void alreadyPlayed(Task onEndTurn,Task onSurrender) {
         waitForPlayer(new Task() {
             @Override
             protected Object call() // This gets called when other player is ready
             {
                 // wait one second for the other player to insert data in the database
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(5000);
                 } catch (Exception e) {
                     Log.error(e, false);
                 }
@@ -271,11 +332,9 @@ public class GameModel {
                 _dock.update(_gameId, _turnId);// update hand
                 _board.getBoardFromDatabase(_gameId, _turnId);
                 Platform.runLater(onEndTurn);
-
-                checkGameFinished();
                 return null;
             }
-        });
+        },onSurrender);
     }
 
     private void createNewTurn() {
@@ -300,7 +359,7 @@ public class GameModel {
 
             boolean uploadedLast = results.size() > 0;
 
-            if (checkInfo.getPoints().total() == 0 && checkInfo.getTiles() == null && checkInfo.getCoordinates() == null) {
+            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null) {
                 _db.insert(new TurnPlayer1(_gameId, _turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
             } else {
                 _db.insert(new TurnPlayer1(_gameId, _turnId, _playerName1, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
@@ -321,13 +380,16 @@ public class GameModel {
             }
 
             //insert alle tiles in tile en boardplayer1
-
+            Vector2[] c = checkInfo.getCoordinates();
             //TODO in database tileType moet je kijke wat -- en * zijn (default?)
-            for (Vector2 coordinate : checkInfo.getCoordinates()) {
+            if (c != null)
+            {
+                for (int i = 0; i < c.length; i++) {
 
-                var letterId = this._board.getTiles()[coordinate.getY()][coordinate.getX()].getLetterType().getid();
+                    int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
 
-                this._db.insert(new BoardPlayer1(this._gameId, this._playerName1, this._turnId, letterId, (coordinate.getX() + 1), (coordinate.getY() + 1))); // Insert in Boardplayer 1
+                    _db.insert(new BoardPlayer1(_gameId, _playerName1, _turnId, letterId, (c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 1
+                }
             }
 
         } catch (Exception e) {
@@ -391,7 +453,7 @@ public class GameModel {
 
             var uploadedLast = results.size() > 0;
 
-            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null && checkInfo.getTiles() == null)
+            if (checkInfo.getPoints().total() == 0 && checkInfo.getCoordinates() == null )
                 this._db.insert(new TurnPlayer2(this._gameId, this._turnId, this._playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "pass"));
             else
                 this._db.insert(new TurnPlayer2(this._gameId, this._turnId, this._playerName2, checkInfo.getPoints().score(), checkInfo.getPoints().bonus(), "play"));
@@ -411,11 +473,15 @@ public class GameModel {
             }
 
             //insert alle tiles in tile en boardplayer1
-
+            Vector2[] c = checkInfo.getCoordinates();
             //TODO in database tileType moet je kijke nwat -- en * zijn (default?)
-            for (Vector2 coordinate : checkInfo.getCoordinates()) {
-                var letterId = _board.getTiles()[coordinate.getY()][coordinate.getX()].getLetterType().getid();
-                this._db.insert(new BoardPlayer2(this._gameId, this._playerName2, this._turnId, letterId, (coordinate.getX() + 1), (coordinate.getY() + 1))); // Insert in Boardplayer 2
+            if (c != null)
+            {
+                for (int i = 0; i < c.length; i++) {
+
+                    int letterId = _board.getTiles()[c[i].getY()][c[i].getX()].getLetterType().getid();
+                    _db.insert(new model.tables.BoardPlayer2(_gameId, _playerName2, _turnId, letterId, (c[i].getX() + 1), (c[i].getY() + 1))); // Insert in Boardplayer 2
+                }
             }
 
         } catch (Exception e) {
@@ -554,6 +620,15 @@ public class GameModel {
 
     private void checkGameFinished() {
 
+        if (checkBothPassed())
+        {
+            String notUsed = getNotUsedTiles(_turnId);
+            if(Integer.valueOf(notUsed)>7)
+            {
+                _dock.replaceLettersDock(_gameId,_turnId );
+            }
+        }
+
         if (!getNotUsedTiles(_turnId).equals("0")) {
             return;
         }
@@ -599,7 +674,7 @@ public class GameModel {
         clauses.add(new Clause(new TableAlias("Game", -1), "game_id", CompareMethod.EQUAL, _gameId));
         try {
             Game game = _db.select(Game.class, clauses).get(0);
-            if (game.getGameState().getState().equals("finished") || game.getGameState().getState().equals("resigned")) {
+            if (game.getGameState().isFinished() || game.getGameState().isResigned()) {
                 return true;
             }
 

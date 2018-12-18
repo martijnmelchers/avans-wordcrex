@@ -11,6 +11,8 @@ import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
 
+import java.net.URL;
+
 public class ObserveView {
     @FXML
     private HBox rootHbox;
@@ -36,21 +38,18 @@ public class ObserveView {
 
     private Game match;
     public ObserveView(Game match){
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./PlayerGame.fxml"));
-        fxmlLoader.setController(this);
-        MatchOverviewController controller = new MatchOverviewController();
-        this.match = match;
+
         try
         {
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/MatchOverview/PlayerGame.fxml"));
+            fxmlLoader.setController(this);
+            this.match = match;
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
-
             fxmlLoader.load();
 
-            String player = GameSession.getUsername();
             String player1 = match.getPlayer1().getUsername();
             String player2 = match.getPlayer2().getUsername();
-            String enemy  = player1.equals(player) ?  player2 : player1;
 
             if (match.getGameState().isRequest()) {
 
@@ -84,7 +83,7 @@ public class ObserveView {
                     //Uitnodiging van tegenstander
                     inviteTxt.setText("Uitnodiging van: " + player1);
                 }
-                
+
                 infoPane.getChildren().add(inviteTxt);
                 infoPane.getChildren().add(inviteStatusTxt);
                 inviteTxt.setX(5);

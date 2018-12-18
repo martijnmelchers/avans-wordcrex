@@ -19,6 +19,7 @@ import model.tables.Chatline;
 import view.View;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -71,10 +72,10 @@ public class ChatView extends View {
         this._messagesScrollPane.layout();
         this._messagesScrollPane.setVvalue(1.0);
     }
-
+    //todo fixe me if you kak
     private void displayMessage(Chatline chatline) {
         try {
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("MessageView.fxml"));
+            FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/ChatView/MessageView.fxml"));
             AnchorPane messagePane = loader.load();
 
             MessageView messageViewController = loader.getController();

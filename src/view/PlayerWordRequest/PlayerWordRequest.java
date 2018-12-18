@@ -3,12 +3,17 @@ package view.PlayerWordRequest;
 import controller.PlayerWordRequestController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+import model.GameSession;
+import model.moderator.GameWord;
 import view.View;
+
+import java.util.List;
 
 
 public class PlayerWordRequest extends View {
@@ -24,6 +29,9 @@ public class PlayerWordRequest extends View {
     @FXML
     private Button _terug;
 
+    @FXML
+    private ListView sentRequestsListview;
+
     private PlayerWordRequestController _controller;
 
     @Override
@@ -36,12 +44,14 @@ public class PlayerWordRequest extends View {
 
         _woordIsVerstuurd.setVisible(false);
         addTextLimiter(_text, 15);
+
+        displayRequestedWords();
     }
 
     @FXML
     private void backButtonPressed()
     {
-        _controller.navigate("MatchOverview");
+        _controller.navigate("MatchOverview", true);
     }
 
     @FXML
@@ -51,6 +61,19 @@ public class PlayerWordRequest extends View {
 
         _controller.submitWord(new String[]{word});
         _woordIsVerstuurd.setVisible(true);
+
+        displayRequestedWords();
+    }
+
+    private void displayRequestedWords() {
+        List<GameWord> requestedWords = _controller.getByPlayerRequestedWords(GameSession.getUsername());
+
+        ObservableList<String> requestedItems = sentRequestsListview.getItems();
+
+        for(GameWord requestedWord : requestedWords) {
+            requestedItems.add("" + requestedWord.getWord() + " - " + requestedWord.getState());
+        }
+
     }
 
     private void addTextLimiter(final TextField tf, final int maxLength) {
