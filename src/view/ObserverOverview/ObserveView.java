@@ -38,13 +38,11 @@ public class ObserveView {
     public ObserveView(Game match){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./PlayerGame.fxml"));
         fxmlLoader.setController(this);
-        MatchOverviewController controller = new MatchOverviewController();
         this.match = match;
         try
         {
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
-
             fxmlLoader.load();
 
             String player = GameSession.getUsername();

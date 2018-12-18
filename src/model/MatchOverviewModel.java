@@ -123,7 +123,7 @@ public class MatchOverviewModel {
         clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, latestTurn));
 
         try {
-            var turnList = this._db.select(TurnPlayer1.class, clauses);
+            var turnList = this._db.select(TurnPlayer1.class, clauses, false);
             if (turnList.size() > 0)
                 return true;
 
