@@ -139,7 +139,7 @@ public class GameController extends Controller{
 
     public void checkIfTurnPlayed()
     {
-       if( _gameModel.checkIfTurnPlayed())
+       if(!GameSession.isInObserverMode() && _gameModel.checkIfTurnPlayed())
        {
            _boardView = getViewCasted();
            _boardView.startLoadingScreen("Wachten op andere speler.");

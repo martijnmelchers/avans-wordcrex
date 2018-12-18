@@ -77,7 +77,7 @@ public class BoardView extends View {
 
     private void checkRole()
     {
-        if (GameSession.hasRole("observer") && GameSession.isInObserverMode())
+        if (GameSession.isInObserverMode())
         {
             _controller.getOldDock(_controller.getCurrentTurn());
             dockController.updateDock();
@@ -291,12 +291,12 @@ public class BoardView extends View {
         try{
             if(_chatViewController != null){
                 _chatViewController.closeMessageChecker();
-                if(GameSession.isInObserverMode()){
-                    _controller.navigate("ObserverOverview",861,920);
-                }
-                else{
-                    _controller.navigate("MatchOverview", 861,920);
-                }
+            }
+            if(GameSession.isInObserverMode()){
+                _controller.navigate("ObserverOverview",861,920);
+            }
+            else{
+                _controller.navigate("MatchOverview", 861,920);
             }
         }
         catch(Exception e){
@@ -318,7 +318,7 @@ public class BoardView extends View {
         updateScore();
         updateTilesLeft((int)snap);
 
-        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.hasRole("observer"))
+        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.isInObserverMode())
         {
             _controller.getOldDock((int)snap);
             dockController.updateDock();
@@ -350,7 +350,7 @@ public class BoardView extends View {
 
     public void displayChat() {
         try {
-            if(!GameSession.hasRole("observer")) {
+            if(!GameSession.isInObserverMode()) {
                 FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/ChatView/ChatView.fxml"));
                 AnchorPane chatView = loader.load();
 
