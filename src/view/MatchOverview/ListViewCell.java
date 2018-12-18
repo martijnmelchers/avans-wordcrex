@@ -53,7 +53,7 @@ public final class ListViewCell extends ListCell<Game> {
                 } else {
                     try {
                         this._controller.start();
-                        this._controller.navigate("BoardView");
+                        this._controller.navigate("BoardView", true);
                     } catch (Exception ex) {
                         Log.error(ex);
                     }

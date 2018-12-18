@@ -44,7 +44,7 @@ public class Main extends Application {
         try {
             var app = new App(primaryStage);
 
-            app.navigate(EnvironmentVariables.MAIN_VIEW, 350, 550);
+            app.navigate(EnvironmentVariables.MAIN_VIEW, 350, 550, false);
         } catch (Exception e) {
             e.printStackTrace();
             //Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);

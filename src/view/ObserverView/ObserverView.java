@@ -43,7 +43,7 @@ public class ObserverView extends View {
             Log.error(e);
         }
         try {
-            this.getController(ObserverController.class).navigate("BoardView");
+            this.getController(ObserverController.class).navigate("BoardView", true);
         } catch (Exception e) {
             Log.error(e);
         }

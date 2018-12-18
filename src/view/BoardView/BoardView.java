@@ -293,10 +293,10 @@ public class BoardView extends View {
                 _chatViewController.closeMessageChecker();
             }
             if(GameSession.isInObserverMode()){
-                _controller.navigate("ObserverOverview",861,920);
+                _controller.navigate("ObserverOverview",861,920, true);
             }
             else{
-                _controller.navigate("MatchOverview", 861,920);
+                _controller.navigate("MatchOverview", 861,920, true);
             }
         }
         catch(Exception e){

@@ -41,7 +41,7 @@ public class PlayerWordRequest extends View {
     @FXML
     private void backButtonPressed()
     {
-        _controller.navigate("MatchOverview");
+        _controller.navigate("MatchOverview", true);
     }
 
     @FXML
