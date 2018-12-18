@@ -10,8 +10,6 @@ import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
 
-import java.net.URL;
-
 public class MatchView {
     @FXML
     private HBox rootHbox;
@@ -117,16 +115,18 @@ public class MatchView {
                 // This runs when it is not an invite.
 
                 this.matchEnemy.setText(enemy);
-                this.matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
+                this.matchScore.setText(scores.player1 + "/" + scores.player2);
                 this.matchTurn.setText(MatchOverviewModel.isMyTurn(match) ? GameSession.getUsername() : enemy);
 
 
                 // If the match has ended
-                if(match.getGameState().isFinished() || match.getGameState().isResigned()){
+                if (match.getGameState().isFinished() || match.getGameState().isResigned()) {
 
                     this.scoreLabel.setText("Eindscore: ");
                     this.turnLabel.setText("Winnaar: ");
-                    this.matchTurn.setText(match.getWinner().getUsername());
+                    if (match.getWinner() != null) {
+                        this.matchTurn.setText(match.getWinner().getUsername());
+                    }
                 }
             }
         } catch (Exception e) {
@@ -147,6 +147,7 @@ public class MatchView {
     public Button getMatchPlayButton() {
         return this.matchPlayButton;
     }
+
     public Button getMatchSurrenderButton() {
         return this.matchSurrenderButton;
     }
