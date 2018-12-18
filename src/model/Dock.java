@@ -97,6 +97,7 @@ public class Dock {
         }
 
         clearAll();
+        Log.info("Filtered size: " + Integer.toString(filtered.size()));
         for (int i = 0; i < filtered.size(); i++) {
             letters[i] = filtered.get(i);
         }

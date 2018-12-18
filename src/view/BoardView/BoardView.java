@@ -318,7 +318,7 @@ public class BoardView extends View {
         updateScore();
         updateTilesLeft((int)snap);
 
-        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.isInObserverMode())
+        if (_controller.getCurrentTurn() != (int)snap || GameSession.isInObserverMode())
         {
             _controller.getOldDock((int)snap);
             dockController.updateDock();
