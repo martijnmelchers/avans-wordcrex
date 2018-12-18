@@ -31,6 +31,9 @@ public class AccountInfo {
         this.roleId = role;
 
     }
+    public void setRole(Role role){
+        this.role = role;
+    }
     public void setAccount(Account account){
         this.account = account;
     }

@@ -57,6 +57,7 @@ public class AdminModel {
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
         clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
         info.setAccount(new Account(info.getUsername(),null));
+        info.setRole(new Role(info.getRoleId()));
         if(this._db.select(AccountInfo.class, clauses).size()  == 0){
             this._db.insert(info);
         }
