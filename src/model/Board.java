@@ -252,8 +252,11 @@ public class Board {
         if (word == "")
             return null;
         Points points = new Points(0,0);
+        System.out.println(word);
         if (wordChecker.check(word) && !(isHorizontal == isVertical))
             points = (calculatePoints(mainWord.toArray(new Tile[0])));
+
+        if(points.total() < 1) return null;
 
         Points temp = this.checkSubWordsVert(secondaryWordsVertical);
         if(temp != null) points.add(temp);
