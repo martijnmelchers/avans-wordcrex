@@ -56,6 +56,7 @@ public class Database {
         return this.select(output, clauses, true);
     }
 
+    /* Select items and find foreign keys */
     public <T> List<T> select(Class<T> output, List<Clause> clauses, boolean fetchForeignKeys) throws Exception {
         Log.info("Building select query for class: " + output + " with " + clauses.size() + " clauses");
         var tableName = this.getTableName(output);
@@ -69,30 +70,34 @@ public class Database {
         return this.select(output, result.getJoins(), query, fetchForeignKeys);
     }
 
-
+    /* Update items */
     public <T> void update(T item) throws Exception {
         this.update(item, this.getTableName(item.getClass()));
     }
 
+    /* Update items */
     public <T> void update(List<T> items) throws Exception {
         for (T item : items)
             this.update(item);
     }
 
-
+    /* Delete items */
     public <T> void delete(T item) throws Exception {
         this.delete(item, this.getTableName(item.getClass()));
     }
 
+    /* Delete items */
     public <T> void delete(List<T> items) throws Exception {
         for (T item : items)
             this.delete(item);
     }
 
+    /* Close the database connection */
     public void close() throws SQLException {
         this.connection.close();
     }
 
+    /* Inserts information into the database */
     private <T> ArrayList<InsertedKeys> insert(T item, String table) throws Exception {
         Log.info("Building insert query for class " + item.getClass());
         /* Store the keys to insert and values separately */
@@ -207,6 +212,7 @@ public class Database {
         ArrayList<T> list = new ArrayList<>();
         Log.info("Select query success! Processing result for class " + output + "...");
         while (resultSet.next()) {
+            /* Process all the results */
             list.add(this.processResult(output, resultSet, this.getTableName(output), list, join, fetchForeignKeys));
         }
         Log.info("Result processing finished. Found " + list.size() + " results");
