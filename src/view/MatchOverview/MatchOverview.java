@@ -170,21 +170,11 @@ public class MatchOverview extends View {
         FilteredList<Game> filteredGames = new FilteredList<>(this._gameObservableList, s -> true);
         FilteredList<Game> filteredGames1 = new FilteredList<>(this._gameObservableList1, s -> true);
         FilteredList<Game> filteredGames2 = new FilteredList<>(this._gameObservableList2, s -> true);
-
-
-
         if (filter == null || filter.length() == 0) {
             filteredGames.setPredicate(s -> true);
         } else {
             filteredGames.setPredicate(s -> {
-                boolean isPlayer1 = GameSession.getUsername().equals(s.getPlayer1Username());
-
-                if(isPlayer1){
-                    return s.getPlayer2().getUsername().contains(filter);
-                }
-                else{
-                    return s.getPlayer1().getUsername().contains(filter);
-                }
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
             });
         }
 
@@ -192,14 +182,7 @@ public class MatchOverview extends View {
             filteredGames1.setPredicate(s -> true);
         } else {
             filteredGames1.setPredicate(s -> {
-                boolean isPlayer1 = GameSession.getUsername().equals(s.getPlayer1Username());
-
-                if(isPlayer1){
-                    return s.getPlayer2().getUsername().contains(filter);
-                }
-                else{
-                    return s.getPlayer1().getUsername().contains(filter);
-                }
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
             });
         }
 
@@ -207,14 +190,7 @@ public class MatchOverview extends View {
             filteredGames2.setPredicate(s -> true);
         } else {
             filteredGames2.setPredicate(s -> {
-                boolean isPlayer1 = GameSession.getUsername().equals(s.getPlayer1Username());
-
-                if(isPlayer1){
-                    return s.getPlayer2().getUsername().contains(filter);
-                }
-                else{
-                    return s.getPlayer1().getUsername().contains(filter);
-                }
+                return (s.getPlayer1().getUsername().contains(filter) || s.getPlayer2().getUsername().contains(filter));
             });
         }
 

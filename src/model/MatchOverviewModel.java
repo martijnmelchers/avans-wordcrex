@@ -74,13 +74,25 @@ public class MatchOverviewModel {
 
     public boolean checkIfTurnPlayed(Game game) {
 
-        var lastTurn = this.getLatestTurnOfGame(game);
+        int lastTurn = 0;
+        var clausesTurn = new ArrayList<Clause>();
+        clausesTurn.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
+
+        try{
+            for (Turn turn : this._db.select(Turn.class, clausesTurn)) {
+                if (lastTurn < turn.getTurnID())
+                    lastTurn = turn.getTurnID();
+            }
+        }
+        catch (Exception e){
+            Log.error(e);
+        }
 
         if (GameSession.getUsername().equals(game.getPlayer1Username())) {
             var clauses = new ArrayList<Clause>();
 
             clauses.add(new Clause(new TableAlias("TurnPlayer1", -1), "turn_id", CompareMethod.EQUAL, lastTurn));
-            clauses.add(new Clause(new TableAlias("TurnPlayer1", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
+            clauses.add(new Clause(new TableAlias("TurnPlayer1", -1), "game_id", CompareMethod.EQUAL, lastTurn));
 
             try {
                 var turnPlayer1 = this._db.select(TurnPlayer1.class, clauses);
@@ -97,7 +109,7 @@ public class MatchOverviewModel {
             var clauses = new ArrayList<Clause>();
 
             clauses.add(new Clause(new TableAlias("TurnPlayer2", -1), "turn_id", CompareMethod.EQUAL, lastTurn));
-            clauses.add(new Clause(new TableAlias("TurnPlayer2", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
+            clauses.add(new Clause(new TableAlias("TurnPlayer2", -1), "game_id", CompareMethod.EQUAL, lastTurn));
 
             try {
                 var turnPlayer2 = this._db.select(TurnPlayer2.class, clauses);
