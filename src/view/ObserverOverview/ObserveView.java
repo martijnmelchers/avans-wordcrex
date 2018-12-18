@@ -41,19 +41,16 @@ public class ObserveView {
 
         try
         {
-            FXMLLoader fxmlLoader = new FXMLLoader(new URL("https://drive.google.com/uc?export=download&id=1MR7hiFIINLDg3b2bckO6gYKt4hMIwv-1"));
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/MatchOverview/PlayerGame.fxml"));
             fxmlLoader.setController(this);
-            MatchOverviewController controller = new MatchOverviewController();
             this.match = match;
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
 
             fxmlLoader.load();
 
-            String player = GameSession.getUsername();
             String player1 = match.getPlayer1().getUsername();
             String player2 = match.getPlayer2().getUsername();
-            String enemy  = player1.equals(player) ?  player2 : player1;
 
             if (match.getGameState().isRequest()) {
 

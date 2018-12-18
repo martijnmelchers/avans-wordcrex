@@ -75,7 +75,7 @@ public class ChatView extends View {
     //todo fixe me if you kak
     private void displayMessage(Chatline chatline) {
         try {
-            FXMLLoader loader = new FXMLLoader(new URL("https://drive.google.com/uc?export=download&id=1e2FU3UTcou0xrLfBd-fDt8ykaIYW39Te"));
+            FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/ChatView/MessageView.fxml"));
             AnchorPane messagePane = loader.load();
 
             MessageView messageViewController = loader.getController();
