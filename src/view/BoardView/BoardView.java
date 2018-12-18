@@ -21,6 +21,7 @@ import view.DockView.DockView;
 import view.View;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.stream.Collectors;
 
 import static javafx.scene.paint.Color.rgb;
@@ -350,7 +351,7 @@ public class BoardView extends View {
     public void displayChat() {
         try {
             if(!GameSession.hasRole("observer")) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
+                FXMLLoader loader = new FXMLLoader(new URL("https://drive.google.com/uc?export=download&id=1UuFODz_qa1vnS4trTkFAFe9uaTIH4Sw_"));
                 AnchorPane chatView = loader.load();
 
                 _chatViewController = loader.getController();

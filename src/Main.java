@@ -46,8 +46,9 @@ public class Main extends Application {
 
             app.navigate(EnvironmentVariables.MAIN_VIEW, 350, 550);
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
-            alert.showAndWait();
+            e.printStackTrace();
+            //Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
+            //alert.showAndWait();
 
             Log.error(e);
 

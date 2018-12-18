@@ -46,27 +46,17 @@ public class App {
 
     private void loadControllers() throws Exception {
         controllers = new ArrayList<>();
-        File[] files;
-        files = new File(App.class.getResource("/controller").toURI().getPath()).listFiles();
+        controllers.add(new AccountController());
+        controllers.add(new AdminController());
+        controllers.add(new ChatController());
+        controllers.add(new GameController());
+        controllers.add(new MainController());
+        controllers.add(new MatchFixerController());
+        controllers.add(new MatchOverviewController());
+        controllers.add(new ModeratorController());
+        controllers.add(new ObserverController());
+        controllers.add(new PlayerWordRequestController());
 
-
-        if (files == null)
-            throw new Exception("No files were found!");
-
-        for (File file : files) {
-            try {
-                Class<?> controllerClass = ClassLoader.getSystemClassLoader().loadClass("controller." + file.getName().replace(".class", ""));
-                if (controllerClass.isAssignableFrom(Controller.class)) {
-                    continue;
-                }
-
-                Controller controllerInstance = (Controller) controllerClass.getConstructor().newInstance();
-                controllers.add(controllerInstance);
-            } catch (Exception e) {
-                Log.warn("Could not create controller: " + e.getMessage());
-            }
-
-        }
     }
 
     public <T extends Controller> T getController(Class<T> cType) throws Exception {

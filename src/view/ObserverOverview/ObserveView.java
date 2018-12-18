@@ -11,6 +11,8 @@ import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
 
+import java.net.URL;
+
 public class ObserveView {
     @FXML
     private HBox rootHbox;
@@ -36,12 +38,13 @@ public class ObserveView {
 
     private Game match;
     public ObserveView(Game match){
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./PlayerGame.fxml"));
-        fxmlLoader.setController(this);
-        MatchOverviewController controller = new MatchOverviewController();
-        this.match = match;
+
         try
         {
+            FXMLLoader fxmlLoader = new FXMLLoader(new URL("https://drive.google.com/uc?export=download&id=1MR7hiFIINLDg3b2bckO6gYKt4hMIwv-1"));
+            fxmlLoader.setController(this);
+            MatchOverviewController controller = new MatchOverviewController();
+            this.match = match;
             MatchOverviewModel mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
 
