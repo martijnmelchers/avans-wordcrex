@@ -285,7 +285,7 @@ public class MatchOverview extends View {
     @FXML
     private void requestWord(){
         try {
-            this._controller.navigate("PlayerWordRequest");
+            this._controller.navigate("PlayerWordRequest",true);
         } catch (Exception e) {
             Log.error(e);
         }
