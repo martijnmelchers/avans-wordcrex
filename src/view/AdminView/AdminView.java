@@ -126,6 +126,23 @@ public class AdminView extends View {
         new Alert(Alert.AlertType.CONFIRMATION, "Success").show();
     }
     @FXML
+    private void removeRoles() {
+        ObservableList<String> selectedUsers = this.userList.getSelectionModel().getSelectedItems();
+
+        for (String user : selectedUsers) {
+
+            int index = 0;
+            for (String role : this.roleList.getSelectionModel().getSelectedItems()) {
+
+
+                this.controller.removeRole(user, role);
+
+            }
+        }
+        this.showInfo();
+        new Alert(Alert.AlertType.CONFIRMATION, "Success").show();
+    }
+    @FXML
     private void goBack(){
         try {
             this.getController(AdminController.class).navigate("MatchOverview",true);

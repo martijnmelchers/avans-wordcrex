@@ -72,7 +72,7 @@ public class AdminModel {
     public void removeRole(AccountInfo info) throws Exception {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
-        clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRoleId()));
 
         List<AccountInfo> roles  = this._db.select(AccountInfo.class, clauses);
         if(roles.size()  > 0){
