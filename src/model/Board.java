@@ -276,14 +276,27 @@ public class Board {
         int xMin = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
         int yMin = this._placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
 
-        boolean isHorizontal = !this._placedCoords.stream().anyMatch(x -> x.getX() != xMin);
-        boolean isVertical = !this._placedCoords.stream().anyMatch(x -> x.getY() != yMin);
+        boolean isVertical = !this._placedCoords.stream().anyMatch(x -> x.getX() != xMin);
+        boolean isHorizontal = !this._placedCoords.stream().anyMatch(x -> x.getY() != yMin);
 
         if (!isHorizontal && !isVertical) {
             return false;
         }
 
         if (isHorizontal) {
+            int index = xMin;
+            int foundCount = 0;
+            while(!_tiles[yMin][index].isEmpty())
+            {
+                final int tempIndex = index;
+                if(_placedCoords.stream().anyMatch(a-> a.getX() == tempIndex && a.getY() == yMin))
+                {
+                    foundCount++;
+                }
+                index++;
+            }
+            return foundCount == _placedCoords.size();
+            /*
             int xMax = this._placedCoords.stream().mapToInt(x -> x.getX()).max().orElseThrow();
             for (int i = xMin; i < xMax; i++) {
                 Tile curTile = this._tiles[yMin][i];
@@ -291,17 +304,21 @@ public class Board {
                     return false;
                 }
             }
+            */
         } else {
-            int yMax = this._placedCoords.stream().mapToInt(x -> x.getY()).max().orElseThrow();
-            for (int i = yMin; i < yMax; i++) {
-                Tile curTile = this._tiles[i][xMin];
-                if (curTile.isEmpty()) {
-                    return false;
+            int index = yMin;
+            int foundCount = 0;
+            while(!_tiles[index][xMin].isEmpty())
+            {
+                final int tempIndex = index;
+                if(_placedCoords.stream().anyMatch(a-> a.getY() == yMin&& a.getX() == xMin ))
+                {
+                    foundCount++;
                 }
+                index++;
             }
+            return foundCount == _placedCoords.size();
         }
-
-        return true;
     }
 
     private boolean isConnectedToOldTile() {
