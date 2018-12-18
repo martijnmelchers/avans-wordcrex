@@ -6,8 +6,13 @@ import javafx.stage.Stage;
 import model.EnvironmentVariables;
 import model.database.DocumentSession;
 import model.helper.Log;
+import model.tables.AccountInfo;
+
+import java.util.List;
 
 public class Main extends Application {
+    private List<AccountInfo> accounts;
+
     public static void main(String[] args) {
         Log.info("Launching application...");
         launch(EnvironmentVariables.MAIN_VIEW);
@@ -37,6 +42,13 @@ public class Main extends Application {
                 this.initializeApp(primaryStage);
             else
                 System.exit(1);
+        }
+
+        try {
+            this.accounts = DocumentSession.getDatabase().select(AccountInfo.class, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         /* Start the main app */
