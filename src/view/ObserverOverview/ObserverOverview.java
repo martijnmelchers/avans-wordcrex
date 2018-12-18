@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import model.GameSession;
 import model.helper.Log;
 import model.tables.Game;
 import view.View;
@@ -146,6 +147,7 @@ public class ObserverOverview extends View {
     @FXML
     private void playMode() {
         try {
+            GameSession.setInObserverMode(false);
             this._controller.navigate("MatchOverview", 861, 920);
         } catch (Exception e) {
             Log.error(e);
