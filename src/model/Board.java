@@ -287,9 +287,10 @@ public class Board {
         }
 
         if (isHorizontal) {
+
             int index = xMin;
             int foundCount = 0;
-            while(!_tiles[yMin][index].isEmpty())
+            while(!(index>14)&&!_tiles[yMin][index].isEmpty())
             {
                 final int tempIndex = index;
                 if(_placedCoords.stream().anyMatch(a-> a.getX() == tempIndex && a.getY() == yMin))
@@ -311,7 +312,7 @@ public class Board {
         } else {
             int index = yMin;
             int foundCount = 0;
-            while(!_tiles[index][xMin].isEmpty())
+            while(!(index>14)&&_tiles[index][xMin].isEmpty())
             {
                 final int tempIndex = index;
                 if(_placedCoords.stream().anyMatch(a-> a.getY() == yMin&& a.getX() == xMin ))
