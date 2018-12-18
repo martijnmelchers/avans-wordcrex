@@ -64,6 +64,23 @@ public class ModeratorDictionary {
         }
     }
 
+    public List<GameWord> getByPlayerRequestedWords(String username) {
+        ArrayList<Clause> clauses = new ArrayList<Clause>();
+
+        clauses.add(new Clause(new TableAlias("dictionary", -1), "username", CompareMethod.EQUAL, username));
+
+        List<GameWord> requestedWords = new ArrayList<>();
+
+        try {
+            requestedWords = this._db.select(GameWord.class, clauses);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return  requestedWords;
+    }
+
+
     public void acceptWords(String[] words, String userName, String letterSet) {
         this.setWords(words, userName, letterSet, "accepted");
 
