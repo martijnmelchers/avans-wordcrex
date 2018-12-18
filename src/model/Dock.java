@@ -97,10 +97,8 @@ public class Dock {
         }
 
         clearAll();
-        int temp = filtered.size();
-        if(filtered.size() > 7) temp = 7;
-
-        for (int i = 0; i < temp; i++) {
+        Log.info("Filtered size: " + Integer.toString(filtered.size()));
+        for (int i = 0; i < filtered.size(); i++) {
             letters[i] = filtered.get(i);
         }
 
