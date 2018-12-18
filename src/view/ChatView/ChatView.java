@@ -56,8 +56,10 @@ public class ChatView extends View {
     }
 
     private void displayMessages() {
+        // clear the gridpane
         this._messagesGridPane.getChildren().clear();
 
+        // get the chatlines from the database by id
         ArrayList<Chatline> chatlines = this._controller.getChatlines(GameSession.getGame().getGameId());
 
         this.messageCount = chatlines.size();
@@ -74,14 +76,18 @@ public class ChatView extends View {
 
     private void displayMessage(Chatline chatline) {
         try {
+            // load the message view into an object
             FXMLLoader loader = new FXMLLoader(this.getClass().getResource("MessageView.fxml"));
             AnchorPane messagePane = loader.load();
 
+            // load the corresponding controller for the message view
             MessageView messageViewController = loader.getController();
 
+            // set the messagelabel and momentlabel in the message view
             messageViewController.setMessageLabel(chatline.getMessage());
             messageViewController.setMomentLabel(chatline.getMoment().toString());
 
+            // place the messages in the correct gridpane column with the correct color
             if (chatline.account.getUsername().equals(GameSession.getUsername())) {
                 messageViewController.setMessageAlignment(1);
                 this._messagesGridPane.add(messagePane, 1, this._messagesGridPane.getRowCount() + 1);
@@ -95,6 +101,7 @@ public class ChatView extends View {
     }
 
     private void checkForMessages() {
+        // start a new timeline that will check every second for new messages
         this.messageChecker = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             int chatlinesCount = this._controller.getChatlines(GameSession.getGame().getGameId()).size();
 
@@ -107,22 +114,26 @@ public class ChatView extends View {
     }
 
     public void sendMessage() {
+        // if there is no game id set there can't be a chat
         if (GameSession.getGame().getGameId() == null) {
             return;
         }
 
-
         String message = this.messageField.getText();
 
         if (!message.isEmpty()) {
+            // get the current time and date
             Timestamp timestamp = new Timestamp(new Date().getTime());
 
+            // create a new chatline object with the correct parameters and send it
             Chatline chatline = new Chatline(GameSession.getUsername(), GameSession.getGame().getGameId(), timestamp, message);
             this._controller.sendChatline(chatline);
 
+            // clear the textfield and display the new message
             this.messageField.clear();
             this.displayMessages();
 
+            // delay for 1 second because there can't be multiple messages with the same timestamp
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
