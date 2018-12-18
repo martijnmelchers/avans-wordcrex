@@ -249,11 +249,20 @@ public class GameModel {
             //submit tiles of the winner to the database table:'turnboardletters'
             submitWinnerBoard();
 
+            // get letters that are not used
+            List<Integer> used = new ArrayList<Integer>();
+            for(Vector2 coord : checkInfo.getCoordinates())
+            {
+                used.add(_board.getTiles()[coord.getY()][coord.getX()].getLetterType().getid());
+            }
+
+            _dock.removeUsedLetters(used);
             // Create new turn
             createNewTurn();
 
-            //removeUsedLettersInDock(checkInfo);
-            _dock.update(_gameId, _turnId);
+            // insert letters that are not used in db
+
+
             //refill winners hand + insert hand to database
             _dock.refill(_gameId, _turnId);
 

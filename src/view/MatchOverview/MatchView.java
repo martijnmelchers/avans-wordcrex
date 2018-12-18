@@ -126,7 +126,10 @@ public class MatchView {
 
                     this.scoreLabel.setText("Eindscore: ");
                     this.turnLabel.setText("Winnaar: ");
-                    this.matchTurn.setText(match.getWinner().getUsername());
+                    if(match.getWinner() != null)
+                    {
+                        this.matchTurn.setText(match.getWinner().getUsername());
+                    }
                 }
             }
         } catch (Exception e) {
