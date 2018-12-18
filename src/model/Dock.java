@@ -97,7 +97,10 @@ public class Dock {
         }
 
         clearAll();
-        for (int i = 0; i < 7; i++) {
+        int temp = filtered.size();
+        if(filtered.size() > 7) temp = 7;
+
+        for (int i = 0; i < temp; i++) {
             letters[i] = filtered.get(i);
         }
 
