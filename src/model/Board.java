@@ -194,23 +194,32 @@ public class Board {
             return null;
 
 
-        int xMin = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
-        int yMin = this._placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
 
-        final int tempx = xMin;
-        final int tempy = yMin;
-        boolean isHorizontal = this._placedCoords.stream().anyMatch(x -> x.getX() != tempx);
-        boolean isVertical = this._placedCoords.stream().anyMatch(x -> x.getY() != tempy);
+        final int tempx = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
+        final int tempy = this._placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
+        Boolean isHorizontal = false;
+        Boolean isVertical = false;
+        if(this._placedCoords.stream().anyMatch(x -> x.getX() != tempx)) {
+            isHorizontal = true;
+        }
+        if (this._placedCoords.stream().anyMatch(x -> x.getY() != tempy)) {
+            isVertical = true;
+        }
         if (isHorizontal == isVertical) {
             isHorizontal = true;
             isVertical = true;
         }
+
+
+
 
         List<Vector2> secondaryWordsHorizontal = new ArrayList<Vector2>();
         List<Vector2> secondaryWordsVertical = new ArrayList<Vector2>();
         List<Tile> mainWord = new ArrayList<Tile>();
         String word = "";
         if (isHorizontal) {
+            int xMin = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
+            int yMin = this._placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
             word = "";
             mainWord = new ArrayList<Tile>();
             for (int x = xMin; x > -1 && !this._tiles[yMin][x].isEmpty(); x--) {
@@ -228,8 +237,12 @@ public class Board {
                     }
                 }
             }
+            if(wordChecker.check(word))
+                isVertical = false;
         }
         if (isVertical) {
+            int xMin = this._placedCoords.stream().mapToInt(x -> x.getX()).min().orElseThrow();
+            int yMin = this._placedCoords.stream().mapToInt(x -> x.getY()).min().orElseThrow();
             word = "";
             mainWord = new ArrayList<Tile>();
             for (int y = yMin; y > -1 && !this._tiles[y][xMin].isEmpty(); y--) {
@@ -248,6 +261,8 @@ public class Board {
                     }
                 }
             }
+            if(wordChecker.check(word))
+                isHorizontal= false;
         }
         if (word == "")
             return null;
