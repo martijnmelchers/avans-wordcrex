@@ -253,20 +253,19 @@ public class Board {
             return null;
         Points points = new Points(0,0);
         System.out.println(word);
-        if (wordChecker.check(word) && !(isHorizontal == isVertical))
+        if (wordChecker.check(word) && isHorizontal != isVertical)
             points = (calculatePoints(mainWord.toArray(new Tile[0])));
-
-        if(points.total() < 1) return null;
-
+        else if(!wordChecker.check(word) && isHorizontal != isVertical)
+            return null;
         Points temp = this.checkSubWordsVert(secondaryWordsVertical);
         if(temp != null) points.add(temp);
         else return null;
+
         temp = this.checkSubWordsHorz(secondaryWordsHorizontal);
         if(temp !=null) points.add(temp);
         else return  null;
 
         //return new CheckInfo(0,)
-
 
         Vector2[] coordinatesArr = _placedCoords.toArray(new Vector2[0]);
         return new CheckInfo(points, coordinatesArr);
@@ -312,10 +311,10 @@ public class Board {
         } else {
             int index = yMin;
             int foundCount = 0;
-            while(!(index>14)&&_tiles[index][xMin].isEmpty())
+            while(!(index>14)&&!_tiles[index][xMin].isEmpty())
             {
                 final int tempIndex = index;
-                if(_placedCoords.stream().anyMatch(a-> a.getY() == yMin&& a.getX() == xMin ))
+                if(_placedCoords.stream().anyMatch(a-> a.getY() == tempIndex&& a.getX() == xMin ))
                 {
                     foundCount++;
                 }
