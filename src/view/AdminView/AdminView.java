@@ -115,13 +115,11 @@ public class AdminView extends View {
         for (String user : selectedUsers) {
 
             int index = 0;
-            for (String role : this.roleList.getItems()) {
-                if (!this.roleList.getSelectionModel().isSelected((index++))) {
-                    this.controller.removeRole(user, role);
-                } else {
+            for (String role : this.roleList.getSelectionModel().getSelectedItems()) {
+
 
                     this.controller.setRole(user, role);
-                }
+
             }
         }
         this.showInfo();

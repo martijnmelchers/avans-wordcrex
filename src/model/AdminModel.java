@@ -55,7 +55,7 @@ public class AdminModel {
     public void setRole(AccountInfo info) throws Exception {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
-        clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
+        clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRoleId()));
         info.setAccount(new Account(info.getUsername(),null));
         info.setRole(new Role(info.getRoleId()));
         if(this._db.select(AccountInfo.class, clauses).size()  == 0){
