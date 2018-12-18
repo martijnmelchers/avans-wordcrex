@@ -111,7 +111,7 @@ public class MatchView {
                 this.matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
                 this.matchTurn.setText(MatchOverviewModel.isMyTurn(match) ? GameSession.getUsername() : enemy);
 
-                if(match.getGameState().isFinished()){
+                if(match.getGameState().isFinished() || match.getGameState().isResigned()){
 
                     this.scoreLabel.setText("Eindscore: ");
                     this.turnLabel.setText("Winnaar: ");

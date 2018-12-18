@@ -38,7 +38,7 @@ public final class ListViewCell extends ListCell<Game> {
                 view.getMatchSurrenderButton().setText("Weigeren");
             }
 
-            if(game.getGameState().isFinished()){
+            if(game.getGameState().isFinished() || game.getGameState().isResigned()){
                 view.getMatchSurrenderButton().setDisable(true);
                 view.getMatchPlayButton().setDisable(true);
             }
