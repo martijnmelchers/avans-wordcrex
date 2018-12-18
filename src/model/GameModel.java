@@ -137,10 +137,18 @@ public class GameModel {
         return _playerName1.equals(GameSession.getUsername());
     }
 
-    private void waitForPlayer(Task finished) {
+    private void waitForPlayer(Task finished,Task onSurrender
+                               ) {
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
+                if(onSurrender!=null)
+                {
+                    if(checkGameDone())
+                    {
+                        Platform.runLater(onSurrender);
+                    }
+                }
                 if (isNewTurn()) {
                     _turnId++;
                     finished.run();
@@ -226,7 +234,7 @@ public class GameModel {
         }
     }
 
-    public void submitTurn(CheckInfo checkInfo, Task onEndTurn) {
+    public void submitTurn(CheckInfo checkInfo, Task onEndTurn, Task onSurrender) {
         // submit turn to database tables: boardplayer1, turnplayer1 OR boardplayer2,
 
         if (isPlayerOne()) {
@@ -253,11 +261,17 @@ public class GameModel {
 
             checkGameFinished();
 
+            if(checkGameDone())
+            {
+                onSurrender.run();
+                return;
+            }
+
             onEndTurn.run();
         }
         else
         {
-            alreadyPlayed(onEndTurn);
+            alreadyPlayed(onEndTurn,onSurrender);
         }
     }
 
@@ -302,14 +316,14 @@ public class GameModel {
         return true;
     }
 
-    public void alreadyPlayed(Task onEndTurn) {
+    public void alreadyPlayed(Task onEndTurn,Task onSurrender) {
         waitForPlayer(new Task() {
             @Override
             protected Object call() // This gets called when other player is ready
             {
                 // wait one second for the other player to insert data in the database
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(5000);
                 } catch (Exception e) {
                     Log.error(e, false);
                 }
@@ -320,7 +334,7 @@ public class GameModel {
                 Platform.runLater(onEndTurn);
                 return null;
             }
-        });
+        },onSurrender);
     }
 
     private void createNewTurn() {

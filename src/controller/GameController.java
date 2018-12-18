@@ -108,7 +108,7 @@ public class GameController extends Controller{
         }
 
         _boardView.startLoadingScreen("Wachten op andere speler.");
-        _gameModel.submitTurn(info, nextTurn());
+        _gameModel.submitTurn(info, nextTurn(),onSurrender());
 
     }
 
@@ -127,7 +127,9 @@ public class GameController extends Controller{
 
     public void surrender()
     {
+        _boardView = getViewCasted();
         _gameModel.surrender();
+        _boardView.gameDone();
     }
 
     public void checkScore(){
@@ -143,8 +145,19 @@ public class GameController extends Controller{
        {
            _boardView = getViewCasted();
            _boardView.startLoadingScreen("Wachten op andere speler.");
-           _gameModel.alreadyPlayed(nextTurn());
+           _gameModel.alreadyPlayed(nextTurn(), onSurrender() );
        }
+    }
+
+    private Task onSurrender()
+    {
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+                _boardView.gameDone();
+                return null;
+            }
+        };
     }
 
     private void updateView(boolean updateDock)
