@@ -97,7 +97,7 @@ public class Dock {
         }
 
         clearAll();
-        for (int i = 0; i < filtered.size(); i++) {
+        for (int i = 0; i < 7; i++) {
             letters[i] = filtered.get(i);
         }
 
