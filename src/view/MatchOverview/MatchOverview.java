@@ -133,7 +133,7 @@ public class MatchOverview extends View {
                 }
 
                 case "resigned": {
-                    //TODO: show resigned games??
+                    this._gameObservableList2.add(game);
                     break;
                 }
             }
