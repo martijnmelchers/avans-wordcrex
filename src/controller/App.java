@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class App {
-    private final boolean _isMaximized = false;
-
     private ArrayList<Controller> controllers;
     private Stage primaryStage;
     private View view;
@@ -31,17 +29,6 @@ public class App {
         primaryStage.show();
 
         loadControllers();
-
-        if(_isMaximized)
-        {
-            Screen screen = Screen.getPrimary();
-            Rectangle2D bounds = screen.getVisualBounds();
-
-            primaryStage.setX(bounds.getMinX());
-            primaryStage.setY(bounds.getMinY());
-            primaryStage.setWidth(bounds.getWidth());
-            primaryStage.setHeight(bounds.getHeight());
-        }
     }
 
     private void loadControllers() throws Exception {
@@ -83,11 +70,11 @@ public class App {
         return view;
     }
 
-    public void navigate(String fxmlFileName) throws IOException {
-        navigate(fxmlFileName, 1600, 1200 );
+    public void navigate(String fxmlFileName, boolean maximized) throws IOException {
+        navigate(fxmlFileName, 800, 600, maximized);
     }
 
-    public void navigate(String fxmlFileName, int width, int height) throws IOException {
+    public void navigate(String fxmlFileName, int width, int height, boolean maximized) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/" + fxmlFileName + "/" + fxmlFileName + ".fxml"));
         Parent root = fxmlLoader.load();
 
@@ -101,6 +88,18 @@ public class App {
         primaryStage.setScene(_scene);
         primaryStage.setHeight(height);
         primaryStage.setWidth(width);
+
+
+        if(maximized)
+        {
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getVisualBounds();
+
+            primaryStage.setX(bounds.getMinX());
+            primaryStage.setY(bounds.getMinY());
+            primaryStage.setWidth(bounds.getWidth());
+            primaryStage.setHeight(bounds.getHeight());
+        }
     }
 
     public Scene getScene()

@@ -50,7 +50,7 @@ public class MatchInvitationView extends View {
             Log.error(e);
         }
         try {
-            this._controller.navigate("MatchOverview", 620, 769);
+            this._controller.navigate("MatchOverview", 861, 920, true);
         } catch (Exception e) {
             Log.error(e);
         }
@@ -59,7 +59,7 @@ public class MatchInvitationView extends View {
     @FXML
     private void goBack() {
         try {
-            this._controller.navigate("MatchOverview", 869, 920);
+            this._controller.navigate("MatchOverview", 861, 920, true);
         } catch (Exception e) {
             Log.error(e);
         }

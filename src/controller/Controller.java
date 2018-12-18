@@ -24,13 +24,13 @@ public abstract class Controller {
         return application;
     }
 
-    public void navigate(String fxmlFileName, int width, int height) throws IOException {
-        this.application.navigate(fxmlFileName, width, height);
+    public void navigate(String fxmlFileName, int width, int height, boolean maximized) throws IOException {
+        this.application.navigate(fxmlFileName, width, height, maximized);
     }
 
-    public void navigate(String fxmlFileName) {
+    public void navigate(String fxmlFileName, boolean maximized) {
         try {
-            this.application.navigate(fxmlFileName);
+            this.application.navigate(fxmlFileName, maximized);
         } catch (Exception e) {
             Log.error(e, false);
         }
