@@ -275,6 +275,16 @@ public class MatchOverview extends View {
         }
     }
 
+
+    @FXML
+    private void requestWord(){
+        try {
+            this._controller.navigate("PlayerWordRequest");
+        } catch (Exception e) {
+            Log.error(e);
+        }
+    }
+
     @FXML
     public void refresh() {
         this.renderGames();

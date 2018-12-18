@@ -67,6 +67,11 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
+            <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" layoutX="654.0" layoutY="33.0" mnemonicParsing="false" onAction="#requestWord" text="Woord aanvragen">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
          </children>
          <opaqueInsets>
             <Insets />
