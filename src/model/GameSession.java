@@ -10,6 +10,7 @@ public final class GameSession {
     private static Account account;
     private static ArrayList<Role> roles;
     private static Game game;
+    private static boolean inObserverMode = false;
 
     public static void setSession(Account user) {
         GameSession.account = user;
@@ -49,6 +50,15 @@ public final class GameSession {
 
     public static void setRoles(ArrayList<Role> roles) {
         GameSession.roles = roles;
+    }
+
+
+    public static void setInObserverMode(boolean mode){
+        GameSession.inObserverMode = mode;
+    }
+
+    public static boolean isInObserverMode(){
+        return GameSession.inObserverMode;
     }
 
     public static boolean hasRole(String role) {

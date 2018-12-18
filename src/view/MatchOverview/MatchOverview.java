@@ -114,7 +114,6 @@ public class MatchOverview extends View {
 
                 case "playing": {
                     boolean isMyTurn;
-
                     try {
                         isMyTurn = MatchOverviewModel.isMyTurn(game);
                     } catch (NullPointerException e) {
@@ -221,6 +220,7 @@ public class MatchOverview extends View {
     @FXML
     private void navigateObserver() {
         try {
+            GameSession.setInObserverMode(true);
             this._controller.navigate("ObserverOverview", 861, 920);
         } catch (Exception e) {
             Log.error(e);

@@ -77,7 +77,7 @@ public class BoardView extends View {
 
     private void checkRole()
     {
-        if (GameSession.hasRole("observer"))
+        if (GameSession.hasRole("observer") && GameSession.isInObserverMode())
         {
             _controller.getOldDock(_controller.getCurrentTurn());
             dockController.updateDock();
@@ -291,7 +291,7 @@ public class BoardView extends View {
         try{
             if(_chatViewController != null){
                 _chatViewController.closeMessageChecker();
-                if(_submit.isVisible() == false){
+                if(GameSession.isInObserverMode()){
                     _controller.navigate("ObserverOverview",861,920);
                 }
                 else{
