@@ -119,6 +119,7 @@ public class AdminView extends View {
                 if (!this.roleList.getSelectionModel().isSelected((index++))) {
                     this.controller.removeRole(user, role);
                 } else {
+
                     this.controller.setRole(user, role);
                 }
             }

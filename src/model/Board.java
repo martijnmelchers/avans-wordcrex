@@ -420,6 +420,10 @@ public class Board {
                         w3++;
                         score += letterValue;
                         break;
+                    case STARTING_TILE:
+                        w3++;
+                        score += letterValue;
+                        break;
                     case WORD_TIMES_FOUR:
                         w4++;
                         score += letterValue;

@@ -6,6 +6,7 @@ import model.database.classes.TableAlias;
 import model.database.enumerators.CompareMethod;
 import model.database.services.Database;
 import model.helper.Log;
+import model.tables.Account;
 import model.tables.AccountInfo;
 import model.tables.Role;
 
@@ -55,6 +56,7 @@ public class AdminModel {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, info.getUsername()));
         clauses.add(new Clause(new TableAlias("accountrole", -1), "role", CompareMethod.EQUAL, info.getRole()));
+        info.setAccount(new Account(info.getUsername(),null));
         if(this._db.select(AccountInfo.class, clauses).size()  == 0){
             this._db.insert(info);
         }

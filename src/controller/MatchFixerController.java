@@ -11,7 +11,7 @@ public class MatchFixerController extends Controller {
     }
 
     public String[] searchPlayers(String name) {
-        return this._matchFixer.searchPlayers(name).stream().map(AccountInfo::getUsername).toArray(String[]::new);
+        return this._matchFixer.searchPlayers(name.toLowerCase()).stream().map(AccountInfo::getUsername).toArray(String[]::new);
     }
 
     public void RequestGame(String player) {

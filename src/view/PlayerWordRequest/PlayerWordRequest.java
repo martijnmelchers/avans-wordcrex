@@ -66,6 +66,7 @@ public class PlayerWordRequest extends View {
     }
 
     private void displayRequestedWords() {
+        sentRequestsListview.getItems().clear();
         List<GameWord> requestedWords = _controller.getByPlayerRequestedWords(GameSession.getUsername());
 
         ObservableList<String> requestedItems = sentRequestsListview.getItems();

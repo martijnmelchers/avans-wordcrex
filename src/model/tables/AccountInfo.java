@@ -18,6 +18,7 @@ public class AccountInfo {
     @ForeignKey(type = Role.class, field = "role", output = "role")
     private String roleId;
 
+
     private Account account;
     private Role role;
 
@@ -28,11 +29,16 @@ public class AccountInfo {
     public AccountInfo(String role, String username) {
         this.usernameId = username;
         this.roleId = role;
+
+    }
+    public void setAccount(Account account){
+        this.account = account;
     }
 
     public String getUsername() {
-        return this.account.getUsername();
+        return this.usernameId;
     }
+
 
     public String getRoleId() {
         return this.roleId;
@@ -43,7 +49,7 @@ public class AccountInfo {
     }
 
     public Role getRole() {
-        return this.role;
+        return new Role( this.roleId);
     }
 
     public Account getAccount() {
