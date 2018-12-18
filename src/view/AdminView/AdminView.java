@@ -125,7 +125,14 @@ public class AdminView extends View {
         this.showInfo();
         new Alert(Alert.AlertType.CONFIRMATION, "Success").show();
     }
-
+    @FXML
+    private void goBack(){
+        try {
+            this.getController(AdminController.class).navigate("MatchOverview",true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Shows the selected user its rows.
