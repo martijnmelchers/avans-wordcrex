@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class MatchOverviewModel {
     private static HashMap<Game, Boolean> currentTurns = new HashMap<>();
+    private static HashMap<Game, String> observerTurns = new HashMap<>();
     private Database _db;
 
     public MatchOverviewModel() {
@@ -39,10 +40,21 @@ public class MatchOverviewModel {
         }
     }
 
-    public List<Game> getCurrentPlayerGames(String username) {
-        return findCurrentPlayerGame(username);
+
+    public static String whoTurn(Game game) {
+        return MatchOverviewModel.observerTurns.get(game);
     }
 
+    public List<Game> getCurrentPlayerGames(String username) {
+        return this.findCurrentPlayerGame(username);
+    }
+
+
+    /**
+     * Returns the games of the current user
+     * @param username
+     * @return
+     */
     private List<Game> findCurrentPlayerGame(String username) {
         try {
 
@@ -53,25 +65,10 @@ public class MatchOverviewModel {
 
             var games = this._db.select(Game.class, clauses);
 
+
+            // Caches the turns so we don't need to get the turns every time.
             for (Game game : games) {
-                String player = GameSession.getUsername();
-                String player1 = game.getPlayer1().getUsername();
-
-                boolean isPlayer1 = player.equals(player1);
-
-                if (isPlayer1) {
-                    if (!currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
-//                        MatchOverviewModel.currentTurns.put(game, true);
-                    } else {
-                        MatchOverviewModel.currentTurns.put(game, !currentTurnHasAction(game));
-                    }
-                } else {
-                    if (!currentTurnHasAction(game) && !currentTurnPlayer2HasAction(game)) {
-                        MatchOverviewModel.currentTurns.put(game, true);
-                    } else {
-                        MatchOverviewModel.currentTurns.put(game, !currentTurnPlayer2HasAction(game));
-                    }
-                }
+                MatchOverviewModel.currentTurns.put(game, !this.checkIfTurnPlayed(game));
             }
 
             return games;
@@ -82,6 +79,59 @@ public class MatchOverviewModel {
         return null;
     }
 
+
+    /**
+     * Check if the current user has played a turn.
+     * @param game
+     * @return
+     */
+    public boolean checkIfTurnPlayed(Game game) {
+
+        var lastTurn = this.getLatestTurnOfGame(game);
+
+        if (GameSession.getUsername().equals(game.getPlayer1Username())) {
+            var clauses = new ArrayList<Clause>();
+
+            clauses.add(new Clause(new TableAlias("TurnPlayer1", -1), "turn_id", CompareMethod.EQUAL, lastTurn));
+            clauses.add(new Clause(new TableAlias("TurnPlayer1", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
+
+            try {
+                var turnPlayer1 = this._db.select(TurnPlayer1.class, clauses);
+
+                if (turnPlayer1.size() != 0)
+                    return true;
+
+            } catch (Exception e) {
+                Log.error(e);
+            }
+
+            return false;
+        } else {
+            var clauses = new ArrayList<Clause>();
+
+            clauses.add(new Clause(new TableAlias("TurnPlayer2", -1), "turn_id", CompareMethod.EQUAL, lastTurn));
+            clauses.add(new Clause(new TableAlias("TurnPlayer2", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
+
+            try {
+                var turnPlayer2 = this._db.select(TurnPlayer2.class, clauses);
+
+                if (turnPlayer2.size() != 0)
+                    return true;
+
+            } catch (Exception e) {
+                Log.error(e);
+            }
+
+            return false;
+        }
+    }
+
+
+    /**
+     * Checks if player1 has played his turn.
+     * @param game
+     * @return
+     */
     public boolean currentTurnHasAction(Game game) {
         var latestTurn = this.getLatestTurnOfGame(game);
 
@@ -91,7 +141,7 @@ public class MatchOverviewModel {
         clauses.add(new Clause(new TableAlias("turnplayer1", -1), "turn_id", CompareMethod.EQUAL, latestTurn));
 
         try {
-            var turnList = this._db.select(TurnPlayer1.class, clauses);
+            var turnList = this._db.select(TurnPlayer1.class, clauses, false);
             if (turnList.size() > 0)
                 return true;
 
@@ -102,15 +152,20 @@ public class MatchOverviewModel {
         return false;
     }
 
+    /**
+     * Checks if player2 has played his turn.
+     * @param game
+     * @return
+     */
     public boolean currentTurnPlayer2HasAction(Game game) {
-        Integer latestTurn = getLatestTurnOfGame(game);
+        Integer latestTurn = this.getLatestTurnOfGame(game);
 
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("turnplayer2", -1), "username_player2", CompareMethod.EQUAL, game.getPlayer2().getUsername(), LinkMethod.AND));
         clauses.add(new Clause(new TableAlias("turnplayer2", -1), "turn_id", CompareMethod.EQUAL, latestTurn));
 
         try {
-            var turnList = _db.select(TurnPlayer2.class, clauses);
+            var turnList = this._db.select(TurnPlayer2.class, clauses);
             if (turnList.size() > 0) {
                 return true;
             }
@@ -122,6 +177,11 @@ public class MatchOverviewModel {
     }
 
 
+    /**
+     * Returns the latest turn id of the game.
+     * @param game
+     * @return
+     */
     private int getLatestTurnOfGame(Game game) {
         int latestTurn = 0;
 
@@ -129,7 +189,7 @@ public class MatchOverviewModel {
         turnClauses.add(new Clause(new TableAlias("turn", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
 
         try {
-            for (Turn turn : _db.select(Turn.class, turnClauses)) {
+            for (Turn turn : this._db.select(Turn.class, turnClauses)) {
                 Integer id = turn.getTurnID();
                 if (id > latestTurn) {
                     latestTurn = id;
@@ -142,21 +202,39 @@ public class MatchOverviewModel {
         return latestTurn;
     }
 
+    /**
+     * Returns all games in the database
+     * @return
+     */
     public List<Game> getAllGames() {
         try {
+            var games = this._db.select(Game.class);
 
-            var clauses = new ArrayList<Clause>();
 
-            var games = _db.select(Game.class);
+            // Caches who's turn it is so the observer is much faster.
+            for (var game : games) {
+                if (!this.currentTurnHasAction(game)) {
+                    MatchOverviewModel.observerTurns.put(game, game.getPlayer1Username());
+                } else if (!this.currentTurnPlayer2HasAction(game)) {
+                    MatchOverviewModel.observerTurns.put(game, game.getPlayer2Username());
+                }
+            }
+
 
             return games;
+
         } catch (Exception e) {
             Log.error(e);
         }
+
         return null;
     }
 
-
+    /**
+     * Old function
+     * @param gamesToSearch
+     * @return
+     */
     public ArrayList<Game> searchForGamesAsObserver(String gamesToSearch) {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("game", -1), "username_player1", CompareMethod.LIKE, "%" + gamesToSearch + "%", LinkMethod.OR));
@@ -165,7 +243,7 @@ public class MatchOverviewModel {
         try {
             Map<Integer, Game> map = new HashMap<>();
 
-            for (Game game : _db.select(Game.class, clauses)) {
+            for (Game game : this._db.select(Game.class, clauses)) {
                 if (game.getGameState().isRequest())
                     continue;
 
@@ -189,7 +267,7 @@ public class MatchOverviewModel {
         clauses.add(new Clause(new TableAlias("game", -1), "username_player2", CompareMethod.LIKE, "%" + currentGamesToSearch + "%"));
 
         try {
-            return new ArrayList<>(_db.select(Game.class, clauses));
+            return new ArrayList<>(this._db.select(Game.class, clauses));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -197,6 +275,10 @@ public class MatchOverviewModel {
         return null;
     }
 
+    /**
+     * Returns all roles of the current user.
+     * @return
+     */
     public ArrayList<String> getPlayerRoles() {
         var clauses = new ArrayList<Clause>();
         clauses.add(new Clause(new TableAlias("accountrole", -1), "username", CompareMethod.EQUAL, GameSession.getUsername()));
@@ -204,7 +286,7 @@ public class MatchOverviewModel {
         try {
             ArrayList<String> accountRoles = new ArrayList<>();
 
-            for (AccountInfo acc : _db.select(AccountInfo.class, clauses)) {
+            for (AccountInfo acc : this._db.select(AccountInfo.class, clauses)) {
                 accountRoles.add(acc.getRole().getRole());
             }
 
@@ -216,6 +298,11 @@ public class MatchOverviewModel {
         return null;
     }
 
+
+    /**
+     * Surrenders the current game.
+     * @param game
+     */
     public void surrenderGame(Game game) {
         String player = GameSession.getUsername();
 
@@ -229,6 +316,10 @@ public class MatchOverviewModel {
         }
     }
 
+    /**
+     * Accept an invite.
+     * @param game
+     */
     public void acceptInvite(Game game) {
         game.setState("playing");
         game.setAnswer("accepted");
@@ -240,9 +331,12 @@ public class MatchOverviewModel {
         }
     }
 
+    /**
+     * Decline an invite
+     * @param game
+     */
     public void declineInvite(Game game) {
         game.setAnswer("rejected");
-
         try {
             this._db.update(game);
         } catch (Exception e) {
@@ -250,6 +344,12 @@ public class MatchOverviewModel {
         }
     }
 
+
+    /**
+     * Returns the latest scores of the game.
+     * @param game
+     * @return
+     */
     public GameScore getPlayerScores(Game game) {
         GameScore score = new GameScore();
 
@@ -260,11 +360,11 @@ public class MatchOverviewModel {
         clauses2.add(new Clause(new TableAlias("turnplayer2", -1), "game_id", CompareMethod.EQUAL, game.getGameId()));
 
         try {
-            for (TurnPlayer1 turn1 : _db.select(TurnPlayer1.class, clauses1))
+            for (TurnPlayer1 turn1 : this._db.select(TurnPlayer1.class, clauses1))
                 score.player1 += turn1.getScore() + turn1.getBonus();
 
 
-            for (TurnPlayer2 turn2 : _db.select(TurnPlayer2.class, clauses2))
+            for (TurnPlayer2 turn2 : this._db.select(TurnPlayer2.class, clauses2))
                 score.player2 += turn2.getScore() + turn2.getBonus();
 
         } catch (Exception e) {

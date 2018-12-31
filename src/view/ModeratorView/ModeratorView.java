@@ -104,8 +104,7 @@ public class ModeratorView extends View {
     }
 
     public void dispose() {
-        var temp = (Stage) this._wordView.getScene().getWindow();
-        temp.close();
+        _controller.navigate("MatchOverview", true);
     }
 
     @Override

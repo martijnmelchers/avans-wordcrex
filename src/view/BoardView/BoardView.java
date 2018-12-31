@@ -4,20 +4,27 @@ import controller.GameController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import model.GameSession;
+import model.Letter;
 import model.Tile;
 import model.TileState;
 import model.helper.Log;
+import view.ChatView.ChatView;
 import view.DockView.DockView;
 import view.View;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.stream.Collectors;
+
+import static javafx.scene.paint.Color.rgb;
 
 
 public class BoardView extends View {
@@ -47,6 +54,8 @@ public class BoardView extends View {
 
     private GameController _controller;
 
+    private ChatView _chatViewController;
+
     @Override
     protected void loadFinished() {
         try {
@@ -61,12 +70,14 @@ public class BoardView extends View {
         updateTilesLeft();
         checkRole();
         checkIfTurnPlayed();
+
+        _slider.setDisable(_controller.getCurrentTurn() == 1);
         displayChat();
     }
 
     private void checkRole()
     {
-        if (GameSession.hasRole("observer"))
+        if (GameSession.isInObserverMode())
         {
             _controller.getOldDock(_controller.getCurrentTurn());
             dockController.updateDock();
@@ -88,6 +99,7 @@ public class BoardView extends View {
         if (updateDock)
         {
             dockController.updateDock();
+            _slider.setDisable(_controller.getCurrentTurn() == 1);
         }
     }
 
@@ -132,11 +144,19 @@ public class BoardView extends View {
     {
         vboxLoadingScreen.setVisible(true);
         labelLoadingScreen.setText(message);
+        _submit.setDisable(true);
+        _pass.setDisable(true);
+        _reset.setDisable(true);
+        _shuffle.setDisable(true);
     }
 
     public void stopLoadingScreen()
     {
         vboxLoadingScreen.setVisible(false);
+        _submit.setDisable(false);
+        _pass.setDisable(false);
+        _reset.setDisable(false);
+        _shuffle.setDisable(false);
     }
 
     public void init()
@@ -156,17 +176,28 @@ public class BoardView extends View {
                 Text text = new Text();
                 text.setMouseTransparent(true);
 
+                Text p = new Text();
+                p.setMouseTransparent(true);
+                p.setText(Integer.toString(tiles[y][x].getLetterType().getPoints()));
+                p.setFill(rgb(130, 130, 130));
+                StackPane.setAlignment(p, Pos.CENTER_LEFT);
+                p.setTranslateY(-10);
+                p.setTranslateX(2);
+
                 var letter = tiles[y][x].getLetterType().getLetter();
                 text.setText(letter.equals("") ? tiles[y][x].getType().toString() : tiles[y][x].getLetterType().getLetter());
 
                 GridPane.setRowIndex(stackPane, y);
                 GridPane.setColumnIndex(stackPane, x);
 
-                stackPane.getChildren().addAll(rect, text);
+                if(!tiles[y][x].isEmpty()) { stackPane.getChildren().addAll(rect, text, p); }
+                else { stackPane.getChildren().addAll(rect, text); }
                 _gridPane.getChildren().add(stackPane);
             }
         }
-        _slider.setMin(1);
+        _slider.setDisable(_controller.getCurrentTurn() == 1);
+
+        _slider.setMin(0);
         _slider.setMax(_controller.getCurrentTurn());
         _slider.setValue(_controller.getCurrentTurn());
 
@@ -175,7 +206,7 @@ public class BoardView extends View {
 
         _slider.setMinorTickCount(_controller.getCurrentTurn() - 1);
 
-       // _slider.setBlockIncrement(5);
+       _slider.setBlockIncrement(5);
     }
 
     @FXML
@@ -200,7 +231,7 @@ public class BoardView extends View {
        for (Tile tile : _controller.resetTiles())
        {
            int letterid = tile.getLetterType().getid();
-           dockController.addCharacter(tile.getLetterType().getLetter(), tile.getLetterType().getid());
+           dockController.addCharacter(tile.getLetterType().getLetter(), tile.getLetterType());
        }
        update(false);
        updateLocalScore("0p");
@@ -209,6 +240,7 @@ public class BoardView extends View {
     @FXML
     public void shuffleTiles()
     {
+        resetTiles();
         dockController.shuffleDock();
     }
 
@@ -232,10 +264,10 @@ public class BoardView extends View {
         if(tiles[row][col].getState() == TileState.UNLOCKED)
         {
             String character = ((Text)tile.getChildren().get(1)).getText();
-            int letterid = tiles[row][col].getLetterType().getid();
+            Letter letter = tiles[row][col].getLetterType();
             _controller.resetTile(col,row);
             update(false);
-            StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY(),letterid);
+            StackPane sp = dockController.addCharacter(character,e.getSceneX(),e.getSceneY(), letter);
 
             tile.setOnMouseDragged(event-> Event.fireEvent(sp,event));
             tile.setOnMouseReleased(event-> Event.fireEvent(sp,event ));
@@ -257,11 +289,14 @@ public class BoardView extends View {
     @FXML
     private void home(){
         try{
-            if(_submit.isVisible() == false){
-                _controller.navigate("ObserverOverview",620,770);
+            if(_chatViewController != null){
+                _chatViewController.closeMessageChecker();
+            }
+            if(GameSession.isInObserverMode()){
+                _controller.navigate("ObserverOverview",861,920, true);
             }
             else{
-                _controller.navigate("MatchOverview", 620,770);
+                _controller.navigate("MatchOverview", 861,920, true);
             }
         }
         catch(Exception e){
@@ -272,15 +307,18 @@ public class BoardView extends View {
 
     @FXML
     public void showTurnOnBoard(){
+        if(_controller.getCurrentTurn() == 1)// Return void if there is no history.
+            return;
+
         //TODO update score erbij
         //TODO lock dock
-        var snap = _slider.getValue();
+        var snap = Math.round(_slider.getValue());
         _controller.showTurn((int)snap);
         _slider.setValue(snap);
         updateScore();
         updateTilesLeft((int)snap);
 
-        if ((_controller.getCurrentTurn() - 1) != (int)snap || GameSession.hasRole("observer"))
+        if (_controller.getCurrentTurn() != (int)snap || GameSession.isInObserverMode())
         {
             _controller.getOldDock((int)snap);
             dockController.updateDock();
@@ -312,10 +350,14 @@ public class BoardView extends View {
 
     public void displayChat() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../ChatView/ChatView.fxml"));
-            AnchorPane chatView = loader.load();
+            if(!GameSession.isInObserverMode()) {
+                FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("view/ChatView/ChatView.fxml"));
+                AnchorPane chatView = loader.load();
 
-            chatViewContainer.getChildren().add(chatView);
+                _chatViewController = loader.getController();
+
+                chatViewContainer.getChildren().add(chatView);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

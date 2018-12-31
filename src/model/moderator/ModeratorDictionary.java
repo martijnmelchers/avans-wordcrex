@@ -64,27 +64,52 @@ public class ModeratorDictionary {
         }
     }
 
+    public List<GameWord> getByPlayerRequestedWords(String username) {
+        ArrayList<Clause> clauses = new ArrayList<Clause>();
+
+        clauses.add(new Clause(new TableAlias("dictionary", -1), "username", CompareMethod.EQUAL, username));
+
+        List<GameWord> requestedWords = new ArrayList<>();
+
+        try {
+            requestedWords = this._db.select(GameWord.class, clauses);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return  requestedWords;
+    }
+
+
     public void acceptWords(String[] words, String userName, String letterSet) {
         this.setWords(words, userName, letterSet, "accepted");
 
 
     }
 
-    private void setWords(String[] words, String userName, String letterSet, String state) {
+    public void setWords(String[] words, String userName, String letterSet, String state) {
         List<GameWord> acceptedWords = new ArrayList<>();
 
         for (String temp : words) {
+            if(temp.length() > 15)
+                continue;
+
             acceptedWords.add(new GameWord(temp, letterSet, state, userName));
         }
 
         try {
-            this._db.update(acceptedWords);
+            this._db.insert(acceptedWords);
         } catch (Exception e) {
+            try {
+                this._db.update(acceptedWords);
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             Log.error(e);
         }
-
-
     }
+
+
 
     public void declineWords(String[] words, String userName, String letterSet) {
         this.setWords(words, userName, letterSet, "denied");

@@ -32,16 +32,13 @@ public class AdminView extends View {
     private TextField searchField;
 
     public AdminView() {
-        try {
-            this.controller = this.getController(AdminController.class);
-        } catch (Exception e) {
-            Log.error(e);
-        }
+
     }
 
 
     @FXML
     public void filter() {
+
         String filter = this.searchField.getText();
         this.filteredNames = new FilteredList<>(this.listViewItems, s -> true);
         if (filter == null || filter.length() == 0) {
@@ -52,7 +49,17 @@ public class AdminView extends View {
         this.userList.setItems(this.filteredNames);
     }
 
-    public void initialize() {
+
+    @Override
+    protected void loadFinished() {
+
+        try {
+            this.controller = this.getController(AdminController.class);
+        } catch (Exception e) {
+            Log.error(e);
+        }
+
+
         this.userList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         this.roleList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -63,15 +70,13 @@ public class AdminView extends View {
             }
         });
 
-
-    }
-
-    @Override
-    protected void loadFinished() {
         this.showInfo();
     }
 
 
+    /**
+     * Shows all data on the screen,
+     */
     private void showInfo() {
         if (this.filteredNames != null) {
             this.filteredNames.setPredicate(s -> true);
@@ -100,6 +105,9 @@ public class AdminView extends View {
         }
     }
 
+    /**
+     * Assigns all selected roles to the selected user.
+     */
     @FXML
     private void assignRoles() {
         ObservableList<String> selectedUsers = this.userList.getSelectionModel().getSelectedItems();
@@ -107,18 +115,46 @@ public class AdminView extends View {
         for (String user : selectedUsers) {
 
             int index = 0;
-            for (String role : this.roleList.getItems()) {
-                if (!this.roleList.getSelectionModel().isSelected((index++))) {
-                    this.controller.removeRole(user, role);
-                } else {
+            for (String role : this.roleList.getSelectionModel().getSelectedItems()) {
+
+
                     this.controller.setRole(user, role);
-                }
+
             }
         }
         this.showInfo();
         new Alert(Alert.AlertType.CONFIRMATION, "Success").show();
     }
+    @FXML
+    private void removeRoles() {
+        ObservableList<String> selectedUsers = this.userList.getSelectionModel().getSelectedItems();
 
+        for (String user : selectedUsers) {
+
+            int index = 0;
+            for (String role : this.roleList.getSelectionModel().getSelectedItems()) {
+
+
+                this.controller.removeRole(user, role);
+
+            }
+        }
+        this.showInfo();
+        new Alert(Alert.AlertType.CONFIRMATION, "Success").show();
+    }
+    @FXML
+    private void goBack(){
+        try {
+            this.getController(AdminController.class).navigate("MatchOverview",true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Shows the selected user its rows.
+     * @param username
+     */
     private void showRoles(String username) {
         List<AccountInfo> roles = this.controller.getRoles(username);
         this.roleList.getSelectionModel().clearSelection();

@@ -17,6 +17,9 @@ public class AccountInformation extends View {
     private Label role;
     @FXML
     private Label error;
+
+    @FXML
+    private Label passwordShow;
     @FXML
     private TextField password;
     @FXML
@@ -33,8 +36,13 @@ public class AccountInformation extends View {
     }
 
     private void getAccountInformation() {
-        this.role.setText(GameSession.getRoles().get(0).getRole());
+
+        for (var roleObj : GameSession.getRoles()) {
+            this.role.setText(this.role.getText() + "\n" + roleObj.getRole());
+        }
         this.username.setText(GameSession.getUsername());
+
+        this.passwordShow.setText(GameSession.getAccount().getPassword());
     }
 
     public void changePassword() {
@@ -47,7 +55,7 @@ public class AccountInformation extends View {
 
     public void backMain() {
         try {
-            this.getController(AccountController.class).navigate("MatchOverview");
+            this.getController(AccountController.class).navigate("MatchOverview", true);
         } catch (Exception e) {
             Log.error(e, true);
         }

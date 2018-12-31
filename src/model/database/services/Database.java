@@ -45,46 +45,59 @@ public class Database {
 
 
     public <T> List<T> select(Class<T> output) throws Exception {
-        return this.select(output, new ArrayList<>());
+        return this.select(output, new ArrayList<>(), true);
+    }
+
+    public <T> List<T> select(Class<T> output, boolean fetchForeignKeys) throws Exception {
+        return this.select(output, new ArrayList<>(), fetchForeignKeys);
     }
 
     public <T> List<T> select(Class<T> output, List<Clause> clauses) throws Exception {
+        return this.select(output, clauses, true);
+    }
+
+    /* Select items and find foreign keys */
+    public <T> List<T> select(Class<T> output, List<Clause> clauses, boolean fetchForeignKeys) throws Exception {
         Log.info("Building select query for class: " + output + " with " + clauses.size() + " clauses");
         var tableName = this.getTableName(output);
-        var result = this.findForeignKeys(output, new TableAlias(tableName, -1));
+        var result = this.findForeignKeys(output, new TableAlias(tableName, -1), fetchForeignKeys);
 
         var query = QueryBuilder.buildSelect(tableName, result.getSelects(), clauses, result.getJoins());
 
         Log.info("Successfully built select query for class " + output);
         Log.query(query);
 
-        return this.select(output, result.getJoins(), query);
+        return this.select(output, result.getJoins(), query, fetchForeignKeys);
     }
 
-
+    /* Update items */
     public <T> void update(T item) throws Exception {
         this.update(item, this.getTableName(item.getClass()));
     }
 
+    /* Update items */
     public <T> void update(List<T> items) throws Exception {
         for (T item : items)
             this.update(item);
     }
 
-
+    /* Delete items */
     public <T> void delete(T item) throws Exception {
         this.delete(item, this.getTableName(item.getClass()));
     }
 
+    /* Delete items */
     public <T> void delete(List<T> items) throws Exception {
         for (T item : items)
             this.delete(item);
     }
 
+    /* Close the database connection */
     public void close() throws SQLException {
         this.connection.close();
     }
 
+    /* Inserts information into the database */
     private <T> ArrayList<InsertedKeys> insert(T item, String table) throws Exception {
         Log.info("Building insert query for class " + item.getClass());
         /* Store the keys to insert and values separately */
@@ -192,14 +205,15 @@ public class Database {
         return keys;
     }
 
-    private <T> ArrayList<T> select(Class<T> output, ArrayList<Join> join, String sql) throws Exception {
+    private <T> ArrayList<T> select(Class<T> output, ArrayList<Join> join, String sql, boolean fetchForeignKeys) throws Exception {
         Log.info("Executing select query for class " + output);
         var resultSet = this.connection.createStatement().executeQuery(sql);
 
         ArrayList<T> list = new ArrayList<>();
         Log.info("Select query success! Processing result for class " + output + "...");
         while (resultSet.next()) {
-            list.add(this.processResult(output, resultSet, this.getTableName(output), list, join));
+            /* Process all the results */
+            list.add(this.processResult(output, resultSet, this.getTableName(output), list, join, fetchForeignKeys));
         }
         Log.info("Result processing finished. Found " + list.size() + " results");
 
@@ -273,7 +287,7 @@ public class Database {
     }
 
 
-    private <T> T processResult(Class<T> output, ResultSet data, String table, ArrayList<T> existing, ArrayList<Join> joins) throws Exception {
+    private <T> T processResult(Class<T> output, ResultSet data, String table, ArrayList<T> existing, ArrayList<Join> joins, boolean fetchForeignKeys) throws Exception {
         T dto = output.getConstructor().newInstance();
         var foreignKeyListFields = new ArrayList<Field>();
 
@@ -288,7 +302,7 @@ public class Database {
 
             try {
 
-                if (field.isAnnotationPresent(ForeignKey.class)) {
+                if (field.isAnnotationPresent(ForeignKey.class) && fetchForeignKeys) {
                     var annotation = field.getAnnotation(ForeignKey.class);
                     var type = annotation.type();
 
@@ -310,7 +324,7 @@ public class Database {
                         }
 
                         foreignKeyField.setAccessible(true);
-                        foreignKeyField.set(dto, this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins));
+                        foreignKeyField.set(dto, this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins, fetchForeignKeys));
                     } else {
                         foreignKeyListFields.add(field);
                     }
@@ -360,7 +374,7 @@ public class Database {
                         throw new Exception("A join was not found in the foreign key list; error!");
 
                     var newList = new ArrayList<>();
-                    var newItem = this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins);
+                    var newItem = this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins, fetchForeignKeys);
 
                     newList.add(newItem);
 
@@ -381,7 +395,7 @@ public class Database {
                     @SuppressWarnings("unchecked") /* Suppress this because we know it is a list */
                             ArrayList<Object> existingItems = (ArrayList<Object>) foreignKeyField.get(output);
 
-                    var newItem = this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins);
+                    var newItem = this.processResult(type, data, join.getDestinationTable().build(), new ArrayList<>(), joins, fetchForeignKeys);
 
                     existingItems.add(newItem);
 
@@ -436,11 +450,11 @@ public class Database {
         return null;
     }
 
-    private <T> JoinResult findForeignKeys(Class<T> input, TableAlias table) throws Exception {
-        return this.findForeignKeys(input, table, new JoinResult());
+    private <T> JoinResult findForeignKeys(Class<T> input, TableAlias table, boolean fetchForeignKeys) throws Exception {
+        return this.findForeignKeys(input, table, new JoinResult(), fetchForeignKeys);
     }
 
-    private <T> JoinResult findForeignKeys(Class<T> input, TableAlias table, JoinResult result) throws Exception {
+    private <T> JoinResult findForeignKeys(Class<T> input, TableAlias table, JoinResult result, boolean fetchForeignKeys) throws Exception {
         for (Field field : input.getDeclaredFields()) {
             field.setAccessible(true);
 
@@ -456,6 +470,9 @@ public class Database {
                 var tblName = this.getTableName(type);
 
                 result.addSelect(new Select(table, this.getColumnName(field)));
+
+                if (!fetchForeignKeys)
+                    continue;
 
                 if (result.foreignKeyFinished(annotation.output())) {
                     var existingJoin = this.findJoin(result.getJoins(), output);
@@ -484,7 +501,7 @@ public class Database {
                 recursiveJoinResult.addAliases(result.getAliases());
 
                 /* Recursively find the foreign keys in the foreign key */
-                var recursiveResult = this.findForeignKeys(type, tbl, recursiveJoinResult);
+                var recursiveResult = this.findForeignKeys(type, tbl, recursiveJoinResult, fetchForeignKeys);
 
                 /* Add the new results to the parent result */
                 result.addAliases(recursiveResult.getAliases());

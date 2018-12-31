@@ -35,7 +35,7 @@ public class MatchFixer {
 
     public void invitePlayer(String Player) {
         try {
-            var game = new Game("request", "NL", GameSession.getUsername(), Player, "unknown");
+            var game = new Game("request", "NL", GameSession.getUsername(), Player.toLowerCase(), "unknown");
             this._db.insert(game);
 
 
@@ -89,7 +89,7 @@ public class MatchFixer {
             for (AccountInfo account : this.cachedAccounts) {
                 Optional<Game> game = this.cachedGames.stream().filter(x -> x.isParticipating(account.getUsername())).findFirst();
 
-                if (account.getUsername().contains(username) && !game.isPresent())
+                if (account.getUsername().toLowerCase().contains(username.toLowerCase()) && !game.isPresent())
                     foundPlayers.add(account);
             }
 

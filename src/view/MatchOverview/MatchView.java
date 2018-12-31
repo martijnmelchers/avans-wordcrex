@@ -1,13 +1,11 @@
 package view.MatchOverview;
 
-import controller.MatchOverviewController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import model.GameModel;
 import model.GameSession;
 import model.MatchOverviewModel;
 import model.tables.Game;
@@ -26,6 +24,13 @@ public class MatchView {
     private Text matchTurn;
 
     @FXML
+    private Text turnLabel;
+
+
+    @FXML
+    private Text scoreLabel;
+
+    @FXML
     private Button matchPlayButton;
 
     @FXML
@@ -36,93 +41,115 @@ public class MatchView {
     private Pane infoPane;
 
     private Game match;
-    public MatchView(Game match){
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./PlayerGame.fxml"));
-        fxmlLoader.setController(this);
-        MatchOverviewController controller = new MatchOverviewController();
-        this.match = match;
-        try
-        {
-            MatchOverviewModel mod = new MatchOverviewModel();
+
+    public MatchView(Game match) {
+
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("PlayerGame.fxml"));
+            fxmlLoader.setController(this);
+
+            this.match = match;
+            var mod = new MatchOverviewModel();
             MatchOverviewModel.GameScore scores = mod.getPlayerScores(match);
 
-            var gameMod = new GameModel(match);
             fxmlLoader.load();
-            boolean isMyTurn;
 
-            try {
-                 isMyTurn = MatchOverviewModel.isMyTurn(match);
-            }
-            catch (NullPointerException e){
-                isMyTurn = true;
-            }
+            var player = GameSession.getUsername();
 
-            String player = GameSession.getUsername();
-            String player1 = match.getPlayer1().getUsername();
-            String player2 = match.getPlayer2().getUsername();
-            String enemy  = player1.equals(player) ?  player2 : player1;
+            var player1 = match.getPlayer1().getUsername();
+            var player2 = match.getPlayer2().getUsername();
 
+
+            // Gets the enemy (opponents) username
+            var enemy = player1.equals(player) ? player2 : player1;
+
+
+            // We change some text when this match entry is a request.
             if (match.getGameState().isRequest()) {
+                this.infoPane.getChildren().clear();
 
+                var inviteTxt = new Text();
+                var inviteStatusTxt = new Text();
 
-                infoPane.getChildren().clear();
-                Text inviteTxt = new Text();
-                Text inviteStatusTxt = new Text();
-                matchPlayButton.setDisable(true);
-                matchSurrenderButton.setDisable(true);
-                if(GameSession.getUsername().equals(player1)){
+                this.matchPlayButton.setDisable(true);
+                this.matchSurrenderButton.setDisable(true);
+
+                if (GameSession.getUsername().equals(player1)) {
                     //Uitnodiging van ons
                     inviteTxt.setText("Uitnodiging naar: " + player2);
-                    String antwoord = "reactie: ";
-                    switch(match.getAnswer().get_type()){
+
+                    var answer = "reactie: ";
+
+
+                    // Show the answer from this invite.
+                    switch (match.getAnswer().get_type()) {
                         case "accepted": {
-                            inviteStatusTxt.setText(antwoord+"Geaccepteerd");
-                            matchPlayButton.setDisable(false);
-                            matchSurrenderButton.setDisable(false);
+                            inviteStatusTxt.setText(answer + "Geaccepteerd");
+                            this.matchPlayButton.setDisable(false);
+                            this.matchSurrenderButton.setDisable(false);
                             break;
                         }
                         case "declined": {
-                            inviteStatusTxt.setText(antwoord+"Geweigerd");
+                            inviteStatusTxt.setText(answer + "Geweigerd");
                             break;
                         }
                         case "unknown": {
-                            inviteStatusTxt.setText(antwoord+"Nog geen antwoord gegeven.");
+                            inviteStatusTxt.setText(answer + "Nog geen antwoord gegeven.");
                             break;
                         }
                     }
-                }
-
-                else {
-                    //Uitnodiging van tegenstander
+                } else {
+                    // this is an invite from the opponent
                     inviteTxt.setText("Uitnodiging van: " + player1);
                 }
-                
-                infoPane.getChildren().add(inviteTxt);
-                infoPane.getChildren().add(inviteStatusTxt);
+
+                this.infoPane.getChildren().add(inviteTxt);
+                this.infoPane.getChildren().add(inviteStatusTxt);
+
                 inviteTxt.setX(5);
                 inviteTxt.setY(20);
+
                 inviteStatusTxt.setX(5);
                 inviteStatusTxt.setY(35);
+            } else {
+                // This runs when it is not an invite.
+
+                this.matchEnemy.setText(enemy);
+                this.matchScore.setText(scores.player1 + "/" + scores.player2);
+                this.matchTurn.setText(MatchOverviewModel.isMyTurn(match) ? GameSession.getUsername() : enemy);
+
+
+                // If the match has ended
+                if (match.getGameState().isFinished() || match.getGameState().isResigned()) {
+
+                    this.scoreLabel.setText("Eindscore: ");
+                    this.turnLabel.setText("Winnaar: ");
+                    if (match.getWinner() != null) {
+                        this.matchTurn.setText(match.getWinner().getUsername());
+                    }
+                }
             }
-            else {
-                matchEnemy.setText(enemy);
-                matchScore.setText(Integer.toString(scores.player1) + "/" + Integer.toString(scores.player2));
-                matchTurn.setText(!gameMod.checkIfTurnPlayed() ? GameSession.getUsername() : enemy);
-            }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void loadFinished() { }
+    public void loadFinished() {
+    }
 
-    public HBox getAnchor(){ return  this.rootHbox; }
 
-    public Button getMatchPlayButton(){ return this.matchPlayButton; }
+    // Returns the upper element to be able to show it in a listviewcell
+    public HBox getAnchor() {
+        return this.rootHbox;
+    }
 
-    public Button getMatchSurrenderButton(){ return this.matchSurrenderButton; }
+    // Returns the buttons to be able to have controller interaction in listviewcell
+    public Button getMatchPlayButton() {
+        return this.matchPlayButton;
+    }
 
-    @FXML
-    private void onMatchPlay() { System.out.println(match.getGameId()); }
+    public Button getMatchSurrenderButton() {
+        return this.matchSurrenderButton;
+    }
+
 }

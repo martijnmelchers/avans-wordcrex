@@ -18,8 +18,8 @@ Button {
     -fx-font-family: "Comic Sans MS";
     -fx-background-color: #2c3e50;
     -fx-background-radius: 0;
-
 }
+
 Text{
     -fx-fill: #ecf0f1;
     -fx-text-fill: #ecf0f1;
@@ -52,7 +52,7 @@ ListView :odd {
 }
 
 Pane {
-    -fx-background-color: #207BCF;
+    /*-fx-background-color: #207BCF;*/
 }
 
 ScrollPane {
@@ -69,13 +69,6 @@ FlowPane {
 
 AnchorPane {
 
-}
-
-
-TextField {
-    -fx-border-color: #2c3e50;
-    -fx-border-width: 0 0 2 0;
-    -fx-background-color: transparent;
 }
 
 TextField:focused {
@@ -108,4 +101,23 @@ TextField:focused {
 
 #username, #role {
     -fx-font-size: 20;
+}
+
+HBox {
+    -fx-background-color: transparent;
+}
+
+TextField {
+    -fx-border-color: #2c3e50;
+    -fx-border-width: 0 0 2 0;
+    -fx-background-color: transparent;
+}
+
+TextField * {
+    -fx-background-color: transparent;
+}
+
+.yellowButton {
+    -fx-background-color: #FDC70C;
+    -fx-text-fill: black;
 }

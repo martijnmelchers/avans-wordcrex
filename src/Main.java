@@ -6,8 +6,13 @@ import javafx.stage.Stage;
 import model.EnvironmentVariables;
 import model.database.DocumentSession;
 import model.helper.Log;
+import model.tables.AccountInfo;
+
+import java.util.List;
 
 public class Main extends Application {
+    private List<AccountInfo> accounts;
+
     public static void main(String[] args) {
         Log.info("Launching application...");
         launch(EnvironmentVariables.MAIN_VIEW);
@@ -39,15 +44,23 @@ public class Main extends Application {
                 System.exit(1);
         }
 
+        try {
+            this.accounts = DocumentSession.getDatabase().select(AccountInfo.class, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         /* Start the main app */
         Log.info("Starting views...");
         try {
             var app = new App(primaryStage);
 
-            app.navigate(EnvironmentVariables.MAIN_VIEW, 350, 550);
+            app.navigate(EnvironmentVariables.MAIN_VIEW, 350, 550, false);
         } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
-            alert.showAndWait();
+            e.printStackTrace();
+            //Alert alert = new Alert(Alert.AlertType.ERROR, "Er is een fatale fout opgetreden tijdens het starten van de applicatie!\n\n" + e.getMessage(), closeAppButton);
+            //alert.showAndWait();
 
             Log.error(e);
 
